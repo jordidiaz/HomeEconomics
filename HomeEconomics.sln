@@ -5,6 +5,13 @@ VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeEconomics", "HomeEconomics.csproj", "{A37893B8-040F-4435-B689-084C86115EB6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{FE965C44-5BDF-4953-8008-42A493ED82A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{10452378-AAB0-41DE-BC47-0C5BB589E755}"
+	ProjectSection(SolutionItems) = preProject
+		Deploy\Scripts\RunHomeEconomicsService.bat = Deploy\Scripts\RunHomeEconomicsService.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +25,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{10452378-AAB0-41DE-BC47-0C5BB589E755} = {FE965C44-5BDF-4953-8008-42A493ED82A1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CD6A584-4AA0-416F-B5FE-9D8D46A83195}
