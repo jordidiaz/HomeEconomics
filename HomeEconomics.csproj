@@ -8,9 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Build\**" />
+    <Content Remove="Build\**" />
+    <EmbeddedResource Remove="Build\**" />
+    <None Remove="Build\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="RunHomeEconomicsService.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
