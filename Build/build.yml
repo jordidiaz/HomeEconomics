@@ -23,7 +23,7 @@ steps:
     command: publish
     publishWebProjects: true
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\HomeEconomics'
-    zipAfterPublish: true
+    modifyOutputPath: false
 - task: PublishBuildArtifacts@1
   displayName: 'Publish build artifact'
   inputs:
