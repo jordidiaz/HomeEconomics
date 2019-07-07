@@ -24,6 +24,7 @@ steps:
     publishWebProjects: true
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\HomeEconomics'
     modifyOutputPath: false
+    zipAfterPublish: false
 - task: PublishBuildArtifacts@1
   displayName: 'Publish build artifact'
   inputs:
