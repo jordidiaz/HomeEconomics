@@ -13,6 +13,10 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    useGlobalJson: true
 - script: dotnet restore
   displayName: 'dotnet restore'
 - script: dotnet build --configuration $(buildConfiguration)
