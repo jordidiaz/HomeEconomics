@@ -3,12 +3,35 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics", "HomeEconomics.csproj", "{A37893B8-040F-4435-B689-084C86115EB6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{44ED4452-69D2-487F-BF71-587FAEA9BA12}"
 	ProjectSection(SolutionItems) = preProject
 		Build\build.yml = Build\build.yml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2BA55308-73F6-4818-BCD6-BD3AA86384E8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics", "src\HomeEconomics\HomeEconomics.csproj", "{66C96C3B-9858-40B8-8469-9A0B9BF11600}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Domain\Domain.csproj", "{AB3CCAB4-B7CF-47F8-A3A2-29E0B12F8A59}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1C37AD96-7358-40AF-9313-6C3A5D89D4CF}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		global.json = global.json
+		RunHomeEconomicsService.bat = RunHomeEconomicsService.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{464E6D58-952A-46C6-AD64-700E29620583}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.UnitTests", "test\Domain.UnitTests\Domain.UnitTests.csproj", "{D2A14C4E-2ADE-4D45-BBE0-B45656F8F45B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "src\Persistence\Persistence.csproj", "{51906E92-C12B-46E0-9985-71F915FA16E6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.UnitTests", "test\HomeEconomics.UnitTests\HomeEconomics.UnitTests.csproj", "{F86013CE-6589-4F4C-A9C3-50E321B29A37}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.FunctionalTests", "test\HomeEconomics.FunctionalTests\HomeEconomics.FunctionalTests.csproj", "{B51D133A-D342-49AA-973B-2801537F9346}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.IntegrationTests", "test\HomeEconomics.IntegrationTests\HomeEconomics.IntegrationTests.csproj", "{5475C031-2B77-485E-BAB1-F2125D991DE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,13 +39,46 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A37893B8-040F-4435-B689-084C86115EB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A37893B8-040F-4435-B689-084C86115EB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A37893B8-040F-4435-B689-084C86115EB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A37893B8-040F-4435-B689-084C86115EB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66C96C3B-9858-40B8-8469-9A0B9BF11600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66C96C3B-9858-40B8-8469-9A0B9BF11600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66C96C3B-9858-40B8-8469-9A0B9BF11600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66C96C3B-9858-40B8-8469-9A0B9BF11600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB3CCAB4-B7CF-47F8-A3A2-29E0B12F8A59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB3CCAB4-B7CF-47F8-A3A2-29E0B12F8A59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB3CCAB4-B7CF-47F8-A3A2-29E0B12F8A59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB3CCAB4-B7CF-47F8-A3A2-29E0B12F8A59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2A14C4E-2ADE-4D45-BBE0-B45656F8F45B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A14C4E-2ADE-4D45-BBE0-B45656F8F45B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A14C4E-2ADE-4D45-BBE0-B45656F8F45B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A14C4E-2ADE-4D45-BBE0-B45656F8F45B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51906E92-C12B-46E0-9985-71F915FA16E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51906E92-C12B-46E0-9985-71F915FA16E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51906E92-C12B-46E0-9985-71F915FA16E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51906E92-C12B-46E0-9985-71F915FA16E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F86013CE-6589-4F4C-A9C3-50E321B29A37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F86013CE-6589-4F4C-A9C3-50E321B29A37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F86013CE-6589-4F4C-A9C3-50E321B29A37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F86013CE-6589-4F4C-A9C3-50E321B29A37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B51D133A-D342-49AA-973B-2801537F9346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B51D133A-D342-49AA-973B-2801537F9346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B51D133A-D342-49AA-973B-2801537F9346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B51D133A-D342-49AA-973B-2801537F9346}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5475C031-2B77-485E-BAB1-F2125D991DE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5475C031-2B77-485E-BAB1-F2125D991DE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5475C031-2B77-485E-BAB1-F2125D991DE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5475C031-2B77-485E-BAB1-F2125D991DE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{66C96C3B-9858-40B8-8469-9A0B9BF11600} = {2BA55308-73F6-4818-BCD6-BD3AA86384E8}
+		{AB3CCAB4-B7CF-47F8-A3A2-29E0B12F8A59} = {2BA55308-73F6-4818-BCD6-BD3AA86384E8}
+		{D2A14C4E-2ADE-4D45-BBE0-B45656F8F45B} = {464E6D58-952A-46C6-AD64-700E29620583}
+		{51906E92-C12B-46E0-9985-71F915FA16E6} = {2BA55308-73F6-4818-BCD6-BD3AA86384E8}
+		{F86013CE-6589-4F4C-A9C3-50E321B29A37} = {464E6D58-952A-46C6-AD64-700E29620583}
+		{B51D133A-D342-49AA-973B-2801537F9346} = {464E6D58-952A-46C6-AD64-700E29620583}
+		{5475C031-2B77-485E-BAB1-F2125D991DE0} = {464E6D58-952A-46C6-AD64-700E29620583}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CD6A584-4AA0-416F-B5FE-9D8D46A83195}

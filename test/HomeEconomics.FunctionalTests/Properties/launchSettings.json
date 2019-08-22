@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "HomeEconomics.FunctionalTests": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
