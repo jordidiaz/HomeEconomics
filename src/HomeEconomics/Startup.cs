@@ -20,7 +20,6 @@ namespace HomeEconomics
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddHomeEconomicsApplicationInsights()
                 .AddHomeEconomicsMvc()
                 .AddHomeEconomicsMediatR()
                 .AddHomeEconomicsPersistence(Configuration, Environment.IsDevelopment())

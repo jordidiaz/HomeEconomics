@@ -50,7 +50,8 @@ namespace HomeEconomics
         {
             return WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseSerilog(ConfigureSerilog());
+                .UseSerilog(ConfigureSerilog())
+                .UseApplicationInsights();
         }
 
         private static Action<WebHostBuilderContext, LoggerConfiguration> ConfigureSerilog()

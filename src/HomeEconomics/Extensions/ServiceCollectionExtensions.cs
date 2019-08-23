@@ -33,12 +33,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddMediatR(typeof(HomeEconomics.HomeEconomics));
         }
 
-        internal static IServiceCollection AddHomeEconomicsApplicationInsights(this IServiceCollection services)
-        {
-            return services
-                .AddApplicationInsightsTelemetry();
-        }
-
         internal static IServiceCollection AddHomeEconomicsSwagger(this IServiceCollection services)
         {
             return services
