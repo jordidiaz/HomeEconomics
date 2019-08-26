@@ -45,5 +45,11 @@ steps:
     PathtoPublish: 'Deploy'
     ArtifactName: 'Deploy'
     publishLocation: 'Container'
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish install script'
+  inputs:
+    PathtoPublish: 'RunHomeEconomicsService.bat'
+    ArtifactName: 'Install'
+    publishLocation: 'Container'
 
 
