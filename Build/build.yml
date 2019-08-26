@@ -40,8 +40,10 @@ steps:
     ArtifactName: 'HomeEconomics'
     publishLocation: 'Container'
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish deployment scripts'
   inputs:
-    PathtoPublish: 'Deploy\*.tf'
+    PathtoPublish: 'Deploy\infrastructure.tf'
     ArtifactName: 'Deploy'
     publishLocation: 'Container'
+
 
