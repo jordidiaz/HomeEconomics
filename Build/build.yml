@@ -42,7 +42,7 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish deployment scripts'
   inputs:
-    PathtoPublish: 'Deploy\infrastructure.tf'
+    PathtoPublish: 'Deploy'
     ArtifactName: 'Deploy'
     publishLocation: 'Container'
 
