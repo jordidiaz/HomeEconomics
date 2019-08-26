@@ -39,4 +39,9 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)\HomeEconomics'
     ArtifactName: 'HomeEconomics'
     publishLocation: 'Container'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'Deploy\*.tf'
+    ArtifactName: 'Deploy'
+    publishLocation: 'Container'
 
