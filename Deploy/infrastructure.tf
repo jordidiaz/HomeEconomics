@@ -35,17 +35,17 @@ resource "azurerm_sql_server" "sqlServer" {
   administrator_login_password = "${var.sqlServerAdministratorPassword}"
 }
 
-# resource "azurerm_sql_database" "sqlDatabase" {
-#   name                = "${local.prefix}-sqldatabase"
-#   resource_group_name = "${azurerm_resource_group.resourceGroup.name}"
-#   location            = "${local.location}"
-#   server_name         = "${azurerm_sql_server.sqlServer.name}"
-#   edition             = "Basic"
-# }
+resource "azurerm_sql_database" "sqlDatabase" {
+  name                = "${local.prefix}-sqldatabase"
+  resource_group_name = "${azurerm_resource_group.resourceGroup.name}"
+  location            = "${local.location}"
+  server_name         = "${azurerm_sql_server.sqlServer.name}"
+  edition             = "Basic"
+}
 
-# resource "azurerm_application_insights" "applicationInsights" {
-#   name                = "${local.prefix}-appinsights"
-#   location            = "${local.location}"
-#   resource_group_name = "${azurerm_resource_group.resourceGroup.name}"
-#   application_type    = "web"
-# }
+resource "azurerm_application_insights" "applicationInsights" {
+  name                = "${local.prefix}-appinsights"
+  location            = "${local.location}"
+  resource_group_name = "${azurerm_resource_group.resourceGroup.name}"
+  application_type    = "web"
+}
