@@ -1,3 +1,13 @@
+variable "subscriptionId" {
+
+}
+variable "sqlServerAdministratorLogin" {
+
+}
+variable "sqlServerAdministratorPassword" {
+
+}
+
 locals {
   location            = "West Europe"
   resource_group_name = "HomeEconomics"
