@@ -351,3 +351,4 @@ MigrationBackup/
 # Terraform
 .terraform
 Deploy/*.tfstate*
+Deploy/*.tfvars
