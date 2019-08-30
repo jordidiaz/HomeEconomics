@@ -31,7 +31,7 @@ namespace HomeEconomics
             applicationBuilder
                 .UseIfNot(env.IsDevelopment(), appBuilder => appBuilder.UseHsts())
                 .UseHttpsRedirection()
-                .UseIf(env.IsDevelopment(), appBuilder => appBuilder.UseHomeEconomicsSwagger())
+                .UseHomeEconomicsSwagger()
                 .UseProblemDetails()
                 .UseMvc();
         }
