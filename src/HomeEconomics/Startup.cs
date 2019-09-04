@@ -1,4 +1,5 @@
-﻿using Hellang.Middleware.ProblemDetails;
+﻿using AutoMapper;
+using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,8 +23,9 @@ namespace HomeEconomics
             services
                 .AddHomeEconomicsMvc()
                 .AddHomeEconomicsMediatR()
+                .AddHomeEconomicsAutoMapper()
                 .AddHomeEconomicsPersistence(Configuration, Environment.IsDevelopment())
-                .AddIf(Environment.IsDevelopment(), serviceCollection => serviceCollection.AddHomeEconomicsSwagger());
+                .AddHomeEconomicsSwagger();
         }
 
         public void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment env)

@@ -25,5 +25,13 @@ namespace HomeEconomics.Features.Movements
 
             return NoContent();
         }
+
+        [HttpGet]
+        public async Task<ActionResult<Index.Result>> Index()
+        {
+            var movements = await _mediator.Send(new Index.Query());
+
+            return Ok(movements);
+        }
     }
 }
