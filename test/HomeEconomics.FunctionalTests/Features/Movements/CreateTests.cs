@@ -40,25 +40,5 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
             movement.Frequency.Type.Should().Be(FrequencyType.Monthly);
             movement.Frequency.Months.Should().BeNull();
         }
-
-        [Fact]
-        public async Task Should_Throw_InvalidOperationException_If_Expense_Exists()
-        {
-            var movement = new Movement("Gasolina", 60m, MovementType.Expense);
-            await Fixture.InsertDbContextAsync(movement);
-
-            Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "Gasolina",
-                Amount = 60m,
-                Type = MovementType.Expense,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.Monthly
-                }
-            });
-
-            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.ExpenseExists);
-        }
     }
 }

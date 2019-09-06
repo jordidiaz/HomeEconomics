@@ -33,5 +33,23 @@ namespace HomeEconomics.Features.Movements
 
             return Ok(movements);
         }
+
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var deleted = await _mediator.Send(new Delete.Command {
+                Id = id
+            });
+
+            if (deleted)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
+        }
     }
 }
