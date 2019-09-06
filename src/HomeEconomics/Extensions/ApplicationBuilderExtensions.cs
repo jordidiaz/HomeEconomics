@@ -4,11 +4,6 @@ namespace Microsoft.AspNetCore.Builder
 {
     internal static class ApplicationBuilderExtensions
     {
-        internal static IApplicationBuilder UseIfNot(this IApplicationBuilder appBuilder, bool condition, Func<IApplicationBuilder, IApplicationBuilder> action)
-        {
-            return !condition ? action(appBuilder) : appBuilder;
-        }
-
         internal static IApplicationBuilder UseHomeEconomicsSwagger(this IApplicationBuilder appBuilder)
         {
             return appBuilder

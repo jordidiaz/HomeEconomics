@@ -31,8 +31,6 @@ namespace HomeEconomics
         public void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment env)
         {
             applicationBuilder
-                .UseIfNot(env.IsDevelopment(), appBuilder => appBuilder.UseHsts())
-                .UseHttpsRedirection()
                 .UseHomeEconomicsSwagger()
                 .UseProblemDetails()
                 .UseMvc();
