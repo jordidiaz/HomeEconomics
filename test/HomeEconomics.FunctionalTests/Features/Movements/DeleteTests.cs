@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Domain.Movements;
 using FluentAssertions;
 using HomeEconomics.Features.Movements;
@@ -34,23 +35,31 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
 
             movement.Should().NotBeNull();
 
-            var deleted = await Fixture.SendToMediatRAsync(new Delete.Command
+            await Fixture.SendToMediatRAsync(new Delete.Command
             {
                 Id = movementId
             });
 
-            deleted.Should().BeTrue();
+            movement = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
+            {
+                return await homeEconomicsDbContext
+                    .Movements
+                    .Include(m => m.Frequency)
+                    .SingleOrDefaultAsync(m => m.Id == movementId);
+            });
+
+            movement.Should().BeNull();
         }
 
         [Fact]
-        public async Task Should_Not_Delete_A_Movement()
+        public void Should_Throw_InvalidOperationException_If_Movement_Not_Exists()
         {
-            var deleted = await Fixture.SendToMediatRAsync(new Delete.Command
+            Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Delete.Command
             {
                 Id = 42
             });
 
-            deleted.Should().BeFalse();
+            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MovementNotExists);
         }
     }
 }

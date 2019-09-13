@@ -4,6 +4,7 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -14,7 +15,10 @@ namespace Microsoft.Extensions.DependencyInjection
         internal static IServiceCollection AddHomeEconomicsMvc(this IServiceCollection services)
         {
             return services
-                .AddProblemDetails()
+                .AddProblemDetails(problemDetailsOptions =>
+                {
+                    problemDetailsOptions.Map<InvalidOperationException>(ex => new ExceptionProblemDetails(ex, StatusCodes.Status409Conflict));
+                })
                 .AddMvcCore()
                 .AddFluentValidation(fluentValidationMvcConfiguration =>
                     {
@@ -47,6 +51,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddSwaggerGen(swaggerGenOptions =>
                 {
                     swaggerGenOptions.SwaggerDoc("hm", new Info { Title = "HomeEconomics API" });
+                    swaggerGenOptions.CustomSchemaIds(type => type.FullName);
                 });
         }
 

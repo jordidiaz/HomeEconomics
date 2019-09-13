@@ -1,6 +1,8 @@
-﻿using FluentValidation.AspNetCore;
+﻿using System;
+using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +13,10 @@ namespace HomeEconomics.IntegrationTests.Extensions
         internal static IServiceCollection AddHomeEconomicsMvc(this IServiceCollection services)
         {
             return services
-                .AddProblemDetails()
+                .AddProblemDetails(problemDetailsOptions =>
+                {
+                    problemDetailsOptions.Map<InvalidOperationException>(ex => new ExceptionProblemDetails(ex, StatusCodes.Status409Conflict));
+                })
                 .AddMvcCore()
                 .AddFluentValidation(fluentValidationMvcConfiguration =>
                 {

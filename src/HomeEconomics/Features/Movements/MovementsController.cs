@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace HomeEconomics.Features.Movements
 {
-    [Route("api/movements")]
     [ApiController]
+    [Route("api/movements")]
     public class MovementsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -36,20 +36,15 @@ namespace HomeEconomics.Features.Movements
 
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
         public async Task<ActionResult> Delete(int id)
         {
-            var deleted = await _mediator.Send(new Delete.Command {
+            await _mediator.Send(new Delete.Command
+            {
                 Id = id
             });
 
-            if (deleted)
-            {
-                return NoContent();
-            }
-
-            return NotFound();
+            return NoContent();
         }
     }
 }

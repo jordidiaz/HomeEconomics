@@ -123,4 +123,7 @@
   <data name="IncomeExists" xml:space="preserve">
     <value>El ingreso ya existe</value>
   </data>
+  <data name="MovementNotExists" xml:space="preserve">
+    <value>El gasto/ingreso no existe</value>
+  </data>
 </root>

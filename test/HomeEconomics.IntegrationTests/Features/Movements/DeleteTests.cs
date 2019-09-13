@@ -30,22 +30,11 @@ namespace HomeEconomics.IntegrationTests.Features.Movements
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
-        [Fact]
-        public async Task Should_Return_404_NotFound()
+        public class Handler : IRequestHandler<Delete.Command, Unit>
         {
-            _uri = "api/movements/0";
-
-            var response = await HttpClient
-                .DeleteAsync(_uri);
-
-            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-        }
-
-        public class Handler : IRequestHandler<Delete.Command, bool>
-        {
-            public Task<bool> Handle(Delete.Command request, CancellationToken cancellationToken)
+            public Task<Unit> Handle(Delete.Command request, CancellationToken cancellationToken)
             {
-                return Task.FromResult(request.Id == 42);
+                return Task.FromResult(Unit.Value);
             }
         }
     }

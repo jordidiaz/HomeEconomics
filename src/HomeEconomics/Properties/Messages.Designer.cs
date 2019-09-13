@@ -77,5 +77,14 @@ namespace HomeEconomics.Properties {
                 return ResourceManager.GetString("IncomeExists", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El gasto/ingreso no existe.
+        /// </summary>
+        public static string MovementNotExists {
+            get {
+                return ResourceManager.GetString("MovementNotExists", resourceCulture);
+            }
+        }
     }
 }
