@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Microsoft.Extensions.FileProviders;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -11,7 +13,15 @@ namespace Microsoft.AspNetCore.Builder
                 .UseSwaggerUI(swaggerUiOptions =>
                 {
                     swaggerUiOptions.SwaggerEndpoint("/swagger/hm/swagger.json", "HomeEconomics API");
-                    swaggerUiOptions.RoutePrefix = string.Empty;
+                });
+        }
+
+        internal static IApplicationBuilder UseHomeEconomicsSpa(this IApplicationBuilder appBuilder)
+        {
+            return appBuilder
+                .UseFileServer(new FileServerOptions
+                {
+                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "spa/build"))
                 });
         }
     }

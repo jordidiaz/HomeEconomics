@@ -32,6 +32,7 @@ namespace HomeEconomics
             applicationBuilder
                 .UseHomeEconomicsSwagger()
                 .UseProblemDetails()
+                .UseHomeEconomicsSpa()
                 .UseMvc();
         }
     }
