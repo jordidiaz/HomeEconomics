@@ -11,6 +11,11 @@ namespace System.Net.Http
             return await httpClient.PostAsync(requestUri, CreateHttpContent(content));
         }
 
+        internal static async Task<HttpResponseMessage> PutAsync(this HttpClient httpClient, string requestUri, object content)
+        {
+            return await httpClient.PutAsync(requestUri, CreateHttpContent(content));
+        }
+
         private static HttpContent CreateHttpContent(object data)
         {
             var content = JsonConvert.SerializeObject(data);

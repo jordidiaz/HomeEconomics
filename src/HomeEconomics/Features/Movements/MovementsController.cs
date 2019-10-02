@@ -46,5 +46,15 @@ namespace HomeEconomics.Features.Movements
 
             return NoContent();
         }
+
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult> Edit(Edit.Command command)
+        {
+            await _mediator.Send<Unit>(command);
+
+            return NoContent();
+        }
     }
 }

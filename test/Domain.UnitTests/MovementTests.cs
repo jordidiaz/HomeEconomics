@@ -51,6 +51,19 @@ namespace Domain.UnitTests
         }
 
         [Fact]
+        public void SetNoneFrequency_Should_Set_Frequency_To_None()
+        {
+            _sut.SetMonthlyFrequency();
+
+            _sut.Frequency.Type.Should().Be(FrequencyType.Monthly);
+
+            _sut.SetNoneFrequency();
+
+            _sut.Frequency.Type.Should().Be(FrequencyType.None);
+            _sut.Frequency.Months.Should().BeNull();
+        }
+
+        [Fact]
         public void SetMonthlyFrequency_Should_Set_Frequency_To_Monthly()
         {
             _sut.Frequency.Type.Should().Be(FrequencyType.None);
@@ -58,6 +71,7 @@ namespace Domain.UnitTests
             _sut.SetMonthlyFrequency();
 
             _sut.Frequency.Type.Should().Be(FrequencyType.Monthly);
+            _sut.Frequency.Months.Should().BeNull();
         }
 
         [Theory]
@@ -113,6 +127,42 @@ namespace Domain.UnitTests
 
             _sut.Frequency.Type.Should().Be(FrequencyType.Custom);
             _sut.Frequency.Months.SequenceEqual(months).Should().BeTrue();
+        }
+
+        [Fact]
+        public void SetName_Throws_ArgumentNullException_If_Name_Is_Null()
+        {
+            Action action = () => _sut.SetName(null);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void SetName_Should_Set_The_Name()
+        {
+            _sut.Name.Should().Be(Name);
+
+            _sut.SetName("thenewname");
+
+            _sut.Name.Should().Be("thenewname");
+        }
+
+        [Fact]
+        public void SetAmount_Throws_ArgumentOutOfRangeException_If_Amount_Is_Invalid()
+        {
+            Action action = () => _sut.SetAmount(0m);
+
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Fact]
+        public void SetAmount_Should_Set_The_Amount()
+        {
+            _sut.Amount.Should().Be(Amount);
+
+            _sut.SetAmount(56m);
+
+            _sut.Amount.Should().Be(56m);
         }
     }
 }

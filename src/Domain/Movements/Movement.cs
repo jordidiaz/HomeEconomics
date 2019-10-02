@@ -28,12 +28,16 @@ namespace Domain.Movements
 
         public decimal Amount { get; private set; }
 
-        public MovementType Type { get; private set; }
+        public MovementType Type { get; set; }
 
         public int FrequencyId { get; private set; }
     
         public Frequency Frequency { get; private set; }
 
+        public void SetNoneFrequency()
+        {
+            Frequency.SetNoneFrequency();
+        }
 
         public void SetMonthlyFrequency()
         {
@@ -48,6 +52,21 @@ namespace Domain.Movements
         public void SetCustomFrequency(bool[] months)
         {
             Frequency.SetCustomFrequency(months);
+        }
+
+        public void SetName(string name)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+        }
+
+        public void SetAmount(decimal amount)
+        {
+            if (amount < MinAmount)
+            {
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            }
+
+            Amount = amount;
         }
     }
 }
