@@ -18,6 +18,12 @@ steps:
   inputs:
     command: 'install'
     workingDir: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
+- task: Npm@1
+  displayName: 'npm build'
+  inputs:
+    command: 'custom'
+    workingDir: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
+    customCommand: 'run build'
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
