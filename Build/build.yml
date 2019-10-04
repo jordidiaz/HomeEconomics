@@ -13,6 +13,11 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    command: 'install'
+    workingDir: 'src\HomeEconomics\spa'
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
