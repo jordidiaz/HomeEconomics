@@ -17,7 +17,7 @@ steps:
   displayName: 'npm install'
   inputs:
     command: 'install'
-    workingDir: '$(Build.SourcesDirectory)\HomeEconomics\src\HomeEconomics\spa'
+    workingDir: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
