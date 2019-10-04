@@ -67,9 +67,9 @@ steps:
     customCommand: 'run build'
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.ArtifactStagingDirectory)\spa'
+    SourceFolder: '$(Build.ArtifactStagingDirectory)\spa\build'
     Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)\HomeEconomics\spa'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\HomeEconomics\spa\build'
     CleanTargetFolder: true
 - task: PublishBuildArtifacts@1
   displayName: 'Publish build artifact'
