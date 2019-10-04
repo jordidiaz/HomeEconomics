@@ -52,12 +52,12 @@ steps:
   displayName: 'npm ci'
   inputs:
     command: 'install'
-    workingDir: '$(Build.ArtifactStagingDirectory)\HomeEconomics\src\HomeEconomics\spa'
+    workingDir: '$(Build.ArtifactStagingDirectory)\HomeEconomics\spa'
 - task: Npm@1
   displayName: 'npm build'
   inputs:
     command: 'custom'
-    workingDir: '$(Build.ArtifactStagingDirectory)\HomeEconomics\src\HomeEconomics\spa'
+    workingDir: '$(Build.ArtifactStagingDirectory)\HomeEconomics\spa'
     customCommand: 'run build'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish build artifact'
