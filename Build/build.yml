@@ -48,17 +48,23 @@ steps:
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\HomeEconomics'
     modifyOutputPath: false
     zipAfterPublish: false
-- task: Npm@1
-  displayName: 'npm ci'
+- task: CopyFiles@2
   inputs:
-    command: 'install'
-    workingDir: '$(Build.ArtifactStagingDirectory)\HomeEconomics\spa'
-- task: Npm@1
-  displayName: 'npm build'
-  inputs:
-    command: 'custom'
-    workingDir: '$(Build.ArtifactStagingDirectory)\HomeEconomics\spa'
-    customCommand: 'run build'
+    SourceFolder: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\HomeEconomics\spa'
+    CleanTargetFolder: true
+# - task: Npm@1
+#   displayName: 'npm ci'
+#   inputs:
+#     command: 'install'
+#     workingDir: '$(Build.ArtifactStagingDirectory)\HomeEconomics\spa'
+# - task: Npm@1
+#   displayName: 'npm build'
+#   inputs:
+#     command: 'custom'
+#     workingDir: '$(Build.ArtifactStagingDirectory)\HomeEconomics\spa'
+#     customCommand: 'run build'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish build artifact'
   inputs:
