@@ -17,17 +17,17 @@ steps:
   displayName: 'Use node LTS'
   inputs:
     version: '10.16.3'
-- task: Npm@1
-  displayName: 'npm install'
-  inputs:
-    command: 'install'
-    workingDir: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
-- task: Npm@1
-  displayName: 'npm build'
-  inputs:
-    command: 'custom'
-    workingDir: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
-    customCommand: 'run build'
+# - task: Npm@1
+#   displayName: 'npm ci'
+#   inputs:
+#     command: 'install'
+#     workingDir: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
+# - task: Npm@1
+#   displayName: 'npm build'
+#   inputs:
+#     command: 'custom'
+#     workingDir: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
+#     customCommand: 'run build'
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
@@ -48,6 +48,17 @@ steps:
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\HomeEconomics'
     modifyOutputPath: false
     zipAfterPublish: false
+- task: Npm@1
+  displayName: 'npm ci'
+  inputs:
+    command: 'install'
+    workingDir: '$(Build.ArtifactStagingDirectory)\HomeEconomics\src\HomeEconomics\spa'
+- task: Npm@1
+  displayName: 'npm build'
+  inputs:
+    command: 'custom'
+    workingDir: '$(Build.ArtifactStagingDirectory)\HomeEconomics\src\HomeEconomics\spa'
+    customCommand: 'run build'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish build artifact'
   inputs:
