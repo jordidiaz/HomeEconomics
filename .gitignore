@@ -352,3 +352,6 @@ MigrationBackup/
 .terraform
 Deploy/*.tfstate*
 Deploy/*.tfvars
+
+# SPA
+src/HomeEconomics/spa/build
