@@ -20,7 +20,6 @@ namespace Persistence.Configurations
             builder.Property(f => f.Months)
                 .HasMaxLength(23)
                 .HasConversion(converter);
-
         }
     }
 }

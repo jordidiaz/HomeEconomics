@@ -35,7 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.IntegrationTe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{55B50527-D2F7-46D1-86B7-4D150438FAD6}"
 	ProjectSection(SolutionItems) = preProject
-		Release\infrastructure.tf = Release\infrastructure.tf
+		Deploy\infrastructure.tf = Deploy\infrastructure.tf
+		Deploy\main.tf = Deploy\main.tf
 		Deploy\variables.tf = Deploy\variables.tf
 	EndProjectSection
 EndProject

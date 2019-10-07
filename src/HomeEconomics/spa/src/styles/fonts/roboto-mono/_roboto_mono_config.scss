@@ -1,0 +1,20 @@
+$font-styles: (
+  Regular: (
+    400,
+    normal
+  )
+);
+
+@each $name, $styles in $font-styles {
+  $weight: nth($styles, 1);
+  $style: nth($styles, 2);
+
+  @font-face {
+    font-family: "Roboto Mono", monospace;
+    src: url("RobotoMono-#{$name}.ttf") format("truetype");
+    font-weight: $weight;
+    font-style: $style;
+  }
+}
+
+$roboto-mono: "Roboto Mono", monospace;

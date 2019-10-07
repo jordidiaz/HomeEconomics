@@ -15,6 +15,10 @@ namespace Persistence.Configurations
             builder.Property(m => m.Name)
                 .HasMaxLength(Lengths.Name)
                 .IsRequired();
+            builder.HasOne(movement => movement.Frequency)
+                .WithOne(frequency => frequency.Movement)
+                .HasForeignKey<Frequency>(frequency => frequency.MovementId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

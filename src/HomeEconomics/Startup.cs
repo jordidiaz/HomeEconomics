@@ -21,6 +21,7 @@ namespace HomeEconomics
         {
             services
                 .AddHomeEconomicsMvc()
+                .AddCors()
                 .AddHomeEconomicsMediatR()
                 .AddHomeEconomicsAutoMapper()
                 .AddHomeEconomicsPersistence(Configuration, Environment.IsDevelopment())
@@ -30,6 +31,7 @@ namespace HomeEconomics
         public void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment env)
         {
             applicationBuilder
+                .UseHomeEconomicsCors()
                 .UseHomeEconomicsSwagger()
                 .UseProblemDetails()
                 .UseHomeEconomicsSpa()

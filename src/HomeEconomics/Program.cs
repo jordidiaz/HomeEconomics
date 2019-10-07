@@ -51,7 +51,8 @@ namespace HomeEconomics
             return WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseSerilog(ConfigureSerilog())
-                .UseApplicationInsights();
+                .UseApplicationInsights()
+                .UseUrls(GetUrl());
         }
 
         private static Action<WebHostBuilderContext, LoggerConfiguration> ConfigureSerilog()
@@ -61,6 +62,15 @@ namespace HomeEconomics
                 loggerConfiguration
                     .ReadFrom.Configuration(webHostBuilderContext.Configuration);
             };
+        }
+
+        private static string GetUrl()
+        {
+            var port = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"
+                ? 5000
+                : 5001;
+
+            return $"http://localhost:{port}";
         }
     }
 }

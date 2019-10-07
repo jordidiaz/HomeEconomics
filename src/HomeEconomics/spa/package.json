@@ -3,23 +3,53 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1",
+    "react-scripts": "3.1.2"
+  },
+  "devDependencies": {
     "@types/jest": "24.0.18",
     "@types/node": "12.7.9",
     "@types/react": "16.9.4",
     "@types/react-dom": "16.9.1",
-    "react": "^16.10.1",
-    "react-dom": "^16.10.1",
-    "react-scripts": "3.1.2",
+    "@types/react-test-renderer": "^16.9.1",
+    "eslint": "^6.5.1",
+    "eslint-plugin-react-hooks": "^2.2.0",
+    "husky": "^3.0.8",
+    "lint-staged": "^9.4.1",
+    "node-sass": "^4.12.0",
+    "react-test-renderer": "^16.11.0",
+    "stylelint": "^11.0.0",
+    "stylelint-config-recommended-scss": "^4.0.0",
+    "stylelint-scss": "^3.11.1",
     "typescript": "3.6.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "lint": "eslint src/**/*.tsx",
+    "stylelint": "stylelint src/**/*.scss",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "overrides": [
+      {
+        "files": [
+          "**/*.ts?(x)"
+        ],
+        "rules": {
+          "semi": "error"
+        }
+      }
+    ]
+  },
+  "stylelint": {
+    "plugins": [
+      "stylelint-scss"
+    ],
+    "extends": "stylelint-config-recommended-scss"
   },
   "browserslist": {
     "production": [
@@ -31,6 +61,21 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.tsx": [
+      "eslint --fix",
+      "git add"
+    ],
+    "**/*.scss": [
+      "stylelint",
+      "git add"
     ]
   }
 }

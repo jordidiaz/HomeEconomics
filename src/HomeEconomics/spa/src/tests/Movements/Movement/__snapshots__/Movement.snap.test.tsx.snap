@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Movement component Matches the snapshot 1`] = `
+<div
+  className="Movement"
+>
+  <div
+    className="Movement__name"
+  >
+    <span>
+      Basura
+    </span>
+  </div>
+  <div
+    className="Movement__amount"
+  >
+    <span
+      className="Movement__amount-expense"
+    >
+      -
+      40
+       €
+    </span>
+  </div>
+  <div
+    className="Movement__frequency"
+  >
+    <i
+      className="icon--calendar"
+    />
+    <div
+      className="Movement__frequency-text-container"
+    >
+      <span
+        className="Movement__frequency-text"
+      >
+        feb
+      </span>
+      <span
+        className="Movement__frequency-text"
+      >
+        jun
+      </span>
+      <span
+        className="Movement__frequency-text"
+      >
+        oct
+      </span>
+    </div>
+  </div>
+</div>
+`;

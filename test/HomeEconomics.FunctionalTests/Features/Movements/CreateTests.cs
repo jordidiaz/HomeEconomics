@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Domain.Movements;
 using FluentAssertions;
@@ -38,7 +39,8 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
             movement.Amount.Should().Be(60m);
             movement.Type.Should().Be(MovementType.Expense);
             movement.Frequency.Type.Should().Be(FrequencyType.Monthly);
-            movement.Frequency.Months.Should().BeNull();
+            movement.Frequency.Months.SequenceEqual(new bool[12]).Should().BeTrue();
+
         }
 
         [Fact]

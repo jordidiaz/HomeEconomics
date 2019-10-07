@@ -1,0 +1,16 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: $open-sans;
+  color: $color-text;
+  font-size: $font-size-regular;
+  font-weight: $font-weight-regular;
+}
+
+ul {
+  list-style-type: none;
+}

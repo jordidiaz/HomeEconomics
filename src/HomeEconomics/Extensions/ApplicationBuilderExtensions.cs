@@ -24,5 +24,16 @@ namespace Microsoft.AspNetCore.Builder
                     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "spa/build"))
                 });
         }
+
+        internal static IApplicationBuilder UseHomeEconomicsCors(this IApplicationBuilder appBuilder)
+        {
+            return appBuilder.UseCors(corsPolicyBuilder =>
+                corsPolicyBuilder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials()
+            );
+        }
     }
 }

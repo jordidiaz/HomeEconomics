@@ -14,16 +14,20 @@ namespace Domain.Movements
 
         public bool[] Months { get; private set; }
 
+        public int MovementId { get; private set; }
+
+        public Movement Movement { get; private set; }
+
         internal void SetNoneFrequency()
         {
             Type = FrequencyType.None;
-            Months = null;
+            Months = new bool[12];
         }
 
         internal void SetMonthlyFrequency()
         {
             Type = FrequencyType.Monthly;
-            Months = null;
+            Months = new bool[12];
         }
 
         internal void SetYearlyFrequency(int month)

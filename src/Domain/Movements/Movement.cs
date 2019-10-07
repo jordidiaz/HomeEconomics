@@ -30,8 +30,6 @@ namespace Domain.Movements
 
         public MovementType Type { get; set; }
 
-        public int FrequencyId { get; private set; }
-    
         public Frequency Frequency { get; private set; }
 
         public void SetNoneFrequency()

@@ -60,7 +60,7 @@ namespace Domain.UnitTests
             _sut.SetNoneFrequency();
 
             _sut.Frequency.Type.Should().Be(FrequencyType.None);
-            _sut.Frequency.Months.Should().BeNull();
+            _sut.Frequency.Months.SequenceEqual(new bool[12]).Should().BeTrue();
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace Domain.UnitTests
             _sut.SetMonthlyFrequency();
 
             _sut.Frequency.Type.Should().Be(FrequencyType.Monthly);
-            _sut.Frequency.Months.Should().BeNull();
+            _sut.Frequency.Months.SequenceEqual(new bool[12]).Should().BeTrue();
         }
 
         [Theory]
