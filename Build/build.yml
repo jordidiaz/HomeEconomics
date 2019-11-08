@@ -54,7 +54,7 @@ steps:
   inputs:
     command: 'custom'
     workingDir: '$(Build.ArtifactStagingDirectory)\spa'
-    customCommand: 'test'
+    customCommand: 'run citest'
 - task: Npm@1
   displayName: 'npm build'
   inputs:
