@@ -50,6 +50,12 @@ steps:
     command: 'install'
     workingDir: '$(Build.ArtifactStagingDirectory)\spa'
 - task: Npm@1
+  displayName: 'npm test'
+  inputs:
+    command: 'custom'
+    workingDir: '$(Build.ArtifactStagingDirectory)\spa'
+    customCommand: 'run test'
+- task: Npm@1
   displayName: 'npm build'
   inputs:
     command: 'custom'
