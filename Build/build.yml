@@ -54,7 +54,7 @@ steps:
   inputs:
     command: 'custom'
     workingDir: '$(Build.ArtifactStagingDirectory)\spa'
-    customCommand: 'run test'
+    customCommand: 'test'
 - task: Npm@1
   displayName: 'npm build'
   inputs:
