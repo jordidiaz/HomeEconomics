@@ -13,7 +13,7 @@ describe('frequency', () => {
       type: MovementType.Expense,
       frequencyType: FrequencyType.None,
       frequencyMonths: []
-    }
+    };
   });
 
   describe('hasFrequency', () => {
