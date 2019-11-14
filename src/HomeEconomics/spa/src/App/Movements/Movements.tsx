@@ -7,17 +7,24 @@ import movementsService from './services/movements.service';
 const Movements: React.FC = () => {
   const [movements, setMovements] = useState<TMovement[]>([]);
 
+  async function deleteMovement(movement: TMovement) {
+    await movementsService.deleteMovement(movement);
+    setMovements(movements.filter(m => m.id !== movement.id));
+  }
+
   useEffect(() => {
-    movementsService.getAllMovements()
-      .then(setMovements);
+    (async function () {
+      const movements = await movementsService.getAllMovements();
+      setMovements(movements);
+    })();
   }, []);
 
   return (
     <ul className="Movements">
       {
-        movements.map((movement: TMovement) => {
-          return <li key={movement.id}><Movement movement={movement} /></li>;
-        })
+        movements.map((movement: TMovement) =>
+          <li key={movement.id}><Movement movement={movement} deleteMovement={deleteMovement} /></li>
+        )
       }
     </ul>
   );

@@ -10,7 +10,7 @@ $frequency-text-height: 24px;
   grid-template-areas:
     "name amount"
     ". amount"
-    "frequency frecuency";
+    "frequency actions";
 
   overflow: hidden;
 
@@ -71,5 +71,11 @@ $frequency-text-height: 24px;
 
       font-family: $roboto-mono;
     }
+  }
+
+  &__actions {
+    grid-area: actions;
+    display: flex;
+    justify-content: flex-end;
   }
 }

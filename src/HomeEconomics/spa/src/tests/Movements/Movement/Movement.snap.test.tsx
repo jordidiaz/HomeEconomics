@@ -27,7 +27,7 @@ describe("Movement component", () => {
       ]
     };
 
-    const movementRenderer = create(<Movement movement={movement} />);
+    const movementRenderer = create(<Movement movement={movement} deleteMovement={() => { return; }} />);
     expect(movementRenderer.toJSON()).toMatchSnapshot();
   });
 });

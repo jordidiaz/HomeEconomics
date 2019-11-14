@@ -1,20 +1,23 @@
 import { TMovement } from '../Movement/models/movement.models';
-
-const apiBaseUrl: string = process.env.REACT_APP_API_BASE_URL as string;
+import http from '../../infrastructure/http';
 
 type GetAllMovementsResponse = {
   movements: TMovement[];
 }
 
-const getAllMovements = (): Promise<TMovement[]> => {
-  return fetch(`${apiBaseUrl}/api/movements`)
-    .then((response: Response) => response.json())
-    .then((result: GetAllMovementsResponse) => result.movements)
-    .catch((err) => { throw new Error(err) });
-}
+const getAllMovements = async (): Promise<TMovement[]> => {
+  const response: GetAllMovementsResponse = await http.get<GetAllMovementsResponse>('movements');
+  return response.movements;
+};
+
+const deleteMovement = async (movement: TMovement): Promise<void> => {
+  await http.del(`movements/${movement.id}`);
+  return;
+};
 
 const movementsService = {
-  getAllMovements
-}
+  getAllMovements,
+  deleteMovement
+};
 
 export default movementsService;

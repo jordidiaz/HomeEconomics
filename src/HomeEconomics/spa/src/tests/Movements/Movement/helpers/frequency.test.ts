@@ -1,5 +1,5 @@
-import { hasFrequency, getFrequency } from '../../../App/Movements/Movement/helpers/frequency';
-import { FrequencyType, MovementType, TMovement } from '../../../App/Movements/Movement/models/movement.models';
+import { hasFrequency, getFrequency } from '../../../../App/Movements/Movement/helpers/frequency';
+import { FrequencyType, MovementType, TMovement } from '../../../../App/Movements/Movement/models/movement.models';
 
 
 describe('frequency', () => {

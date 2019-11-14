@@ -48,5 +48,13 @@ exports[`Movement component Matches the snapshot 1`] = `
       </span>
     </div>
   </div>
+  <div
+    className="Movement__actions"
+  >
+    <i
+      className="action-icon icon--bin"
+      onClick={[Function]}
+    />
+  </div>
 </div>
 `;
