@@ -17,13 +17,13 @@ namespace HomeEconomics.Features.Movements
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Create(Create.Command command)
         {
-            await _mediator.Send(command);
+            var id = await _mediator.Send(command);
 
-            return NoContent();
+            return Ok(id);
         }
 
         [HttpGet]

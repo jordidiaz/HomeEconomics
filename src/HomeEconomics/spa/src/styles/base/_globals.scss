@@ -7,7 +7,14 @@ body {
 body {
   font-family: $open-sans;
   color: $color-text;
-  font-size: $font-size-regular;
+  font-weight: $font-weight-regular;
+}
+
+input,
+select,
+button {
+  font-family: $open-sans;
+  color: $color-text;
   font-weight: $font-weight-regular;
 }
 

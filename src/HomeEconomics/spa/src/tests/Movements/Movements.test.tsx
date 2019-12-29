@@ -17,9 +17,19 @@ describe("Movements component", () => {
   });
 
   beforeEach(() => {
-    jest.spyOn(movementsService, 'getAllMovements')
+    jest.spyOn(movementsService, 'getAll')
       .mockImplementation(() => {
         return Promise.resolve(movements);
+      });
+
+    jest.spyOn(movementsService, 'remove')
+      .mockImplementation(() => {
+        return Promise.resolve();
+      });
+
+    jest.spyOn(movementsService, 'create')
+      .mockImplementation(() => {
+        return Promise.resolve(1);
       });
   });
 
@@ -32,11 +42,37 @@ describe("Movements component", () => {
     jest.clearAllMocks();
   });
 
-  test("should call to getAllMovements and render the movements", async () => {
+  test("should call to getAll and render the MovementForm and the movements", async () => {
     await act(async () => {
       ReactDOM.render(<Movements />, container);
     });
-    expect(movementsService.getAllMovements).toHaveBeenCalledTimes(1);
+    expect(movementsService.getAll).toHaveBeenCalledTimes(1);
     expect(container.getElementsByTagName('li').length).toBe(5);
+    expect(container.getElementsByClassName('MovementForm').length).toBe(1);
+  });
+
+  test('should call to remove and remove the movement from the list', async () => {
+    await act(async () => {
+      ReactDOM.render(<Movements />, container);
+    });
+    const movement = container.getElementsByClassName('Movement')[0];
+    const deleteIcon = movement.getElementsByClassName("icon--bin")[0];
+    await act(async () => {
+      deleteIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(movementsService.remove).toHaveBeenCalledTimes(1);
+    expect(container.getElementsByTagName('li').length).toBe(4);
+  });
+
+  test('should call to create and add the movement to the list', async () => {
+    await act(async () => {
+      ReactDOM.render(<Movements />, container);
+    });
+    const saveButton = container.getElementsByClassName('MovementForm__save')[0];
+    await act(async () => {
+      saveButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(movementsService.create).toHaveBeenCalledTimes(1);
+    expect(container.getElementsByTagName('li').length).toBe(6);
   });
 });

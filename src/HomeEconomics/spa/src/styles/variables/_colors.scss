@@ -1,6 +1,8 @@
 $color-grey: #666969;
 $color-grey-dark: darken($color-grey, 20%);
+$color-grey-light: lighten($color-grey, 40%);
 $color-red: #e36a62;
 $color-green: #43994d;
+$color-green-dark: darken($color-green, 10%);
 
 $color-text: $color-grey;

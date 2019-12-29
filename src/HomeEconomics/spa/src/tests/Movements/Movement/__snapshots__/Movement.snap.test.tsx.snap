@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Movement component Matches the snapshot 1`] = `
+exports[`Movement component Matches the snapshot 1 1`] = `
 <div
   className="Movement"
 >
@@ -8,7 +8,7 @@ exports[`Movement component Matches the snapshot 1`] = `
     className="Movement__name"
   >
     <span>
-      Basura
+      Name
     </span>
   </div>
   <div
@@ -18,6 +18,72 @@ exports[`Movement component Matches the snapshot 1`] = `
       className="Movement__amount-expense"
     >
       -
+      40
+       €
+    </span>
+  </div>
+  <div
+    className="Movement__actions"
+  >
+    <i
+      className="action-icon icon--bin"
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;
+
+exports[`Movement component Matches the snapshot 2 1`] = `
+<div
+  className="Movement"
+>
+  <div
+    className="Movement__name"
+  >
+    <span>
+      Name
+    </span>
+  </div>
+  <div
+    className="Movement__amount"
+  >
+    <span
+      className="Movement__amount-income"
+    >
+      +
+      40
+       €
+    </span>
+  </div>
+  <div
+    className="Movement__actions"
+  >
+    <i
+      className="action-icon icon--bin"
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;
+
+exports[`Movement component Matches the snapshot 2 2`] = `
+<div
+  className="Movement"
+>
+  <div
+    className="Movement__name"
+  >
+    <span>
+      Name
+    </span>
+  </div>
+  <div
+    className="Movement__amount"
+  >
+    <span
+      className="Movement__amount-income"
+    >
+      +
       40
        €
     </span>
@@ -34,19 +100,106 @@ exports[`Movement component Matches the snapshot 1`] = `
       <span
         className="Movement__frequency-text"
       >
-        feb
+        ago
       </span>
       <span
         className="Movement__frequency-text"
       >
-        jun
-      </span>
-      <span
-        className="Movement__frequency-text"
-      >
-        oct
+        nov
       </span>
     </div>
+  </div>
+  <div
+    className="Movement__actions"
+  >
+    <i
+      className="action-icon icon--bin"
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;
+
+exports[`Movement component Matches the snapshot 3 1`] = `
+<div
+  className="Movement"
+>
+  <div
+    className="Movement__name"
+  >
+    <span>
+      Name
+    </span>
+  </div>
+  <div
+    className="Movement__amount"
+  >
+    <span
+      className="Movement__amount-income"
+    >
+      +
+      40
+       €
+    </span>
+  </div>
+  <div
+    className="Movement__frequency"
+  >
+    <i
+      className="icon--calendar"
+    />
+    <div
+      className="Movement__frequency-text-container"
+    >
+      <span
+        className="Movement__frequency-text"
+      >
+        men
+      </span>
+    </div>
+  </div>
+  <div
+    className="Movement__actions"
+  >
+    <i
+      className="action-icon icon--bin"
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;
+
+exports[`Movement component Matches the snapshot 4 1`] = `
+<div
+  className="Movement"
+>
+  <div
+    className="Movement__name"
+  >
+    <span>
+      Name
+    </span>
+  </div>
+  <div
+    className="Movement__amount"
+  >
+    <span
+      className="Movement__amount-income"
+    >
+      +
+      40
+       €
+    </span>
+  </div>
+  <div
+    className="Movement__frequency"
+  >
+    <i
+      className="icon--calendar"
+    />
+    <div
+      className="Movement__frequency-text-container"
+    />
   </div>
   <div
     className="Movement__actions"

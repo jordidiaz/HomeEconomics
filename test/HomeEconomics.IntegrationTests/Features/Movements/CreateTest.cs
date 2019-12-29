@@ -32,13 +32,13 @@ namespace HomeEconomics.IntegrationTests.Features.Movements
         }
 
         [Fact]
-        public async Task Should_Return_204_NoContent()
+        public async Task Should_Return_200_Ok()
         {
             var response = await HttpClient
                 .PostAsync(Uri, _command);
 
             response.EnsureSuccessStatusCode();
-            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Fact]

@@ -1,23 +1,50 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
 import notifications from './notifications';
 
-const configureAxios = (): AxiosInstance => {
-  const axiosInstance: AxiosInstance = axios.create({
+let axiosInstance: AxiosInstance;
+
+const configure = (loadingCallback: (loading: boolean) => void): AxiosInstance => {
+  axiosInstance = axios.create({
     baseURL: `${process.env.REACT_APP_API_BASE_URL}/api/`
   });
 
+  const onRejected: (error: AxiosError) => void = (error: AxiosError) => {
+    loadingCallback(false);
+    notifications.error(getErrorMessage(error));
+    return Promise.reject(error);
+  };
+
+  axiosInstance.interceptors.request.use(
+    ((request: AxiosRequestConfig) => {
+      loadingCallback(true);
+      return request;
+    }),
+    onRejected
+  );
+
   axiosInstance.interceptors.response.use(
-    ((response: AxiosResponse<any>) => response),
-    ((error: AxiosError) => {
-      notifications.error(getErrorMessage(error));
-      return Promise.reject(error);
-    })
+    ((response: AxiosResponse<any>) => {
+      loadingCallback(false);
+      return response;
+    }),
+    onRejected
   );
 
   return axiosInstance;
 };
 
 const getErrorMessage = (error: AxiosError): string => {
+  const defaultMessage = 'Ha ocurrido un error inesperado';
+  const validationErrorMessage = 'Ha ocurrido un error de validación';
+
+  if (error.response && error.response.status === 500) {
+    return defaultMessage;
+  }
+
+  if (error.response && error.response.status === 400) {
+    return validationErrorMessage;
+  }
+
   if (error && !error.response) {
     return error.message;
   }
@@ -26,10 +53,8 @@ const getErrorMessage = (error: AxiosError): string => {
     return error.response.data.detail;
   }
 
-  return "Ha ocurrido un error inesperado";
+  return defaultMessage;
 };
-
-const axiosInstance = configureAxios();
 
 const get = async <T>(path: string): Promise<T> => {
   const response = await axiosInstance.get(path);
@@ -41,7 +66,14 @@ const del = async (path: string): Promise<boolean> => {
   return true;
 };
 
+const post = async (path: string, data: any): Promise<any> => {
+  const response = await axiosInstance.post(path, data);
+  return response.data;
+};
+
 export default {
+  configure,
   get,
-  del
+  del,
+  post
 };

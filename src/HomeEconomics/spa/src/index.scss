@@ -1,5 +1,6 @@
 @import-normalize;
+@import "styles/base/_reset.css";
 @import "styles/variables/variables.scss";
 @import "styles/fonts/fonts.scss";
-@import "styles/base/base.scss";
+@import "styles/base/globals";
 @import "styles/components/components.scss";

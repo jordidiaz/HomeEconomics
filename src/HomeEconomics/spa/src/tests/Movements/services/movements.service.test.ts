@@ -7,7 +7,7 @@ describe('Movements Service', () => {
 
   let movements: TMovement[];
 
-  describe('getAllMovements', () => {
+  describe('getAll', () => {
 
     movements = getMovements(3);
     const expected: TMovement[] = getMovements(3);
@@ -16,20 +16,32 @@ describe('Movements Service', () => {
       jest.spyOn(http, 'get')
         .mockResolvedValueOnce({ movements });
 
-      return expect(movementsService.getAllMovements()).resolves.toEqual(expected);
+      return expect(movementsService.getAll()).resolves.toEqual(expected);
     });
 
   });
 
-  describe('deleteMovement', () => {
+  describe('remove', () => {
 
-    test('should delete the movement', () => {
+    test('should remove the movement', () => {
       jest.spyOn(http, 'del')
         .mockResolvedValueOnce(true);
 
-      return expect(movementsService.deleteMovement(movements[0])).resolves.not.toThrow();
+      return expect(movementsService.remove(movements[0])).resolves.not.toThrow();
     });
 
+  });
+
+  describe('create', () => {
+
+    test('should create a movement', () => {
+      jest.spyOn(http, 'post')
+        .mockResolvedValueOnce(1);
+
+      const movement = getMovements()[0];
+
+      return expect(movementsService.create(movement)).resolves.toEqual(1);
+    });
   });
 
 });

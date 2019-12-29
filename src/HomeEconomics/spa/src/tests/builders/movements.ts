@@ -13,7 +13,7 @@ export const getMovements = (quantity: number = 1): TMovement[] => {
   }
 
   return movements;
-}
+};
 
 const baseMovement: TMovement = {
   id: -1,
@@ -21,5 +21,6 @@ const baseMovement: TMovement = {
   amount: 0,
   type: MovementType.Expense,
   frequencyType: FrequencyType.None,
+  frequencyMonth: 0,
   frequencyMonths: []
 };

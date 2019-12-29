@@ -12,6 +12,7 @@ describe('frequency', () => {
       amount: 10,
       type: MovementType.Expense,
       frequencyType: FrequencyType.None,
+      frequencyMonth: 0,
       frequencyMonths: []
     };
   });

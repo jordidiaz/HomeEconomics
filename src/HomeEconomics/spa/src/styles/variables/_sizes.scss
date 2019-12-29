@@ -1,5 +1,5 @@
 $font-size-regular: 16px;
-$font-size-big: 20px;
+$font-size-big: 18px;
 $font-size-bigger: 20px;
 $font-size-biggest: 30px;
 
@@ -7,3 +7,7 @@ $font-weight-regular: 500;
 $font-weight-semibold: 600;
 
 $border-radius: 5px;
+$border-line-with: 1.5px;
+
+$input-height: 30px;
+$select-height: calc(#{$input-height} + #{$border-line-with} + #{$border-line-with});

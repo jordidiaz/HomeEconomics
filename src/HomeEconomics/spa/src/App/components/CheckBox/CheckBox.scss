@@ -1,0 +1,63 @@
+@import "../../../styles/variables/variables.scss";
+
+.CheckBox {
+  margin: 2.5px 0 2.5px 0;
+
+  [type="checkbox"]:checked,
+  [type="checkbox"]:not(:checked) {
+    position: absolute;
+    left: -9999px;
+  }
+
+  [type="checkbox"]:checked + label,
+  [type="checkbox"]:not(:checked) + label {
+    display: inline-block;
+    position: relative;
+    padding-left: 28px;
+
+    cursor: pointer;
+
+    line-height: 20px;
+
+    color: $color-text;
+    font-size: $font-size-regular;
+  }
+
+  [type="checkbox"]:checked + label:before,
+  [type="checkbox"]:not(:checked) + label:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border: $border-line-with solid $color-grey;
+    border-radius: $border-radius;
+    background: #fff;
+  }
+
+  [type="checkbox"]:checked + label:after,
+  [type="checkbox"]:not(:checked) + label:after {
+    content: "";
+    width: 5px;
+    height: 12px;
+    border: 2px solid $color-grey;
+    border-top: none;
+    border-left: none;
+    position: absolute;
+    top: 2px;
+    left: 7px;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+  }
+
+  [type="checkbox"]:not(:checked) + label:after {
+    opacity: 0;
+    transform: scale(0);
+  }
+  [type="checkbox"]:checked + label:after {
+    opacity: 1;
+    transform: scale(1);
+    transform: rotate(45deg);
+  }
+}

@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CheckBox component Matches the snapshot if checked 1`] = `
+<div
+  className="CheckBox"
+>
+  <input
+    checked={true}
+    id="1"
+    onChange={[Function]}
+    type="checkbox"
+    value={2}
+  />
+  <label
+    htmlFor="1"
+  >
+    label
+  </label>
+</div>
+`;
+
+exports[`CheckBox component Matches the snapshot if not checked 1`] = `
+<div
+  className="CheckBox"
+>
+  <input
+    checked={false}
+    id="1"
+    onChange={[Function]}
+    type="checkbox"
+    value={2}
+  />
+  <label
+    htmlFor="1"
+  >
+    label
+  </label>
+</div>
+`;
