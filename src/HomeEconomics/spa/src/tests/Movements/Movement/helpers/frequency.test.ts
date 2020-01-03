@@ -73,25 +73,12 @@ describe('frequency', () => {
 
     test('should return ["ago"] if frequencyType is Yearly and august selected', () => {
       movement.frequencyType = FrequencyType.Yearly;
-      movement.frequencyMonths = [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false
-      ];
+      movement.frequencyMonth = 8;
       expect(getFrequency(movement)).toEqual(['ago']);
     });
 
     test('should return ["ene", "feb", "nov"] if frequencyType is Custom and those months are selected', () => {
-      movement.frequencyType = FrequencyType.Yearly;
+      movement.frequencyType = FrequencyType.Custom;
       movement.frequencyMonths = [
         true,
         true,

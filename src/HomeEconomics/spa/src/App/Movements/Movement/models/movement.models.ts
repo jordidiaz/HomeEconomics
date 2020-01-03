@@ -21,3 +21,13 @@ export enum FrequencyType {
   Yearly,
   Custom
 }
+
+export const emptyMovement: TMovement = {
+  id: -1,
+  name: '',
+  amount: 0,
+  type: MovementType.Undefined,
+  frequencyType: FrequencyType.Undefined,
+  frequencyMonth: -1,
+  frequencyMonths: Array.from({ length: 12 }, () => false)
+};

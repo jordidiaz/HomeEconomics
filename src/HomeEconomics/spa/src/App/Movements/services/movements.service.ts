@@ -16,6 +16,10 @@ interface createMovementDTO {
   }
 }
 
+interface editMovementDTO extends createMovementDTO {
+  id: number;
+}
+
 const getAll = async (): Promise<TMovement[]> => {
   const response: GetAllMovementsResponse = await http.get<GetAllMovementsResponse>('movements');
   return response.movements;
@@ -40,10 +44,27 @@ const create = async (movement: TMovement): Promise<number> => {
   return await http.post('movements', createMovementDTO);
 };
 
+const edit = async (movement: TMovement): Promise<void> => {
+  const editMovementDTO: editMovementDTO = {
+    id: movement.id,
+    name: movement.name,
+    amount: movement.amount,
+    type: movement.type,
+    frequency: {
+      type: movement.frequencyType,
+      month: movement.frequencyMonth,
+      months: movement.frequencyMonths,
+    }
+  };
+  await http.put(`movements/${movement.id}`, editMovementDTO);
+  return;
+};
+
 const movementsService = {
   getAll,
   remove,
-  create
+  create,
+  edit
 };
 
 export default movementsService;

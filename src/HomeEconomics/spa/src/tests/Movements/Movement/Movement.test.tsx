@@ -10,11 +10,12 @@ describe('Movement component', () => {
 
   const movement = getMovements()[0];
   const deleteMovement = jest.fn();
+  const loadMovement = jest.fn();
 
   beforeEach(() => {
     container = document.createElement("div");
     document.body.appendChild(container);
-    ReactDOM.render(<Movement movement={movement} deleteMovement={deleteMovement} />, container);
+    ReactDOM.render(<Movement movement={movement} deleteMovement={deleteMovement} loadMovement={loadMovement} />, container);
   });
 
   afterEach(() => {
@@ -32,5 +33,13 @@ describe('Movement component', () => {
       deleteIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(deleteMovement.mock.calls.length).toBe(1);
+  });
+
+  test('should call to loadMovement when the edit icon is clicked', () => {
+    const editIcon = container.getElementsByClassName("icon--pencil")[0];
+    act(() => {
+      editIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(loadMovement.mock.calls.length).toBe(1);
   });
 });

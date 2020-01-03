@@ -92,5 +92,11 @@ exports[`MovementForm component Matches the snapshot 1`] = `
   >
     Guardar
   </button>
+  <button
+    className="MovementForm__cancel button"
+    onClick={[Function]}
+  >
+    Cancelar
+  </button>
 </form>
 `;

@@ -31,6 +31,11 @@ describe("Movements component", () => {
       .mockImplementation(() => {
         return Promise.resolve(1);
       });
+
+    jest.spyOn(movementsService, 'edit')
+      .mockImplementation(() => {
+        return Promise.resolve();
+      });
   });
 
   afterEach(() => {
@@ -74,5 +79,21 @@ describe("Movements component", () => {
     });
     expect(movementsService.create).toHaveBeenCalledTimes(1);
     expect(container.getElementsByTagName('li').length).toBe(6);
+  });
+
+  test('should call to edit and edit the movement from the list', async () => {
+    await act(async () => {
+      ReactDOM.render(<Movements />, container);
+    });
+    const editButton = container.getElementsByClassName('icon--pencil')[0];
+    act(() => {
+      editButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    const saveButton = container.getElementsByClassName('MovementForm__save')[0];
+    await act(async () => {
+      saveButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(movementsService.edit).toHaveBeenCalledTimes(1);
+    expect(container.getElementsByTagName('li').length).toBe(5);
   });
 });

@@ -6,14 +6,19 @@ import './Movement.scss';
 export type MovementProps = {
   movement: TMovement;
   deleteMovement: (movement: TMovement) => void;
+  loadMovement: (movement: TMovement) => void;
 }
 
 const Movement: React.FC<MovementProps> = (props) => {
 
-  const { movement, deleteMovement } = props;
+  const { movement, deleteMovement, loadMovement } = props;
 
   const onClickDelete = () => {
     deleteMovement(movement);
+  };
+
+  const onClickEdit = () => {
+    loadMovement(movement);
   };
 
   const type: string = movement.type === MovementType.Expense
@@ -55,6 +60,7 @@ const Movement: React.FC<MovementProps> = (props) => {
         </div>
       }
       <div className="Movement__actions">
+        <i className="action-icon icon--pencil" onClick={onClickEdit}></i>
         <i className="action-icon icon--bin" onClick={onClickDelete}></i>
       </div>
     </div>

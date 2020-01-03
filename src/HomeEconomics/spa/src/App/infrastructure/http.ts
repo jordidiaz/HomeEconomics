@@ -71,9 +71,15 @@ const post = async (path: string, data: any): Promise<any> => {
   return response.data;
 };
 
+const put = async (path: string, data: any): Promise<boolean> => {
+  await axiosInstance.put(path, data);
+  return true;
+};
+
 export default {
   configure,
   get,
   del,
-  post
+  post,
+  put
 };

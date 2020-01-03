@@ -2,11 +2,11 @@
 
 @font-face {
   font-family: '#{$icomoon-font-family}';
-  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?yrqrxv');
-  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?yrqrxv#iefix') format('embedded-opentype'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?yrqrxv') format('truetype'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?yrqrxv') format('woff'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?yrqrxv##{$icomoon-font-family}') format('svg');
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?8dir1u');
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?8dir1u#iefix') format('embedded-opentype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?8dir1u') format('truetype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?8dir1u') format('woff'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?8dir1u##{$icomoon-font-family}') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -27,6 +27,11 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon--pencil {
+  &:before {
+    content: $icon--pencil; 
+  }
+}
 .icon--calendar {
   &:before {
     content: $icon--calendar; 

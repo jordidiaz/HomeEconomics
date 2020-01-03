@@ -25,7 +25,7 @@ describe('Movements Service', () => {
 
     test('should remove the movement', () => {
       jest.spyOn(http, 'del')
-        .mockResolvedValueOnce(true);
+        .mockResolvedValue(true);
 
       return expect(movementsService.remove(movements[0])).resolves.not.toThrow();
     });
@@ -41,6 +41,18 @@ describe('Movements Service', () => {
       const movement = getMovements()[0];
 
       return expect(movementsService.create(movement)).resolves.toEqual(1);
+    });
+  });
+
+  describe('edit', () => {
+
+    test('should edit a movement', () => {
+      jest.spyOn(http, 'put')
+        .mockResolvedValueOnce(true);
+
+      const movement = getMovements()[0];
+
+      return expect(movementsService.edit(movement)).resolves.not.toThrow();
     });
   });
 

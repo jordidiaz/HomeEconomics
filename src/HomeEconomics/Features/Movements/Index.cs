@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Domain.Movements;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -31,6 +33,8 @@ namespace HomeEconomics.Features.Movements
                 public int FrequencyType { get; set; }
 
                 public bool[] FrequencyMonths { get; set; }
+
+                public int FrequencyMonth { get; set; }
             }
         }
 
@@ -51,6 +55,14 @@ namespace HomeEconomics.Features.Movements
                         .Include(m => m.Frequency)
                         .OrderBy(m => m.Name))
                         .ToArrayAsync(cancellationToken: cancellationToken);
+
+                movements = movements.Select(movement =>
+                    {
+                        movement.FrequencyMonth = movement.FrequencyType == (int) FrequencyType.Yearly
+                            ? Array.IndexOf(movement.FrequencyMonths, true) + 1
+                            : 0;
+                        return movement;
+                    }).ToArray();
 
                 return new Result
                 {
