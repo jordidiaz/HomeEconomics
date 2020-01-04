@@ -355,3 +355,4 @@ Deploy/*.tfvars
 
 # SPA
 src/HomeEconomics/spa/build
+.vscode
