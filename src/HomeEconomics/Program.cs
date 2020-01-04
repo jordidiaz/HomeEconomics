@@ -1,58 +1,27 @@
 ﻿using System;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using Microsoft.AspNetCore;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.WindowsServices;
-using Persistence;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 
 namespace HomeEconomics
 {
     public static class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            var isService = !(Debugger.IsAttached || args.Contains("--console"));
-            
-            if (isService)
-            {
-                var mainModule = Process.GetCurrentProcess().MainModule;
-                if (mainModule is null)
-                {
-                    throw new NoNullAllowedException(nameof(mainModule));
-                }
-                var pathToExe = mainModule.FileName;
-                var pathToContentRoot = Path.GetDirectoryName(pathToExe);
-                Directory.SetCurrentDirectory(pathToContentRoot);
-            }
-
-            var builder = CreateWebHostBuilder(
-                args.Where(arg => arg != "--console").ToArray());
-
-            var host = builder.Build();
-
-            host.InitializeDbContext<HomeEconomicsDbContext>();
-
-            if (isService)
-            {
-                host.RunAsService();
-            }
-            else
-            {
-                host.Run();
-            }
+            await CreateHostBuilder(args).Build().RunAsync();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .UseSerilog(ConfigureSerilog())
-                .UseApplicationInsights()
-                .UseUrls(GetUrl());
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webHostBuilder =>
+                {
+                    webHostBuilder.UseStartup<Startup>();
+                    webHostBuilder.UseSerilog(ConfigureSerilog());
+                    webHostBuilder.UseUrls(GetUrl());
+                });
         }
 
         private static Action<WebHostBuilderContext, LoggerConfiguration> ConfigureSerilog()

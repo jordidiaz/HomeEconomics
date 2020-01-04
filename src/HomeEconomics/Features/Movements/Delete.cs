@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain;
+using FluentValidation;
+using HomeEconomics.Helpers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -12,6 +15,14 @@ namespace HomeEconomics.Features.Movements
         public class Command : IRequest
         {
             public int Id { get; set; }
+        }
+
+        public class Validator : AbstractValidator<Delete.Command>
+        {
+            public Validator()
+            {
+                RuleFor(command => command.Id).GreaterThan(0);
+            }
         }
 
         public class Handler : IRequestHandler<Command>

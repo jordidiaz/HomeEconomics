@@ -5,14 +5,13 @@ using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    internal static class ServiceCollectionExtensions
+    public static class ServiceCollectionExtensions
     {
-        internal static IServiceCollection AddHomeEconomicsMvc(this IServiceCollection services)
+        public static IServiceCollection AddHomeEconomicsApi(this IServiceCollection services)
         {
             return services
                 .AddProblemDetails(problemDetailsOptions =>
@@ -20,6 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     problemDetailsOptions.Map<InvalidOperationException>(ex => new ExceptionProblemDetails(ex, StatusCodes.Status409Conflict));
                 })
                 .AddMvcCore()
+                .AddNewtonsoftJson()
                 .AddFluentValidation(fluentValidationMvcConfiguration =>
                     {
                         fluentValidationMvcConfiguration
@@ -28,18 +28,16 @@ namespace Microsoft.Extensions.DependencyInjection
                         fluentValidationMvcConfiguration.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                     })
                 .AddApiExplorer()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonFormatters()
                 .Services;
         }
 
-        internal static IServiceCollection AddHomeEconomicsMediatR(this IServiceCollection services)
+        public static IServiceCollection AddHomeEconomicsMediatR(this IServiceCollection services)
         {
             return services
                 .AddMediatR(typeof(HomeEconomics.HomeEconomics));
         }
 
-        internal static IServiceCollection AddHomeEconomicsAutoMapper(this IServiceCollection services)
+        public static IServiceCollection AddHomeEconomicsAutoMapper(this IServiceCollection services)
         {
             return services
                 .AddAutoMapper(HomeEconomics.Configuration.Configuration.ConfigureAutoMapper(), Assembly.GetAssembly(typeof(HomeEconomics.HomeEconomics)));
@@ -50,7 +48,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services
                 .AddSwaggerGen(swaggerGenOptions =>
                 {
-                    swaggerGenOptions.SwaggerDoc("hm", new Info { Title = "HomeEconomics API" });
+                    swaggerGenOptions.SwaggerDoc("hm", new OpenApiInfo { Title = "HomeEconomics API" });
                     swaggerGenOptions.CustomSchemaIds(type => type.FullName);
                 });
         }

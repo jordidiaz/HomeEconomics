@@ -5,11 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace HomeEconomics
+namespace HomeEconomics.FunctionalTests.Infrastructure
 {
-    public class Startup
+    public class TestStartup
     {
-        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
+        public TestStartup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
             WebHostEnvironment = webHostEnvironment;
@@ -25,20 +25,13 @@ namespace HomeEconomics
                 .AddCors()
                 .AddHomeEconomicsMediatR()
                 .AddHomeEconomicsAutoMapper()
-                .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment())
-                .AddHomeEconomicsSwagger()
-                .AddApplicationInsightsTelemetry();
+                .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment());
         }
 
         public void Configure(IApplicationBuilder applicationBuilder)
         {
             applicationBuilder
-                .UseRouting()
-                .UseHomeEconomicsCors()
-                .UseHomeEconomicsSwagger()
-                .UseProblemDetails()
-                .UseHomeEconomicsSpa()
-                .UseHomeEconomicsEndpoints();
+                .UseProblemDetails();
         }
     }
 }

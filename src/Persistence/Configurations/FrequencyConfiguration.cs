@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Domain.Movements;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -12,7 +13,7 @@ namespace Persistence.Configurations
         {
             var converter = new ValueConverter<bool[], string>(
                 months => string.Join(",", months.Select(x => x ? 1 : 0)),
-                months => months.Split(',').Select(x => x == "1").ToArray()
+                months => months.Split(',', StringSplitOptions.None).Select(x => x == "1").ToArray()
                 );
 
             builder.ToTable("Frequencies");

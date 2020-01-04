@@ -1,7 +1,7 @@
 ﻿using Hellang.Middleware.ProblemDetails;
-using HomeEconomics.IntegrationTests.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using ServiceCollectionExtensions = HomeEconomics.IntegrationTests.Extensions.ServiceCollectionExtensions;
 
 namespace HomeEconomics.IntegrationTests.Infrastructure
 {
@@ -9,16 +9,16 @@ namespace HomeEconomics.IntegrationTests.Infrastructure
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddHomeEconomicsMvc()
-                .AddHomeEconomicsMediatR();
+            ServiceCollectionExtensions.AddHomeEconomicsApi(services);
+            ServiceCollectionExtensions.AddHomeEconomicsMediatR(services);
         }
 
         public void Configure(IApplicationBuilder applicationBuilder)
         {
             applicationBuilder
+                .UseRouting()
                 .UseProblemDetails()
-                .UseMvc();
+                .UseHomeEconomicsEndpoints();
         }
     }
 }

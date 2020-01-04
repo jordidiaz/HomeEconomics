@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Persistence;
 
@@ -21,8 +20,6 @@ namespace Microsoft.Extensions.DependencyInjection
                         .UseSqlServer(
                             connectionString,
                             sqlServerDbContextOptionsBuilder => sqlServerDbContextOptionsBuilder.EnableRetryOnFailure())
-                        .ConfigureWarnings(warningsConfigurationBuilder =>
-                            warningsConfigurationBuilder.Throw(RelationalEventId.QueryClientEvaluationWarning))
                         .EnableSensitiveDataLogging(isDevelopment);
                 });
         }

@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Microsoft.Extensions.FileProviders;
 
 namespace Microsoft.AspNetCore.Builder
 {
-    internal static class ApplicationBuilderExtensions
+    public static class ApplicationBuilderExtensions
     {
         internal static IApplicationBuilder UseHomeEconomicsSwagger(this IApplicationBuilder appBuilder)
         {
@@ -18,10 +17,15 @@ namespace Microsoft.AspNetCore.Builder
 
         internal static IApplicationBuilder UseHomeEconomicsSpa(this IApplicationBuilder appBuilder)
         {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "spa/build");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
             return appBuilder
                 .UseFileServer(new FileServerOptions
                 {
-                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "spa/build"))
+                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), path))
                 });
         }
 
@@ -32,8 +36,12 @@ namespace Microsoft.AspNetCore.Builder
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod()
-                    .AllowCredentials()
             );
+        }
+
+        internal static IApplicationBuilder UseHomeEconomicsEndpoints(this IApplicationBuilder appBuilder)
+        {
+            return appBuilder.UseEndpoints(endpointRouteBuilder => endpointRouteBuilder.MapControllers());
         }
     }
 }

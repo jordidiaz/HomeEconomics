@@ -1,16 +1,16 @@
 ﻿using System;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
+using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HomeEconomics.IntegrationTests.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        internal static IServiceCollection AddHomeEconomicsMvc(this IServiceCollection services)
+        internal static IServiceCollection AddHomeEconomicsApi(this IServiceCollection services)
         {
             return services
                 .AddProblemDetails(problemDetailsOptions =>
@@ -18,6 +18,8 @@ namespace HomeEconomics.IntegrationTests.Extensions
                     problemDetailsOptions.Map<InvalidOperationException>(ex => new ExceptionProblemDetails(ex, StatusCodes.Status409Conflict));
                 })
                 .AddMvcCore()
+                .AddApplicationPart(typeof(TestStartup).Assembly)
+                .AddNewtonsoftJson()
                 .AddFluentValidation(fluentValidationMvcConfiguration =>
                 {
                     fluentValidationMvcConfiguration
@@ -25,8 +27,6 @@ namespace HomeEconomics.IntegrationTests.Extensions
                     fluentValidationMvcConfiguration.ImplicitlyValidateChildProperties = true;
                     fluentValidationMvcConfiguration.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonFormatters()
                 .Services;
         }
 

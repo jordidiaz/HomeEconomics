@@ -25,8 +25,8 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
 
         private static ServiceProvider GetServiceProvider()
         {
-            var hostingEnvironment = A.Fake<IHostingEnvironment>();
-            var startup = new Startup(Configuration, hostingEnvironment);
+            var webHostEnvironment = A.Fake<IWebHostEnvironment>();
+            var startup = new TestStartup(Configuration, webHostEnvironment);
             var serviceCollection = new ServiceCollection();
             startup.ConfigureServices(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();

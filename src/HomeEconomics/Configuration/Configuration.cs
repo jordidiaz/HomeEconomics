@@ -1,7 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Domain.Movements;
-using HomeEconomics.Features.Movements;
+using Index = HomeEconomics.Features.Movements.Index;
 
 namespace HomeEconomics.Configuration
 {
