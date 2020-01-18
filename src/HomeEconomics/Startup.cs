@@ -33,11 +33,11 @@ namespace HomeEconomics
         public void Configure(IApplicationBuilder applicationBuilder)
         {
             applicationBuilder
+                .UseHomeEconomicsSpa()
                 .UseRouting()
                 .UseHomeEconomicsCors()
                 .UseHomeEconomicsSwagger()
                 .UseProblemDetails()
-                .UseHomeEconomicsSpa()
                 .UseHomeEconomicsEndpoints();
         }
     }
