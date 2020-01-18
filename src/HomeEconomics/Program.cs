@@ -29,14 +29,14 @@ namespace HomeEconomics
         {
             return (webHostBuilderContext, loggerConfiguration) =>
             {
-                loggerConfiguration
-                    .ReadFrom.Configuration(webHostBuilderContext.Configuration);
-
                 if (!IsDevelopment())
                 {
-                    loggerConfiguration.WriteTo.EventLog("HomeEconomics", manageEventSource: true)
-                        .CreateLogger();
+                    loggerConfiguration
+                        .WriteTo.EventLog("HomeEconomics", manageEventSource: true);
                 }
+
+                loggerConfiguration
+                    .ReadFrom.Configuration(webHostBuilderContext.Configuration);
             };
         }
 
