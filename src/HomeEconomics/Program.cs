@@ -31,16 +31,27 @@ namespace HomeEconomics
             {
                 loggerConfiguration
                     .ReadFrom.Configuration(webHostBuilderContext.Configuration);
+
+                if (!IsDevelopment())
+                {
+                    loggerConfiguration.WriteTo.EventLog("HomeEconomics", manageEventSource: true)
+                        .CreateLogger();
+                }
             };
         }
 
         private static string GetUrl()
         {
-            var port = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"
+            var port = IsDevelopment()
                 ? 5000
                 : 5001;
 
             return $"http://localhost:{port}";
+        }
+
+        private static bool IsDevelopment()
+        {
+            return Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
         }
     }
 }
