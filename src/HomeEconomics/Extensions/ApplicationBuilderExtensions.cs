@@ -19,7 +19,10 @@ namespace Microsoft.AspNetCore.Builder
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "spa/build");
             return appBuilder
-                .UseDefaultFiles()
+                .UseDefaultFiles(new DefaultFilesOptions
+                {
+                    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), path))
+                })
                 .UseStaticFiles(new StaticFileOptions
                 {
                     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), path))
