@@ -29,12 +29,6 @@ namespace HomeEconomics
         {
             return (webHostBuilderContext, loggerConfiguration) =>
             {
-                if (!IsDevelopment())
-                {
-                    loggerConfiguration
-                        .WriteTo.EventLog("HomeEconomics", manageEventSource: true);
-                }
-
                 loggerConfiguration
                     .ReadFrom.Configuration(webHostBuilderContext.Configuration);
             };
@@ -42,16 +36,11 @@ namespace HomeEconomics
 
         private static string GetUrl()
         {
-            var port = IsDevelopment()
+            var port = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"
                 ? 5000
                 : 5001;
 
             return $"http://localhost:{port}";
-        }
-
-        private static bool IsDevelopment()
-        {
-            return Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
         }
     }
 }
