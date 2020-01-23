@@ -17,12 +17,8 @@ namespace Microsoft.AspNetCore.Builder
 
         internal static IApplicationBuilder UseHomeEconomicsSpa(this IApplicationBuilder appBuilder)
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "spa/build");
             return appBuilder
-                .UseFileServer(new FileServerOptions
-                {
-                    FileProvider = new PhysicalFileProvider(path)
-                });
+                .UseFileServer();
         }
 
         internal static IApplicationBuilder UseHomeEconomicsCors(this IApplicationBuilder appBuilder)

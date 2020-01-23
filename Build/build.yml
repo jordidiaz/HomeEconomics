@@ -66,7 +66,7 @@ steps:
   inputs:
     SourceFolder: '$(Build.ArtifactStagingDirectory)\spa\build'
     Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)\HomeEconomics\spa\build'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\HomeEconomics\wwwroot'
     CleanTargetFolder: true
 - task: PublishBuildArtifacts@1
   displayName: 'Publish build artifact'
