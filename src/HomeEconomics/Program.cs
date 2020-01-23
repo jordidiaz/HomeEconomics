@@ -38,7 +38,7 @@ namespace HomeEconomics
         {
             var port = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"
                 ? 5000
-                : 5001;
+                : 6001;
 
             return $"http://localhost:{port}";
         }
