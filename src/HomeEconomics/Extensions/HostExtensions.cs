@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.AspNetCore.Hosting
 {
-    internal static class WebHostExtensions
+    internal static class HostExtensions
     {
-        internal static IWebHost InitializeDbContext<TDbContext>(this IWebHost host) where TDbContext : DbContext
+        internal static IHost InitializeDbContext<TDbContext>(this IHost host) where TDbContext : DbContext
         {
             using (var scope = host.Services.CreateScope())
             {

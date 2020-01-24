@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Persistence;
 using Serilog;
 
 namespace HomeEconomics
@@ -10,6 +11,9 @@ namespace HomeEconomics
     {
         public static async Task Main(string[] args)
         {
+            var host = CreateHostBuilder(args).Build();
+            host.InitializeDbContext<HomeEconomicsDbContext>();
+
             await CreateHostBuilder(args).Build().RunAsync();
         }
 
