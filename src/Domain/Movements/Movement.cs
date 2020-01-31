@@ -1,4 +1,5 @@
 ﻿using System;
+using Domain.MovementMonth;
 
 namespace Domain.Movements
 {
@@ -65,6 +66,23 @@ namespace Domain.Movements
             }
 
             Amount = amount;
+        }
+
+        public FrequencyType GetFrequencyType()
+        {
+            return Frequency.Type;
+        }
+
+        public bool HasMonthInFrequency(Month month)
+        {
+            if (GetFrequencyType() == FrequencyType.None || GetFrequencyType() == FrequencyType.Monthly)
+            {
+                return false;
+            }
+
+            var monthNumber = (int) month;
+
+            return Frequency.Months[monthNumber - 1];
         }
     }
 }

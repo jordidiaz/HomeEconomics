@@ -12,7 +12,7 @@ namespace Microsoft.AspNetCore.Hosting
             {
                 var dbContext = scope.ServiceProvider.GetService<TDbContext>();
 
-                dbContext.Database.EnsureCreated();
+                dbContext.Database.Migrate();
             }
 
             return host;

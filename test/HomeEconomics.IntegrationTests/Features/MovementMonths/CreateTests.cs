@@ -1,33 +1,28 @@
 ﻿using System.Net;
-using System.Threading.Tasks;
-using Domain.Movements;
-using HomeEconomics.Features.Movements;
-using HomeEconomics.IntegrationTests.Infrastructure;
-using Xunit;
 using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
+using Domain.MovementMonth;
 using FluentAssertions;
+using HomeEconomics.Features.MovementMonths;
+using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
+using Xunit;
 
-namespace HomeEconomics.IntegrationTests.Features.Movements
+namespace HomeEconomics.IntegrationTests.Features.MovementMonths
 {
-    public class CreateTest : IntegrationTestBase
+    public class CreateTests : IntegrationTestBase
     {
         private readonly Create.Command _command;
 
-        private const string Uri = "api/movements";
+        private const string Uri = "api/movement-months";
 
-        public CreateTest(Fixture fixture) : base(fixture)
+        public CreateTests(Fixture fixture) : base(fixture)
         {
             _command = new Create.Command
             {
-                Name = "EPSV",
-                Amount = 50m,
-                Type = MovementType.Expense,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.Monthly
-                }
+                Year = 2020,
+                Month = Month.Feb
             };
         }
 
@@ -44,7 +39,7 @@ namespace HomeEconomics.IntegrationTests.Features.Movements
         [Fact]
         public async Task Should_Return_400_BadRequest()
         {
-            _command.Name = null;
+            _command.Year = 2019;
 
             var response = await HttpClient
                 .PostAsync(Uri, _command);

@@ -11,7 +11,8 @@ namespace Persistence.Configurations
         {
             builder.ToTable("Movements");
             builder.HasKey(m => m.Id);
-            builder.HasIndex(m => m.Name);
+            builder.HasIndex(m => m.Name)
+                .IsUnique();
             builder.Property(m => m.Name)
                 .HasMaxLength(Lengths.Name)
                 .IsRequired();

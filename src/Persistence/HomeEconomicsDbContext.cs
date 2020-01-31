@@ -1,4 +1,5 @@
-﻿using Domain.Movements;
+﻿using Domain.MovementMonth;
+using Domain.Movements;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
@@ -10,6 +11,8 @@ namespace Persistence
         }
 
         public DbSet<Movement> Movements { get; set; }
+
+        public DbSet<MovementMonth> MovementMonths { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

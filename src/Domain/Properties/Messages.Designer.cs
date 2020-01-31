@@ -61,6 +61,15 @@ namespace Domain.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No existe el movimiento mensual.
+        /// </summary>
+        public static string MonthMovementNotExists {
+            get {
+                return ResourceManager.GetString("MonthMovementNotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hay que seleccionar al menos un mes.
         /// </summary>
         public static string NoMonthSelected {

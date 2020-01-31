@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
@@ -20,7 +21,8 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
 
         static Fixture()
         {
-            CreateDatabase();
+            DeleteDatabase();
+            MigrateDatabase();
         }
 
         private static ServiceProvider GetServiceProvider()
@@ -47,13 +49,19 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
             return ServiceProvider.GetService<IServiceScopeFactory>();
         }
 
-        private static void CreateDatabase()
+        private static void MigrateDatabase()
         {
             var dbContext = ServiceProvider.GetService<HomeEconomicsDbContext>();
-            dbContext.Database.EnsureCreated();
+            dbContext.Database.Migrate();
         }
 
-        public static Task ResetCheckpointAsync() => Checkpoint.Reset(Configuration.GetConnectionString("HomeEconomics"));
+        private static void DeleteDatabase()
+        {
+            var dbContext = ServiceProvider.GetService<HomeEconomicsDbContext>();
+            dbContext.Database.EnsureDeleted();
+        }
+
+         public static Task ResetCheckpointAsync() => Checkpoint.Reset(Configuration.GetConnectionString("HomeEconomics"));
 
         public static async Task<TResponse> SendToMediatRAsync<TResponse>(IRequest<TResponse> request)
         {
