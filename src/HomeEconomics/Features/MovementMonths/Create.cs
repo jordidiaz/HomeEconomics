@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Domain.MovementMonth;
 using Domain.Movements;
 using FluentValidation;
@@ -14,11 +15,31 @@ namespace HomeEconomics.Features.MovementMonths
 {
     public class Create
     {
-        public class Command : IRequest<int>
+        public class Command : IRequest<Result>
         {
             public int Year { get; set; }
 
             public Month Month { get; set; }
+        }
+
+        public class Result
+        {
+            public int Id { get; set; }
+
+            public int Year { get; set; }
+
+            public int Month { get; set; }
+
+            public MonthMovementResult[] MonthMovements { get; set; }
+
+            public class MonthMovementResult
+            {
+                public string Name { get; set; }
+
+                public decimal Amount { get; set; }
+
+                public int Type { get; set; }
+            }
         }
 
         public class Validator : AbstractValidator<Command>
@@ -30,16 +51,18 @@ namespace HomeEconomics.Features.MovementMonths
             }
         }
 
-        public class Handler : IRequestHandler<Command, int>
+        public class Handler : IRequestHandler<Command, Result>
         {
             private readonly HomeEconomicsDbContext _dbContext;
+            private readonly IMapper _mapper;
 
-            public Handler(HomeEconomicsDbContext dbContext)
+            public Handler(HomeEconomicsDbContext dbContext, IMapper mapper)
             {
                 _dbContext = dbContext;
+                _mapper = mapper;
             }
 
-            public async Task<int> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
             {
                 var movementMonth = await _dbContext
                     .MovementMonths
@@ -71,9 +94,13 @@ namespace HomeEconomics.Features.MovementMonths
 
                 _dbContext.MovementMonths.Add(movementMonth);
 
+                var result = _mapper.Map<Result>(movementMonth);
+
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
-                return movementMonth.Id;
+                result.Id = movementMonth.Id;
+
+                return result;
             }
 
             private static bool UseMovement(Movement movement, Month month)

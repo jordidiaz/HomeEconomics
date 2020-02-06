@@ -30,17 +30,17 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
         {
             await InsertMovements();
             
-            var movementMonthId = await Fixture.SendToMediatRAsync(_command);
+            var result = await Fixture.SendToMediatRAsync(_command);
 
             var movementMonth = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
             {
                 return await homeEconomicsDbContext
                     .MovementMonths
                     .Include(mm => mm.MonthMovements)
-                    .SingleOrDefaultAsync(mm => mm.Id == movementMonthId);
+                    .SingleOrDefaultAsync(mm => mm.Id == result.Id);
             });
 
-            movementMonth.Id.Should().Be(movementMonthId);
+            movementMonth.Id.Should().Be(result.Id);
             movementMonth.Year.Should().Be(2020);
             movementMonth.Month.Should().Be(Month.Jan);
 

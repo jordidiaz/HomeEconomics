@@ -1,6 +1,8 @@
 ﻿using System;
 using AutoMapper;
+using Domain.MovementMonth;
 using Domain.Movements;
+using HomeEconomics.Features.MovementMonths;
 using Index = HomeEconomics.Features.Movements.Index;
 
 namespace HomeEconomics.Configuration
@@ -18,7 +20,17 @@ namespace HomeEconomics.Configuration
                             memberConfigurationExpression.MapFrom(source => (int) source.Type))
                     .ForMember(destination => destination.FrequencyType,
                         memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => (int) source.Frequency.Type));
+                            memberConfigurationExpression.MapFrom(source => (int) source.Frequency.Type))
+                    .ForMember(destination => destination.FrequencyMonth,
+                        memberConfigurationExpression => memberConfigurationExpression.MapFrom(source => source.Frequency.Type == FrequencyType.Yearly
+                            ? Array.IndexOf(source.Frequency.Months, true) + 1
+                            : 0));
+
+                mapperConfigurationExpression
+                    .CreateMap<MovementMonth, Create.Result>();
+
+                mapperConfigurationExpression
+                    .CreateMap<MonthMovement, Create.Result.MonthMovementResult>();
             };
         }
     }
