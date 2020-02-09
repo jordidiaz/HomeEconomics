@@ -31,15 +31,6 @@ namespace Domain.UnitTests
         }
 
         [Fact]
-        public void New_MovementMonth_Creates_A_New_MovementMonth()
-        {
-            _sut.Year.Should().Be(Year);
-            _sut.Month.Should().Be(Month);
-            _sut.MonthMovements.Should().NotBeNull();
-            _sut.MonthMovements.Count.Should().Be(0);
-        }
-
-        [Fact]
         public void AddMonthMovement_Adds_A_New_AddMonthMovement()
         {
             _sut.AddMonthMovement(Name, Amount, MovementType);

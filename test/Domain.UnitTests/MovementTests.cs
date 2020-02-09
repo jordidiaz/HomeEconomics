@@ -38,19 +38,6 @@ namespace Domain.UnitTests
         }
 
         [Fact]
-        public void New_Movement_Creates_A_New_Movement()
-        {
-            var movement = new Movement(Name, Amount, MovementType.Income);
-
-            movement.Name.Should().Be(Name);
-            movement.Amount.Should().Be(Amount);
-            movement.Type.Should().Be(MovementType.Income);
-
-            movement.Frequency.Type.Should().Be(FrequencyType.None);
-            movement.Frequency.Months.Should().BeNull();
-        }
-
-        [Fact]
         public void SetNoneFrequency_Should_Set_Frequency_To_None()
         {
             _sut.SetMonthlyFrequency();
