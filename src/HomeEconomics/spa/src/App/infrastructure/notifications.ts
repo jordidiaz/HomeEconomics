@@ -4,7 +4,9 @@ import 'react-toastify/dist/ReactToastify.css';
 toast.configure();
 
 const error = (message: string): void => {
-  toast.error(message);
+  if (message) {
+    toast.error(message);
+  }
 };
 
 const notifications = {

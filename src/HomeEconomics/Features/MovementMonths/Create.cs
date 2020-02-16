@@ -22,24 +22,9 @@ namespace HomeEconomics.Features.MovementMonths
             public Month Month { get; set; }
         }
 
-        public class Result
+        public class Result : MovementMonthResponse
         {
-            public int Id { get; set; }
 
-            public int Year { get; set; }
-
-            public int Month { get; set; }
-
-            public MonthMovementResult[] MonthMovements { get; set; }
-
-            public class MonthMovementResult
-            {
-                public string Name { get; set; }
-
-                public decimal Amount { get; set; }
-
-                public int Type { get; set; }
-            }
         }
 
         public class Validator : AbstractValidator<Command>
@@ -94,13 +79,13 @@ namespace HomeEconomics.Features.MovementMonths
 
                 _dbContext.MovementMonths.Add(movementMonth);
 
-                var result = _mapper.Map<Result>(movementMonth);
-
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
-                result.Id = movementMonth.Id;
+                var result = await _dbContext.MovementMonths
+                    .Include(mm => mm.MonthMovements)
+                    .FirstOrDefaultAsync(mm => mm.Id == movementMonth.Id, cancellationToken: cancellationToken);
 
-                return result;
+                return _mapper.Map<Result>(result);
             }
 
             private static bool UseMovement(Movement movement, Month month)

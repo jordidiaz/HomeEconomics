@@ -25,5 +25,25 @@ namespace HomeEconomics.Features.MovementMonths
 
             return Ok(id);
         }
+
+        [HttpGet("{year:int}/{month:int}")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> Detail(int year, int month)
+        {
+            var movementMonth = await _mediator.Send(new Detail.Query
+            {
+                Year = year,
+                Month = month
+            });
+
+            if (movementMonth is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(movementMonth);
+        }
     }
 }

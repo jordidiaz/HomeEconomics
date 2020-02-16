@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.scss';
 import Spinner from './components/Spinner/Spinner';
 import http from './infrastructure/http';
+import MovementMonth from './MovementMonth/MovementMonth';
 import Movements from './Movements/Movements';
 
 const App: React.FC = () => {
@@ -16,7 +17,12 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <Spinner show={loading} />
-      <Movements />
+      <div className="App__movement-month">
+        <MovementMonth />
+      </div>
+      <div className="App__movements">
+        <Movements />
+      </div>
     </div>
   );
 };

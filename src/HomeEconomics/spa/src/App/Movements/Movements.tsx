@@ -52,7 +52,7 @@ const Movements: React.FC = () => {
   return (
     <div className="Movements">
       <MovementForm createMovement={createMovement} editMovement={editMovement} movement={movement} />
-      <ul >
+      <ul>
         {
           movements.map((movement: TMovement) =>
             <li key={movement.id}><Movement movement={movement} deleteMovement={deleteMovement} loadMovement={loadMovement} /></li>

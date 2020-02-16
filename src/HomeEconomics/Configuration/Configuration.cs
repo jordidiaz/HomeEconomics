@@ -28,9 +28,11 @@ namespace HomeEconomics.Configuration
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, Create.Result>();
+                mapperConfigurationExpression
+                    .CreateMap<MovementMonth, Detail.Result>();
 
                 mapperConfigurationExpression
-                    .CreateMap<MonthMovement, Create.Result.MonthMovementResult>();
+                    .CreateMap<MonthMovement, MovementMonthResponse.MonthMovementResult>();
             };
         }
     }

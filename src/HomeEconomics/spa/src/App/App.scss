@@ -1,4 +1,20 @@
 .App {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(2, 50%);
+  grid-template-areas: "movement-month movements";
+
+  padding-top: 20px;
+
+  &__movement-month {
+    width: 90%;
+    grid-area: movement-month;
+    justify-self: center;
+  }
+
+  &__movements {
+    width: 90%;
+    grid-area: movements;
+    justify-self: center;
+  }
 }

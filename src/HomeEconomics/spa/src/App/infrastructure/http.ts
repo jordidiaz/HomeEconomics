@@ -45,6 +45,10 @@ const getErrorMessage = (error: AxiosError): string => {
     return validationErrorMessage;
   }
 
+  if (error.response && error.response.status === 404) {
+    return null as unknown as string;
+  }
+
   if (error && !error.response) {
     return error.message;
   }
@@ -57,23 +61,39 @@ const getErrorMessage = (error: AxiosError): string => {
 };
 
 const get = async <T>(path: string): Promise<T> => {
-  const response = await axiosInstance.get(path);
-  return response.data;
+  try {
+    const response = await axiosInstance.get(path);
+    return response.data;
+  } catch (error) {
+    return null as unknown as T;
+  }
 };
 
 const del = async (path: string): Promise<boolean> => {
-  await axiosInstance.delete(path);
+  try {
+    await axiosInstance.delete(path);
+  } catch (error) {
+    return false;
+  }
   return true;
 };
 
 const post = async (path: string, data: any): Promise<any> => {
-  const response = await axiosInstance.post(path, data);
-  return response.data;
+  try {
+    const response = await axiosInstance.post(path, data);
+    return response.data;
+  } catch (error) {
+    return null;
+  }
 };
 
 const put = async (path: string, data: any): Promise<boolean> => {
-  await axiosInstance.put(path, data);
-  return true;
+  try {
+    await axiosInstance.put(path, data);
+    return true;
+  } catch (error) {
+    return false;
+  }
 };
 
 export default {

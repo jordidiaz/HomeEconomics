@@ -47,7 +47,7 @@ const Movement: React.FC<MovementProps> = (props) => {
       </div>
       {
         movementHasFrequency &&
-        <div className={`Movement__frequency`}>
+        <div className="Movement__frequency">
           <i className="icon--calendar"></i>
           <div className="Movement__frequency-text-container">
             {

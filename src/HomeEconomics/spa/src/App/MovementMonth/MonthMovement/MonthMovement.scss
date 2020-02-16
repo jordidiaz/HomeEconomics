@@ -1,0 +1,42 @@
+@import "../../../styles/variables/variables.scss";
+@import "../../../styles/fonts/fonts.scss";
+
+.MonthMovement {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 50%);
+  grid-template-areas:
+    "name amount"
+    ". amount";
+
+  overflow: hidden;
+
+  border: $border-line-with solid $color-grey;
+  margin-top: 10px;
+  padding: 10px;
+
+  border-radius: $border-radius;
+
+  &__name {
+    grid-area: name;
+
+    font-size: $font-size-big;
+    font-weight: $font-weight-regular;
+  }
+
+  &__amount {
+    grid-area: amount;
+    justify-self: end;
+    align-self: center;
+
+    font-size: $font-size-biggest;
+    font-weight: $font-weight-semibold;
+
+    &-expense {
+      color: $color-red;
+    }
+    &-income {
+      color: $color-green;
+    }
+  }
+}

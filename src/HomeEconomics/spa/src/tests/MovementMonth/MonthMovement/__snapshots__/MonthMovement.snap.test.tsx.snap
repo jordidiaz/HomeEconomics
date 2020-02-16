@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MonthMovement component Matches the snapshot 1 1`] = `
+<div
+  className="MonthMovement"
+>
+  <div
+    className="MonthMovement__name"
+  >
+    <span>
+      Name
+    </span>
+  </div>
+  <div
+    className="MonthMovement__amount"
+  >
+    <span
+      className="MonthMovement__amount-expense"
+    >
+      -
+      50
+       €
+    </span>
+  </div>
+</div>
+`;
+
+exports[`MonthMovement component Matches the snapshot 2 1`] = `
+<div
+  className="MonthMovement"
+>
+  <div
+    className="MonthMovement__name"
+  >
+    <span>
+      Name
+    </span>
+  </div>
+  <div
+    className="MonthMovement__amount"
+  >
+    <span
+      className="MonthMovement__amount-income"
+    >
+      +
+      50
+       €
+    </span>
+  </div>
+</div>
+`;
