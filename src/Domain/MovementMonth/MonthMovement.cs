@@ -28,8 +28,21 @@ namespace Domain.MovementMonth
 
         public MovementType Type { get; private set; }
 
+        public bool Paid { get; private set; }
+
         public int MovementMonthId { get; private set; }
 
         public MovementMonth MovementMonth { get; private set; }
+
+
+        internal void Pay()
+        {
+            Paid = true;
+        }
+
+        internal void UnPay()
+        {
+            Paid = false;
+        }
     }
 }

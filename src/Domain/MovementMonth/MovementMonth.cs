@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Domain.Movements;
 
 namespace Domain.MovementMonth
@@ -30,6 +31,29 @@ namespace Domain.MovementMonth
         {
             var monthMovement = new MonthMovement(name, amount, type);
             MonthMovements.Add(monthMovement);
+        }
+
+        public void PayMonthMovement(int monthMovementId)
+        {
+            var monthMovement = GetMonthMovementOrThrow(monthMovementId);
+            monthMovement.Pay();
+        }
+         
+        public void UnPayMonthMovement(int monthMovementId)
+        {
+            var monthMovement = GetMonthMovementOrThrow(monthMovementId);
+            monthMovement.UnPay();
+        }
+
+        private MonthMovement GetMonthMovementOrThrow(int monthMovementId)
+        {
+            var monthMovement = MonthMovements.SingleOrDefault(mm => mm.Id == monthMovementId);
+            if (monthMovement is null)
+            {
+                throw new InvalidOperationException(Properties.Messages.MonthMovementNotExists);
+            }
+
+            return monthMovement;
         }
     }
 }

@@ -39,7 +39,50 @@ namespace Domain.UnitTests
             _sut.MonthMovements.First().Name.Should().Be(Name);
             _sut.MonthMovements.First().Amount.Should().Be(Amount);
             _sut.MonthMovements.First().Type.Should().Be(MovementType);
+            _sut.MonthMovements.First().Paid.Should().BeFalse();
 
+        }
+
+        [Fact]
+        public void PayMonthMovement_Sets_MonthMovement_Paid()
+        {
+            _sut.AddMonthMovement(Name, Amount, MovementType);
+
+            _sut.MonthMovements.First().Paid.Should().BeFalse();
+
+            _sut.PayMonthMovement(0);
+
+            _sut.MonthMovements.First().Paid.Should().BeTrue();
+        }
+
+        [Fact]
+        public void PayMonthMovement_Throws_InvalidOperationException_If_MonthMovement_Not_Exists()
+        {
+            Action action = () => _sut.PayMonthMovement(0);
+
+            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
+        }
+
+        [Fact]
+        public void UnPayMonthMovement_Sets_MonthMovement_UnPaid()
+        {
+            _sut.AddMonthMovement(Name, Amount, MovementType);
+
+            _sut.PayMonthMovement(0);
+
+            _sut.MonthMovements.First().Paid.Should().BeTrue();
+
+            _sut.UnPayMonthMovement(0);
+
+            _sut.MonthMovements.First().Paid.Should().BeFalse();
+        }
+
+        [Fact]
+        public void UnPayMonthMovement_Throws_InvalidOperationException_If_MonthMovement_Not_Exists()
+        {
+            Action action = () => _sut.UnPayMonthMovement(0);
+
+            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
         }
     }
 }
