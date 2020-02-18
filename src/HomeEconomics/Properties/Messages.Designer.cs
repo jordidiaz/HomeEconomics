@@ -88,6 +88,15 @@ namespace HomeEconomics.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El mes no existe.
+        /// </summary>
+        public static string MovementMonthNotExists {
+            get {
+                return ResourceManager.GetString("MovementMonthNotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to El gasto/ingreso no existe.
         /// </summary>
         public static string MovementNotExists {
