@@ -11,9 +11,10 @@ namespace HomeEconomics.Features.MovementMonths
 {
     public class UnPayMonthMovement
     {
-        public class Command : PayMonthMovement.Command, IRequest<Result>
+        public class Command : IRequest<Result>
         {
-            
+            public int MovementMonthId { get; set; }
+            public int MonthMovementId { get; set; }
         }
 
         public class Result : PayMonthMovement.Result

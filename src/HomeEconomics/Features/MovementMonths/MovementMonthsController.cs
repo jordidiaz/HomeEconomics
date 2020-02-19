@@ -45,5 +45,33 @@ namespace HomeEconomics.Features.MovementMonths
 
             return Ok(movementMonth);
         }
+
+        [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/pay")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> PayMonthMovement(int movementMonthId, int monthMovementId)
+        {
+            await _mediator.Send(new PayMonthMovement.Command
+            {
+                MovementMonthId = movementMonthId,
+                MonthMovementId = monthMovementId
+            });
+
+            return Ok();
+        }
+
+        [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/unpay")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UnPayMonthMovement(int movementMonthId, int monthMovementId)
+        {
+            await _mediator.Send(new UnPayMonthMovement.Command
+            {
+                MovementMonthId = movementMonthId,
+                MonthMovementId = monthMovementId
+            });
+
+            return Ok();
+        }
     }
 }
