@@ -8,6 +8,10 @@
 
         public int Month { get; set; }
 
+        public decimal PendingTotalExpenses { get; set; }
+
+        public decimal PendingTotalIncomes { get; set; }
+
         public MonthMovementResult[] MonthMovements { get; set; }
 
         public class MonthMovementResult

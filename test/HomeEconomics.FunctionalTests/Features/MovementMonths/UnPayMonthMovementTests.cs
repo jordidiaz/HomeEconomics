@@ -13,7 +13,7 @@ using CreateMovementMonth = HomeEconomics.Features.MovementMonths.Create.Command
 
 namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 {
-    public class UnPayMonthMovementTests
+    public class UnPayMonthMovementTests : FunctionalTestBase
     {
         private UnPayMonthMovement.Command _command;
 

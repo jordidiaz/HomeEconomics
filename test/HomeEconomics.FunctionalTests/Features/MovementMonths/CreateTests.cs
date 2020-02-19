@@ -7,7 +7,6 @@ using FluentAssertions;
 using HomeEconomics.Features.Movements;
 using MovementMonth = HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace HomeEconomics.FunctionalTests.Features.MovementMonths
@@ -32,43 +31,37 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
             
             var result = await Fixture.SendToMediatRAsync(_command);
 
-            var movementMonth = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
-            {
-                return await homeEconomicsDbContext
-                    .MovementMonths
-                    .Include(mm => mm.MonthMovements)
-                    .SingleOrDefaultAsync(mm => mm.Id == result.Id);
-            });
+            result.Id.Should().Be(result.Id);
+            result.Year.Should().Be(2020);
+            result.Month.Should().Be(1);
+            result.PendingTotalExpenses.Should().Be(120m);
+            result.PendingTotalIncomes.Should().Be(70m);
 
-            movementMonth.Id.Should().Be(result.Id);
-            movementMonth.Year.Should().Be(2020);
-            movementMonth.Month.Should().Be(Month.Jan);
+            result.MonthMovements.Length.Should().Be(3);
 
-            movementMonth.MonthMovements.Count.Should().Be(3);
-
-            var income = movementMonth.MonthMovements.SingleOrDefault(mm => mm.Name == "Income");
+            var income = result.MonthMovements.SingleOrDefault(mm => mm.Name == "Income");
             income.Should().BeNull();
 
-            var amazon = movementMonth.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon");
+            var amazon = result.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon");
             amazon.Should().BeNull();
 
-            var gasolina = movementMonth.MonthMovements.Single(mm => mm.Name == "Gasolina");
+            var gasolina = result.MonthMovements.Single(mm => mm.Name == "Gasolina");
             gasolina.Should().NotBeNull();
             gasolina.Name.Should().Be("Gasolina");
             gasolina.Amount.Should().Be(60m);
-            gasolina.Type.Should().Be(MovementType.Expense);
+            gasolina.Type.Should().Be(1);
 
-            var seguro = movementMonth.MonthMovements.Single(mm => mm.Name == "Seguro");
+            var seguro = result.MonthMovements.Single(mm => mm.Name == "Seguro");
             seguro.Should().NotBeNull();
             seguro.Name.Should().Be("Seguro");
             seguro.Amount.Should().Be(70m);
-            seguro.Type.Should().Be(MovementType.Income);
+            seguro.Type.Should().Be(0);
 
-            var custom = movementMonth.MonthMovements.Single(mm => mm.Name == "Custom");
+            var custom = result.MonthMovements.Single(mm => mm.Name == "Custom");
             custom.Should().NotBeNull();
             custom.Name.Should().Be("Custom");
             custom.Amount.Should().Be(60m);
-            custom.Type.Should().Be(MovementType.Expense);
+            custom.Type.Should().Be(1);
         }
 
         [Fact]

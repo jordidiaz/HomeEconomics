@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using Domain.MovementMonth;
 using Domain.Movements;
@@ -27,9 +28,22 @@ namespace HomeEconomics.Configuration
                             : 0));
 
                 mapperConfigurationExpression
-                    .CreateMap<MovementMonth, Create.Result>();
+                    .CreateMap<MovementMonth, Create.Result>()
+                    .ForMember(destination => destination.PendingTotalExpenses,
+                        memberConfigurationExpression =>
+                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Expense).Sum(mm => mm.Amount)))
+                    .ForMember(destination => destination.PendingTotalIncomes,
+                        memberConfigurationExpression =>
+                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Income).Sum(mm => mm.Amount)));
+
                 mapperConfigurationExpression
-                    .CreateMap<MovementMonth, Detail.Result>();
+                    .CreateMap<MovementMonth, Detail.Result>()
+                    .ForMember(destination => destination.PendingTotalExpenses,
+                        memberConfigurationExpression =>
+                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Expense).Sum(mm => mm.Amount)))
+                    .ForMember(destination => destination.PendingTotalIncomes,
+                        memberConfigurationExpression =>
+                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Income).Sum(mm => mm.Amount)));
 
                 mapperConfigurationExpression
                     .CreateMap<MonthMovement, MovementMonthResponse.MonthMovementResult>();
