@@ -51,13 +51,13 @@ namespace HomeEconomics.Features.MovementMonths
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> PayMonthMovement(int movementMonthId, int monthMovementId)
         {
-            await _mediator.Send(new PayMonthMovement.Command
+            var result = await _mediator.Send(new PayMonthMovement.Command
             {
                 MovementMonthId = movementMonthId,
                 MonthMovementId = monthMovementId
             });
 
-            return Ok();
+            return Ok(result);
         }
 
         [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/unpay")]
@@ -65,13 +65,13 @@ namespace HomeEconomics.Features.MovementMonths
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UnPayMonthMovement(int movementMonthId, int monthMovementId)
         {
-            await _mediator.Send(new UnPayMonthMovement.Command
+            var result = await _mediator.Send(new UnPayMonthMovement.Command
             {
                 MovementMonthId = movementMonthId,
                 MonthMovementId = monthMovementId
             });
 
-            return Ok();
+            return Ok(result);
         }
     }
 }

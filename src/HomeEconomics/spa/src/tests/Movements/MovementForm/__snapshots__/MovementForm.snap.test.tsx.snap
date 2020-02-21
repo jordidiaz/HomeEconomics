@@ -1,102 +1,104 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MovementForm component Matches the snapshot 1`] = `
-<form
-  className="MovementForm"
->
-  <div
-    className="MovementForm__inputs"
+Array [
+  <form
+    className="MovementForm"
   >
     <div
-      className="MovementForm__inputs-basic"
+      className="MovementForm__inputs"
     >
-      <input
-        className="input form-control"
-        name="name"
-        onChange={[Function]}
-        placeholder="Nombre"
-        type="text"
-        value=""
-      />
-      <input
-        className="input form-control"
-        min="0"
-        name="amount"
-        onChange={[Function]}
-        placeholder="Importe"
-        type="number"
-        value={0}
-      />
-      <select
-        className="select form-control"
-        name="type"
-        onChange={[Function]}
-        value={-1}
+      <div
+        className="MovementForm__inputs-basic"
       >
-        <option
+        <input
+          className="input form-control"
+          name="name"
+          onChange={[Function]}
+          placeholder="Nombre"
+          type="text"
           value=""
+        />
+        <input
+          className="input form-control"
+          min="0"
+          name="amount"
+          onChange={[Function]}
+          placeholder="Importe"
+          type="number"
+          value={0}
+        />
+        <select
+          className="select form-control"
+          name="type"
+          onChange={[Function]}
+          value={-1}
         >
-          Tipo
-        </option>
-        <option
-          value="1"
+          <option
+            value=""
+          >
+            Tipo
+          </option>
+          <option
+            value="1"
+          >
+            Gasto
+          </option>
+          <option
+            value="0"
+          >
+            Ingreso
+          </option>
+        </select>
+        <select
+          className="select form-control"
+          name="frequencyType"
+          onChange={[Function]}
+          value={-1}
         >
-          Gasto
-        </option>
-        <option
-          value="0"
-        >
-          Ingreso
-        </option>
-      </select>
-      <select
-        className="select form-control"
-        name="frequencyType"
-        onChange={[Function]}
-        value={-1}
-      >
-        <option
-          value=""
-        >
-          Frecuencia
-        </option>
-        <option
-          value="0"
-        >
-          Sin frecuencia
-        </option>
-        <option
-          value="1"
-        >
-          Mensual
-        </option>
-        <option
-          value="2"
-        >
-          Anual
-        </option>
-        <option
-          value="3"
-        >
-          Personalizada
-        </option>
-      </select>
+          <option
+            value=""
+          >
+            Frecuencia
+          </option>
+          <option
+            value="0"
+          >
+            Sin frecuencia
+          </option>
+          <option
+            value="1"
+          >
+            Mensual
+          </option>
+          <option
+            value="2"
+          >
+            Anual
+          </option>
+          <option
+            value="3"
+          >
+            Personalizada
+          </option>
+        </select>
+      </div>
+      <div
+        className="MovementForm__inputs-months"
+      />
     </div>
-    <div
-      className="MovementForm__inputs-months"
-    />
-  </div>
+  </form>,
   <button
     className="MovementForm__save button"
     onClick={[Function]}
   >
     Guardar
-  </button>
+  </button>,
   <button
     className="MovementForm__cancel button"
     onClick={[Function]}
   >
     Cancelar
-  </button>
-</form>
+  </button>,
+]
 `;

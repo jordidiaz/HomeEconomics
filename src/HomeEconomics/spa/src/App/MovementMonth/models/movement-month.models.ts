@@ -1,4 +1,4 @@
-import { MovementType } from "../../Movements/Movement/models/movement.models"
+import { MovementType } from "../../Movements/Movement/models/movement.models";
 
 export type TMovementMonth = {
   id: number;
@@ -12,4 +12,5 @@ export type TMonthMovement = {
   name: string;
   amount: number;
   type: MovementType;
+  paid: boolean;
 }

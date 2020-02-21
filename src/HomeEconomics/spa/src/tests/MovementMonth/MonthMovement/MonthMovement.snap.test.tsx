@@ -10,10 +10,11 @@ describe('MonthMovement component', () => {
       id: 1,
       name: 'Name',
       type: MovementType.Expense,
-      amount: 50
+      amount: 50,
+      paid: false,
     };
 
-    const monthMovementRenderer = create(<MonthMovement monthMovement={monthMovement} />);
+    const monthMovementRenderer = create(<MonthMovement monthMovement={monthMovement} payMonthMovement={(_monthMovement) => { return; }} unpayMonthMovement={(_monthMovement) => { return; }} />);
     expect(monthMovementRenderer.toJSON()).toMatchSnapshot();
   });
 
@@ -22,10 +23,11 @@ describe('MonthMovement component', () => {
       id: 1,
       name: 'Name',
       type: MovementType.Income,
-      amount: 50
+      amount: 50,
+      paid: true
     };
 
-    const monthMovementRenderer = create(<MonthMovement monthMovement={monthMovement} />);
+    const monthMovementRenderer = create(<MonthMovement monthMovement={monthMovement} payMonthMovement={(_monthMovement) => { return; }} unpayMonthMovement={(_monthMovement) => { return; }} />);
     expect(monthMovementRenderer.toJSON()).toMatchSnapshot();
   });
 });

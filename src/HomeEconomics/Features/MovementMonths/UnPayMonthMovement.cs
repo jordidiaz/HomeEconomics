@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Domain.Movements;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -17,7 +16,7 @@ namespace HomeEconomics.Features.MovementMonths
             public int MonthMovementId { get; set; }
         }
 
-        public class Result : PayMonthMovement.Result
+        public class Result : MovementMonthResponse
         {
             
         }
@@ -25,10 +24,12 @@ namespace HomeEconomics.Features.MovementMonths
         public class Handler : IRequestHandler<Command, Result>
         {
             private readonly HomeEconomicsDbContext _dbContext;
+            private readonly IMapper _mapper;
 
-            public Handler(HomeEconomicsDbContext dbContext)
+            public Handler(HomeEconomicsDbContext dbContext, IMapper mapper)
             {
                 _dbContext = dbContext;
+                _mapper = mapper;
             }
 
             public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
@@ -47,11 +48,7 @@ namespace HomeEconomics.Features.MovementMonths
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
-                return new Result
-                {
-                    PendingTotalExpenses = movementMonth.MonthMovements.Where(mm => mm.Type == MovementType.Expense).Sum(mm => mm.Amount),
-                    PendingTotalIncomes = movementMonth.MonthMovements.Where(mm => mm.Type == MovementType.Income).Sum(mm => mm.Amount)
-                };
+                return _mapper.Map<Result>(movementMonth);
             }
         }
     }

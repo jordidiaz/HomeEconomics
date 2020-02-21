@@ -7,9 +7,7 @@ exports[`MonthMovement component Matches the snapshot 1 1`] = `
   <div
     className="MonthMovement__name"
   >
-    <span>
-      Name
-    </span>
+    Name
   </div>
   <div
     className="MonthMovement__amount"
@@ -22,6 +20,14 @@ exports[`MonthMovement component Matches the snapshot 1 1`] = `
        €
     </span>
   </div>
+  <div
+    className="MonthMovement__actions"
+  >
+    <i
+      className="action-icon icon--checkbox-unchecked"
+      onClick={[Function]}
+    />
+  </div>
 </div>
 `;
 
@@ -32,9 +38,7 @@ exports[`MonthMovement component Matches the snapshot 2 1`] = `
   <div
     className="MonthMovement__name"
   >
-    <span>
-      Name
-    </span>
+    Name
   </div>
   <div
     className="MonthMovement__amount"
@@ -46,6 +50,19 @@ exports[`MonthMovement component Matches the snapshot 2 1`] = `
       50
        €
     </span>
+  </div>
+  <div
+    className="MonthMovement__paid"
+  >
+    PAGADO
+  </div>
+  <div
+    className="MonthMovement__actions"
+  >
+    <i
+      className="action-icon icon--checkbox-checked"
+      onClick={[Function]}
+    />
   </div>
 </div>
 `;

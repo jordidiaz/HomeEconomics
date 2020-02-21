@@ -11,13 +11,15 @@ export const getMovementMonth = (): TMovementMonth => {
         id: 1,
         name: 'Gasolina',
         type: MovementType.Expense,
-        amount: 60
+        amount: 60,
+        paid: false
       },
       {
         id: 2,
         name: 'Jangela',
         type: MovementType.Expense,
-        amount: 72
+        amount: 72,
+        paid: true
       }
     ]
   };

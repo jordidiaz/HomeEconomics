@@ -26,7 +26,9 @@ describe('MovementForm component', () => {
   });
 
   test('should call to createMovement when the save button is clicked', () => {
-    ReactDOM.render(<MovementForm movement={emptyMovement} createMovement={createMovement} editMovement={editMovement} />, container);
+    act(() => {
+      ReactDOM.render(<MovementForm movement={emptyMovement} createMovement={createMovement} editMovement={editMovement} />, container);
+    });
     const saveButton = container.getElementsByClassName("MovementForm__save")[0];
     act(() => {
       saveButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -36,7 +38,9 @@ describe('MovementForm component', () => {
 
   test('should call to editMovement when the save button is clicked', () => {
     const movement = getMovements()[0];
-    ReactDOM.render(<MovementForm movement={movement} createMovement={createMovement} editMovement={editMovement} />, container);
+    act(() => {
+      ReactDOM.render(<MovementForm movement={movement} createMovement={createMovement} editMovement={editMovement} />, container);
+    });
     const saveButton = container.getElementsByClassName("MovementForm__save")[0];
     act(() => {
       saveButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));

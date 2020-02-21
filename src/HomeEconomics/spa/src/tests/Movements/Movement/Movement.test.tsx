@@ -12,10 +12,12 @@ describe('Movement component', () => {
   const deleteMovement = jest.fn();
   const loadMovement = jest.fn();
 
-  beforeEach(() => {
+  beforeEach(async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
-    ReactDOM.render(<Movement movement={movement} deleteMovement={deleteMovement} loadMovement={loadMovement} />, container);
+    await act(async () => {
+      ReactDOM.render(<Movement movement={movement} deleteMovement={deleteMovement} loadMovement={loadMovement} />, container);
+    });
   });
 
   afterEach(() => {

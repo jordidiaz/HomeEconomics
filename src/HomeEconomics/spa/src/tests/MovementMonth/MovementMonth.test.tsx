@@ -10,7 +10,7 @@ describe('MovementMonth component', () => {
 
   let container: Element;
 
-  const movementMonth = getMovementMonth();
+  let movementMonth = getMovementMonth();
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -24,6 +24,16 @@ describe('MovementMonth component', () => {
       });
 
     jest.spyOn(movementMonthsService, 'create')
+      .mockImplementation(() => {
+        return Promise.resolve(movementMonth);
+      });
+
+    jest.spyOn(movementMonthsService, 'payMonthMovement')
+      .mockImplementation(() => {
+        return Promise.resolve(movementMonth);
+      });
+
+    jest.spyOn(movementMonthsService, 'unpayMonthMovement')
       .mockImplementation(() => {
         return Promise.resolve(movementMonth);
       });
@@ -75,6 +85,31 @@ describe('MovementMonth component', () => {
       deleteIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(movementMonthsService.create).toHaveBeenCalledTimes(1);
+  });
+
+  test('should call to payMonthMovement when pay is clicked', async () => {
+    await act(async () => {
+      ReactDOM.render(<MovementMonth />, container);
+    });
+    const monthMovement = container.getElementsByClassName('MonthMovement')[0];
+    const payCheckbox = monthMovement.getElementsByClassName("icon--checkbox-unchecked")[0];
+    await act(async () => {
+      payCheckbox.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(movementMonthsService.payMonthMovement).toHaveBeenCalledTimes(1);
+  });
+
+  test('should call to unpayMonthMovement when unpay is clicked', async () => {
+    await act(async () => {
+      ReactDOM.render(<MovementMonth />, container);
+    });
+
+    const monthMovement = container.getElementsByClassName('MonthMovement')[1];
+    const payCheckbox = monthMovement.getElementsByClassName("icon--checkbox-checked")[0];
+    await act(async () => {
+      payCheckbox.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(movementMonthsService.unpayMonthMovement).toHaveBeenCalledTimes(1);
   });
 
 });

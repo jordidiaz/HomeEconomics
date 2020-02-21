@@ -23,6 +23,8 @@
             public decimal Amount { get; set; }
 
             public int Type { get; set; }
+
+            public bool Paid { get; set; }
         }
     }
 }

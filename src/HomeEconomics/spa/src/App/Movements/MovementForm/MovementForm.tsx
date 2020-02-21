@@ -43,7 +43,7 @@ const MovementForm: React.FC<MovementFormProps> = (props) => {
     setCurrentMovement({ ...currentMovement, frequencyMonth: value });
   }
 
-  function handleMonthsChange(event: ChangeEvent<HTMLInputElement>): void {
+  function handleChange(event: ChangeEvent<HTMLInputElement>): void {
     const target = event.target;
     const value = parseInt(target.value);
     const months = currentMovement.frequencyMonths;
@@ -68,42 +68,44 @@ const MovementForm: React.FC<MovementFormProps> = (props) => {
   }
 
   return (
-    <form className="MovementForm">
-      <div className="MovementForm__inputs">
-        <div className="MovementForm__inputs-basic">
-          <input className="input form-control" value={currentMovement.name} placeholder="Nombre" type="text" name="name" onChange={handleInputChange} />
-          <input className="input form-control" value={currentMovement.amount} placeholder="Importe" type="number" min="0" name="amount" onChange={handleInputChange} />
-          <select className="select form-control" value={currentMovement.type} name="type" onChange={handleSelectChange}>
-            <option value="">Tipo</option>
-            <option value="1">Gasto</option>
-            <option value="0">Ingreso</option>
-          </select>
-          <select className="select form-control" value={currentMovement.frequencyType} name="frequencyType" onChange={handleSelectChange}>
-            <option value="">Frecuencia</option>
-            <option value="0">Sin frecuencia</option>
-            <option value="1">Mensual</option>
-            <option value="2">Anual</option>
-            <option value="3">Personalizada</option>
-          </select>
+    <>
+      <form className="MovementForm">
+        <div className="MovementForm__inputs">
+          <div className="MovementForm__inputs-basic">
+            <input className="input form-control" value={currentMovement.name} placeholder="Nombre" type="text" name="name" onChange={handleInputChange} />
+            <input className="input form-control" value={currentMovement.amount} placeholder="Importe" type="number" min="0" name="amount" onChange={handleInputChange} />
+            <select className="select form-control" value={currentMovement.type} name="type" onChange={handleSelectChange}>
+              <option value="">Tipo</option>
+              <option value="1">Gasto</option>
+              <option value="0">Ingreso</option>
+            </select>
+            <select className="select form-control" value={currentMovement.frequencyType} name="frequencyType" onChange={handleSelectChange}>
+              <option value="">Frecuencia</option>
+              <option value="0">Sin frecuencia</option>
+              <option value="1">Mensual</option>
+              <option value="2">Anual</option>
+              <option value="3">Personalizada</option>
+            </select>
+          </div>
+          <div className="MovementForm__inputs-months">
+            {
+              currentMovement.frequencyType === FrequencyType.Yearly &&
+              months.map((month: string, index: number) =>
+                <RadioButton key={index} value={index} label={getMonthName(month)} checked={currentMovement.frequencyMonth - 1 === index} handleMonthChange={handleMonthChange} />
+              )
+            }
+            {
+              currentMovement.frequencyType === FrequencyType.Custom &&
+              months.map((month: string, index: number) =>
+                <CheckBox key={index} value={index} label={getMonthName(month)} checked={currentMovement.frequencyMonths[index]} handleChange={handleChange} />
+              )
+            }
+          </div>
         </div>
-        <div className="MovementForm__inputs-months">
-          {
-            currentMovement.frequencyType === FrequencyType.Yearly &&
-            months.map((month: string, index: number) =>
-              <RadioButton key={index} value={index} label={getMonthName(month)} checked={currentMovement.frequencyMonth - 1 === index} handleMonthChange={handleMonthChange} />
-            )
-          }
-          {
-            currentMovement.frequencyType === FrequencyType.Custom &&
-            months.map((month: string, index: number) =>
-              <CheckBox key={index} value={index} label={getMonthName(month)} checked={currentMovement.frequencyMonths[index]} handleMonthsChange={handleMonthsChange} />
-            )
-          }
-        </div>
-      </div>
+      </form>
       <button className="MovementForm__save button" onClick={save}>Guardar</button>
       <button className="MovementForm__cancel button" onClick={cancel}>Cancelar</button>
-    </form>
+    </>
   );
 };
 

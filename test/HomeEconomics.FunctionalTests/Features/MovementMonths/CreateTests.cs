@@ -50,18 +50,21 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
             gasolina.Name.Should().Be("Gasolina");
             gasolina.Amount.Should().Be(60m);
             gasolina.Type.Should().Be(1);
+            gasolina.Paid.Should().BeFalse();
 
             var seguro = result.MonthMovements.Single(mm => mm.Name == "Seguro");
             seguro.Should().NotBeNull();
             seguro.Name.Should().Be("Seguro");
             seguro.Amount.Should().Be(70m);
             seguro.Type.Should().Be(0);
+            seguro.Paid.Should().BeFalse();
 
             var custom = result.MonthMovements.Single(mm => mm.Name == "Custom");
             custom.Should().NotBeNull();
             custom.Name.Should().Be("Custom");
             custom.Amount.Should().Be(60m);
             custom.Type.Should().Be(1);
+            custom.Paid.Should().BeFalse();
         }
 
         [Fact]

@@ -116,7 +116,7 @@ describe("Movement component", () => {
     expect(movementRenderer.toJSON()).toMatchSnapshot();
   });
 
-  test("Matches the snapshot 2", () => {
+  test("Matches the snapshot 5", () => {
     const movement: TMovement = {
       id: 1,
       name: 'Name',

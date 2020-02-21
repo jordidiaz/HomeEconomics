@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '../App/App';
+import { act } from 'react-dom/test-utils';
 
 describe('App component', () => {
 
@@ -16,8 +17,10 @@ describe('App component', () => {
     document.body.removeChild(container);
   });
 
-  test('should render without crashing', () => {
-    ReactDOM.render(<App />, container);
+  test('should render without crashing', async () => {
+    await act(async () => {
+      ReactDOM.render(<App />, container);
+    });
     expect(container.innerHTML).toBeTruthy();
   });
 });

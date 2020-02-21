@@ -29,7 +29,7 @@ describe("Movements component", () => {
 
     jest.spyOn(movementsService, 'create')
       .mockImplementation(() => {
-        return Promise.resolve(1);
+        return Promise.resolve(999);
       });
 
     jest.spyOn(movementsService, 'edit')
