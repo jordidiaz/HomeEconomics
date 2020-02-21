@@ -11,8 +11,6 @@ export type MovementMonthProps = {
 
 const MovementMonth: React.FC<MovementMonthProps> = ({ initialShowPaid = true }) => {
 
-  // const { initialShowPaid } = props;
-
   const [movementMonth, setMovementMonth] = useState<TMovementMonth>();
   const [showPaid, setShowPaid] = useState<boolean>(initialShowPaid);
 
