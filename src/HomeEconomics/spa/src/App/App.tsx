@@ -18,7 +18,7 @@ const App: React.FC = () => {
     <div className="App">
       <Spinner show={loading} />
       <div className="App__movement-month">
-        <MovementMonth />
+        <MovementMonth initialShowPaid={true} />
       </div>
       <div className="App__movements">
         <Movements />
