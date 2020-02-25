@@ -1,0 +1,13 @@
+@import "../../styles/variables/variables.scss";
+
+.input-with-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  font-size: $font-size-big;
+
+  label {
+    flex-basis: 30%;
+  }
+}

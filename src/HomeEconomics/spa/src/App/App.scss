@@ -1,8 +1,10 @@
 .App {
   display: grid;
-  grid-template-rows: 1fr;
+  grid-template-rows: 30% 70%;
   grid-template-columns: repeat(2, 50%);
-  grid-template-areas: "movement-month movements";
+  grid-template-areas:
+    "month-status movements"
+    "movement-month movements";
 
   padding-top: 20px;
 
@@ -15,6 +17,12 @@
   &__movements {
     width: 90%;
     grid-area: movements;
+    justify-self: center;
+  }
+
+  &__month-status {
+    width: 90%;
+    grid-area: month-status;
     justify-self: center;
   }
 }

@@ -1,0 +1,20 @@
+@import "../../styles/variables/variables.scss";
+
+.MonthStatus {
+  width: 40%;
+
+  &__remaining {
+    width: 100%;
+    display: block;
+    font-size: $font-size-biggest;
+    text-align: right;
+
+    &-amount {
+      color: $color-green;
+
+      &--negative {
+        color: $color-red;
+      }
+    }
+  }
+}

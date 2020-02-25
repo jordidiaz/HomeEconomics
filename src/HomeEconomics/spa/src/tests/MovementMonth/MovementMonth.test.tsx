@@ -50,7 +50,7 @@ describe('MovementMonth component', () => {
 
   test('should call to get and render the MonthMovements if MovementMonth exists', async () => {
     await act(async () => {
-      ReactDOM.render(<MovementMonth initialShowPaid={true} />, container);
+      ReactDOM.render(<MovementMonth initialShowPaid={true} movementMonthUpdated={(_movementMonth) => { return; }} />, container);
     });
     expect(movementMonthsService.get).toHaveBeenCalledTimes(1);
     expect(container.getElementsByTagName('li').length).toBe(2);
@@ -64,7 +64,7 @@ describe('MovementMonth component', () => {
       });
 
     await act(async () => {
-      ReactDOM.render(<MovementMonth initialShowPaid={true} />, container);
+      ReactDOM.render(<MovementMonth initialShowPaid={true} movementMonthUpdated={(_movementMonth) => { return; }} />, container);
     });
     expect(movementMonthsService.get).toHaveBeenCalledTimes(1);
     expect(container.getElementsByTagName('li').length).toBe(0);
@@ -78,7 +78,7 @@ describe('MovementMonth component', () => {
       });
 
     await act(async () => {
-      ReactDOM.render(<MovementMonth initialShowPaid={true} />, container);
+      ReactDOM.render(<MovementMonth initialShowPaid={true} movementMonthUpdated={(_movementMonth) => { return; }} />, container);
     });
     const deleteIcon = container.getElementsByClassName("MovementMonth__create")[0];
     await act(async () => {
@@ -89,7 +89,7 @@ describe('MovementMonth component', () => {
 
   test('should call to payMonthMovement when pay is clicked', async () => {
     await act(async () => {
-      ReactDOM.render(<MovementMonth initialShowPaid={true} />, container);
+      ReactDOM.render(<MovementMonth initialShowPaid={true} movementMonthUpdated={(_movementMonth) => { return; }} />, container);
     });
     const monthMovement = container.getElementsByClassName('MonthMovement')[0];
     const payCheckbox = monthMovement.getElementsByClassName("icon--checkbox-unchecked")[0];
@@ -101,7 +101,7 @@ describe('MovementMonth component', () => {
 
   test('should call to unpayMonthMovement when unpay is clicked', async () => {
     await act(async () => {
-      ReactDOM.render(<MovementMonth initialShowPaid={true} />, container);
+      ReactDOM.render(<MovementMonth initialShowPaid={true} movementMonthUpdated={(_movementMonth) => { return; }} />, container);
     });
 
     const monthMovement = container.getElementsByClassName('MonthMovement')[1];

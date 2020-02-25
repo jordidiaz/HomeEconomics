@@ -7,9 +7,12 @@ import CheckBox from '../components/CheckBox/CheckBox';
 
 export type MovementMonthProps = {
   initialShowPaid: boolean;
+  movementMonthUpdated: (movementMonth: TMovementMonth) => void;
 }
 
-const MovementMonth: React.FC<MovementMonthProps> = ({ initialShowPaid = true }) => {
+const MovementMonth: React.FC<MovementMonthProps> = (props) => {
+
+  const { initialShowPaid, movementMonthUpdated } = props;
 
   const [movementMonth, setMovementMonth] = useState<TMovementMonth>();
   const [showPaid, setShowPaid] = useState<boolean>(initialShowPaid);
@@ -20,19 +23,24 @@ const MovementMonth: React.FC<MovementMonthProps> = ({ initialShowPaid = true })
 
   async function createMovementMonth() {
     const movementMonth = await movementMonthService.create(year, month);
-    setMovementMonth(movementMonth);
+    setUpdatedMovementMont(movementMonth);
   }
 
   async function payMonthMovement(monthMovement: TMonthMovement) {
-    setMovementMonth(await movementMonthService.payMonthMovement(movementMonth as TMovementMonth, monthMovement));
+    setUpdatedMovementMont(await movementMonthService.payMonthMovement(movementMonth as TMovementMonth, monthMovement));
   }
 
   async function unpayMonthMovement(monthMovement: TMonthMovement) {
-    setMovementMonth(await movementMonthService.unpayMonthMovement(movementMonth as TMovementMonth, monthMovement));
+    setUpdatedMovementMont(await movementMonthService.unpayMonthMovement(movementMonth as TMovementMonth, monthMovement));
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>): void {
     setShowPaid(event.target.checked);
+  }
+
+  function setUpdatedMovementMont(movementMonth: TMovementMonth): void {
+    setMovementMonth(movementMonth);
+    movementMonthUpdated(movementMonth);
   }
 
   function filterByShowPaid(monthMovement: TMonthMovement): boolean {
@@ -44,8 +52,9 @@ const MovementMonth: React.FC<MovementMonthProps> = ({ initialShowPaid = true })
   useEffect(() => {
     (async function () {
       const movementMonth = await movementMonthService.get(year, month);
-      setMovementMonth(movementMonth);
+      setUpdatedMovementMont(movementMonth);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, month]);
 
   return (

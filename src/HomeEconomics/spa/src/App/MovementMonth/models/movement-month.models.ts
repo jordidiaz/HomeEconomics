@@ -4,6 +4,8 @@ export type TMovementMonth = {
   id: number;
   year: number;
   month: number;
+  pendingTotalExpenses: number;
+  pendingTotalIncomes: number;
   monthMovements: TMonthMovement[];
 }
 

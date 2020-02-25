@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MonthStatus component Matches the snapshot 1`] = `
+<form
+  className="MonthStatus"
+>
+  <div
+    className="input-with-label"
+  >
+    <label>
+      Cuenta
+    </label>
+    <input
+      className="input form-control"
+      min="0"
+      name="amount"
+      onChange={[Function]}
+      type="number"
+      value={0}
+    />
+  </div>
+  <div
+    className="input-with-label"
+  >
+    <label>
+      Cash
+    </label>
+    <input
+      className="input form-control"
+      min="0"
+      name="amount"
+      onChange={[Function]}
+      type="number"
+      value={0}
+    />
+  </div>
+  <label
+    className="MonthStatus__remaining"
+  >
+    <span
+      className="MonthStatus__remaining-amount"
+    >
+      Sobra 0
+    </span>
+  </label>
+</form>
+`;

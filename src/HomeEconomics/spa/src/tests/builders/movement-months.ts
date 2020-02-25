@@ -6,6 +6,8 @@ export const getMovementMonth = (): TMovementMonth => {
     id: 1,
     year: 2020,
     month: 3,
+    pendingTotalExpenses: 132,
+    pendingTotalIncomes: 22,
     monthMovements: [
       {
         id: 1,
