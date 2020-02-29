@@ -23,22 +23,26 @@ const MovementMonth: React.FC<MovementMonthProps> = (props) => {
 
   async function createMovementMonth() {
     const movementMonth = await movementMonthService.create(year, month);
-    setUpdatedMovementMont(movementMonth);
+    setUpdatedMovementMonth(movementMonth);
   }
 
   async function payMonthMovement(monthMovement: TMonthMovement) {
-    setUpdatedMovementMont(await movementMonthService.payMonthMovement(movementMonth as TMovementMonth, monthMovement));
+    setUpdatedMovementMonth(await movementMonthService.payMonthMovement(movementMonth as TMovementMonth, monthMovement));
   }
 
   async function unpayMonthMovement(monthMovement: TMonthMovement) {
-    setUpdatedMovementMont(await movementMonthService.unpayMonthMovement(movementMonth as TMovementMonth, monthMovement));
+    setUpdatedMovementMonth(await movementMonthService.unpayMonthMovement(movementMonth as TMovementMonth, monthMovement));
+  }
+
+  async function updateMonthMovementAmount(monthMovement: TMonthMovement, newAmount: number) {
+    setUpdatedMovementMonth(await movementMonthService.updateMonthMovementAmount(movementMonth as TMovementMonth, monthMovement, newAmount));
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>): void {
     setShowPaid(event.target.checked);
   }
 
-  function setUpdatedMovementMont(movementMonth: TMovementMonth): void {
+  function setUpdatedMovementMonth(movementMonth: TMovementMonth): void {
     setMovementMonth(movementMonth);
     movementMonthUpdated(movementMonth);
   }
@@ -52,7 +56,7 @@ const MovementMonth: React.FC<MovementMonthProps> = (props) => {
   useEffect(() => {
     (async function () {
       const movementMonth = await movementMonthService.get(year, month);
-      setUpdatedMovementMont(movementMonth);
+      setUpdatedMovementMonth(movementMonth);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, month]);
@@ -63,7 +67,7 @@ const MovementMonth: React.FC<MovementMonthProps> = (props) => {
       <ul>
         {
           movementMonth && movementMonth.monthMovements.filter(filterByShowPaid).map((monthMovement: TMonthMovement) =>
-            <li key={monthMovement.id}><MonthMovement monthMovement={monthMovement} payMonthMovement={payMonthMovement} unpayMonthMovement={unpayMonthMovement} /></li>
+            <li key={monthMovement.id}><MonthMovement monthMovement={monthMovement} payMonthMovement={payMonthMovement} unpayMonthMovement={unpayMonthMovement} updateMonthMovementAmount={updateMonthMovementAmount} /></li>
           )
         }
       </ul>

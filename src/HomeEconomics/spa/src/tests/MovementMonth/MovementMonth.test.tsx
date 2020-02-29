@@ -37,6 +37,11 @@ describe('MovementMonth component', () => {
       .mockImplementation(() => {
         return Promise.resolve(movementMonth);
       });
+
+    jest.spyOn(movementMonthsService, 'updateMonthMovementAmount')
+      .mockImplementation(() => {
+        return Promise.resolve(movementMonth);
+      });
   });
 
   afterEach(() => {
@@ -110,6 +115,23 @@ describe('MovementMonth component', () => {
       payCheckbox.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(movementMonthsService.unpayMonthMovement).toHaveBeenCalledTimes(1);
+  });
+
+  test('should call to updateMonthMovementAmount when accept is clicked', async () => {
+    await act(async () => {
+      ReactDOM.render(<MovementMonth initialShowPaid={true} movementMonthUpdated={(_movementMonth) => { return; }} />, container);
+    });
+
+    const monthMovement = container.getElementsByClassName('MonthMovement')[0];
+    const edit = monthMovement.getElementsByClassName("icon--pencil")[0];
+    await act(async () => {
+      edit.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    const accept = monthMovement.getElementsByClassName("icon--checkmark")[0];
+    await act(async () => {
+      accept.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(movementMonthsService.updateMonthMovementAmount).toHaveBeenCalledTimes(1);
   });
 
 });

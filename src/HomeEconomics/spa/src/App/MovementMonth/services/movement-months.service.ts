@@ -6,6 +6,12 @@ interface createMovementMonthDTO {
   month: number;
 }
 
+interface updateMonthMovementAmountDTO {
+  movementMonthId: number;
+  monthMovementId: number;
+  amount: number;
+}
+
 const get = async (year: number, month: number): Promise<TMovementMonth> => {
   const response: TMovementMonth = await http.get<TMovementMonth>(`movement-months/${year}/${month}`);
   return response;
@@ -30,11 +36,22 @@ const unpayMonthMovement = async (movementMonth: TMovementMonth, monthMovement: 
   return response;
 };
 
+const updateMonthMovementAmount = async (movementMonth: TMovementMonth, monthMovement: TMonthMovement, newAmount: number): Promise<TMovementMonth> => {
+  const updateMonthMovementAmountDTO: updateMonthMovementAmountDTO = {
+    movementMonthId: movementMonth.id,
+    monthMovementId: monthMovement.id,
+    amount: newAmount
+  };
+  const response: TMovementMonth = await http.post(`movement-months/${movementMonth.id}/month-movements/${monthMovement.id}/update-amount`, updateMonthMovementAmountDTO);
+  return response;
+};
+
 const movementMonthsService = {
   get,
   create,
   payMonthMovement,
-  unpayMonthMovement
+  unpayMonthMovement,
+  updateMonthMovementAmount
 };
 
 export default movementMonthsService;

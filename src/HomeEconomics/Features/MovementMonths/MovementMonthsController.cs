@@ -73,5 +73,15 @@ namespace HomeEconomics.Features.MovementMonths
 
             return Ok(result);
         }
+
+        [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/update-amount")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateMonthMovementAmount(UpdateMonthMovementAmount.Command command)
+        {
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
     }
 }

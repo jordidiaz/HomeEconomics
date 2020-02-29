@@ -5,6 +5,8 @@ namespace Domain.MovementMonth
 {
     public class MonthMovement : Entity
     {
+        public const decimal MinAmount = 0.1m;
+
         internal MonthMovement(string name, decimal amount, MovementType type)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -43,6 +45,16 @@ namespace Domain.MovementMonth
         internal void UnPay()
         {
             Paid = false;
+        }
+
+        internal void SetAmount(decimal amount)
+        {
+            if (amount < MinAmount)
+            {
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            }
+
+            Amount = amount;
         }
     }
 }

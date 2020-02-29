@@ -65,6 +65,15 @@ namespace HomeEconomics.Configuration
 
                 mapperConfigurationExpression
                     .CreateMap<MonthMovement, MovementMonthResponse.MonthMovementResult>();
+
+                mapperConfigurationExpression
+                    .CreateMap<MovementMonth, UpdateMonthMovementAmount.Result>()
+                    .ForMember(destination => destination.PendingTotalExpenses,
+                        memberConfigurationExpression =>
+                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid).Sum(mm => mm.Amount)))
+                    .ForMember(destination => destination.PendingTotalIncomes,
+                        memberConfigurationExpression =>
+                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid).Sum(mm => mm.Amount)));
             };
         }
     }

@@ -2,11 +2,11 @@
 
 @font-face {
   font-family: '#{$icomoon-font-family}';
-  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?lrlaec');
-  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?lrlaec#iefix') format('embedded-opentype'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?lrlaec') format('truetype'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?lrlaec') format('woff'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?lrlaec##{$icomoon-font-family}') format('svg');
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?yvbopk');
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?yvbopk#iefix') format('embedded-opentype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?yvbopk') format('truetype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?yvbopk') format('woff'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?yvbopk##{$icomoon-font-family}') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -40,6 +40,16 @@ i {
 .icon--bin {
   &:before {
     content: $icon--bin; 
+  }
+}
+.icon--cross {
+  &:before {
+    content: $icon--cross; 
+  }
+}
+.icon--checkmark {
+  &:before {
+    content: $icon--checkmark; 
   }
 }
 .icon--checkbox-checked {

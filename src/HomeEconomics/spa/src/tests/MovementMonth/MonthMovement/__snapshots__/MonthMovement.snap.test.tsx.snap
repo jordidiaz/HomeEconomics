@@ -24,6 +24,10 @@ exports[`MonthMovement component Matches the snapshot 1 1`] = `
     className="MonthMovement__actions"
   >
     <i
+      className="action-icon icon--pencil"
+      onClick={[Function]}
+    />
+    <i
       className="action-icon icon--checkbox-unchecked"
       onClick={[Function]}
     />

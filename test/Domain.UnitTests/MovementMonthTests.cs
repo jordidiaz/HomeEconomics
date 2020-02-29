@@ -84,5 +84,25 @@ namespace Domain.UnitTests
 
             action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
         }
+
+        [Fact]
+        public void UpdateMonthMovementAmount_Updates_MonthMovement_Amount()
+        {
+            _sut.AddMonthMovement(Name, Amount, MovementType);
+
+            _sut.MonthMovements.First().Amount.Should().Be(50m);
+
+            _sut.UpdateMonthMovementAmount(0, 60);
+
+            _sut.MonthMovements.First().Amount.Should().Be(60m);
+        }
+
+        [Fact]
+        public void UpdateMonthMovementAmount_Throws_InvalidOperationException_If_MonthMovement_Not_Exists()
+        {
+            Action action = () => _sut.UpdateMonthMovementAmount(0, 40m);
+
+            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
+        }
     }
 }

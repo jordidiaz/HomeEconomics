@@ -54,4 +54,14 @@ describe('MovementMonths Service', () => {
     });
   });
 
+  describe('updateMonthMovementAmount', () => {
+
+    test('should update movementMonths amount', () => {
+      jest.spyOn(http, 'post')
+        .mockResolvedValueOnce(movementMonth);
+
+      expect(movementMonthsService.updateMonthMovementAmount(movementMonth, monthMovement, 60)).resolves.toEqual(movementMonth);
+    });
+  });
+
 });

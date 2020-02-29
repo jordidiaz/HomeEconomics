@@ -45,6 +45,12 @@ namespace Domain.MovementMonth
             monthMovement.UnPay();
         }
 
+        public void UpdateMonthMovementAmount(int monthMovementId, decimal amount)
+        {
+            var monthMovement = GetMonthMovementOrThrow(monthMovementId);
+            monthMovement.SetAmount(amount);
+        }
+
         private MonthMovement GetMonthMovementOrThrow(int monthMovementId)
         {
             var monthMovement = MonthMovements.SingleOrDefault(mm => mm.Id == monthMovementId);
