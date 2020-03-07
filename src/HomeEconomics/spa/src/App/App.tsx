@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import './App.scss';
 import Spinner from './components/Spinner/Spinner';
 import http from './infrastructure/http';
-import MovementMonth from './MovementMonth/MovementMonth';
-import Movements from './Movements/Movements';
 import MonthStatus from './MonthStatus/MonthStatus';
 import { TMovementMonth } from './MovementMonth/models/movement-month.models';
+import MovementMonth from './MovementMonth/MovementMonth';
+import Movements from './Movements/Movements';
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);

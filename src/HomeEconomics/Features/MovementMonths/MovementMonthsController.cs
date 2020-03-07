@@ -19,6 +19,8 @@ namespace HomeEconomics.Features.MovementMonths
         [HttpPost]
         [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> Create(Create.Command command)
         {
             var id = await _mediator.Send(command);
@@ -49,6 +51,7 @@ namespace HomeEconomics.Features.MovementMonths
         [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/pay")]
         [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> PayMonthMovement(int movementMonthId, int monthMovementId)
         {
             var result = await _mediator.Send(new PayMonthMovement.Command
@@ -63,6 +66,7 @@ namespace HomeEconomics.Features.MovementMonths
         [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/unpay")]
         [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> UnPayMonthMovement(int movementMonthId, int monthMovementId)
         {
             var result = await _mediator.Send(new UnPayMonthMovement.Command
@@ -77,7 +81,19 @@ namespace HomeEconomics.Features.MovementMonths
         [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/update-amount")]
         [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> UpdateMonthMovementAmount(UpdateMonthMovementAmount.Command command)
+        {
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [HttpPost("{movementMonthId:int}/month-movements")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<ActionResult> AddMonthMovement(AddMonthMovement.Command command)
         {
             var result = await _mediator.Send(command);
 

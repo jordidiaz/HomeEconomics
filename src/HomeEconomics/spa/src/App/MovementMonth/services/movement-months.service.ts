@@ -1,5 +1,6 @@
 import { TMovementMonth, TMonthMovement } from "../models/movement-month.models";
 import http from "../../infrastructure/http";
+import { MovementType } from "../../Movements/Movement/models/movement.models";
 
 interface createMovementMonthDTO {
   year: number;
@@ -10,6 +11,13 @@ interface updateMonthMovementAmountDTO {
   movementMonthId: number;
   monthMovementId: number;
   amount: number;
+}
+
+interface addMonthMovementDTO {
+  movementMonthId: number;
+  name: string;
+  amount: number;
+  type: number;
 }
 
 const get = async (year: number, month: number): Promise<TMovementMonth> => {
@@ -46,12 +54,24 @@ const updateMonthMovementAmount = async (movementMonth: TMovementMonth, monthMov
   return response;
 };
 
+const addMonthMovement = async (movementMonth: TMovementMonth, name: string, amount: number, movementType: MovementType): Promise<TMovementMonth> => {
+  const addMonthMovementDTO: addMonthMovementDTO = {
+    movementMonthId: movementMonth.id,
+    name: name,
+    amount: amount,
+    type: movementType
+  };
+  const response: TMovementMonth = await http.post(`movement-months/${movementMonth.id}/month-movements/`, addMonthMovementDTO);
+  return response;
+};
+
 const movementMonthsService = {
   get,
   create,
   payMonthMovement,
   unpayMonthMovement,
-  updateMonthMovementAmount
+  updateMonthMovementAmount,
+  addMonthMovement
 };
 
 export default movementMonthsService;

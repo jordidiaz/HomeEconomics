@@ -19,6 +19,8 @@ namespace HomeEconomics.Features.Movements
         [HttpPost]
         [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Create(Create.Command command)
         {
             var id = await _mediator.Send(command);
@@ -27,6 +29,8 @@ namespace HomeEconomics.Features.Movements
         }
 
         [HttpGet]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Index.Result>> Index()
         {
             var movements = await _mediator.Send(new Index.Query());
@@ -35,8 +39,9 @@ namespace HomeEconomics.Features.Movements
         }
 
         [HttpDelete("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> Delete(int id)
         {
             await _mediator.Send(new Delete.Command
@@ -48,8 +53,9 @@ namespace HomeEconomics.Features.Movements
         }
 
         [HttpPut("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> Edit(Edit.Command command)
         {
             await _mediator.Send<Unit>(command);

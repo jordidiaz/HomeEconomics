@@ -3,4 +3,13 @@
     display: flex;
     justify-content: center;
   }
+
+  &__tools {
+    display: flex;
+    justify-content: space-between;
+
+    & div {
+      flex-basis: 40%;
+    }
+  }
 }
