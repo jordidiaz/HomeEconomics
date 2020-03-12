@@ -38,6 +38,7 @@ namespace HomeEconomics.Configuration
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, Detail.Result>()
+                    .AfterMap((source, destination) => destination.MonthMovements = destination.MonthMovements.OrderBy(mm => mm.Name).ToArray())
                     .ForMember(destination => destination.PendingTotalExpenses,
                         memberConfigurationExpression =>
                             memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid).Sum(mm => mm.Amount)))
