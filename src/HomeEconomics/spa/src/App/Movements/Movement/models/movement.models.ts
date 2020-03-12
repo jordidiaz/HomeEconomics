@@ -31,3 +31,9 @@ export const emptyMovement: TMovement = {
   frequencyMonth: -1,
   frequencyMonths: Array.from({ length: 12 }, () => false)
 };
+
+export const createEmpyMovement = (): TMovement => {
+  const movement = { ...emptyMovement };
+  movement.frequencyMonths = Array.from({ length: 12 }, () => false);
+  return movement;
+};

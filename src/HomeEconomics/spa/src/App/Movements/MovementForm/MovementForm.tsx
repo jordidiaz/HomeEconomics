@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import CheckBox from '../../components/CheckBox/CheckBox';
 import RadioButton from '../../components/RadioButton/RadioButton';
 import { getMonthName, months } from '../Movement/helpers/months';
-import { emptyMovement, FrequencyType, TMovement } from '../Movement/models/movement.models';
+import { emptyMovement, FrequencyType, TMovement, createEmpyMovement } from '../Movement/models/movement.models';
 import './MovementForm.scss';
 
 export type MovementFormProps = {
@@ -54,13 +54,13 @@ const MovementForm: React.FC<MovementFormProps> = (props) => {
   function save(event: any): void {
     event.preventDefault();
     createOrEditMovement().then(() => {
-      setCurrentMovement(emptyMovement);
+      setCurrentMovement(createEmpyMovement());
     });
   }
 
   function cancel(event: any): void {
     event.preventDefault();
-    setCurrentMovement(emptyMovement);
+    setCurrentMovement(createEmpyMovement());
   }
 
   function createOrEditMovement(): Promise<void> {
