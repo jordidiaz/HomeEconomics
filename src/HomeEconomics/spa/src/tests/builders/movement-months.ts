@@ -6,14 +6,14 @@ export const getMovementMonth = (): TMovementMonth => {
     id: 1,
     year: 2020,
     month: 3,
-    pendingTotalExpenses: 132,
+    pendingTotalExpenses: 132.86,
     pendingTotalIncomes: 22,
     monthMovements: [
       {
         id: 1,
         name: 'Gasolina',
         type: MovementType.Expense,
-        amount: 60,
+        amount: 60.86,
         paid: false
       },
       {

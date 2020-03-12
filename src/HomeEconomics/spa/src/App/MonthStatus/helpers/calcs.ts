@@ -13,5 +13,6 @@ export const calculateRemaining = (movementMonth: TMovementMonth | undefined, ac
     cashAmount = 0;
   }
 
-  return (accountAmount + cashAmount) - (movementMonth.pendingTotalExpenses - movementMonth.pendingTotalIncomes);
+  const remaining = (accountAmount + cashAmount) - (movementMonth.pendingTotalExpenses - movementMonth.pendingTotalIncomes);
+  return parseFloat(remaining.toFixed(2));
 };
