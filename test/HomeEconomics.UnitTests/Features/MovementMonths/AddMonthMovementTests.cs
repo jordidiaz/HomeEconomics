@@ -19,7 +19,7 @@ namespace HomeEconomics.UnitTests.Features.MovementMonths
             [Theory]
             [InlineData(null)]
             [InlineData("")]
-            [InlineData("XXXXXXXXXXXXXXXXXXXXXXXX")]
+            [InlineData("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")]
             public void Should_Have_Error_If_Name_Invalid(string name)
             {
                 _sut.ShouldHaveValidationErrorFor(x => x.Name, name);
