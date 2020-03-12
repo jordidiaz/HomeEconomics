@@ -2,6 +2,6 @@
 {
     public static class Lengths
     {
-        public const int Name = 20;
+        public const int Name = 30;
     }
 }
