@@ -18,7 +18,7 @@ namespace HomeEconomics.UnitTests.Features.MovementMonths
             [Fact]
             public void Should_Have_Error_If_Amount_Invalid()
             {
-                _sut.ShouldHaveValidationErrorFor(x => x.Amount, 0);
+                _sut.ShouldHaveValidationErrorFor(x => x.Amount, -0.1m);
             }
 
             [Fact]

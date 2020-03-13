@@ -42,7 +42,7 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         [Fact]
         public async Task Should_Return_400_BadRequest()
         {
-            _command.Amount = 0;
+            _command.Amount = -0.1m;
 
             var response = await HttpClient
                 .PostAsync(Uri, _command);
