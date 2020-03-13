@@ -32,7 +32,7 @@ namespace Domain.UnitTests
         [Fact]
         public void New_Movement_Throws_ArgumentOutOfRangeException_If_Amount_Invalid()
         {
-            Action action = () => new Movement(Name, 0.0m, MovementType.Income);
+            Action action = () => new Movement(Name, -0.1m, MovementType.Income);
 
             action.Should().Throw<ArgumentOutOfRangeException>();
         }
@@ -137,7 +137,7 @@ namespace Domain.UnitTests
         [Fact]
         public void SetAmount_Throws_ArgumentOutOfRangeException_If_Amount_Is_Invalid()
         {
-            Action action = () => _sut.SetAmount(0m);
+            Action action = () => _sut.SetAmount(-0.1m);
 
             action.Should().Throw<ArgumentOutOfRangeException>();
         }

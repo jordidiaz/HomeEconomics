@@ -2,6 +2,7 @@
  using System.Threading;
  using System.Threading.Tasks;
  using AutoMapper;
+ using Domain;
  using FluentValidation;
  using MediatR;
  using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,7 @@
         {
             public Validator()
             {
-                RuleFor(command => command.Amount).GreaterThan(0);
+                RuleFor(command => command.Amount).GreaterThanOrEqualTo(Constants.MovementMinAmount);
             }
         }
 

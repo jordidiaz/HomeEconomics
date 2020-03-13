@@ -14,7 +14,7 @@ namespace Persistence.Configurations
             builder.HasIndex(m => m.Name)
                 .IsUnique();
             builder.Property(m => m.Name)
-                .HasMaxLength(Lengths.Name)
+                .HasMaxLength(Constants.MovementNameMaxLength)
                 .IsRequired();
             builder.HasOne(movement => movement.Frequency)
                 .WithOne(frequency => frequency.Movement)

@@ -12,7 +12,7 @@ namespace Persistence.Configurations
             builder.ToTable("MonthMovements");
             builder.HasKey(monthMovement => monthMovement.Id);
             builder.Property(monthMovement => monthMovement.Name)
-                .HasMaxLength(Lengths.Name)
+                .HasMaxLength(Constants.MovementNameMaxLength)
                 .IsRequired();
         }
     }
