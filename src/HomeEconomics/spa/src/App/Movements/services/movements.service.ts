@@ -1,4 +1,4 @@
-import { TMovement } from '../Movement/models/movement.models';
+import { TMovement } from '../models/movement.models';
 import http from '../../infrastructure/http';
 
 type GetAllMovementsResponse = {

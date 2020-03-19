@@ -45,7 +45,7 @@ namespace HomeEconomics.Features.Movements
             public Validator()
             {
                 RuleFor(command => command.Name).NotNull().NotEmpty().MaximumLength(Constants.MovementNameMaxLength);
-                RuleFor(command => command.Amount).GreaterThanOrEqualTo(Constants.MovementMinAmount);
+                RuleFor(command => command.Amount).GreaterThanOrEqualTo(Constants.MinAmount);
                 RuleFor(command => command.Type).Must(Enums.IsAValidEnumValue);
                 RuleFor(command => command.Frequency).SetValidator(new FrequencyValidator());
             }

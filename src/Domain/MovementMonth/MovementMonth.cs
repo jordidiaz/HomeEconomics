@@ -19,6 +19,7 @@ namespace Domain.MovementMonth
             Year = year;
             Month = month;
             MonthMovements = new List<MonthMovement>();
+            Statuses = new List<Status>();
         }
 
         public int Year { get; private set; }
@@ -26,6 +27,9 @@ namespace Domain.MovementMonth
         public Month Month { get; private set; }
 
         public List<MonthMovement> MonthMovements { get; private set; }
+
+        public List<Status> Statuses { get; private set; }
+
 
         public void AddMonthMovement(string name, decimal amount, MovementType type)
         {
@@ -49,6 +53,30 @@ namespace Domain.MovementMonth
         {
             var monthMovement = GetMonthMovementOrThrow(monthMovementId);
             monthMovement.SetAmount(amount);
+        }
+
+        public void AddStatus(int day, decimal accountAmount, decimal cashAmount)
+        {
+            if (accountAmount < Constants.MinAmount)
+            {
+                throw new ArgumentOutOfRangeException(nameof(accountAmount));
+            }
+
+            if (cashAmount < Constants.MinAmount)
+            {
+                throw new ArgumentOutOfRangeException(nameof(cashAmount));
+            }
+
+            var status = Statuses.SingleOrDefault(s => s.Day == day);
+            if (status is null)
+            {
+                Statuses.Add(new Status(day, accountAmount, cashAmount));
+            }
+            else
+            {
+                status.SetAccountAmount(accountAmount);
+                status.SetCashAmount(cashAmount);
+            }
         }
 
         private MonthMovement GetMonthMovementOrThrow(int monthMovementId)

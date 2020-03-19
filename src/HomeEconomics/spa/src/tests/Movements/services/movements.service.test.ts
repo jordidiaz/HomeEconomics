@@ -1,5 +1,5 @@
 import http from '../../../App/infrastructure/http';
-import { TMovement } from '../../../App/Movements/Movement/models/movement.models';
+import { TMovement } from '../../../App/Movements/models/movement.models';
 import movementsService from '../../../App/Movements/services/movements.service';
 import { getMovements } from '../../builders/movements';
 

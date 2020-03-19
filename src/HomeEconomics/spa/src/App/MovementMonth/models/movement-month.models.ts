@@ -1,12 +1,18 @@
-import { MovementType } from "../../Movements/Movement/models/movement.models";
+import { MovementType } from "../../Movements/models/movement.models";
 
 export type TMovementMonth = {
   id: number;
   year: number;
   month: number;
+  status: TStatus;
+  monthMovements: TMonthMovement[];
+}
+
+export type TStatus = {
   pendingTotalExpenses: number;
   pendingTotalIncomes: number;
-  monthMovements: TMonthMovement[];
+  accountAmount: number;
+  cashAmount: number;
 }
 
 export type TMonthMovement = {

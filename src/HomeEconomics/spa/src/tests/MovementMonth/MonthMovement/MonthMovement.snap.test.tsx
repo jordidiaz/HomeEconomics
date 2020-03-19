@@ -1,8 +1,8 @@
 import React from "react";
 import { create } from "react-test-renderer";
 import { TMonthMovement } from "../../../App/MovementMonth/models/movement-month.models";
-import MonthMovement from "../../../App/MovementMonth/MonthMovement/MonthMovement";
-import { MovementType } from "../../../App/Movements/Movement/models/movement.models";
+import MonthMovement from "../../../App/MovementMonth/components/MonthMovement/MonthMovement";
+import { MovementType } from "../../../App/Movements/models/movement.models";
 
 describe('MonthMovement component', () => {
   test('Matches the snapshot 1', () => {

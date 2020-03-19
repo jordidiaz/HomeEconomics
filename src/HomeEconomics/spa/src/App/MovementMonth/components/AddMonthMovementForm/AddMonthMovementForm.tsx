@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import { MovementType } from "../../Movements/Movement/models/movement.models";
+import { MovementType } from "../../../Movements/models/movement.models";
 import './AddMonthMovementForm.scss';
 
 export type AddMonthMovementProps = {

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.MovementMonth;
-using Domain.Movements;
 using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
@@ -18,10 +17,10 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
         [Fact]
         public async Task Should_Update_MonthMovement_Amount_Return_Resume()
         {
-            await InsertMovements();
+            await CreateMovements();
 
             var createMovementMonthResult = await Fixture.SendToMediatRAsync(
-                new global::HomeEconomics.Features.MovementMonths.Create.Command
+                new HomeEconomics.Features.MovementMonths.Create.Command
                 {
                     Year = 2020,
                     Month = Month.Jan
@@ -36,8 +35,8 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
             var result = await Fixture.SendToMediatRAsync(_command);
 
-            result.PendingTotalExpenses.Should().Be(100m);
-            result.PendingTotalIncomes.Should().Be(940m);
+            result.Status.PendingTotalExpenses.Should().Be(130m);
+            result.Status.PendingTotalIncomes.Should().Be(70m);
         }
 
         [Fact]
@@ -53,53 +52,6 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 
             action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
-        }
-
-        private static async Task InsertMovements()
-        {
-            await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "1",
-                Amount = 60m,
-                Type = MovementType.Expense,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.Monthly
-                }
-            });
-
-            await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "2",
-                Amount = 30m,
-                Type = MovementType.Expense,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.Monthly
-                }
-            });
-
-            await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "3",
-                Amount = 930m,
-                Type = MovementType.Income,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.Monthly
-                }
-            });
-
-            await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "4",
-                Amount = 10m,
-                Type = MovementType.Income,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.Monthly
-                }
-            });
         }
     }
 }

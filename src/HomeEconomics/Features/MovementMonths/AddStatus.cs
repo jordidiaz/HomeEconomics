@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domain;
-using Domain.Movements;
+using Domain.MovementMonth;
 using FluentValidation;
 using HomeEconomics.Helpers;
 using MediatR;
@@ -12,18 +12,17 @@ using Persistence;
 
 namespace HomeEconomics.Features.MovementMonths
 {
-    public class AddMonthMovement
+    public class AddStatus
     {
-
         public class Command : IRequest<Result>
         {
-            public int MovementMonthId { get; set; }
+            public int Year { get; set; }
 
-            public string Name { get; set; }
+            public Month Month { get; set; }
+            
+            public decimal AccountAmount { get; set; }
 
-            public decimal Amount { get; set; }
-
-            public MovementType Type { get; set; }
+            public decimal CashAmount { get; set; }
         }
 
         public class Result : MovementMonthResponse
@@ -35,9 +34,10 @@ namespace HomeEconomics.Features.MovementMonths
         {
             public Validator()
             {
-                RuleFor(command => command.Name).NotNull().NotEmpty().MaximumLength(Constants.MovementNameMaxLength);
-                RuleFor(command => command.Amount).GreaterThanOrEqualTo(Constants.MinAmount);
-                RuleFor(command => command.Type).Must(Enums.IsAValidEnumValue);
+                RuleFor(command => command.Year).GreaterThanOrEqualTo(DateTime.Now.Year);
+                RuleFor(command => command.Month).Must(Enums.IsAValidEnumValue);
+                RuleFor(command => command.AccountAmount).GreaterThanOrEqualTo(Constants.MinAmount);
+                RuleFor(command => command.CashAmount).GreaterThanOrEqualTo(Constants.MinAmount);
             }
         }
 
@@ -58,18 +58,27 @@ namespace HomeEconomics.Features.MovementMonths
                     .MovementMonths
                     .Include(mm => mm.MonthMovements)
                     .Include(mm => mm.Statuses)
-                    .SingleOrDefaultAsync(mm => mm.Id == request.MovementMonthId, cancellationToken: cancellationToken);
+                    .SingleOrDefaultAsync(mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
 
                 if (movementMonth is null)
                 {
                     throw new InvalidOperationException(Properties.Messages.MovementMonthNotExists);
                 }
 
-                movementMonth.AddMonthMovement(request.Name, request.Amount, request.Type);
+                var day = IsCurrentMonth(request.Year, (int)request.Month)
+                    ? DateTime.Now.Day
+                    : 0;
+
+                movementMonth.AddStatus(day, request.AccountAmount, request.CashAmount);
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
                 return _mapper.Map<Result>(movementMonth);
+            }
+
+            private static bool IsCurrentMonth(int year, int month)
+            {
+                return DateTime.Now.Year == year && DateTime.Now.Month == month;
             }
         }
     }

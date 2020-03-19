@@ -14,6 +14,8 @@ namespace Persistence
 
         public DbSet<MovementMonth> MovementMonths { get; set; }
 
+        public DbSet<Status> Statuses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

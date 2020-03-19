@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddFluentValidation(fluentValidationMvcConfiguration =>
                     {
                         fluentValidationMvcConfiguration
-                            .RegisterValidatorsFromAssemblyContaining<HomeEconomics.HomeEconomics>();
+                            .RegisterValidatorsFromAssemblyContaining<HomeEconomics.HomeEconomicsApp>();
                         fluentValidationMvcConfiguration.ImplicitlyValidateChildProperties = true;
                         fluentValidationMvcConfiguration.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                     })
@@ -34,13 +34,13 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddHomeEconomicsMediatR(this IServiceCollection services)
         {
             return services
-                .AddMediatR(typeof(HomeEconomics.HomeEconomics));
+                .AddMediatR(typeof(HomeEconomics.HomeEconomicsApp));
         }
 
         public static IServiceCollection AddHomeEconomicsAutoMapper(this IServiceCollection services)
         {
             return services
-                .AddAutoMapper(HomeEconomics.Configuration.Configuration.ConfigureAutoMapper(), Assembly.GetAssembly(typeof(HomeEconomics.HomeEconomics)));
+                .AddAutoMapper(HomeEconomics.Configuration.Configuration.ConfigureAutoMapper(), Assembly.GetAssembly(typeof(HomeEconomics.HomeEconomicsApp)));
         }
 
         internal static IServiceCollection AddHomeEconomicsSwagger(this IServiceCollection services)

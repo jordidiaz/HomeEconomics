@@ -28,7 +28,7 @@
         {
             public Validator()
             {
-                RuleFor(command => command.Amount).GreaterThanOrEqualTo(Constants.MovementMinAmount);
+                RuleFor(command => command.Amount).GreaterThanOrEqualTo(Constants.MinAmount);
             }
         }
 
@@ -48,6 +48,7 @@
                 var movementMonth = await _dbContext
                     .MovementMonths
                     .Include(mm => mm.MonthMovements)
+                    .Include(mm => mm.Statuses)
                     .SingleOrDefaultAsync(mm => mm.Id == request.MovementMonthId, cancellationToken: cancellationToken);
 
                 if (movementMonth is null)

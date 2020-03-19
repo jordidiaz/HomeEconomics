@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
-import MovementForm from '../../../App/Movements/MovementForm/MovementForm';
-import { TMovement, emptyMovement } from '../../../App/Movements/Movement/models/movement.models';
+import MovementForm from '../../../App/Movements/components/MovementForm/MovementForm';
+import { TMovement, emptyMovement } from '../../../App/Movements/models/movement.models';
 import { getMovements } from '../../builders/movements';
 
 describe('MovementForm component', () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
-import Movement from '../../../App/Movements/Movement/Movement';
+import Movement from '../../../App/Movements/components/Movement/Movement';
 import { getMovements } from '../../builders/movements';
 
 

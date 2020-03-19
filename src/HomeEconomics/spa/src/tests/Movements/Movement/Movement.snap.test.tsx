@@ -1,7 +1,7 @@
 import React from "react";
 import { create } from "react-test-renderer";
-import Movement from '../../../App/Movements/Movement/Movement';
-import { FrequencyType, MovementType, TMovement } from '../../../App/Movements/Movement/models/movement.models';
+import Movement from '../../../App/Movements/components/Movement/Movement';
+import { FrequencyType, MovementType, TMovement } from '../../../App/Movements/models/movement.models';
 
 describe("Movement component", () => {
   test("Matches the snapshot 1", () => {

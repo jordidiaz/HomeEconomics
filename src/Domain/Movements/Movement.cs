@@ -12,7 +12,7 @@ namespace Domain.Movements
                 throw new ArgumentNullException(nameof(name));
             }
 
-            if (amount < Constants.MovementMinAmount)
+            if (amount < Constants.MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(amount));
             }
@@ -58,7 +58,7 @@ namespace Domain.Movements
 
         public void SetAmount(decimal amount)
         {
-            if (amount < Constants.MovementMinAmount)
+            if (amount < Constants.MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(amount));
             }

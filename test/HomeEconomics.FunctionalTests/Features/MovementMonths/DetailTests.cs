@@ -1,9 +1,7 @@
-﻿using System.Threading.Tasks;
-using Domain.MovementMonth;
-using Domain.Movements;
-using FluentAssertions;
+﻿using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.FunctionalTests.Features.MovementMonths
@@ -13,28 +11,23 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
         [Fact]
         public async Task Should_Return_MovementMonth_Detail()
         {
-            var movement = new Movement("Gasolina", 60m, MovementType.Expense);
-            movement.SetMonthlyFrequency();
+            await CreateMovements();
 
-            object[] entities = {
-                movement
-            };
+            var movementMonth = await CreateMovementMonth();
 
-            await Fixture.InsertDbContextAsync(entities);
+            await AddStatus(movementMonth.Year, movementMonth.Month, 1000, 50);
+            await AddStatus(movementMonth.Year, movementMonth.Month, 900, 60);
 
-            var movementMonth = await Fixture.SendToMediatRAsync(new Create.Command
+            var result = await Fixture.SendToMediatRAsync(new Detail.Query
             {
-                Year = 2020,
-                Month = Month.Aug
+                Year = movementMonth.Year,
+                Month = movementMonth.Month
             });
 
-            var movementMonthDetail = await Fixture.SendToMediatRAsync(new Detail.Query
-            {
-                Year = 2020,
-                Month = 8
-            });
-
-            movementMonth.Should().BeEquivalentTo(movementMonthDetail);
+            result.Status.PendingTotalExpenses.Should().Be(120m);
+            result.Status.PendingTotalIncomes.Should().Be(70m);
+            result.Status.AccountAmount.Should().Be(900);
+            result.Status.CashAmount.Should().Be(60);
         }
 
         [Fact]

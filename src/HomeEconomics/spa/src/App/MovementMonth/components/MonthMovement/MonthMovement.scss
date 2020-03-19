@@ -1,16 +1,13 @@
-@import "../../../styles/variables/variables.scss";
-@import "../../../styles/fonts/fonts.scss";
+@import "../../../../styles/variables/variables.scss";
 
-$frequency-text-height: 24px;
-
-.Movement {
+.MonthMovement {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
   grid-template-columns: repeat(2, 50%);
   grid-template-areas:
     "name amount"
     ". amount"
-    "frequency actions";
+    "paid actions";
 
   overflow: hidden;
 
@@ -43,34 +40,11 @@ $frequency-text-height: 24px;
     }
   }
 
-  &__frequency {
-    display: flex;
-    grid-area: frequency;
-    align-self: end;
-
-    > i {
-      font-size: $frequency-text-height;
-    }
-
-    &-text-container {
-      display: flex;
-    }
-
-    &-text {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      height: $frequency-text-height;
-      width: 30px;
-      margin-left: 5px;
-      padding: 0 2px;
-      border-radius: $border-radius;
-
-      background-color: #bfc8f2;
-
-      font-family: $roboto-mono;
-    }
+  &__paid {
+    grid-area: paid;
+    color: $color-red;
+    font-size: $font-size-bigger;
+    font-weight: $font-weight-semibold;
   }
 
   &__actions {

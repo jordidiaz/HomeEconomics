@@ -1,6 +1,6 @@
 import React from 'react';
-import { getFrequency, hasFrequency } from './helpers/frequency';
-import { MovementType, TMovement } from './models/movement.models';
+import { getFrequency, hasFrequency } from '../../helpers/frequency';
+import { MovementType, TMovement } from '../../models/movement.models';
 import './Movement.scss';
 
 export type MovementProps = {

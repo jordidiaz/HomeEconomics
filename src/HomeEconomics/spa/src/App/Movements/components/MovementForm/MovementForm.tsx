@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
-import CheckBox from '../../components/CheckBox/CheckBox';
-import RadioButton from '../../components/RadioButton/RadioButton';
-import { getMonthName, months } from '../Movement/helpers/months';
-import { emptyMovement, FrequencyType, TMovement, createEmpyMovement } from '../Movement/models/movement.models';
+import CheckBox from '../../../components/CheckBox/CheckBox';
+import RadioButton from '../../../components/RadioButton/RadioButton';
+import { getMonthName, months } from '../../helpers/months';
+import { emptyMovement, FrequencyType, TMovement, createEmpyMovement } from '../../models/movement.models';
 import './MovementForm.scss';
 
 export type MovementFormProps = {

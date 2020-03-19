@@ -23,7 +23,7 @@ namespace HomeEconomics.IntegrationTests.Extensions
                 .AddFluentValidation(fluentValidationMvcConfiguration =>
                 {
                     fluentValidationMvcConfiguration
-                        .RegisterValidatorsFromAssemblyContaining<HomeEconomics>();
+                        .RegisterValidatorsFromAssemblyContaining<HomeEconomicsApp>();
                     fluentValidationMvcConfiguration.ImplicitlyValidateChildProperties = true;
                     fluentValidationMvcConfiguration.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                 })

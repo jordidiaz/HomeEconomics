@@ -71,6 +71,7 @@ namespace HomeEconomics.Features.MovementMonths
                 }
 
                 movementMonth = new MovementMonth(request.Year, request.Month);
+                movementMonth.AddStatus(0, 0, 0);
 
                 foreach (var movement in movements)
                 {
@@ -83,7 +84,8 @@ namespace HomeEconomics.Features.MovementMonths
 
                 var result = await _dbContext.MovementMonths
                     .Include(mm => mm.MonthMovements)
-                    .FirstOrDefaultAsync(mm => mm.Id == movementMonth.Id, cancellationToken: cancellationToken);
+                    .Include(mm => mm.Statuses)
+                    .SingleOrDefaultAsync(mm => mm.Id == movementMonth.Id, cancellationToken: cancellationToken);
 
                 return _mapper.Map<Result>(result);
             }

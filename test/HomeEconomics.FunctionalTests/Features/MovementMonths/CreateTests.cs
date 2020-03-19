@@ -2,9 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.MovementMonth;
-using Domain.Movements;
 using FluentAssertions;
-using HomeEconomics.Features.Movements;
 using MovementMonth = HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
 using Xunit;
@@ -27,15 +25,17 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
         [Fact]
         public async Task Should_Create_A_New_MovementMonth()
         {
-            await InsertMovements();
+            await CreateMovements();
             
             var result = await Fixture.SendToMediatRAsync(_command);
 
             result.Id.Should().Be(result.Id);
             result.Year.Should().Be(2020);
             result.Month.Should().Be(1);
-            result.PendingTotalExpenses.Should().Be(120m);
-            result.PendingTotalIncomes.Should().Be(70m);
+            result.Status.PendingTotalExpenses.Should().Be(120m);
+            result.Status.PendingTotalIncomes.Should().Be(70m);
+            result.Status.AccountAmount.Should().Be(0);
+            result.Status.CashAmount.Should().Be(0);
 
             result.MonthMovements.Length.Should().Be(3);
 
@@ -70,7 +70,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
         [Fact]
         public async Task Should_Throw_InvalidOperationException_If_MovementMonth_Exists()
         {
-            await InsertMovements();
+            await CreateMovements();
 
             await Fixture.SendToMediatRAsync(_command);
 
@@ -85,81 +85,6 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 
             action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MovementsNotExists);
-        }
-
-        private static async Task InsertMovements()
-        {
-            await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "Income",
-                Amount = 50m,
-                Type = MovementType.Income,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.None
-                }
-            });
-
-            await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "Gasolina",
-                Amount = 60m,
-                Type = MovementType.Expense,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.Monthly
-                }
-            });
-
-            await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "Amazon",
-                Amount = 30m,
-                Type = MovementType.Expense,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.Yearly,
-                    Month = 2
-                }
-            });
-
-            await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "Seguro",
-                Amount = 70m,
-                Type = MovementType.Income,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.Yearly,
-                    Month = 1
-                }
-            });
-
-            await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "Custom",
-                Amount = 60m,
-                Type = MovementType.Expense,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.Custom,
-                    Months = new []
-                    {
-                        true,
-                        false,
-                        false,
-                        true,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false
-                    }
-                }
-            });
         }
     }
 }

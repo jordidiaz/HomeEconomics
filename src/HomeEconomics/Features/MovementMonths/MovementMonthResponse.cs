@@ -8,9 +8,7 @@
 
         public int Month { get; set; }
 
-        public decimal PendingTotalExpenses { get; set; }
-
-        public decimal PendingTotalIncomes { get; set; }
+        public StatusResult Status { get; set; }
 
         public MonthMovementResult[] MonthMovements { get; set; }
 
@@ -25,6 +23,17 @@
             public int Type { get; set; }
 
             public bool Paid { get; set; }
+        }
+
+        public class StatusResult
+        {
+            public decimal PendingTotalExpenses { get; set; }
+
+            public decimal PendingTotalIncomes { get; set; }
+
+            public decimal AccountAmount { get; set; }
+
+            public decimal CashAmount { get; set; }
         }
     }
 }

@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from 'react';
-import { MovementType } from '../../Movements/Movement/models/movement.models';
-import { TMonthMovement } from '../models/movement-month.models';
+import { MovementType } from '../../../Movements/models/movement.models';
+import { TMonthMovement } from '../../models/movement-month.models';
 import './MonthMovement.scss';
 
 export type MonthMovementProps = {

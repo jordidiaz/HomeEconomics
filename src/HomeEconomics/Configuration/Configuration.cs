@@ -29,61 +29,112 @@ namespace HomeEconomics.Configuration
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, Create.Result>()
-                    .ForMember(destination => destination.PendingTotalExpenses,
-                        memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid).Sum(mm => mm.Amount)))
-                    .ForMember(destination => destination.PendingTotalIncomes,
-                        memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid).Sum(mm => mm.Amount)));
+                    .ForPath(destination => destination.Status.AccountAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
+                    .ForPath(destination => destination.Status.CashAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().CashAmount))
+                    .ForPath(destination => destination.Status.PendingTotalExpenses,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid)
+                                .Sum(mm => mm.Amount)))
+                    .ForPath(destination => destination.Status.PendingTotalIncomes,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid)
+                                .Sum(mm => mm.Amount)));
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, Detail.Result>()
                     .AfterMap((source, destination) => destination.MonthMovements = destination.MonthMovements.OrderBy(mm => mm.Name).ToArray())
-                    .ForMember(destination => destination.PendingTotalExpenses,
-                        memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid).Sum(mm => mm.Amount)))
-                    .ForMember(destination => destination.PendingTotalIncomes,
-                        memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid).Sum(mm => mm.Amount)));
+                    .ForPath(destination => destination.Status.AccountAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
+                    .ForPath(destination => destination.Status.CashAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().CashAmount))
+                    .ForPath(destination => destination.Status.PendingTotalExpenses,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid)
+                                .Sum(mm => mm.Amount)))
+                    .ForPath(destination => destination.Status.PendingTotalIncomes,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid)
+                                .Sum(mm => mm.Amount)));
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, PayMonthMovement.Result>()
-                    .ForMember(destination => destination.PendingTotalExpenses,
-                        memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid).Sum(mm => mm.Amount)))
-                    .ForMember(destination => destination.PendingTotalIncomes,
-                        memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid).Sum(mm => mm.Amount)));
+                    .ForPath(destination => destination.Status.AccountAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
+                    .ForPath(destination => destination.Status.CashAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().CashAmount))
+                    .ForPath(destination => destination.Status.PendingTotalExpenses,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid)
+                                .Sum(mm => mm.Amount)))
+                    .ForPath(destination => destination.Status.PendingTotalIncomes,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid)
+                                .Sum(mm => mm.Amount)));
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, UnPayMonthMovement.Result>()
-                    .ForMember(destination => destination.PendingTotalExpenses,
-                        memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid).Sum(mm => mm.Amount)))
-                    .ForMember(destination => destination.PendingTotalIncomes,
-                        memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid).Sum(mm => mm.Amount)));
+                    .ForPath(destination => destination.Status.AccountAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
+                    .ForPath(destination => destination.Status.CashAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().CashAmount))
+                    .ForPath(destination => destination.Status.PendingTotalExpenses,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid)
+                                .Sum(mm => mm.Amount)))
+                    .ForPath(destination => destination.Status.PendingTotalIncomes,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid)
+                                .Sum(mm => mm.Amount)));
 
                 mapperConfigurationExpression
                     .CreateMap<MonthMovement, MovementMonthResponse.MonthMovementResult>();
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, UpdateMonthMovementAmount.Result>()
-                    .ForMember(destination => destination.PendingTotalExpenses,
-                        memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid).Sum(mm => mm.Amount)))
-                    .ForMember(destination => destination.PendingTotalIncomes,
-                        memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid).Sum(mm => mm.Amount)));
+                    .ForPath(destination => destination.Status.AccountAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
+                    .ForPath(destination => destination.Status.CashAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().CashAmount))
+                    .ForPath(destination => destination.Status.PendingTotalExpenses,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid)
+                                .Sum(mm => mm.Amount)))
+                    .ForPath(destination => destination.Status.PendingTotalIncomes,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid)
+                                .Sum(mm => mm.Amount)));
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, AddMonthMovement.Result>()
-                    .ForMember(destination => destination.PendingTotalExpenses,
-                        memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid).Sum(mm => mm.Amount)))
-                    .ForMember(destination => destination.PendingTotalIncomes,
-                        memberConfigurationExpression =>
-                            memberConfigurationExpression.MapFrom(source => source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid).Sum(mm => mm.Amount)));
+                    .ForPath(destination => destination.Status.AccountAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
+                    .ForPath(destination => destination.Status.CashAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().CashAmount))
+                    .ForPath(destination => destination.Status.PendingTotalExpenses,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid)
+                                .Sum(mm => mm.Amount)))
+                    .ForPath(destination => destination.Status.PendingTotalIncomes,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid)
+                                .Sum(mm => mm.Amount)));
+
+                mapperConfigurationExpression
+                    .CreateMap<MovementMonth, AddStatus.Result>()
+                    .ForPath(destination => destination.Status.AccountAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
+                    .ForPath(destination => destination.Status.CashAmount,
+                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().CashAmount))
+                    .ForPath(destination => destination.Status.PendingTotalExpenses,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid)
+                                .Sum(mm => mm.Amount)))
+                    .ForPath(destination => destination.Status.PendingTotalIncomes,
+                        expression => expression.MapFrom(source =>
+                            source.MonthMovements.Where(mm => mm.Type == MovementType.Income && !mm.Paid)
+                                .Sum(mm => mm.Amount)));
             };
         }
     }

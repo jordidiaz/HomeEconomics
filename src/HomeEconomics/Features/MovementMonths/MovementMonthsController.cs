@@ -99,5 +99,16 @@ namespace HomeEconomics.Features.MovementMonths
 
             return Ok(result);
         }
+
+        [HttpPost("{movementMonthId:int}/add-status")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<ActionResult> AddStatus(AddStatus.Command command)
+        {
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
     }
 }

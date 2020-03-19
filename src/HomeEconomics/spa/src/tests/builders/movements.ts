@@ -1,4 +1,4 @@
-import { TMovement, MovementType, FrequencyType } from '../../App/Movements/Movement/models/movement.models';
+import { TMovement, MovementType, FrequencyType } from '../../App/Movements/models/movement.models';
 
 export const getMovements = (quantity: number = 1): TMovement[] => {
   const movements: TMovement[] = [];

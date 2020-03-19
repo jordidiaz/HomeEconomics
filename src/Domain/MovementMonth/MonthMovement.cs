@@ -12,7 +12,7 @@ namespace Domain.MovementMonth
                 throw new ArgumentNullException(nameof(name));
             }
 
-            if (amount < Constants.MovementMinAmount)
+            if (amount < Constants.MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(amount));
             }
@@ -47,7 +47,7 @@ namespace Domain.MovementMonth
 
         internal void SetAmount(decimal amount)
         {
-            if (amount < Constants.MovementMinAmount)
+            if (amount < Constants.MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(amount));
             }

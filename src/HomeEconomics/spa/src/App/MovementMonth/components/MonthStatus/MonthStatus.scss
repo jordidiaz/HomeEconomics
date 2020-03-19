@@ -1,7 +1,8 @@
-@import "../../styles/variables/variables.scss";
+@import "../../../../styles/variables/variables.scss";
 
 .MonthStatus {
   width: 55%;
+  margin-bottom: 30px;
 
   &__remaining {
     width: 100%;

@@ -37,7 +37,8 @@ namespace HomeEconomics.Features.MovementMonths
             {
                 var movementMonth = await _dbContext.MovementMonths
                     .Include(mm => mm.MonthMovements)
-                    .FirstOrDefaultAsync(mm => mm.Year == request.Year && mm.Month == (Month) request.Month, cancellationToken: cancellationToken);
+                    .Include(mm => mm.Statuses)
+                    .SingleOrDefaultAsync(mm => mm.Year == request.Year && mm.Month == (Month) request.Month, cancellationToken: cancellationToken);
 
                 return _mapper.Map<Result>(movementMonth);
             }

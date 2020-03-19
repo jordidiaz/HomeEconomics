@@ -2,7 +2,7 @@ import http from '../../../App/infrastructure/http';
 import { TMovementMonth, TMonthMovement } from '../../../App/MovementMonth/models/movement-month.models';
 import movementMonthsService from '../../../App/MovementMonth/services/movement-months.service';
 import { getMovementMonth } from '../../builders/movement-months';
-import { MovementType } from '../../../App/Movements/Movement/models/movement.models';
+import { MovementType } from '../../../App/Movements/models/movement.models';
 
 describe('MovementMonths Service', () => {
 

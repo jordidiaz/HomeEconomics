@@ -7,6 +7,10 @@
     <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Build\**" />
     <Content Remove="Build\**" />

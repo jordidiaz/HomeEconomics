@@ -14,9 +14,10 @@ exports[`MonthStatus component Matches the snapshot 1`] = `
       className="input form-control"
       min="0"
       name="amount"
+      onBlur={[Function]}
       onChange={[Function]}
       type="number"
-      value={0}
+      value="0"
     />
   </div>
   <div
@@ -29,9 +30,10 @@ exports[`MonthStatus component Matches the snapshot 1`] = `
       className="input form-control"
       min="0"
       name="amount"
+      onBlur={[Function]}
       onChange={[Function]}
       type="number"
-      value={0}
+      value="0"
     />
   </div>
   <label

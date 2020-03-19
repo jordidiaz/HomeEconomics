@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { TMovement, emptyMovement } from './Movement/models/movement.models';
-import Movement from './Movement/Movement';
-import MovementForm from './MovementForm/MovementForm';
+import { TMovement, emptyMovement } from './models/movement.models';
+import Movement from './components/Movement/Movement';
+import MovementForm from './components/MovementForm/MovementForm';
 import './Movements.scss';
 import movementsService from './services/movements.service';
 

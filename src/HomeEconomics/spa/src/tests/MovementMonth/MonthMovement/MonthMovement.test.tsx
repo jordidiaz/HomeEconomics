@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from "react-dom";
 import { act } from "react-dom/test-utils";
-import MonthMovement from "../../../App/MovementMonth/MonthMovement/MonthMovement";
+import MonthMovement from "../../../App/MovementMonth/components/MonthMovement/MonthMovement";
 import { getMovementMonth } from "../../builders/movement-months";
 
 
