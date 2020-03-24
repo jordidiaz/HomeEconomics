@@ -1,6 +1,6 @@
-import { TMovementMonth, TMonthMovement } from "../models/movement-month.models";
 import http from "../../infrastructure/http";
 import { MovementType } from "../../Movements/models/movement.models";
+import { TMonthMovement, TMovementMonth } from "../models/movement-month.models";
 
 interface createMovementMonthDTO {
   year: number;
@@ -21,7 +21,8 @@ interface addMonthMovementDTO {
 }
 
 interface addStatusDTO {
-  movementMonthId: number;
+  year: number;
+  month: number;
   accountAmount: number;
   cashAmount: number;
 }
@@ -73,7 +74,8 @@ const addMonthMovement = async (movementMonth: TMovementMonth, name: string, amo
 
 const addStatus = async (movementMonth: TMovementMonth, accountAmount: number, cashAmount: number): Promise<TMovementMonth> => {
   const addStatusDTO: addStatusDTO = {
-    movementMonthId: movementMonth.id,
+    year: movementMonth.year,
+    month: movementMonth.month,
     accountAmount: accountAmount,
     cashAmount: cashAmount
   };
