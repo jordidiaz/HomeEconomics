@@ -1,11 +1,11 @@
 import { TMovement } from '../models/movement.models';
 import http from '../../infrastructure/http';
 
-type GetAllMovementsResponse = {
+type GetAllMovementsDTO = {
   movements: TMovement[];
 }
 
-interface createMovementDTO {
+type CreateMovementDTO = {
   name: string;
   amount: number;
   type: number;
@@ -13,15 +13,15 @@ interface createMovementDTO {
     type: number;
     month: number;
     months: boolean[];
-  }
+  };
 }
 
-interface editMovementDTO extends createMovementDTO {
+type EditMovementDTO = CreateMovementDTO & {
   id: number;
 }
 
 const getAll = async (): Promise<TMovement[]> => {
-  const response: GetAllMovementsResponse = await http.get<GetAllMovementsResponse>('movements');
+  const response: GetAllMovementsDTO = await http.get<GetAllMovementsDTO>('movements');
   return response.movements;
 };
 
@@ -31,7 +31,7 @@ const remove = async (movement: TMovement): Promise<void> => {
 };
 
 const create = async (movement: TMovement): Promise<number> => {
-  const createMovementDTO: createMovementDTO = {
+  const createMovementDTO: CreateMovementDTO = {
     name: movement.name,
     amount: movement.amount,
     type: movement.type,
@@ -45,7 +45,7 @@ const create = async (movement: TMovement): Promise<number> => {
 };
 
 const edit = async (movement: TMovement): Promise<void> => {
-  const editMovementDTO: editMovementDTO = {
+  const editMovementDTO: EditMovementDTO = {
     id: movement.id,
     name: movement.name,
     amount: movement.amount,

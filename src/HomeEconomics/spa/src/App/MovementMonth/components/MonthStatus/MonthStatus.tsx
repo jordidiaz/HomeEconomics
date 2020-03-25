@@ -8,14 +8,14 @@ export type MonthStatusProps = {
   addStatus: (movementMonth: TMovementMonth, accountAmount: number, cashAmount: number) => Promise<void>;
 }
 
-const MonthStatus: React.FC<MonthStatusProps> = (props) => {
+const MonthStatus: React.FC<MonthStatusProps> = (props: MonthStatusProps) => {
   const { movementMonth, addStatus } = props;
 
   const [remainingAmount, setRemainingAmount] = useState<number>(0);
   const [accountAmount, setAccountAmount] = useState<string>('0');
   const [cashAmount, setCashAmount] = useState<string>('0');
 
-  function handleAmountBlur(event: React.FocusEvent<HTMLInputElement>): void {
+  function handleAmountBlur(): void {
     if (movementMonth) {
       addStatus(movementMonth, parseFloat(accountAmount), parseFloat(cashAmount));
     }

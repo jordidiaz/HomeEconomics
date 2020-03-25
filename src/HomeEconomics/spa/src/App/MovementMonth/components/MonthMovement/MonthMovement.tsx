@@ -10,31 +10,31 @@ export type MonthMovementProps = {
   updateMonthMovementAmount: (monthMovement: TMonthMovement, newAmount: number) => void;
 }
 
-const MonthMovement: React.FC<MonthMovementProps> = (props) => {
+const MonthMovement: React.FC<MonthMovementProps> = (props: MonthMovementProps) => {
 
   const { monthMovement, payMonthMovement, unpayMonthMovement, updateMonthMovementAmount } = props;
 
   const [editingAmount, setEditingAmount] = useState<boolean>(false);
   const [newAmount, setNewAmount] = useState<number>(monthMovement.amount);
 
-  const pay = () => {
+  const pay = (): void => {
     payMonthMovement(monthMovement);
   };
 
-  const unpay = () => {
+  const unpay = (): void => {
     unpayMonthMovement(monthMovement);
   };
 
-  const edit = () => {
+  const edit = (): void => {
     setEditingAmount(true);
   };
 
-  const cancel = () => {
+  const cancel = (): void => {
     setEditingAmount(false);
     setNewAmount(monthMovement.amount);
   };
 
-  const accept = () => {
+  const accept = (): void => {
     updateMonthMovementAmount(monthMovement, newAmount);
     setEditingAmount(false);
   };

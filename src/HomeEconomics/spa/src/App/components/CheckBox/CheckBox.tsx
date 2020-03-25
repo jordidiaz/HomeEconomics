@@ -2,19 +2,19 @@ import React, { ChangeEvent } from 'react';
 import './CheckBox.scss';
 
 export type CheckBoxProps = {
-  value: any;
+  value: number | boolean;
   label: string;
   checked: boolean;
-  handleChange: (event: ChangeEvent<HTMLInputElement>) => void
+  handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const CheckBox: React.FC<CheckBoxProps> = (props) => {
+const CheckBox: React.FC<CheckBoxProps> = (props: CheckBoxProps) => {
 
   const { value, label, handleChange, checked } = props;
 
   return (
     <div className="CheckBox">
-      <input type="checkbox" id={value.toString()} value={value + 1} onChange={handleChange} checked={checked} />
+      <input type="checkbox" id={value.toString()} value={value.toString()} onChange={handleChange} checked={checked} />
       <label htmlFor={value.toString()}>{label}</label>
     </div>
   );

@@ -11,17 +11,15 @@ export type MovementFormProps = {
   editMovement: (movement: TMovement) => Promise<void>;
 }
 
-const MovementForm: React.FC<MovementFormProps> = (props) => {
-  let { movement } = props;
-  const { createMovement, editMovement } = props;
+const MovementForm: React.FC<MovementFormProps> = (props: MovementFormProps) => {
+  const { createMovement, editMovement, movement } = props;
   const [currentMovement, setCurrentMovement] = useState<TMovement>(movement);
 
   useEffect(() => {
     if (movement.id !== currentMovement.id) {
       setCurrentMovement(movement);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [movement]);
+  }, [currentMovement.id, movement]);
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
     const target = event.target;
@@ -51,20 +49,20 @@ const MovementForm: React.FC<MovementFormProps> = (props) => {
     setCurrentMovement({ ...currentMovement, frequencyMonths: months });
   }
 
-  function save(event: any): void {
+  function createOrEditMovement(): Promise<void> {
+    return currentMovement.id === emptyMovement.id ? createMovement(currentMovement) : editMovement(currentMovement);
+  }
+
+  function save(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
     event.preventDefault();
     createOrEditMovement().then(() => {
       setCurrentMovement(createEmpyMovement());
     });
   }
 
-  function cancel(event: any): void {
+  function cancel(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
     event.preventDefault();
     setCurrentMovement(createEmpyMovement());
-  }
-
-  function createOrEditMovement(): Promise<void> {
-    return currentMovement.id === emptyMovement.id ? createMovement(currentMovement) : editMovement(currentMovement);
   }
 
   return (
@@ -97,7 +95,7 @@ const MovementForm: React.FC<MovementFormProps> = (props) => {
             {
               currentMovement.frequencyType === FrequencyType.Custom &&
               months.map((month: string, index: number) =>
-                <CheckBox key={index} value={index} label={getMonthName(month)} checked={currentMovement.frequencyMonths[index]} handleChange={handleChange} />
+                <CheckBox key={index} value={index + 1} label={getMonthName(month)} checked={currentMovement.frequencyMonths[index]} handleChange={handleChange} />
               )
             }
           </div>

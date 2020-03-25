@@ -9,7 +9,7 @@ exports[`CheckBox component Matches the snapshot if checked 1`] = `
     id="1"
     onChange={[Function]}
     type="checkbox"
-    value={2}
+    value="1"
   />
   <label
     htmlFor="1"
@@ -28,7 +28,7 @@ exports[`CheckBox component Matches the snapshot if not checked 1`] = `
     id="1"
     onChange={[Function]}
     type="checkbox"
-    value={2}
+    value="1"
   />
   <label
     htmlFor="1"

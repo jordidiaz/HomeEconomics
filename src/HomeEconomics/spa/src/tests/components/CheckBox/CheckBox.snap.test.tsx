@@ -8,7 +8,7 @@ describe('CheckBox component', () => {
     const value = 1;
     const label = 'label';
 
-    const checkBoxRenderer = create(<CheckBox value={value} label={label} checked={true} handleChange={() => { return; }} />);
+    const checkBoxRenderer = create(<CheckBox value={value} label={label} checked={true} handleChange={(): void => { return; }} />);
     expect(checkBoxRenderer.toJSON()).toMatchSnapshot();
   });
 
@@ -16,7 +16,7 @@ describe('CheckBox component', () => {
     const value = 1;
     const label = 'label';
 
-    const checkBoxRenderer = create(<CheckBox value={value} label={label} checked={false} handleChange={() => { return; }} />);
+    const checkBoxRenderer = create(<CheckBox value={value} label={label} checked={false} handleChange={(): void => { return; }} />);
     expect(checkBoxRenderer.toJSON()).toMatchSnapshot();
   });
 });

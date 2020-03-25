@@ -2,25 +2,25 @@ import http from "../../infrastructure/http";
 import { MovementType } from "../../Movements/models/movement.models";
 import { TMonthMovement, TMovementMonth } from "../models/movement-month.models";
 
-interface createMovementMonthDTO {
+type CreateMovementMonthDTO = {
   year: number;
   month: number;
 }
 
-interface updateMonthMovementAmountDTO {
+type UpdateMonthMovementAmountDTO = {
   movementMonthId: number;
   monthMovementId: number;
   amount: number;
 }
 
-interface addMonthMovementDTO {
+type AddMonthMovementDTO = {
   movementMonthId: number;
   name: string;
   amount: number;
   type: number;
 }
 
-interface addStatusDTO {
+type AddStatusDTO = {
   year: number;
   month: number;
   accountAmount: number;
@@ -33,7 +33,7 @@ const get = async (year: number, month: number): Promise<TMovementMonth> => {
 };
 
 const create = async (year: number, month: number): Promise<TMovementMonth> => {
-  const createMovementMonthDTO: createMovementMonthDTO = {
+  const createMovementMonthDTO: CreateMovementMonthDTO = {
     year: year,
     month: month
   };
@@ -52,7 +52,7 @@ const unpayMonthMovement = async (movementMonth: TMovementMonth, monthMovement: 
 };
 
 const updateMonthMovementAmount = async (movementMonth: TMovementMonth, monthMovement: TMonthMovement, newAmount: number): Promise<TMovementMonth> => {
-  const updateMonthMovementAmountDTO: updateMonthMovementAmountDTO = {
+  const updateMonthMovementAmountDTO: UpdateMonthMovementAmountDTO = {
     movementMonthId: movementMonth.id,
     monthMovementId: monthMovement.id,
     amount: newAmount
@@ -62,7 +62,7 @@ const updateMonthMovementAmount = async (movementMonth: TMovementMonth, monthMov
 };
 
 const addMonthMovement = async (movementMonth: TMovementMonth, name: string, amount: number, movementType: MovementType): Promise<TMovementMonth> => {
-  const addMonthMovementDTO: addMonthMovementDTO = {
+  const addMonthMovementDTO: AddMonthMovementDTO = {
     movementMonthId: movementMonth.id,
     name: name,
     amount: amount,
@@ -73,7 +73,7 @@ const addMonthMovement = async (movementMonth: TMovementMonth, name: string, amo
 };
 
 const addStatus = async (movementMonth: TMovementMonth, accountAmount: number, cashAmount: number): Promise<TMovementMonth> => {
-  const addStatusDTO: addStatusDTO = {
+  const addStatusDTO: AddStatusDTO = {
     year: movementMonth.year,
     month: movementMonth.month,
     accountAmount: accountAmount,

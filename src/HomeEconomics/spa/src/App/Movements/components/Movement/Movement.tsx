@@ -9,15 +9,15 @@ export type MovementProps = {
   loadMovement: (movement: TMovement) => void;
 }
 
-const Movement: React.FC<MovementProps> = (props) => {
+const Movement: React.FC<MovementProps> = (props: MovementProps) => {
 
   const { movement, deleteMovement, loadMovement } = props;
 
-  const onClickDelete = () => {
+  const onClickDelete = (): void => {
     deleteMovement(movement);
   };
 
-  const onClickEdit = () => {
+  const onClickEdit = (): void => {
     loadMovement(movement);
   };
 

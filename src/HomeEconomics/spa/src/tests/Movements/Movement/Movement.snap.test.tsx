@@ -28,7 +28,7 @@ describe("Movement component", () => {
       ]
     };
 
-    const movementRenderer = create(<Movement movement={movement} deleteMovement={() => { return; }} loadMovement={() => { return; }} />);
+    const movementRenderer = create(<Movement movement={movement} deleteMovement={(): void => { return; }} loadMovement={(): void => { return; }} />);
     expect(movementRenderer.toJSON()).toMatchSnapshot();
   });
 
@@ -56,7 +56,7 @@ describe("Movement component", () => {
       ]
     };
 
-    const movementRenderer = create(<Movement movement={movement} deleteMovement={() => { return; }} loadMovement={() => { return; }} />);
+    const movementRenderer = create(<Movement movement={movement} deleteMovement={(): void => { return; }} loadMovement={(): void => { return; }} />);
     expect(movementRenderer.toJSON()).toMatchSnapshot();
   });
 
@@ -84,7 +84,7 @@ describe("Movement component", () => {
       ]
     };
 
-    const movementRenderer = create(<Movement movement={movement} deleteMovement={() => { return; }} loadMovement={() => { return; }} />);
+    const movementRenderer = create(<Movement movement={movement} deleteMovement={(): void => { return; }} loadMovement={(): void => { return; }} />);
     expect(movementRenderer.toJSON()).toMatchSnapshot();
   });
 
@@ -112,7 +112,7 @@ describe("Movement component", () => {
       ]
     };
 
-    const movementRenderer = create(<Movement movement={movement} deleteMovement={() => { return; }} loadMovement={() => { return; }} />);
+    const movementRenderer = create(<Movement movement={movement} deleteMovement={(): void => { return; }} loadMovement={(): void => { return; }} />);
     expect(movementRenderer.toJSON()).toMatchSnapshot();
   });
 
@@ -140,7 +140,7 @@ describe("Movement component", () => {
       ]
     };
 
-    const movementRenderer = create(<Movement movement={movement} deleteMovement={() => { return; }} loadMovement={() => { return; }} />);
+    const movementRenderer = create(<Movement movement={movement} deleteMovement={(): void => { return; }} loadMovement={(): void => { return; }} />);
     expect(movementRenderer.toJSON()).toMatchSnapshot();
   });
 

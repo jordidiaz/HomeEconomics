@@ -6,7 +6,7 @@ export type AddMonthMovementProps = {
   addMonthMovement: (name: string, amount: number, movementType: MovementType) => Promise<void>;
 }
 
-const AddMonthMovementForm: React.FC<AddMonthMovementProps> = (props) => {
+const AddMonthMovementForm: React.FC<AddMonthMovementProps> = (props: AddMonthMovementProps) => {
 
   const { addMonthMovement } = props;
 
@@ -14,22 +14,22 @@ const AddMonthMovementForm: React.FC<AddMonthMovementProps> = (props) => {
   const [amount, setAmount] = useState<number>(0);
   const [type, setType] = useState<MovementType>(MovementType.Undefined);
 
-  function save(event: any): void {
-    event.preventDefault();
-    addMonthMovement(name as string, amount, type)
-      .then(() => cleanForm());
-  };
-
-  function cancel(event: any): void {
-    event.preventDefault();
-    cleanForm();
-  };
-
   function cleanForm(): void {
     setName('');
     setAmount(0);
     setType(MovementType.Undefined);
   }
+
+  function save(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    event.preventDefault();
+    addMonthMovement(name as string, amount, type)
+      .then(() => cleanForm());
+  };
+
+  function cancel(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    event.preventDefault();
+    cleanForm();
+  };
 
   function handleNameChange(event: ChangeEvent<HTMLInputElement>): void {
     setName(event.target.value);

@@ -19,18 +19,18 @@ const Movements: React.FC = () => {
     return 0;
   };
 
-  async function deleteMovement(movement: TMovement) {
+  async function deleteMovement(movement: TMovement): Promise<void> {
     await movementsService.remove(movement);
     setMovements(movements.filter(m => m.id !== movement.id));
   }
 
-  async function createMovement(movement: TMovement) {
+  async function createMovement(movement: TMovement): Promise<void> {
     const id = await movementsService.create(movement);
     const newMovements = [...movements, { ...movement, id }].sort(sortFn());
     setMovements(newMovements);
   }
 
-  async function editMovement(editedMovement: TMovement) {
+  async function editMovement(editedMovement: TMovement): Promise<void> {
     await movementsService.edit(editedMovement);
     const filteredMovements = movements.filter(m => m.id !== editedMovement.id);
     filteredMovements.push(editedMovement);
@@ -38,15 +38,17 @@ const Movements: React.FC = () => {
     setMovements(newMovements);
   }
 
-  function loadMovement(movement: TMovement) {
+  function loadMovement(movement: TMovement): void {
     setMovement(movement);
   }
 
+  const getMovements = async (): Promise<void> => {
+    const movements = await movementsService.getAll();
+    setMovements(movements);
+  }
+
   useEffect(() => {
-    (async function () {
-      const movements = await movementsService.getAll();
-      setMovements(movements);
-    })();
+    getMovements();
   }, []);
 
   return (

@@ -2,14 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import MovementForm from '../../../App/Movements/components/MovementForm/MovementForm';
-import { TMovement, emptyMovement } from '../../../App/Movements/models/movement.models';
+import { emptyMovement } from '../../../App/Movements/models/movement.models';
 import { getMovements } from '../../builders/movements';
 
 describe('MovementForm component', () => {
   let container: Element;
 
-  const createMovement = jest.fn((_: TMovement) => { return Promise.resolve(); });
-  const editMovement = jest.fn((_: TMovement) => { return Promise.resolve(); });
+  const createMovement = jest.fn(() => { return Promise.resolve(); });
+  const editMovement = jest.fn(() => { return Promise.resolve(); });
 
   beforeEach(() => {
     container = document.createElement("div");

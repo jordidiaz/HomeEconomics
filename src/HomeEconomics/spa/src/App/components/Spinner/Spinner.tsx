@@ -7,7 +7,7 @@ export type SpinnerProps = {
   show: boolean;
 }
 
-const Spinner: React.FC<SpinnerProps> = (props) => {
+const Spinner: React.FC<SpinnerProps> = (props: SpinnerProps) => {
 
   const { show } = props;
 

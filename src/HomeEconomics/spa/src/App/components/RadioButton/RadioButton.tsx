@@ -5,10 +5,10 @@ export type RadioButtonProps = {
   value: number;
   label: string;
   checked: boolean;
-  handleMonthChange: (event: ChangeEvent<HTMLInputElement>) => void
+  handleMonthChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const RadioButton: React.FC<RadioButtonProps> = (props) => {
+const RadioButton: React.FC<RadioButtonProps> = (props: RadioButtonProps) => {
 
   const { value, label, checked, handleMonthChange } = props;
 

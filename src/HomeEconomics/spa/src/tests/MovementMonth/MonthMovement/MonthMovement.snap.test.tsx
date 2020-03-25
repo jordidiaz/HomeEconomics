@@ -14,7 +14,7 @@ describe('MonthMovement component', () => {
       paid: false,
     };
 
-    const monthMovementRenderer = create(<MonthMovement monthMovement={monthMovement} payMonthMovement={(_monthMovement) => { return; }} unpayMonthMovement={(_monthMovement) => { return; }} updateMonthMovementAmount={(_monthMovement, _newAmount) => { return; }} />);
+    const monthMovementRenderer = create(<MonthMovement monthMovement={monthMovement} payMonthMovement={(): void => { return; }} unpayMonthMovement={(): void => { return; }} updateMonthMovementAmount={(): void => { return; }} />);
     expect(monthMovementRenderer.toJSON()).toMatchSnapshot();
   });
 
@@ -27,7 +27,7 @@ describe('MonthMovement component', () => {
       paid: true
     };
 
-    const monthMovementRenderer = create(<MonthMovement monthMovement={monthMovement} payMonthMovement={(_monthMovement) => { return; }} unpayMonthMovement={(_monthMovement) => { return; }} updateMonthMovementAmount={(_monthMovement, _newAmount) => { return; }} />);
+    const monthMovementRenderer = create(<MonthMovement monthMovement={monthMovement} payMonthMovement={(): void => { return; }} unpayMonthMovement={(): void => { return; }} updateMonthMovementAmount={(): void => { return; }} />);
     expect(monthMovementRenderer.toJSON()).toMatchSnapshot();
   });
 });

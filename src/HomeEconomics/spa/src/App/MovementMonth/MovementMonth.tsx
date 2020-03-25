@@ -12,7 +12,7 @@ export type MovementMonthProps = {
   initialShowPaid: boolean;
 }
 
-const MovementMonth: React.FC<MovementMonthProps> = (props) => {
+const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) => {
 
   const now = new Date();
   const currentYear = now.getFullYear();
@@ -20,42 +20,42 @@ const MovementMonth: React.FC<MovementMonthProps> = (props) => {
 
   const { initialShowPaid } = props;
 
-  const [movementMonth, setMovementMonth] = useState<TMovementMonth>();
+  const [movementMonth, setMovementMonth] = useState<TMovementMonth | null>(null);
   const [showPaid, setShowPaid] = useState<boolean>(initialShowPaid);
   const [year, setYear] = useState<number>(currentYear);
   const [month, setMonth] = useState<number>(currentMonth);
 
-  async function createMovementMonth() {
+  function setUpdatedMovementMonth(movementMonth: TMovementMonth): void {
+    setMovementMonth(movementMonth);
+  }
+
+  async function createMovementMonth(): Promise<void> {
     const movementMonth = await movementMonthService.create(year, month);
     setUpdatedMovementMonth(movementMonth);
   }
 
-  async function payMonthMovement(monthMovement: TMonthMovement) {
+  async function payMonthMovement(monthMovement: TMonthMovement): Promise<void> {
     setUpdatedMovementMonth(await movementMonthService.payMonthMovement(movementMonth as TMovementMonth, monthMovement));
   }
 
-  async function unpayMonthMovement(monthMovement: TMonthMovement) {
+  async function unpayMonthMovement(monthMovement: TMonthMovement): Promise<void> {
     setUpdatedMovementMonth(await movementMonthService.unpayMonthMovement(movementMonth as TMovementMonth, monthMovement));
   }
 
-  async function updateMonthMovementAmount(monthMovement: TMonthMovement, newAmount: number) {
+  async function updateMonthMovementAmount(monthMovement: TMonthMovement, newAmount: number): Promise<void> {
     setUpdatedMovementMonth(await movementMonthService.updateMonthMovementAmount(movementMonth as TMovementMonth, monthMovement, newAmount));
   }
 
-  async function addMonthMovement(name: string, amount: number, movementType: MovementType) {
+  async function addMonthMovement(name: string, amount: number, movementType: MovementType): Promise<void> {
     setUpdatedMovementMonth(await movementMonthService.addMonthMovement(movementMonth as TMovementMonth, name, amount, movementType));
   }
 
-  async function addStatus(movementMonth: TMovementMonth, accountAmount: number, cashAmount: number) {
+  async function addStatus(movementMonth: TMovementMonth, accountAmount: number, cashAmount: number): Promise<void> {
     setUpdatedMovementMonth(await movementMonthService.addStatus(movementMonth, accountAmount, cashAmount));
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>): void {
     setShowPaid(event.target.checked);
-  }
-
-  function setUpdatedMovementMonth(movementMonth: TMovementMonth): void {
-    setMovementMonth(movementMonth);
   }
 
   function filterByShowPaid(monthMovement: TMonthMovement): boolean {
@@ -72,12 +72,14 @@ const MovementMonth: React.FC<MovementMonthProps> = (props) => {
     setMonth(parseInt(event.target.value));
   }
 
+  const getMovementMonth = async (): Promise<void> => {
+    const movementMonth = await movementMonthService.get(year, month);
+    setUpdatedMovementMonth(movementMonth);
+  }
+
   useEffect(() => {
-    (async function () {
-      const movementMonth = await movementMonthService.get(year, month);
-      setUpdatedMovementMonth(movementMonth);
-    })();
-  }, [year, month]);
+    getMovementMonth();
+  }, [year, month, getMovementMonth]);
 
   return (
     <div className="MovementMonth" >

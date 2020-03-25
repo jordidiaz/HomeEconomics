@@ -8,7 +8,7 @@ describe('RadioButton component', () => {
     const value = 1;
     const label = 'label';
 
-    const radioButtonRenderer = create(<RadioButton value={value} label={label} checked={true} handleMonthChange={() => { return; }} />);
+    const radioButtonRenderer = create(<RadioButton value={value} label={label} checked={true} handleMonthChange={(): void => { return; }} />);
     expect(radioButtonRenderer.toJSON()).toMatchSnapshot();
   });
 
@@ -16,7 +16,7 @@ describe('RadioButton component', () => {
     const value = 1;
     const label = 'label';
 
-    const radioButtonRenderer = create(<RadioButton value={value} label={label} checked={false} handleMonthChange={() => { return; }} />);
+    const radioButtonRenderer = create(<RadioButton value={value} label={label} checked={false} handleMonthChange={(): void => { return; }} />);
     expect(radioButtonRenderer.toJSON()).toMatchSnapshot();
   });
 });

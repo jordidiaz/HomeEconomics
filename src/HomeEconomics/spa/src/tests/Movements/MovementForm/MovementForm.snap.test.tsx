@@ -1,11 +1,11 @@
 import React from "react";
 import { create } from 'react-test-renderer';
-import { TMovement, emptyMovement } from '../../../App/Movements/models/movement.models';
 import MovementForm from '../../../App/Movements/components/MovementForm/MovementForm';
+import { emptyMovement } from '../../../App/Movements/models/movement.models';
 
 describe('MovementForm component', () => {
   test('Matches the snapshot', () => {
-    const movementFormRenderer = create(<MovementForm movement={emptyMovement} createMovement={(_: TMovement) => { return Promise.resolve(); }} editMovement={(_: TMovement) => { return Promise.resolve(); }} />);
+    const movementFormRenderer = create(<MovementForm movement={emptyMovement} createMovement={(): Promise<void> => { return Promise.resolve(); }} editMovement={(): Promise<void> => { return Promise.resolve(); }} />);
     expect(movementFormRenderer.toJSON()).toMatchSnapshot();
   });
 
