@@ -29,6 +29,7 @@ namespace HomeEconomics.Configuration
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, Create.Result>()
+                    .AfterMap((source, destination) => destination.MonthMovements = destination.MonthMovements.OrderBy(mm => mm.Name).ToArray())
                     .ForPath(destination => destination.Status.AccountAmount,
                         expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
                     .ForPath(destination => destination.Status.CashAmount,
@@ -46,9 +47,9 @@ namespace HomeEconomics.Configuration
                     .CreateMap<MovementMonth, Detail.Result>()
                     .AfterMap((source, destination) => destination.MonthMovements = destination.MonthMovements.OrderBy(mm => mm.Name).ToArray())
                     .ForPath(destination => destination.Status.AccountAmount,
-                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
+                        expression => expression.MapFrom(source => source.Statuses.Count > 0 ? source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount : 0))
                     .ForPath(destination => destination.Status.CashAmount,
-                        expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().CashAmount))
+                        expression => expression.MapFrom(source => source.Statuses.Count > 0 ? source.Statuses.OrderByDescending(s => s.Day).First().CashAmount : 0))
                     .ForPath(destination => destination.Status.PendingTotalExpenses,
                         expression => expression.MapFrom(source =>
                             source.MonthMovements.Where(mm => mm.Type == MovementType.Expense && !mm.Paid)
@@ -60,6 +61,7 @@ namespace HomeEconomics.Configuration
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, PayMonthMovement.Result>()
+                    .AfterMap((source, destination) => destination.MonthMovements = destination.MonthMovements.OrderBy(mm => mm.Name).ToArray())
                     .ForPath(destination => destination.Status.AccountAmount,
                         expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
                     .ForPath(destination => destination.Status.CashAmount,
@@ -75,6 +77,7 @@ namespace HomeEconomics.Configuration
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, UnPayMonthMovement.Result>()
+                    .AfterMap((source, destination) => destination.MonthMovements = destination.MonthMovements.OrderBy(mm => mm.Name).ToArray())
                     .ForPath(destination => destination.Status.AccountAmount,
                         expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
                     .ForPath(destination => destination.Status.CashAmount,
@@ -93,6 +96,7 @@ namespace HomeEconomics.Configuration
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, UpdateMonthMovementAmount.Result>()
+                    .AfterMap((source, destination) => destination.MonthMovements = destination.MonthMovements.OrderBy(mm => mm.Name).ToArray())
                     .ForPath(destination => destination.Status.AccountAmount,
                         expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
                     .ForPath(destination => destination.Status.CashAmount,
@@ -108,6 +112,7 @@ namespace HomeEconomics.Configuration
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, AddMonthMovement.Result>()
+                    .AfterMap((source, destination) => destination.MonthMovements = destination.MonthMovements.OrderBy(mm => mm.Name).ToArray())
                     .ForPath(destination => destination.Status.AccountAmount,
                         expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
                     .ForPath(destination => destination.Status.CashAmount,
@@ -123,6 +128,7 @@ namespace HomeEconomics.Configuration
 
                 mapperConfigurationExpression
                     .CreateMap<MovementMonth, AddStatus.Result>()
+                    .AfterMap((source, destination) => destination.MonthMovements = destination.MonthMovements.OrderBy(mm => mm.Name).ToArray())
                     .ForPath(destination => destination.Status.AccountAmount,
                         expression => expression.MapFrom(source => source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount))
                     .ForPath(destination => destination.Status.CashAmount,
