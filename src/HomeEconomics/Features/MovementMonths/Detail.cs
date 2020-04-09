@@ -10,19 +10,14 @@ namespace HomeEconomics.Features.MovementMonths
 {
     public class Detail
     {
-        public class Query : IRequest<Result>
+        public class Query : IRequest<MovementMonthResponse>
         {
             public int Year { get; set; }
 
             public int Month { get; set; }
         }
 
-        public class Result : MovementMonthResponse
-        {
-
-        }
-
-        public class Handler : IRequestHandler<Query, Result>
+        public class Handler : IRequestHandler<Query, MovementMonthResponse>
         {
             private readonly HomeEconomicsDbContext _dbContext;
             private readonly IMapper _mapper;
@@ -33,14 +28,14 @@ namespace HomeEconomics.Features.MovementMonths
                 _mapper = mapper;
             }
 
-            public async Task<Result> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<MovementMonthResponse> Handle(Query request, CancellationToken cancellationToken)
             {
                 var movementMonth = await _dbContext.MovementMonths
                     .Include(mm => mm.MonthMovements)
                     .Include(mm => mm.Statuses)
                     .SingleOrDefaultAsync(mm => mm.Year == request.Year && mm.Month == (Month) request.Month, cancellationToken: cancellationToken);
 
-                return _mapper.Map<Result>(movementMonth);
+                return _mapper.Map<MovementMonthResponse>(movementMonth);
             }
         }
     }

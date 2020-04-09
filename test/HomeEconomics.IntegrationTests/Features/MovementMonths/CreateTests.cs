@@ -47,11 +47,11 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
-        public class Handler : IRequestHandler<Create.Command, Create.Result>
+        public class Handler : IRequestHandler<Create.Command, MovementMonthResponse>
         {
-            public Task<Create.Result> Handle(Create.Command request, CancellationToken cancellationToken)
+            public Task<MovementMonthResponse> Handle(Create.Command request, CancellationToken cancellationToken)
             {
-                return Task.FromResult(new Create.Result());
+                return Task.FromResult(new MovementMonthResponse());
             }
         }
     }

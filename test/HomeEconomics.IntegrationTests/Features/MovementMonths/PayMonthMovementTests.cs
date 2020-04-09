@@ -27,11 +27,11 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
-        public class Handler : IRequestHandler<PayMonthMovement.Command, PayMonthMovement.Result>
+        public class Handler : IRequestHandler<PayMonthMovement.Command, MovementMonthResponse>
         {
-            public Task<PayMonthMovement.Result> Handle(PayMonthMovement.Command request, CancellationToken cancellationToken)
+            public Task<MovementMonthResponse> Handle(PayMonthMovement.Command request, CancellationToken cancellationToken)
             {
-                return Task.FromResult(new PayMonthMovement.Result());
+                return Task.FromResult(new MovementMonthResponse());
             }
         }
     }

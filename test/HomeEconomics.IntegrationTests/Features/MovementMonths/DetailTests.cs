@@ -37,11 +37,11 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
-        public class Handler : IRequestHandler<Detail.Query, Detail.Result>
+        public class Handler : IRequestHandler<Detail.Query, MovementMonthResponse>
         {
-            public Task<Detail.Result> Handle(Detail.Query request, CancellationToken cancellationToken)
+            public Task<MovementMonthResponse> Handle(Detail.Query request, CancellationToken cancellationToken)
             {
-                return request.Year == 2020 ? Task.FromResult(new Detail.Result()) : Task.FromResult<Detail.Result>(null);
+                return request.Year == 2020 ? Task.FromResult(new MovementMonthResponse()) : Task.FromResult<MovementMonthResponse>(null);
             }
         }
     }

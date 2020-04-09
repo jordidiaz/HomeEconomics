@@ -1,4 +1,7 @@
-﻿namespace HomeEconomics.Features.MovementMonths
+﻿using AutoMapper;
+using Domain.MovementMonth;
+
+namespace HomeEconomics.Features.MovementMonths
 {
     public class MovementMonthResponse
     {
@@ -34,6 +37,14 @@
             public decimal AccountAmount { get; set; }
 
             public decimal CashAmount { get; set; }
+        }
+    }
+
+    public class MovementMonthResponseProfile : Profile
+    {
+        public MovementMonthResponseProfile()
+        {
+            CreateMap<MonthMovement, MovementMonthResponse.MonthMovementResult>();
         }
     }
 }

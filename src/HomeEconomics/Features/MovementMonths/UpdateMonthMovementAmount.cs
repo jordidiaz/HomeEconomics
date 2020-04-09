@@ -12,16 +12,11 @@
 {
     public class UpdateMonthMovementAmount
     {
-        public class Command : IRequest<Result>
+        public class Command : IRequest<MovementMonthResponse>
         {
             public int MovementMonthId { get; set; }
             public int MonthMovementId { get; set; }
             public decimal Amount { get; set; }
-        }
-
-        public class Result : MovementMonthResponse
-        {
-
         }
 
         public class Validator : AbstractValidator<Command>
@@ -32,7 +27,7 @@
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result>
+        public class Handler : IRequestHandler<Command, MovementMonthResponse>
         {
             private readonly HomeEconomicsDbContext _dbContext;
             private readonly IMapper _mapper;
@@ -43,7 +38,7 @@
                 _mapper = mapper;
             }
 
-            public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var movementMonth = await _dbContext
                     .MovementMonths
@@ -60,7 +55,7 @@
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
-                return _mapper.Map<Result>(movementMonth);
+                return _mapper.Map<MovementMonthResponse>(movementMonth);
             }
         }
     }

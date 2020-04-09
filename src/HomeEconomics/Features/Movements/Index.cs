@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Domain.Movements;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -33,6 +35,24 @@ namespace HomeEconomics.Features.Movements
                 public bool[] FrequencyMonths { get; set; }
 
                 public int FrequencyMonth { get; set; }
+            }
+        }
+
+        public class MovementsIndexProfile : Profile
+        {
+            public MovementsIndexProfile()
+            {
+                CreateMap<Movement, Result.Movement>()
+                .ForMember(destination => destination.Type,
+                    memberConfigurationExpression =>
+                        memberConfigurationExpression.MapFrom(source => (int)source.Type))
+                .ForMember(destination => destination.FrequencyType,
+                    memberConfigurationExpression =>
+                        memberConfigurationExpression.MapFrom(source => (int)source.Frequency.Type))
+                .ForMember(destination => destination.FrequencyMonth,
+                    memberConfigurationExpression => memberConfigurationExpression.MapFrom(source => source.Frequency.Type == FrequencyType.Yearly
+                        ? Array.IndexOf(source.Frequency.Months, true) + 1
+                        : 0));
             }
         }
 

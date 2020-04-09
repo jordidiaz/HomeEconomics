@@ -15,16 +15,11 @@ namespace HomeEconomics.Features.MovementMonths
 {
     public class Create
     {
-        public class Command : IRequest<Result>
+        public class Command : IRequest<MovementMonthResponse>
         {
             public int Year { get; set; }
 
             public Month Month { get; set; }
-        }
-
-        public class Result : MovementMonthResponse
-        {
-
         }
 
         public class Validator : AbstractValidator<Command>
@@ -36,7 +31,7 @@ namespace HomeEconomics.Features.MovementMonths
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result>
+        public class Handler : IRequestHandler<Command, MovementMonthResponse>
         {
             private readonly HomeEconomicsDbContext _dbContext;
             private readonly IMapper _mapper;
@@ -47,7 +42,7 @@ namespace HomeEconomics.Features.MovementMonths
                 _mapper = mapper;
             }
 
-            public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var movementMonth = await _dbContext
                     .MovementMonths
@@ -87,7 +82,7 @@ namespace HomeEconomics.Features.MovementMonths
                     .Include(mm => mm.Statuses)
                     .SingleOrDefaultAsync(mm => mm.Id == movementMonth.Id, cancellationToken: cancellationToken);
 
-                return _mapper.Map<Result>(result);
+                return _mapper.Map<MovementMonthResponse>(result);
             }
 
             private static bool UseMovement(Movement movement, Month month)

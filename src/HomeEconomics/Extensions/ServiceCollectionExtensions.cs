@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
@@ -40,7 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddHomeEconomicsAutoMapper(this IServiceCollection services)
         {
             return services
-                .AddAutoMapper(HomeEconomics.Configuration.Configuration.ConfigureAutoMapper(), Assembly.GetAssembly(typeof(HomeEconomics.HomeEconomicsApp)));
+                .AddAutoMapper(typeof(HomeEconomics.HomeEconomicsApp));
         }
 
         internal static IServiceCollection AddHomeEconomicsSwagger(this IServiceCollection services)

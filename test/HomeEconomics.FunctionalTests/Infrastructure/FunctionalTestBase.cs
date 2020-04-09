@@ -94,7 +94,7 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
             });
         }
 
-        public static async Task<Create.Result> CreateMovementMonth(Month month = Month.Jan)
+        public static async Task<MovementMonthResponse> CreateMovementMonth(Month month = Month.Jan)
         {
             var year = DateTime.Now.Year;
 
