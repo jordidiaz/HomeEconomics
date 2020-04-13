@@ -1,8 +1,9 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { useEffect, ChangeEvent } from 'react';
 import CheckBox from '../../../components/CheckBox/CheckBox';
 import RadioButton from '../../../components/RadioButton/RadioButton';
+import useForm from '../../../hooks/useForm';
 import { getMonthName, months } from '../../helpers/months';
-import { emptyMovement, FrequencyType, TMovement, createEmpyMovement } from '../../models/movement.models';
+import { createEmpyMovement, emptyMovement, FrequencyType, TMovement } from '../../models/movement.models';
 import './MovementForm.scss';
 
 export type MovementFormProps = {
@@ -12,98 +13,78 @@ export type MovementFormProps = {
 }
 
 const MovementForm: React.FC<MovementFormProps> = (props: MovementFormProps) => {
+
   const { createMovement, editMovement, movement } = props;
-  const [currentMovement, setCurrentMovement] = useState<TMovement>(movement);
+
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  const { handleChange, handleSubmit, values, setValues } = useForm<TMovement>(movement, submit);
 
   useEffect(() => {
-    if (movement.id !== currentMovement.id) {
-      setCurrentMovement(movement);
+    if (movement.id !== values.id) {
+      setValues(movement);
     }
-  }, [currentMovement.id, movement]);
+  }, [values.id, movement, setValues]);
 
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    setCurrentMovement({ ...currentMovement, [name]: value });
-  }
-
-  function handleSelectChange(event: ChangeEvent<HTMLSelectElement>): void {
+  function handleMonthsChange(event: ChangeEvent<HTMLInputElement>): void {
     const target = event.target;
     const value = parseInt(target.value);
-    const name = target.name;
-    setCurrentMovement({ ...currentMovement, [name]: value });
-  }
-
-  function handleMonthChange(event: ChangeEvent<HTMLInputElement>): void {
-    const target = event.target;
-    const value = parseInt(target.value);
-    setCurrentMovement({ ...currentMovement, frequencyMonth: value });
-  }
-
-  function handleChange(event: ChangeEvent<HTMLInputElement>): void {
-    const target = event.target;
-    const value = parseInt(target.value);
-    const months = currentMovement.frequencyMonths;
+    const months = values.frequencyMonths;
     months[value - 1] = target.checked;
-    setCurrentMovement({ ...currentMovement, frequencyMonths: months });
+    setValues({ ...values, frequencyMonths: months });
   }
 
   function createOrEditMovement(): Promise<void> {
-    return currentMovement.id === emptyMovement.id ? createMovement(currentMovement) : editMovement(currentMovement);
+    return values.id === emptyMovement.id ? createMovement(values) : editMovement(values);
   }
 
-  function save(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-    event.preventDefault();
+  function submit(): void {
     createOrEditMovement().then(() => {
-      setCurrentMovement(createEmpyMovement());
+      setValues(createEmpyMovement());
     });
   }
 
   function cancel(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
     event.preventDefault();
-    setCurrentMovement(createEmpyMovement());
+    setValues(createEmpyMovement());
   }
 
   return (
-    <>
-      <form className="MovementForm">
-        <div className="MovementForm__inputs">
-          <div className="MovementForm__inputs-basic">
-            <input className="input form-control" value={currentMovement.name} placeholder="Nombre" type="text" name="name" onChange={handleInputChange} />
-            <input className="input form-control" value={currentMovement.amount} placeholder="Importe" type="number" min="0" name="amount" onChange={handleInputChange} />
-            <select className="select form-control" value={currentMovement.type} name="type" onChange={handleSelectChange}>
-              <option value="">Tipo</option>
-              <option value="1">Gasto</option>
-              <option value="0">Ingreso</option>
-            </select>
-            <select className="select form-control" value={currentMovement.frequencyType} name="frequencyType" onChange={handleSelectChange}>
-              <option value="">Frecuencia</option>
-              <option value="0">Sin frecuencia</option>
-              <option value="1">Mensual</option>
-              <option value="2">Anual</option>
-              <option value="3">Personalizada</option>
-            </select>
-          </div>
-          <div className="MovementForm__inputs-months">
-            {
-              currentMovement.frequencyType === FrequencyType.Yearly &&
-              months.map((month: string, index: number) =>
-                <RadioButton key={index} value={index} label={getMonthName(month)} checked={currentMovement.frequencyMonth - 1 === index} handleMonthChange={handleMonthChange} />
-              )
-            }
-            {
-              currentMovement.frequencyType === FrequencyType.Custom &&
-              months.map((month: string, index: number) =>
-                <CheckBox key={index} value={index + 1} label={getMonthName(month)} checked={currentMovement.frequencyMonths[index]} handleChange={handleChange} />
-              )
-            }
-          </div>
+    <form onSubmit={handleSubmit} className="MovementForm">
+      <div className="MovementForm__inputs">
+        <div className="MovementForm__inputs-basic">
+          <input className="input form-control" value={values.name} placeholder="Nombre" type="text" name="name" onChange={handleChange} />
+          <input className="input form-control" value={values.amount} placeholder="Importe" type="number" min="0" name="amount" onChange={handleChange} />
+          <select className="select form-control" value={values.type} name="type" onChange={handleChange}>
+            <option value="">Tipo</option>
+            <option value="1">Gasto</option>
+            <option value="0">Ingreso</option>
+          </select>
+          <select className="select form-control" value={values.frequencyType} name="frequencyType" onChange={handleChange}>
+            <option value="">Frecuencia</option>
+            <option value="0">Sin frecuencia</option>
+            <option value="1">Mensual</option>
+            <option value="2">Anual</option>
+            <option value="3">Personalizada</option>
+          </select>
         </div>
-      </form>
-      <button className="MovementForm__save button" onClick={save}>Guardar</button>
+        <div className="MovementForm__inputs-months">
+          {
+            values.frequencyType === FrequencyType.Yearly &&
+            months.map((month: string, index: number) =>
+              <RadioButton name="frequencyMonth" key={index} value={index} label={getMonthName(month)} checked={values.frequencyMonth - 1 === index} handleMonthChange={handleChange} />
+            )
+          }
+          {
+            values.frequencyType === FrequencyType.Custom &&
+            months.map((month: string, index: number) =>
+              <CheckBox name="frequencyMonths" key={index} value={index + 1} label={getMonthName(month)} checked={values.frequencyMonths[index]} handleChange={handleMonthsChange} />
+            )
+          }
+        </div>
+      </div>
+      <button type="submit" className="MovementForm__save button">Guardar</button>
       <button className="MovementForm__cancel button" onClick={cancel}>Cancelar</button>
-    </>
+    </form>
   );
 };
 

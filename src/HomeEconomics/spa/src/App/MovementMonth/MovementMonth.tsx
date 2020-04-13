@@ -20,7 +20,7 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
 
   const { initialShowPaid } = props;
 
-  const [movementMonth, setMovementMonth] = useState<TMovementMonth | null>(null);
+  const [movementMonth, setMovementMonth] = useState<TMovementMonth>();
   const [showPaid, setShowPaid] = useState<boolean>(initialShowPaid);
   const [year, setYear] = useState<number>(currentYear);
   const [month, setMonth] = useState<number>(currentMonth);
@@ -72,19 +72,21 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
     setMonth(parseInt(event.target.value));
   }
 
-  const getMovementMonth = async (): Promise<void> => {
-    const movementMonth = await movementMonthService.get(year, month);
-    setUpdatedMovementMonth(movementMonth);
-  }
-
   useEffect(() => {
+    async function getMovementMonth(): Promise<void> {
+      const movementMonth = await movementMonthService.get(year, month);
+      setUpdatedMovementMonth(movementMonth);
+    }
     getMovementMonth();
-  }, [year, month, getMovementMonth]);
+  }, [year, month]);
 
   return (
     <div className="MovementMonth" >
       <div className="MovementMonth__month-status">
-        <MonthStatus movementMonth={movementMonth} addStatus={addStatus} />
+        {
+          movementMonth &&
+          <MonthStatus movementMonth={movementMonth} addStatus={addStatus} />
+        }
       </div>
       <div className="MovementMonth__tools">
         <div className="MovementMonth__tools-add-month-movement">
@@ -118,7 +120,7 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
       </div>
       {
         movementMonth &&
-        <CheckBox value={showPaid} label='Mostrar pagados' checked={showPaid} handleChange={handleChange} />
+        <CheckBox name="showPaid" value={showPaid} label='Mostrar pagados' checked={showPaid} handleChange={handleChange} />
       }
       <ul>
         {

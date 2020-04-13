@@ -1,53 +1,45 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import { calculateRemaining } from '../../helpers/calcs';
+import React from 'react';
+import useForm from '../../../hooks/useForm';
+import { useRemainingAmount } from '../../hooks/useRemainingAmount';
 import { TMovementMonth } from '../../models/movement-month.models';
 import './MonthStatus.scss';
 
 export type MonthStatusProps = {
-  movementMonth: TMovementMonth | undefined;
+  movementMonth: TMovementMonth;
   addStatus: (movementMonth: TMovementMonth, accountAmount: number, cashAmount: number) => Promise<void>;
 }
 
+type MonthStatusFormValues = {
+  accountAmount: number;
+  cashAmount: number;
+}
+
 const MonthStatus: React.FC<MonthStatusProps> = (props: MonthStatusProps) => {
-  const { movementMonth, addStatus } = props;
 
-  const [remainingAmount, setRemainingAmount] = useState<number>(0);
-  const [accountAmount, setAccountAmount] = useState<string>('0');
-  const [cashAmount, setCashAmount] = useState<string>('0');
+  const { addStatus, movementMonth } = props;
 
-  function handleAmountBlur(): void {
-    if (movementMonth) {
-      addStatus(movementMonth, parseFloat(accountAmount), parseFloat(cashAmount));
-    }
+  const initialValues: MonthStatusFormValues = {
+    accountAmount: movementMonth.status.accountAmount,
+    cashAmount: movementMonth.status.cashAmount
   }
 
-  function handleAccountAmountChange(event: ChangeEvent<HTMLInputElement>): void {
-    event.target.value
-      ? setAccountAmount(event.target.value)
-      : setAccountAmount('');
-  }
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  const { handleChange, values } = useForm<MonthStatusFormValues>(initialValues, onBlur);
+  const remainingAmount = useRemainingAmount(movementMonth);
 
-  function handleCashAmountChange(event: ChangeEvent<HTMLInputElement>): void {
-    event.target.value
-      ? setCashAmount(event.target.value)
-      : setCashAmount('');
+  function onBlur(): void {
+    addStatus(movementMonth, values.accountAmount, values.cashAmount);
   }
-
-  useEffect(() => {
-    setRemainingAmount(calculateRemaining(movementMonth));
-    setAccountAmount(movementMonth ? movementMonth.status.accountAmount.toString() : '0');
-    setCashAmount(movementMonth ? movementMonth.status.cashAmount.toString() : '0');
-  }, [movementMonth]);
 
   return (
-    <form className="MonthStatus">
+    <form onBlurCapture={onBlur} className="MonthStatus">
       <div className="input-with-label">
         <label>Cuenta</label>
-        <input className="input form-control" value={accountAmount} type="number" min="0" name="amount" onBlur={handleAmountBlur} onChange={handleAccountAmountChange} />
+        <input className="input form-control" value={values.accountAmount} type="number" min="0" name="accountAmount" onChange={handleChange} />
       </div>
       <div className="input-with-label">
         <label>Cash</label>
-        <input className="input form-control" value={cashAmount} type="number" min="0" name="amount" onBlur={handleAmountBlur} onChange={handleCashAmountChange} />
+        <input className="input form-control" value={values.cashAmount} type="number" min="0" name="cashAmount" onChange={handleChange} />
       </div>
       <label className="MonthStatus__remaining">
         <span className={remainingAmount >= 0 ? 'MonthStatus__remaining-amount' : 'MonthStatus__remaining-amount--negative'}>{remainingAmount >= 0 ? `Sobra ${remainingAmount}` : `Falta ${remainingAmount}`}</span>
