@@ -2,6 +2,7 @@ import React, { ChangeEvent } from 'react';
 import './RadioButton.scss';
 
 export type RadioButtonProps = {
+  name: string;
   value: number;
   label: string;
   checked: boolean;
@@ -10,11 +11,11 @@ export type RadioButtonProps = {
 
 const RadioButton: React.FC<RadioButtonProps> = (props: RadioButtonProps) => {
 
-  const { value, label, checked, handleMonthChange } = props;
+  const { name, value, label, checked, handleMonthChange } = props;
 
   return (
     <div className="RadioButton">
-      <input type="radio" id={value.toString()} value={value + 1} onChange={handleMonthChange} checked={checked} />
+      <input type="radio" name={name} id={value.toString()} value={value + 1} onChange={handleMonthChange} checked={checked} />
       <label htmlFor={value.toString()}>{label}</label>
     </div>
   );
