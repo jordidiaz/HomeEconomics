@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { TMovement, emptyMovement } from './models/movement.models';
+import React, { useState } from 'react';
 import Movement from './components/Movement/Movement';
 import MovementForm from './components/MovementForm/MovementForm';
+import { useMovements } from './hooks/useMovements';
+import { emptyMovement, TMovement } from './models/movement.models';
 import './Movements.scss';
 import movementsService from './services/movements.service';
 
 const Movements: React.FC = () => {
-  const [movements, setMovements] = useState<TMovement[]>([]);
+  const { movements, setMovements } = useMovements();
   const [movement, setMovement] = useState<TMovement>(emptyMovement);
 
   const sortFn = () => (a: TMovement, b: TMovement): number => {
@@ -41,15 +42,6 @@ const Movements: React.FC = () => {
   function loadMovement(movement: TMovement): void {
     setMovement(movement);
   }
-
-  const getMovements = async (): Promise<void> => {
-    const movements = await movementsService.getAll();
-    setMovements(movements);
-  }
-
-  useEffect(() => {
-    getMovements();
-  }, []);
 
   return (
     <div className="Movements">

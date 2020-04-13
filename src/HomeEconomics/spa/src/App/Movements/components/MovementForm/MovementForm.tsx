@@ -1,8 +1,9 @@
-import React, { useEffect, ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 import CheckBox from '../../../components/CheckBox/CheckBox';
 import RadioButton from '../../../components/RadioButton/RadioButton';
 import useForm from '../../../hooks/useForm';
 import { getMonthName, months } from '../../helpers/months';
+import { useMovement } from '../../hooks/useMovement';
 import { createEmpyMovement, emptyMovement, FrequencyType, TMovement } from '../../models/movement.models';
 import './MovementForm.scss';
 
@@ -18,12 +19,7 @@ const MovementForm: React.FC<MovementFormProps> = (props: MovementFormProps) => 
 
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const { handleChange, handleSubmit, values, setValues } = useForm<TMovement>(movement, submit);
-
-  useEffect(() => {
-    if (movement.id !== values.id) {
-      setValues(movement);
-    }
-  }, [values.id, movement, setValues]);
+  useMovement(movement, setValues);
 
   function handleMonthsChange(event: ChangeEvent<HTMLInputElement>): void {
     const target = event.target;

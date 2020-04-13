@@ -14,7 +14,7 @@ type StringIndexed = {
   [key: string]: any;
 }
 
-const useForm = <TValues extends StringIndexed>(initialValues: TValues, callback: Function): UseForm<TValues> => {
+const useForm = <TValues extends StringIndexed>(initialValues: TValues, callback: Function = (): void => { return }): UseForm<TValues> => {
 
   const [values, setValues] = useState<TValues>(initialValues);
 
@@ -23,8 +23,9 @@ const useForm = <TValues extends StringIndexed>(initialValues: TValues, callback
     callback();
   };
 
-  const propertyIsNumber = (name: string): boolean =>
-    typeof values[name] === 'number';
+  const propertyIsNumber = (name: string): boolean => {
+    return typeof values[name] === 'number';
+  }
 
   const handleChange = (event: ChangeEvent<HTMLInput>): void => {
     event.persist();

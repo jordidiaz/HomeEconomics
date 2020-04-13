@@ -1,15 +1,22 @@
-import React, { useEffect, useState, ChangeEvent } from 'react';
-import { TMonthMovement, TMovementMonth } from './models/movement-month.models';
+import React, { ChangeEvent, useState } from 'react';
+import CheckBox from '../components/CheckBox/CheckBox';
+import useForm from '../hooks/useForm';
+import { MovementType } from '../Movements/models/movement.models';
+import AddMonthMovementForm from './components/AddMonthMovementForm/AddMonthMovementForm';
 import MonthMovement from './components/MonthMovement/MonthMovement';
+import MonthStatus from './components/MonthStatus/MonthStatus';
+import { useMovementMonth } from './hooks/useMovementMonth';
+import { TMonthMovement, TMovementMonth } from './models/movement-month.models';
 import './MovementMonth.scss';
 import movementMonthService from './services/movement-months.service';
-import CheckBox from '../components/CheckBox/CheckBox';
-import AddMonthMovementForm from './components/AddMonthMovementForm/AddMonthMovementForm';
-import { MovementType } from '../Movements/models/movement.models';
-import MonthStatus from './components/MonthStatus/MonthStatus';
 
 export type MovementMonthProps = {
   initialShowPaid: boolean;
+}
+
+type MonthSelectorValues = {
+  year: number;
+  month: number;
 }
 
 const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) => {
@@ -20,41 +27,43 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
 
   const { initialShowPaid } = props;
 
-  const [movementMonth, setMovementMonth] = useState<TMovementMonth>();
-  const [showPaid, setShowPaid] = useState<boolean>(initialShowPaid);
-  const [year, setYear] = useState<number>(currentYear);
-  const [month, setMonth] = useState<number>(currentMonth);
+  const initialValues: MonthSelectorValues = {
+    year: currentYear,
+    month: currentMonth
+  }
 
-  function setUpdatedMovementMonth(movementMonth: TMovementMonth): void {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  const { handleChange, values } = useForm<MonthSelectorValues>(initialValues);
+
+  const [showPaid, setShowPaid] = useState<boolean>(initialShowPaid);
+  const { movementMonth, setMovementMonth } = useMovementMonth(values.year, values.month);
+
+  async function createMovementMonth(): Promise<void> {
+    const movementMonth = await movementMonthService.create(values.year, values.month);
     setMovementMonth(movementMonth);
   }
 
-  async function createMovementMonth(): Promise<void> {
-    const movementMonth = await movementMonthService.create(year, month);
-    setUpdatedMovementMonth(movementMonth);
-  }
-
   async function payMonthMovement(monthMovement: TMonthMovement): Promise<void> {
-    setUpdatedMovementMonth(await movementMonthService.payMonthMovement(movementMonth as TMovementMonth, monthMovement));
+    setMovementMonth(await movementMonthService.payMonthMovement(movementMonth as TMovementMonth, monthMovement));
   }
 
   async function unpayMonthMovement(monthMovement: TMonthMovement): Promise<void> {
-    setUpdatedMovementMonth(await movementMonthService.unpayMonthMovement(movementMonth as TMovementMonth, monthMovement));
+    setMovementMonth(await movementMonthService.unpayMonthMovement(movementMonth as TMovementMonth, monthMovement));
   }
 
   async function updateMonthMovementAmount(monthMovement: TMonthMovement, newAmount: number): Promise<void> {
-    setUpdatedMovementMonth(await movementMonthService.updateMonthMovementAmount(movementMonth as TMovementMonth, monthMovement, newAmount));
+    setMovementMonth(await movementMonthService.updateMonthMovementAmount(movementMonth as TMovementMonth, monthMovement, newAmount));
   }
 
   async function addMonthMovement(name: string, amount: number, movementType: MovementType): Promise<void> {
-    setUpdatedMovementMonth(await movementMonthService.addMonthMovement(movementMonth as TMovementMonth, name, amount, movementType));
+    setMovementMonth(await movementMonthService.addMonthMovement(movementMonth as TMovementMonth, name, amount, movementType));
   }
 
   async function addStatus(movementMonth: TMovementMonth, accountAmount: number, cashAmount: number): Promise<void> {
-    setUpdatedMovementMonth(await movementMonthService.addStatus(movementMonth, accountAmount, cashAmount));
+    setMovementMonth(await movementMonthService.addStatus(movementMonth, accountAmount, cashAmount));
   }
 
-  function handleChange(event: ChangeEvent<HTMLInputElement>): void {
+  function handleShowPaidChange(event: ChangeEvent<HTMLInputElement>): void {
     setShowPaid(event.target.checked);
   }
 
@@ -63,22 +72,6 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
       ? true
       : !monthMovement.paid;
   }
-
-  function handleYearChange(event: ChangeEvent<HTMLSelectElement>): void {
-    setYear(parseInt(event.target.value));
-  }
-
-  function handleMonthChange(event: ChangeEvent<HTMLSelectElement>): void {
-    setMonth(parseInt(event.target.value));
-  }
-
-  useEffect(() => {
-    async function getMovementMonth(): Promise<void> {
-      const movementMonth = await movementMonthService.get(year, month);
-      setUpdatedMovementMonth(movementMonth);
-    }
-    getMovementMonth();
-  }, [year, month]);
 
   return (
     <div className="MovementMonth" >
@@ -96,31 +89,33 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
           }
         </div>
         <div className="MovementMonth__tools-month-selector">
-          <select className="select form-control" value={year} name="type" onChange={handleYearChange}>
-            <option value="">Año</option>
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-          </select>
-          <select className="select form-control" value={month} name="type" onChange={handleMonthChange}>
-            <option value="">Mes</option>
-            <option value="1">Enero</option>
-            <option value="2">Febrero</option>
-            <option value="3">Marzo</option>
-            <option value="4">Abril</option>
-            <option value="5">Mayo</option>
-            <option value="6">Junio</option>
-            <option value="7">Julio</option>
-            <option value="8">Agosto</option>
-            <option value="9">Septiembre</option>
-            <option value="10">Octubre</option>
-            <option value="11">Noviembre</option>
-            <option value="12">Diciembre</option>
-          </select>
+          <form>
+            <select className="select form-control" value={values.year} name="year" onChange={handleChange}>
+              <option value="">Año</option>
+              <option value="2020">2020</option>
+              <option value="2021">2021</option>
+            </select>
+            <select className="select form-control" value={values.month} name="month" onChange={handleChange}>
+              <option value="">Mes</option>
+              <option value="1">Enero</option>
+              <option value="2">Febrero</option>
+              <option value="3">Marzo</option>
+              <option value="4">Abril</option>
+              <option value="5">Mayo</option>
+              <option value="6">Junio</option>
+              <option value="7">Julio</option>
+              <option value="8">Agosto</option>
+              <option value="9">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </select>
+          </form>
         </div>
       </div>
       {
         movementMonth &&
-        <CheckBox name="showPaid" value={showPaid} label='Mostrar pagados' checked={showPaid} handleChange={handleChange} />
+        <CheckBox name="showPaid" value={showPaid} label='Mostrar pagados' checked={showPaid} handleChange={handleShowPaidChange} />
       }
       <ul>
         {

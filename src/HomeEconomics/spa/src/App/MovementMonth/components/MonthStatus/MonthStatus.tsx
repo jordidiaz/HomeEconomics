@@ -1,6 +1,6 @@
 import React from 'react';
 import useForm from '../../../hooks/useForm';
-import { useRemainingAmount } from '../../hooks/useRemainingAmount';
+import { useAmounts } from '../../hooks/useAmounts';
 import { TMovementMonth } from '../../models/movement-month.models';
 import './MonthStatus.scss';
 
@@ -9,7 +9,7 @@ export type MonthStatusProps = {
   addStatus: (movementMonth: TMovementMonth, accountAmount: number, cashAmount: number) => Promise<void>;
 }
 
-type MonthStatusFormValues = {
+export type MonthStatusFormValues = {
   accountAmount: number;
   cashAmount: number;
 }
@@ -24,8 +24,8 @@ const MonthStatus: React.FC<MonthStatusProps> = (props: MonthStatusProps) => {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  const { handleChange, values } = useForm<MonthStatusFormValues>(initialValues, onBlur);
-  const remainingAmount = useRemainingAmount(movementMonth);
+  const { handleChange, values, setValues } = useForm<MonthStatusFormValues>(initialValues, onBlur);
+  const remainingAmount = useAmounts(movementMonth, setValues);
 
   function onBlur(): void {
     addStatus(movementMonth, values.accountAmount, values.cashAmount);
