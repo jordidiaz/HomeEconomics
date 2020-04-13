@@ -3,6 +3,33 @@ import notifications from './notifications';
 
 let axiosInstance: AxiosInstance;
 
+const getErrorMessage = (error: AxiosError): string => {
+  const defaultMessage = 'Ha ocurrido un error inesperado';
+  const validationErrorMessage = 'Ha ocurrido un error de validación';
+
+  if (error.response && error.response.status === 500) {
+    return defaultMessage;
+  }
+
+  if (error.response && error.response.status === 400) {
+    return validationErrorMessage;
+  }
+
+  if (error.response && error.response.status === 404) {
+    return null as unknown as string;
+  }
+
+  if (error && !error.response) {
+    return error.message;
+  }
+
+  if (error && error.response) {
+    return error.response.data.detail;
+  }
+
+  return defaultMessage;
+};
+
 const configure = (loadingCallback: (loading: boolean) => void): AxiosInstance => {
   axiosInstance = axios.create({
     baseURL: `${process.env.REACT_APP_API_BASE_URL}/api/`
@@ -31,33 +58,6 @@ const configure = (loadingCallback: (loading: boolean) => void): AxiosInstance =
   );
 
   return axiosInstance;
-};
-
-const getErrorMessage = (error: AxiosError): string => {
-  const defaultMessage = 'Ha ocurrido un error inesperado';
-  const validationErrorMessage = 'Ha ocurrido un error de validación';
-
-  if (error.response && error.response.status === 500) {
-    return defaultMessage;
-  }
-
-  if (error.response && error.response.status === 400) {
-    return validationErrorMessage;
-  }
-
-  if (error.response && error.response.status === 404) {
-    return null as unknown as string;
-  }
-
-  if (error && !error.response) {
-    return error.message;
-  }
-
-  if (error && error.response) {
-    return error.response.data.detail;
-  }
-
-  return defaultMessage;
 };
 
 const get = async <T>(path: string): Promise<T> => {
