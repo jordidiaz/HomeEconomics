@@ -37,6 +37,9 @@ const configure = (loadingCallback: (loading: boolean) => void): AxiosInstance =
 
   const onRejected: (error: AxiosError) => void = (error: AxiosError) => {
     loadingCallback(false);
+    if (error.response && error.response.status === 404) {
+      return Promise.resolve(null);
+    }
     notifications.error(getErrorMessage(error));
     return Promise.reject(error);
   };
@@ -61,15 +64,11 @@ const configure = (loadingCallback: (loading: boolean) => void): AxiosInstance =
 };
 
 const get = async <T>(path: string): Promise<T> => {
-  try {
-    const response = await axiosInstance.get(path);
-    return response.data;
-  } catch (error) {
-    if (error.response && error.response.status && error.response.status === 404) {
-      return null as unknown as T;
-    }
-    throw new Error(error);
+  const response = await axiosInstance.get(path);
+  if (response === null) {
+    return null as unknown as T;
   }
+  return response.data;
 };
 
 const del = async (path: string): Promise<boolean> => {
