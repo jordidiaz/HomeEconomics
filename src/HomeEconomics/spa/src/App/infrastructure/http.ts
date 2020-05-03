@@ -23,7 +23,7 @@ const getErrorMessage = (error: AxiosError): string => {
     return error.message;
   }
 
-  if (error && error.response) {
+  if (error?.response) {
     return error.response.data.detail;
   }
 
