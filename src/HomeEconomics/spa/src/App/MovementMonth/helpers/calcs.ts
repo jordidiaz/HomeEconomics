@@ -1,5 +1,9 @@
 import { TMovementMonth } from "../models/movement-month.models";
 
+export const isNumber = (value: number): boolean => {
+  return !isNaN(value);
+}
+
 export const calculateRemaining = (movementMonth: TMovementMonth | undefined): number => {
   if (!movementMonth) {
     return 0;
@@ -8,11 +12,11 @@ export const calculateRemaining = (movementMonth: TMovementMonth | undefined): n
   let accountAmount = 0;
   let cashAmount = 0;
 
-  if (!isNaN(movementMonth.status.accountAmount)) {
+  if (isNumber(movementMonth.status.accountAmount)) {
     accountAmount = movementMonth.status.accountAmount;
   }
 
-  if (!isNaN(movementMonth.status.cashAmount)) {
+  if (isNumber(movementMonth.status.cashAmount)) {
     cashAmount = movementMonth.status.cashAmount;
   }
 

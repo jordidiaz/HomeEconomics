@@ -16,7 +16,6 @@ export const useMovements = (): UseMovements => {
       setMovements(await movementsService.getAll());
     }
     getMovements();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

@@ -7,15 +7,15 @@ const getErrorMessage = (error: AxiosError): string => {
   const defaultMessage = 'Ha ocurrido un error inesperado';
   const validationErrorMessage = 'Ha ocurrido un error de validación';
 
-  if (error.response && error.response.status === 500) {
+  if (error.response?.status === 500) {
     return defaultMessage;
   }
 
-  if (error.response && error.response.status === 400) {
+  if (error.response?.status === 400) {
     return validationErrorMessage;
   }
 
-  if (error.response && error.response.status === 404) {
+  if (error.response?.status === 404) {
     return null as unknown as string;
   }
 
@@ -37,7 +37,7 @@ const configure = (loadingCallback: (loading: boolean) => void): AxiosInstance =
 
   const onRejected: (error: AxiosError) => void = (error: AxiosError) => {
     loadingCallback(false);
-    if (error.response && error.response.status === 404) {
+    if (error.response?.status === 404) {
       return Promise.resolve(null);
     }
     notifications.error(getErrorMessage(error));

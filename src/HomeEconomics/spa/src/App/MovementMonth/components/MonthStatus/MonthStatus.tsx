@@ -1,5 +1,6 @@
 import React from 'react';
 import useForm from '../../../hooks/useForm';
+import { isNumber } from '../../helpers/calcs';
 import { useAmounts } from '../../hooks/useAmounts';
 import { TMovementMonth } from '../../models/movement-month.models';
 import './MonthStatus.scss';
@@ -28,6 +29,9 @@ const MonthStatus: React.FC<MonthStatusProps> = (props: MonthStatusProps) => {
   const remainingAmount = useAmounts(movementMonth, setValues);
 
   function onBlur(): void {
+    if (!isNumber(values.accountAmount) || !isNumber(values.cashAmount)) {
+      return;
+    }
     addStatus(movementMonth, values.accountAmount, values.cashAmount);
   }
 
