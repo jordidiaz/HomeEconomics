@@ -356,3 +356,6 @@ Deploy/*.tfvars
 # SPA
 src/HomeEconomics/spa/build
 .vscode
+
+# Jetbrains Rider
+.idea
