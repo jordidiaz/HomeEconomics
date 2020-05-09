@@ -119,7 +119,7 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
       }
       <ul>
         {
-          movementMonth && movementMonth.monthMovements.filter(filterByShowPaid).map((monthMovement: TMonthMovement) =>
+          movementMonth?.monthMovements.filter(filterByShowPaid).map((monthMovement: TMonthMovement) =>
             <li key={monthMovement.id}><MonthMovement monthMovement={monthMovement} payMonthMovement={payMonthMovement} unpayMonthMovement={unpayMonthMovement} updateMonthMovementAmount={updateMonthMovementAmount} /></li>
           )
         }

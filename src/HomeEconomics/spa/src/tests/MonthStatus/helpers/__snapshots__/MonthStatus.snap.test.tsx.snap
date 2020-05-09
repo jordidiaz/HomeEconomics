@@ -3,6 +3,7 @@
 exports[`MonthStatus component Matches the snapshot 1`] = `
 <form
   className="MonthStatus"
+  onBlurCapture={[Function]}
 >
   <div
     className="input-with-label"
@@ -13,11 +14,10 @@ exports[`MonthStatus component Matches the snapshot 1`] = `
     <input
       className="input form-control"
       min="0"
-      name="amount"
-      onBlur={[Function]}
+      name="accountAmount"
       onChange={[Function]}
       type="number"
-      value="0"
+      value={1000}
     />
   </div>
   <div
@@ -29,11 +29,10 @@ exports[`MonthStatus component Matches the snapshot 1`] = `
     <input
       className="input form-control"
       min="0"
-      name="amount"
-      onBlur={[Function]}
+      name="cashAmount"
       onChange={[Function]}
       type="number"
-      value="0"
+      value={50}
     />
   </div>
   <label

@@ -8,7 +8,7 @@ describe('MonthStatus component', () => {
   const movementMonth = getMovementMonth();
 
   test('Matches the snapshot', () => {
-    const monthStatusRenderer = create(<MonthStatus status={movementMonth.status} />);
+    const monthStatusRenderer = create(<MonthStatus movementMonth={movementMonth} addStatus={(): Promise<void> => { return Promise.resolve() }} />);
     expect(monthStatusRenderer.toJSON()).toMatchSnapshot();
   });
 

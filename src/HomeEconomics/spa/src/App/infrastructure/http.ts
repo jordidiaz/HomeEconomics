@@ -53,6 +53,7 @@ const configure = (loadingCallback: (loading: boolean) => void): AxiosInstance =
   );
 
   axiosInstance.interceptors.response.use(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ((response: AxiosResponse<any>) => {
       loadingCallback(false);
       return response;
@@ -76,11 +77,13 @@ const del = async (path: string): Promise<boolean> => {
   return true;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const post = async (path: string, data: any): Promise<any> => {
   const response = await axiosInstance.post(path, data);
   return response.data;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const put = async (path: string, data: any): Promise<boolean> => {
   await axiosInstance.put(path, data);
   return true;

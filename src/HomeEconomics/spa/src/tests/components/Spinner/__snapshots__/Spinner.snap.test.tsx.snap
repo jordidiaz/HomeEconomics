@@ -28,7 +28,7 @@ exports[`Spinner component Matches the snapshot if not visible 1`] = `
           <circle
             cx="22"
             cy="22"
-            r="1"
+            r={1}
           >
             <animate
               attributeName="r"
@@ -54,7 +54,7 @@ exports[`Spinner component Matches the snapshot if not visible 1`] = `
           <circle
             cx="22"
             cy="22"
-            r="1"
+            r={1}
           >
             <animate
               attributeName="r"
@@ -112,7 +112,7 @@ exports[`Spinner component Matches the snapshot if visible 1`] = `
           <circle
             cx="22"
             cy="22"
-            r="1"
+            r={1}
           >
             <animate
               attributeName="r"
@@ -138,7 +138,7 @@ exports[`Spinner component Matches the snapshot if visible 1`] = `
           <circle
             cx="22"
             cy="22"
-            r="1"
+            r={1}
           >
             <animate
               attributeName="r"
