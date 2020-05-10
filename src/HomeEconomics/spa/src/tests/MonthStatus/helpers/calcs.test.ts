@@ -3,7 +3,7 @@ import { calculateRemaining } from "../../../App/MovementMonth/helpers/calcs";
 
 describe('calcs', () => {
 
-  fdescribe('calculateRemaining', () => {
+  describe('calculateRemaining', () => {
 
     const movementMonth = getMovementMonth();
 

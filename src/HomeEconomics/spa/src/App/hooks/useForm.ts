@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from 'react';
+import { parseNumber } from '../helpers/number-parser';
 
 type UseForm<TValues> = {
   handleChange: (event: ChangeEvent<HTMLInput>) => void;
@@ -30,7 +31,7 @@ const useForm = <TValues extends StringIndexed>(initialValues: TValues, callback
   const handleChange = (event: ChangeEvent<HTMLInput>): void => {
     event.persist();
     const value = propertyIsNumber(event.target.name)
-      ? parseInt(event.target.value)
+      ? parseNumber(event.target.value)
       : event.target.value;
     setValues(values => ({ ...values, [event.target.name]: value }));
   };
