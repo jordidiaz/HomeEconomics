@@ -4,8 +4,9 @@ import RadioButton from '../../../components/RadioButton/RadioButton';
 import useForm from '../../../hooks/useForm';
 import { getMonthName, months } from '../../helpers/months';
 import { useMovement } from '../../hooks/useMovement';
-import { createEmpyMovement, emptyMovement, FrequencyType, TMovement } from '../../models/movement.models';
+import { createEmpyMovement, emptyMovement, FrequencyType, TMovement, MovementType } from '../../models/movement.models';
 import './MovementForm.scss';
+import { parseNumber } from '../../../helpers/number-parser';
 
 export type MovementFormProps = {
   movement: TMovement;
@@ -13,12 +14,60 @@ export type MovementFormProps = {
   editMovement: (movement: TMovement) => Promise<void>;
 }
 
+export type MovementFormValues = {
+  id: number;
+  name: string;
+  amount: string;
+  type: MovementType;
+  frequencyType: FrequencyType;
+  frequencyMonth: string;
+  frequencyMonths: boolean[];
+}
+
 const MovementForm: React.FC<MovementFormProps> = (props: MovementFormProps) => {
 
   const { createMovement, editMovement, movement } = props;
 
+  const initialValues: MovementFormValues = {
+    id: movement.id,
+    name: movement.name,
+    amount: movement.amount.toString(),
+    type: movement.type,
+    frequencyType: movement.frequencyType,
+    frequencyMonth: movement.frequencyMonth.toString(),
+    frequencyMonths: movement.frequencyMonths
+  }
+
+  function createTMovementFromValues(values: MovementFormValues): TMovement {
+    const movement: TMovement = {
+      id: values.id,
+      name: values.name,
+      amount: parseNumber(values.amount),
+      type: values.type,
+      frequencyType: values.frequencyType,
+      frequencyMonth: parseNumber(values.frequencyMonth),
+      frequencyMonths: values.frequencyMonths
+    }
+
+    return movement;
+  }
+
+  function createValuesFromTMovement(movement: TMovement): MovementFormValues {
+    const values: MovementFormValues = {
+      id: movement.id,
+      name: movement.name,
+      amount: movement.amount.toString(),
+      type: movement.type,
+      frequencyType: movement.frequencyType,
+      frequencyMonth: movement.frequencyMonth.toString(),
+      frequencyMonths: movement.frequencyMonths
+    }
+
+    return values;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  const { handleChange, handleSubmit, values, setValues } = useForm<TMovement>(movement, submit);
+  const { handleChange, handleSubmit, values, setValues } = useForm<MovementFormValues>(initialValues, submit);
   useMovement(movement, setValues);
 
   function handleMonthsChange(event: ChangeEvent<HTMLInputElement>): void {
@@ -30,22 +79,22 @@ const MovementForm: React.FC<MovementFormProps> = (props: MovementFormProps) => 
   }
 
   function createOrEditMovement(): Promise<void> {
-    return values.id === emptyMovement.id ? createMovement(values) : editMovement(values);
+    return values.id === emptyMovement.id ? createMovement(createTMovementFromValues(values)) : editMovement(createTMovementFromValues(values));
   }
 
   function submit(): void {
     createOrEditMovement().then(() => {
-      setValues(createEmpyMovement());
+      setValues(createValuesFromTMovement(createEmpyMovement()));
     });
   }
 
   function cancel(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
     event.preventDefault();
-    setValues(createEmpyMovement());
+    setValues(createValuesFromTMovement(createEmpyMovement()));
   }
 
   return (
-    <form onSubmit={handleSubmit} className="MovementForm">
+    <form noValidate onSubmit={handleSubmit} className="MovementForm">
       <div className="MovementForm__inputs">
         <div className="MovementForm__inputs-basic">
           <input className="input form-control" value={values.name} placeholder="Nombre" type="text" name="name" onChange={handleChange} />
@@ -67,7 +116,7 @@ const MovementForm: React.FC<MovementFormProps> = (props: MovementFormProps) => 
           {
             values.frequencyType === FrequencyType.Yearly &&
             months.map((month: string, index: number) =>
-              <RadioButton name="frequencyMonth" key={index} value={index} label={getMonthName(month)} checked={values.frequencyMonth - 1 === index} handleMonthChange={handleChange} />
+              <RadioButton name="frequencyMonth" key={index} value={index} label={getMonthName(month)} checked={parseNumber(values.frequencyMonth) - 1 === index} handleMonthChange={handleChange} />
             )
           }
           {

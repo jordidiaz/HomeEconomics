@@ -2,6 +2,7 @@ import React, { useState, ChangeEvent } from 'react';
 import { MovementType } from '../../../Movements/models/movement.models';
 import { TMonthMovement } from '../../models/movement-month.models';
 import './MonthMovement.scss';
+import { parseNumber } from '../../../helpers/number-parser';
 
 export type MonthMovementProps = {
   monthMovement: TMonthMovement;
@@ -15,7 +16,7 @@ const MonthMovement: React.FC<MonthMovementProps> = (props: MonthMovementProps) 
   const { monthMovement, payMonthMovement, unpayMonthMovement, updateMonthMovementAmount } = props;
 
   const [editingAmount, setEditingAmount] = useState<boolean>(false);
-  const [newAmount, setNewAmount] = useState<number>(monthMovement.amount);
+  const [newAmount, setNewAmount] = useState<string>(monthMovement.amount.toString());
 
   const pay = (): void => {
     payMonthMovement(monthMovement);
@@ -31,16 +32,16 @@ const MonthMovement: React.FC<MonthMovementProps> = (props: MonthMovementProps) 
 
   const cancel = (): void => {
     setEditingAmount(false);
-    setNewAmount(monthMovement.amount);
+    setNewAmount(monthMovement.amount.toString());
   };
 
   const accept = (): void => {
-    updateMonthMovementAmount(monthMovement, newAmount);
+    updateMonthMovementAmount(monthMovement, parseNumber(newAmount));
     setEditingAmount(false);
   };
 
   function handleAmountChange(event: ChangeEvent<HTMLInputElement>): void {
-    setNewAmount(parseFloat(event.target.value));
+    setNewAmount(event.target.value);
   }
 
   const type: string = monthMovement.type === MovementType.Expense

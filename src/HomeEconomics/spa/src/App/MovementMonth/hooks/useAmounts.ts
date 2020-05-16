@@ -9,8 +9,8 @@ export const useAmounts = (movementMonth: TMovementMonth, setAmounts: React.Disp
   useEffect(() => {
     setRemainingAmount(calculateRemaining(movementMonth));
     setAmounts({
-      accountAmount: movementMonth.status.accountAmount,
-      cashAmount: movementMonth.status.cashAmount,
+      accountAmount: movementMonth.status.accountAmount.toString(),
+      cashAmount: movementMonth.status.cashAmount.toString(),
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movementMonth]);

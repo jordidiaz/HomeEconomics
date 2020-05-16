@@ -2,6 +2,7 @@ import React from "react";
 import useForm from "../../../hooks/useForm";
 import { MovementType } from "../../../Movements/models/movement.models";
 import './AddMonthMovementForm.scss';
+import { parseNumber } from "../../../helpers/number-parser";
 
 export type AddMonthMovementProps = {
   addMonthMovement: (name: string, amount: number, movementType: MovementType) => Promise<void>;
@@ -9,7 +10,7 @@ export type AddMonthMovementProps = {
 
 type AddMonthMovementFormValues = {
   name: string;
-  amount: number;
+  amount: string;
   type: MovementType;
 }
 
@@ -19,7 +20,7 @@ const AddMonthMovementForm: React.FC<AddMonthMovementProps> = (props: AddMonthMo
 
   const initialValues: AddMonthMovementFormValues = {
     name: '',
-    amount: 0,
+    amount: '0',
     type: MovementType.Undefined
   }
 
@@ -31,7 +32,7 @@ const AddMonthMovementForm: React.FC<AddMonthMovementProps> = (props: AddMonthMo
   }
 
   function submit(): void {
-    addMonthMovement(values.name, values.amount, values.type)
+    addMonthMovement(values.name, parseNumber(values.amount), values.type)
       .then(() => cleanForm());
   };
 
@@ -41,7 +42,7 @@ const AddMonthMovementForm: React.FC<AddMonthMovementProps> = (props: AddMonthMo
   };
 
   return (
-    <form onSubmit={handleSubmit} className="AddMonthMovementForm">
+    <form noValidate onSubmit={handleSubmit} className="AddMonthMovementForm">
       <div className="AddMonthMovementForm__inputs-basic">
         <input className="input form-control" value={values.name} placeholder="Nombre" type="text" name="name" onChange={handleChange} />
         <input className="input form-control" value={values.amount} placeholder="Importe" type="number" min="0" name="amount" onChange={handleChange} />

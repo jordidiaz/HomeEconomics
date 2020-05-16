@@ -3,6 +3,7 @@
 exports[`MonthStatus component Matches the snapshot 1`] = `
 <form
   className="MonthStatus"
+  noValidate={true}
   onBlurCapture={[Function]}
 >
   <div
@@ -17,7 +18,7 @@ exports[`MonthStatus component Matches the snapshot 1`] = `
       name="accountAmount"
       onChange={[Function]}
       type="number"
-      value={1000}
+      value="1000"
     />
   </div>
   <div
@@ -32,7 +33,7 @@ exports[`MonthStatus component Matches the snapshot 1`] = `
       name="cashAmount"
       onChange={[Function]}
       type="number"
-      value={50}
+      value="50"
     />
   </div>
   <label

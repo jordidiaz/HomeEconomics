@@ -4,6 +4,7 @@ import { isNumber } from '../../helpers/calcs';
 import { useAmounts } from '../../hooks/useAmounts';
 import { TMovementMonth } from '../../models/movement-month.models';
 import './MonthStatus.scss';
+import { parseNumber } from '../../../helpers/number-parser';
 
 export type MonthStatusProps = {
   movementMonth: TMovementMonth;
@@ -11,8 +12,8 @@ export type MonthStatusProps = {
 }
 
 export type MonthStatusFormValues = {
-  accountAmount: number;
-  cashAmount: number;
+  accountAmount: string;
+  cashAmount: string;
 }
 
 const MonthStatus: React.FC<MonthStatusProps> = (props: MonthStatusProps) => {
@@ -20,8 +21,8 @@ const MonthStatus: React.FC<MonthStatusProps> = (props: MonthStatusProps) => {
   const { addStatus, movementMonth } = props;
 
   const initialValues: MonthStatusFormValues = {
-    accountAmount: movementMonth.status.accountAmount,
-    cashAmount: movementMonth.status.cashAmount
+    accountAmount: movementMonth.status.accountAmount.toString(),
+    cashAmount: movementMonth.status.cashAmount.toString()
   }
 
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -29,14 +30,14 @@ const MonthStatus: React.FC<MonthStatusProps> = (props: MonthStatusProps) => {
   const remainingAmount = useAmounts(movementMonth, setValues);
 
   function onBlur(): void {
-    if (!isNumber(values.accountAmount) || !isNumber(values.cashAmount)) {
+    if (!isNumber(parseNumber(values.accountAmount)) || !isNumber(parseNumber(values.cashAmount))) {
       return;
     }
-    addStatus(movementMonth, values.accountAmount, values.cashAmount);
+    addStatus(movementMonth, parseNumber(values.accountAmount), parseNumber(values.cashAmount));
   }
 
   return (
-    <form onBlurCapture={onBlur} className="MonthStatus">
+    <form noValidate onBlurCapture={onBlur} className="MonthStatus">
       <div className="input-with-label">
         <label>Cuenta</label>
         <input className="input form-control" value={values.accountAmount} type="number" min="0" name="accountAmount" onChange={handleChange} />

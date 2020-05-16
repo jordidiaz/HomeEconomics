@@ -9,14 +9,15 @@ import { useMovementMonth } from './hooks/useMovementMonth';
 import { TMonthMovement, TMovementMonth } from './models/movement-month.models';
 import './MovementMonth.scss';
 import movementMonthService from './services/movement-months.service';
+import { parseNumber } from '../helpers/number-parser';
 
 export type MovementMonthProps = {
   initialShowPaid: boolean;
 }
 
 type MonthSelectorValues = {
-  year: number;
-  month: number;
+  year: string;
+  month: string;
 }
 
 const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) => {
@@ -28,18 +29,18 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
   const { initialShowPaid } = props;
 
   const initialValues: MonthSelectorValues = {
-    year: currentYear,
-    month: currentMonth
+    year: currentYear.toString(),
+    month: currentMonth.toString()
   }
 
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const { handleChange, values } = useForm<MonthSelectorValues>(initialValues);
 
   const [showPaid, setShowPaid] = useState<boolean>(initialShowPaid);
-  const { movementMonth, setMovementMonth } = useMovementMonth(values.year, values.month);
+  const { movementMonth, setMovementMonth } = useMovementMonth(parseNumber(values.year), parseNumber(values.month));
 
   async function createMovementMonth(): Promise<void> {
-    const movementMonth = await movementMonthService.create(values.year, values.month);
+    const movementMonth = await movementMonthService.create(parseNumber(values.year), parseNumber(values.month));
     setMovementMonth(movementMonth);
   }
 
@@ -89,7 +90,7 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
           }
         </div>
         <div className="MovementMonth__tools-month-selector">
-          <form>
+          <form noValidate>
             <select className="select form-control" value={values.year} name="year" onChange={handleChange}>
               <option value="">Año</option>
               <option value="2020">2020</option>
