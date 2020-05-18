@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Microsoft.Extensions.FileProviders;
+﻿using System;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -34,6 +33,11 @@ namespace Microsoft.AspNetCore.Builder
         internal static IApplicationBuilder UseHomeEconomicsEndpoints(this IApplicationBuilder appBuilder)
         {
             return appBuilder.UseEndpoints(endpointRouteBuilder => endpointRouteBuilder.MapControllers());
+        }
+
+        internal static IApplicationBuilder UseIf(this IApplicationBuilder appBuilder, bool condition, Func<IApplicationBuilder, IApplicationBuilder> action)
+        {
+            return condition ? action(appBuilder) : appBuilder;
         }
     }
 }

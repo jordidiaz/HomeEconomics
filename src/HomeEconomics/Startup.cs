@@ -15,14 +15,14 @@ namespace HomeEconomics
             WebHostEnvironment = webHostEnvironment;
         }
 
-        public IConfiguration Configuration { get; }
-        public IWebHostEnvironment WebHostEnvironment { get; }
+        private IConfiguration Configuration { get; }
+        private IWebHostEnvironment WebHostEnvironment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services
                 .AddHomeEconomicsApi()
-                .AddCors()
+                .AddIf(WebHostEnvironment.IsDevelopment(), serviceCollection => serviceCollection.AddCors())
                 .AddHomeEconomicsMediatR()
                 .AddHomeEconomicsAutoMapper()
                 .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment())
@@ -35,7 +35,7 @@ namespace HomeEconomics
             applicationBuilder
                 .UseHomeEconomicsSpa()
                 .UseRouting()
-                .UseHomeEconomicsCors()
+                .UseIf(WebHostEnvironment.IsDevelopment(), appBuilder => appBuilder.UseHomeEconomicsCors())
                 .UseHomeEconomicsSwagger()
                 .UseProblemDetails()
                 .UseHomeEconomicsEndpoints();

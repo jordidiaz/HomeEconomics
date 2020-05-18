@@ -15,14 +15,13 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
             WebHostEnvironment = webHostEnvironment;
         }
 
-        public IConfiguration Configuration { get; }
-        public IWebHostEnvironment WebHostEnvironment { get; }
+        private IConfiguration Configuration { get; }
+        private IWebHostEnvironment WebHostEnvironment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services
                 .AddHomeEconomicsApi()
-                .AddCors()
                 .AddHomeEconomicsMediatR()
                 .AddHomeEconomicsAutoMapper()
                 .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment());
