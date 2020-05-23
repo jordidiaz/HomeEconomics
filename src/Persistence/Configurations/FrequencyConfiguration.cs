@@ -1,9 +1,10 @@
-﻿using System;
-using System.Linq;
-using Domain.Movements;
+﻿using Domain.Movements;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
+using System.Linq;
 
 namespace Persistence.Configurations
 {
@@ -16,11 +17,19 @@ namespace Persistence.Configurations
                 months => months.Split(',', StringSplitOptions.None).Select(x => x == "1").ToArray()
                 );
 
+            // https://github.com/dotnet/efcore/issues/17471
+            var comparer = new ValueComparer<bool[]>(
+                (months1, months2) => months1.SequenceEqual(months2),
+                months => months.Aggregate(0, (i, b) => HashCode.Combine(i, b.GetHashCode())));
+
             builder.ToTable("Frequencies");
+
             builder.HasKey(f => f.Id);
+
             builder.Property(f => f.Months)
                 .HasMaxLength(23)
-                .HasConversion(converter);
+                .HasConversion(converter)
+                .Metadata.SetValueComparer(comparer);
         }
     }
 }

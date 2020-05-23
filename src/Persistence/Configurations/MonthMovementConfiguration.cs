@@ -10,10 +10,15 @@ namespace Persistence.Configurations
         public void Configure(EntityTypeBuilder<MonthMovement> builder)
         {
             builder.ToTable("MonthMovements");
+
             builder.HasKey(monthMovement => monthMovement.Id);
+
             builder.Property(monthMovement => monthMovement.Name)
                 .HasMaxLength(Constants.MovementNameMaxLength)
                 .IsRequired();
+
+            builder.Property(monthMovement => monthMovement.Amount)
+                .HasColumnType("decimal(18,2)");
         }
     }
 }

@@ -9,7 +9,14 @@ namespace Persistence.Configurations
         public void Configure(EntityTypeBuilder<Status> builder)
         {
             builder.ToTable("Statuses");
+
             builder.HasKey(status => status.Id);
+
+            builder.Property(status => status.AccountAmount)
+                .HasColumnType("decimal(18,2)");
+
+            builder.Property(status => status.CashAmount)
+                .HasColumnType("decimal(18,2)");
         }
     }
 }
