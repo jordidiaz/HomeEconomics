@@ -1,10 +1,10 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
+using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services
                 .AddProblemDetails(problemDetailsOptions =>
                 {
-                    problemDetailsOptions.Map<InvalidOperationException>(ex => new ExceptionProblemDetails(ex, StatusCodes.Status409Conflict));
+                    problemDetailsOptions.Map<InvalidOperationException>(ex => new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
                 })
                 .AddMvcCore()
                 .AddNewtonsoftJson()

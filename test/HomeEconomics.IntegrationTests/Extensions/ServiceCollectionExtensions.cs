@@ -1,10 +1,10 @@
-﻿using System;
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace HomeEconomics.IntegrationTests.Extensions
 {
@@ -15,7 +15,7 @@ namespace HomeEconomics.IntegrationTests.Extensions
             return services
                 .AddProblemDetails(problemDetailsOptions =>
                 {
-                    problemDetailsOptions.Map<InvalidOperationException>(ex => new ExceptionProblemDetails(ex, StatusCodes.Status409Conflict));
+                    problemDetailsOptions.Map<InvalidOperationException>(ex => new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
                 })
                 .AddMvcCore()
                 .AddApplicationPart(typeof(TestStartup).Assembly)
