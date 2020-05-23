@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using FakeItEasy;
+﻿using FakeItEasy;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using Respawn;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace HomeEconomics.FunctionalTests.Infrastructure
 {
@@ -61,7 +61,7 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
             dbContext.Database.EnsureDeleted();
         }
 
-         public static Task ResetCheckpointAsync() => Checkpoint.Reset(Configuration.GetConnectionString("HomeEconomics"));
+        public static Task ResetCheckpointAsync() => Checkpoint.Reset(Configuration.GetConnectionString("HomeEconomics"));
 
         public static async Task<TResponse> SendToMediatRAsync<TResponse>(IRequest<TResponse> request)
         {
