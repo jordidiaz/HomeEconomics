@@ -140,6 +140,7 @@ stages:
           provider: 'azurerm'
           command: 'apply'
           environmentServiceNameAzureRM: 'Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)'
+          workingDirectory: 'pipeline/infrastructure'
 
       - task: terraform-outputs@0
         displayName: 'Terraform Outputs'
