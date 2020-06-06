@@ -140,12 +140,9 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'apply'
-          environmentServiceNameAzureRM: 'Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)'
           workingDirectory: 'pipeline/infrastructure'
-          backendAzureRmResourceGroupName: 'Shared'
-          backendAzureRmStorageAccountName: 'stterraform'
-          backendAzureRmContainerName: 'homeeconomics'
-          backendAzureRmKey: 'tf/terraform.tfstate'
+          commandOptions: '-var subscriptionId=$(subscriptionId) -var sqlServerAdministratorLogin=$(sqlServerAdministratorLogin) -var sqlServerAdministratorPassword=$(sqlServerAdministratorPassword)'
+          environmentServiceNameAzureRM: 'Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)'
 
       - task: terraform-outputs@0
         displayName: 'Terraform Outputs'
