@@ -21,78 +21,78 @@ stages:
 
     steps:
 
-    # - task: UseNode@1
-    #   displayName: 'Use node LTS'
-    #   inputs:
-    #     version: '12.18.0'
+    - task: UseNode@1
+      displayName: 'Use node LTS'
+      inputs:
+        version: '12.18.0'
 
-    # - task: UseDotNet@2
-    #   inputs:
-    #     packageType: 'sdk'
-    #     useGlobalJson: true
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        useGlobalJson: true
 
-    # - script: dotnet restore
-    #   displayName: 'dotnet restore'
+    - script: dotnet restore
+      displayName: 'dotnet restore'
 
-    # - script: dotnet build --configuration $(BuildConfiguration)
-    #   displayName: 'dotnet build'
+    - script: dotnet build --configuration $(BuildConfiguration)
+      displayName: 'dotnet build'
 
-    # - task: DotNetCoreCLI@2
-    #   displayName: 'dotnet test'
-    #   inputs:
-    #     command: 'test'
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet test'
+      inputs:
+        command: 'test'
 
-    # - task: DotNetCoreCLI@2
-    #   displayName: 'dotnet publish'
-    #   inputs:
-    #     command: publish
-    #     publishWebProjects: true
-    #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\HomeEconomics'
-    #     modifyOutputPath: false
-    #     zipAfterPublish: false
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet publish'
+      inputs:
+        command: publish
+        publishWebProjects: true
+        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\HomeEconomics'
+        modifyOutputPath: false
+        zipAfterPublish: false
 
-    # - task: CopyFiles@2
-    #   displayName: 'Copy SPA to ArtifactStagingDirectory'
-    #   inputs:
-    #     SourceFolder: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
-    #     Contents: '**'
-    #     TargetFolder: '$(Build.ArtifactStagingDirectory)\spa'
-    #     CleanTargetFolder: true
+    - task: CopyFiles@2
+      displayName: 'Copy SPA to ArtifactStagingDirectory'
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)\spa'
+        CleanTargetFolder: true
 
-    # - task: Npm@1
-    #   displayName: 'npm ci'
-    #   inputs:
-    #     command: 'install'
-    #     workingDir: '$(Build.ArtifactStagingDirectory)\spa'
+    - task: Npm@1
+      displayName: 'npm ci'
+      inputs:
+        command: 'install'
+        workingDir: '$(Build.ArtifactStagingDirectory)\spa'
 
-    # - task: Npm@1
-    #   displayName: 'npm test'
-    #   inputs:
-    #     command: 'custom'
-    #     workingDir: '$(Build.ArtifactStagingDirectory)\spa'
-    #     customCommand: 'run citest'
+    - task: Npm@1
+      displayName: 'npm test'
+      inputs:
+        command: 'custom'
+        workingDir: '$(Build.ArtifactStagingDirectory)\spa'
+        customCommand: 'run citest'
 
-    # - task: Npm@1
-    #   displayName: 'npm build'
-    #   inputs:
-    #     command: 'custom'
-    #     workingDir: '$(Build.ArtifactStagingDirectory)\spa'
-    #     customCommand: 'run build'
+    - task: Npm@1
+      displayName: 'npm build'
+      inputs:
+        command: 'custom'
+        workingDir: '$(Build.ArtifactStagingDirectory)\spa'
+        customCommand: 'run build'
 
-    # - task: CopyFiles@2
-    #   displayName: 'Copy SPA build into HomeEconomics artifact'
-    #   inputs:
-    #     SourceFolder: '$(Build.ArtifactStagingDirectory)\spa\build'
-    #     Contents: '**'
-    #     TargetFolder: '$(Build.ArtifactStagingDirectory)\HomeEconomics\wwwroot'
-    #     CleanTargetFolder: true
+    - task: CopyFiles@2
+      displayName: 'Copy SPA build into HomeEconomics artifact'
+      inputs:
+        SourceFolder: '$(Build.ArtifactStagingDirectory)\spa\build'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)\HomeEconomics\wwwroot'
+        CleanTargetFolder: true
 
-    # - task: PublishBuildArtifacts@1
-    #   displayName: 'Publish build artifact'
-    #   inputs:
-    #     PathtoPublish: '$(Build.ArtifactStagingDirectory)\HomeEconomics'
-    #     ArtifactName: 'HomeEconomics'
-    #     publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish build artifact'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)\HomeEconomics'
+        ArtifactName: 'HomeEconomics'
+        publishLocation: 'Container'
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish deployment scripts'
@@ -150,39 +150,39 @@ stages:
           workingDirectory: 'pipeline/infrastructure'
           mapSensitiveOutputsAsSecrets: true
 
-    # - job: upload_zip
-    #   displayName: Upload HomeEconomics zip
+    - job: upload_zip
+      displayName: Upload HomeEconomics zip
 
-    #   steps:
+      steps:
 
-    #   - task: qetza.replacetokens.replacetokens-task.replacetokens@3
-    #     displayName: 'Replace tokens in appsettings.json'
-    #     inputs:
-    #       rootDirectory: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics'
-    #       targetFiles: appsettings.json
-    #       actionOnMissing: fail
-    #       tokenPrefix: '%%'
-    #       tokenSuffix: '%%'
+      - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+        displayName: 'Replace tokens in appsettings.json'
+        inputs:
+          rootDirectory: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics'
+          targetFiles: appsettings.json
+          actionOnMissing: fail
+          tokenPrefix: '%%'
+          tokenSuffix: '%%'
 
-    #   - task: CopyFiles@2
-    #     displayName: 'Add install script'
-    #     inputs:
-    #       SourceFolder: '$(System.DefaultWorkingDirectory)/HomeEconomics/Install'
-    #       Contents: RunHomeEconomicsService.bat
-    #       TargetFolder: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics'
+      - task: CopyFiles@2
+        displayName: 'Add install script'
+        inputs:
+          SourceFolder: '$(System.DefaultWorkingDirectory)/HomeEconomics/Install'
+          Contents: RunHomeEconomicsService.bat
+          TargetFolder: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics'
 
-    #   - task: ArchiveFiles@2
-    #     displayName: 'Archive HomeEconomics'
-    #     inputs:
-    #       rootFolderOrFile: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics'
-    #       includeRootFolder: false
-    #       archiveFile: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics/HomeEconomics.zip'
+      - task: ArchiveFiles@2
+        displayName: 'Archive HomeEconomics'
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics'
+          includeRootFolder: false
+          archiveFile: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics/HomeEconomics.zip'
 
-    #   - task: AzureFileCopy@2
-    #     displayName: 'Copy HomeEconomics artifact to storage'
-    #     inputs:
-    #       SourcePath: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics/HomeEconomics.zip'
-    #       azureSubscription: 'Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)'
-    #       Destination: AzureBlob
-    #       storage: startifacts
-    #       ContainerName: HomeEconomics
+      - task: AzureFileCopy@2
+        displayName: 'Copy HomeEconomics artifact to storage'
+        inputs:
+          SourcePath: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics/HomeEconomics.zip'
+          azureSubscription: 'Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)'
+          Destination: AzureBlob
+          storage: startifacts
+          ContainerName: HomeEconomics
