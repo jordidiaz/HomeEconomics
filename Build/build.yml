@@ -4,87 +4,98 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
-
-pool:
-  vmImage: 'windows-2019'
-
-variables:
-  buildConfiguration: 'Release'
-
-steps:
-- task: UseNode@1
-  displayName: 'Use node LTS'
-  inputs:
-    version: '12.14.1'
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    useGlobalJson: true
-- script: dotnet restore
-  displayName: 'dotnet restore'
-- script: dotnet build --configuration $(BuildConfiguration)
-  displayName: 'dotnet build'
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet test'
-  inputs:
-    command: 'test'
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet publish'
-  inputs:
-    command: publish
-    publishWebProjects: true
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\HomeEconomics'
-    modifyOutputPath: false
-    zipAfterPublish: false
-- task: CopyFiles@2
-  displayName: 'Copy SPA to ArtifactStagingDirectory'
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
-    Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)\spa'
-    CleanTargetFolder: true
-- task: Npm@1
-  displayName: 'npm ci'
-  inputs:
-    command: 'install'
-    workingDir: '$(Build.ArtifactStagingDirectory)\spa'
-- task: Npm@1
-  displayName: 'npm test'
-  inputs:
-    command: 'custom'
-    workingDir: '$(Build.ArtifactStagingDirectory)\spa'
-    customCommand: 'run citest'
-- task: Npm@1
-  displayName: 'npm build'
-  inputs:
-    command: 'custom'
-    workingDir: '$(Build.ArtifactStagingDirectory)\spa'
-    customCommand: 'run build'
-- task: CopyFiles@2
-  displayName: 'Copy SPA build into HomeEconomics artifact'
-  inputs:
-    SourceFolder: '$(Build.ArtifactStagingDirectory)\spa\build'
-    Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)\HomeEconomics\wwwroot'
-    CleanTargetFolder: true
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish build artifact'
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)\HomeEconomics'
-    ArtifactName: 'HomeEconomics'
-    publishLocation: 'Container'
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish deployment scripts'
-  inputs:
-    PathtoPublish: 'Deploy'
-    ArtifactName: 'Deploy'
-    publishLocation: 'Container'
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish install script'
-  inputs:
-    PathtoPublish: 'RunHomeEconomicsService.bat'
-    ArtifactName: 'Install'
-    publishLocation: 'Container'
-
-
+  - master
+  
+  pool:
+    vmImage: 'windows-2019'
+  
+  variables:
+    buildConfiguration: 'Release'
+  
+  stages:
+  - stage: build_and_publish_artifacts
+    displayName: Build and publish artifacts
+  
+    jobs:
+    - job: build_hm_artifact
+      displayName: Build HomeEconomics Artifact
+  
+      steps:
+      - task: UseNode@1
+        displayName: 'Use node LTS'
+        inputs:
+          version: '12.18.0'
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          useGlobalJson: true
+      - script: dotnet restore
+        displayName: 'dotnet restore'
+      - script: dotnet build --configuration $(BuildConfiguration)
+        displayName: 'dotnet build'
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet test'
+        inputs:
+          command: 'test'
+      - task: DotNetCoreCLI@2
+        displayName: 'dotnet publish'
+        inputs:
+          command: publish
+          publishWebProjects: true
+          arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\HomeEconomics'
+          modifyOutputPath: false
+          zipAfterPublish: false
+      - task: CopyFiles@2
+        displayName: 'Copy SPA to ArtifactStagingDirectory'
+        inputs:
+          SourceFolder: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
+          Contents: '**'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)\spa'
+          CleanTargetFolder: true
+      - task: Npm@1
+        displayName: 'npm ci'
+        inputs:
+          command: 'install'
+          workingDir: '$(Build.ArtifactStagingDirectory)\spa'
+      - task: Npm@1
+        displayName: 'npm test'
+        inputs:
+          command: 'custom'
+          workingDir: '$(Build.ArtifactStagingDirectory)\spa'
+          customCommand: 'run citest'
+      - task: Npm@1
+        displayName: 'npm build'
+        inputs:
+          command: 'custom'
+          workingDir: '$(Build.ArtifactStagingDirectory)\spa'
+          customCommand: 'run build'
+      - task: CopyFiles@2
+        displayName: 'Copy SPA build into HomeEconomics artifact'
+        inputs:
+          SourceFolder: '$(Build.ArtifactStagingDirectory)\spa\build'
+          Contents: '**'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)\HomeEconomics\wwwroot'
+          CleanTargetFolder: true
+  
+    - job: publish_artifacts
+      displayName: Build artifacts
+  
+      steps:
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish build artifact'
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)\HomeEconomics'
+            ArtifactName: 'HomeEconomics'
+            publishLocation: 'Container'
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish deployment scripts'
+          inputs:
+            PathtoPublish: 'Deploy'
+            ArtifactName: 'Deploy'
+            publishLocation: 'Container'
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish install script'
+          inputs:
+            PathtoPublish: 'RunHomeEconomicsService.bat'
+            ArtifactName: 'Install'
+            publishLocation: 'Container'
