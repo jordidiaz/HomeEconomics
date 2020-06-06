@@ -97,13 +97,6 @@ stages:
         publishLocation: 'Container'
 
     - task: PublishBuildArtifacts@1
-      displayName: 'Publish deployment scripts'
-      inputs:
-        PathtoPublish: 'pipeline\infrastructure'
-        ArtifactName: 'Infrastructure'
-        publishLocation: 'Container'
-
-    - task: PublishBuildArtifacts@1
       displayName: 'Publish install script'
       inputs:
         PathtoPublish: 'RunHomeEconomicsService.bat'
@@ -169,7 +162,7 @@ stages:
       - task: CopyFiles@2
         displayName: 'Add install script'
         inputs:
-          SourceFolder: '$(System.DefaultWorkingDirectory)/HomeEconomics/Install'
+          SourceFolder: '$(System.DefaultWorkingDirectory)/Install'
           Contents: RunHomeEconomicsService.bat
           TargetFolder: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics'
 
