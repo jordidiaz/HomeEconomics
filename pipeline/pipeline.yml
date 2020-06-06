@@ -128,6 +128,7 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
+          workingDirectory: 'pipeline/infrastructure'
           backendServiceArm: 'Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)'
           backendAzureRmResourceGroupName: 'Shared'
           backendAzureRmStorageAccountName: 'stterraform'
