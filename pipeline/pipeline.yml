@@ -71,24 +71,24 @@ stages:
         CleanTargetFolder: true
 
   - job: publish_artifacts
-    displayName: Build artifacts
+    displayName: Publish artifacts
 
     steps:
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish build artifact'
-        inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)\HomeEconomics'
-          ArtifactName: 'HomeEconomics'
-          publishLocation: 'Container'
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish deployment scripts'
-        inputs:
-          PathtoPublish: 'Deploy'
-          ArtifactName: 'Deploy'
-          publishLocation: 'Container'
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish install script'
-        inputs:
-          PathtoPublish: 'RunHomeEconomicsService.bat'
-          ArtifactName: 'Install'
-          publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish build artifact'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)\HomeEconomics'
+        ArtifactName: 'HomeEconomics'
+        publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish deployment scripts'
+      inputs:
+        PathtoPublish: 'Deploy'
+        ArtifactName: 'Deploy'
+        publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish install script'
+      inputs:
+        PathtoPublish: 'RunHomeEconomicsService.bat'
+        ArtifactName: 'Install'
+        publishLocation: 'Container'
