@@ -7,7 +7,6 @@ pool:
   vmImage: 'windows-2019'
 
 variables:
-  buildConfiguration: 'Release'
   - group: HomeEconomics
 
 stages:
