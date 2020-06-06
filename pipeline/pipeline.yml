@@ -20,7 +20,7 @@ stages:
     displayName: Build and publish artifacts
 
     steps:
-      
+
     - task: UseNode@1
       displayName: 'Use node LTS'
       inputs:
@@ -97,8 +97,8 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish deployment scripts'
       inputs:
-        PathtoPublish: 'Deploy'
-        ArtifactName: 'Deploy'
+        PathtoPublish: 'pipeline\infrastructure'
+        ArtifactName: 'Infrastructure'
         publishLocation: 'Container'
 
     - task: PublishBuildArtifacts@1
