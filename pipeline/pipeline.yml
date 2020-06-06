@@ -72,6 +72,7 @@ stages:
 
   - job: publish_artifacts
     displayName: Publish artifacts
+    depends_on: build_hm_artifact
 
     steps:
     - task: PublishBuildArtifacts@1
