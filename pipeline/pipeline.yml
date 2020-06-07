@@ -110,10 +110,14 @@ stages:
 
   jobs:
 
-    - job: deploy_infrastructure
-      displayName: Deploy infrastructure
+    - job: deploy_infrastructure_and_upload_zip
+      displayName: Deploy infrastructure and upload HomeEconomics zip
   
       steps:
+
+      - download: current
+        displayName: 'Download HomeEconomics artifact'
+        artifact: HomeEconomics
 
       - task: TerraformInstaller@0
         displayName: 'Install Terraform'
@@ -146,14 +150,6 @@ stages:
         inputs:
           workingDirectory: 'pipeline/infrastructure'
           mapSensitiveOutputsAsSecrets: true
-
-    - job: upload_zip
-      displayName: Upload HomeEconomics zip
-
-      steps:
-
-      - download: current
-        artifact: HomeEconomics
 
       - task: qetza.replacetokens.replacetokens-task.replacetokens@3
         displayName: 'Replace tokens in appsettings.json'
