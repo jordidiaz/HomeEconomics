@@ -152,10 +152,13 @@ stages:
 
       steps:
 
+      - download: current
+        artifact: HomeEconomics
+
       - task: qetza.replacetokens.replacetokens-task.replacetokens@3
         displayName: 'Replace tokens in appsettings.json'
         inputs:
-          rootDirectory: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics'
+          rootDirectory: '$(Pipeline.Workspace)/HomeEconomics'
           targetFiles: appsettings.json
           actionOnMissing: fail
           tokenPrefix: '%%'
@@ -165,19 +168,19 @@ stages:
         displayName: 'Add install script'
         inputs:
           Contents: 'RunHomeEconomicsService.bat'
-          TargetFolder: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics'
+          TargetFolder: '$(Pipeline.Workspace)/HomeEconomics'
 
       - task: ArchiveFiles@2
         displayName: 'Archive HomeEconomics'
         inputs:
-          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics'
+          rootFolderOrFile: '$(Pipeline.Workspace)/HomeEconomics'
           includeRootFolder: false
-          archiveFile: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics/HomeEconomics.zip'
+          archiveFile: '$(Pipeline.Workspace)/HomeEconomics.zip'
 
       - task: AzureFileCopy@2
         displayName: 'Copy HomeEconomics artifact to storage'
         inputs:
-          SourcePath: '$(System.DefaultWorkingDirectory)/HomeEconomics/HomeEconomics/HomeEconomics.zip'
+          SourcePath: '$(Pipeline.Workspace)/HomeEconomics.zip'
           azureSubscription: 'Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)'
           Destination: AzureBlob
           storage: startifacts

@@ -28,6 +28,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.IntegrationTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.UnitTests", "test\HomeEconomics.UnitTests\HomeEconomics.UnitTests.csproj", "{3EFFBACD-15D1-47C9-A955-3C7764983618}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pipeline", "pipeline", "{6D2938A6-38A3-4B04-AD0E-2DA5B2068318}"
+	ProjectSection(SolutionItems) = preProject
+		pipeline\pipeline.yml = pipeline\pipeline.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastructure", "{18D4630F-8F22-4839-B389-E6EE98FA68D3}"
+	ProjectSection(SolutionItems) = preProject
+		pipeline\infrastructure\infrastructure.tf = pipeline\infrastructure\infrastructure.tf
+		pipeline\infrastructure\main.tf = pipeline\infrastructure\main.tf
+		pipeline\infrastructure\variables.tf = pipeline\infrastructure\variables.tf
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +86,7 @@ Global
 		{B51D133A-D342-49AA-973B-2801537F9346} = {464E6D58-952A-46C6-AD64-700E29620583}
 		{5475C031-2B77-485E-BAB1-F2125D991DE0} = {464E6D58-952A-46C6-AD64-700E29620583}
 		{3EFFBACD-15D1-47C9-A955-3C7764983618} = {464E6D58-952A-46C6-AD64-700E29620583}
+		{18D4630F-8F22-4839-B389-E6EE98FA68D3} = {6D2938A6-38A3-4B04-AD0E-2DA5B2068318}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CD6A584-4AA0-416F-B5FE-9D8D46A83195}
