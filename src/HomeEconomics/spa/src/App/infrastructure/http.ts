@@ -72,9 +72,11 @@ const get = async <T>(path: string): Promise<T> => {
   return response.data;
 };
 
-const del = async (path: string): Promise<boolean> => {
-  await axiosInstance.delete(path);
-  return true;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const del = async (path: string): Promise<any> => {
+  debugger;
+  const response = await axiosInstance.delete(path);
+  return response.data;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -84,9 +86,10 @@ const post = async (path: string, data: any): Promise<any> => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const put = async (path: string, data: any): Promise<boolean> => {
-  await axiosInstance.put(path, data);
-  return true;
+const put = async (path: string, data: any): Promise<any> => {
+  debugger;
+  const response = await axiosInstance.put(path, data);
+  return response.data;
 };
 
 export default {

@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace HomeEconomics.Features.MovementMonths
 {
@@ -70,6 +70,21 @@ namespace HomeEconomics.Features.MovementMonths
         public async Task<ActionResult> UnPayMonthMovement(int movementMonthId, int monthMovementId)
         {
             var result = await _mediator.Send(new UnPayMonthMovement.Command
+            {
+                MovementMonthId = movementMonthId,
+                MonthMovementId = monthMovementId
+            });
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{movementMonthId:int}/month-movements/{monthMovementId:int}")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<ActionResult> DeleteMonthMovement(int movementMonthId, int monthMovementId)
+        {
+            var result = await _mediator.Send(new DeleteMonthMovement.Command
             {
                 MovementMonthId = movementMonthId,
                 MonthMovementId = monthMovementId

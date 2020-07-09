@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Domain.Movements;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.Movements;
 
 namespace Domain.MovementMonth
 {
-    public class MovementMonth: Entity, IAggregateRoot
+    public class MovementMonth : Entity, IAggregateRoot
     {
         public MovementMonth(int year, Month month)
         {
@@ -42,7 +42,7 @@ namespace Domain.MovementMonth
             var monthMovement = GetMonthMovementOrThrow(monthMovementId);
             monthMovement.Pay();
         }
-         
+
         public void UnPayMonthMovement(int monthMovementId)
         {
             var monthMovement = GetMonthMovementOrThrow(monthMovementId);
@@ -53,6 +53,12 @@ namespace Domain.MovementMonth
         {
             var monthMovement = GetMonthMovementOrThrow(monthMovementId);
             monthMovement.SetAmount(amount);
+        }
+
+        public void DeleteMonthMovement(int monthMovementId)
+        {
+            var monthMovement = GetMonthMovementOrThrow(monthMovementId);
+            MonthMovements.Remove(monthMovement);
         }
 
         public void AddStatus(int day, decimal accountAmount, decimal cashAmount)

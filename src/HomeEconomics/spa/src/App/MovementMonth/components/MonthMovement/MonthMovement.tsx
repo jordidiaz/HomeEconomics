@@ -9,11 +9,12 @@ export type MonthMovementProps = {
   payMonthMovement: (monthMovement: TMonthMovement) => void;
   unpayMonthMovement: (monthMovement: TMonthMovement) => void;
   updateMonthMovementAmount: (monthMovement: TMonthMovement, newAmount: number) => void;
+  deleteMonthMovement: (monthMovement: TMonthMovement) => void;
 }
 
 const MonthMovement: React.FC<MonthMovementProps> = (props: MonthMovementProps) => {
 
-  const { monthMovement, payMonthMovement, unpayMonthMovement, updateMonthMovementAmount } = props;
+  const { monthMovement, payMonthMovement, unpayMonthMovement, updateMonthMovementAmount, deleteMonthMovement } = props;
 
   const [editingAmount, setEditingAmount] = useState<boolean>(false);
   const [newAmount, setNewAmount] = useState<string>(monthMovement.amount.toString());
@@ -28,6 +29,10 @@ const MonthMovement: React.FC<MonthMovementProps> = (props: MonthMovementProps) 
 
   const edit = (): void => {
     setEditingAmount(true);
+  };
+
+  const remove = (): void => {
+    deleteMonthMovement(monthMovement);
   };
 
   const cancel = (): void => {
@@ -80,6 +85,7 @@ const MonthMovement: React.FC<MonthMovementProps> = (props: MonthMovementProps) 
           (!monthMovement.paid && !editingAmount) &&
           <>
             <i className="action-icon icon--pencil" onClick={edit}></i>
+            <i className="action-icon icon--bin" onClick={remove}></i>
             <i className="action-icon icon--checkbox-unchecked" onClick={pay}></i>
           </>
         }

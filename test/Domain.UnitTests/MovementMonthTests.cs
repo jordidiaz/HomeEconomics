@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
 using Domain.Movements;
 using FluentAssertions;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace Domain.UnitTests
@@ -11,9 +11,12 @@ namespace Domain.UnitTests
     {
         private const int Year = 2020;
         private const Month Month = MovementMonth.Month.Jan;
-        private const string Name = nameof(Name);
-        private const decimal Amount = 50m;
-        private const MovementType MovementType = Movements.MovementType.Expense;
+        private const string Name1 = nameof(Name1);
+        private const string Name2 = nameof(Name2);
+        private const decimal Amount1 = 50m;
+        private const decimal Amount2 = 60m;
+        private const MovementType MovementType1 = MovementType.Expense;
+        private const MovementType MovementType2 = MovementType.Income;
         private const int Day = 1;
         private const decimal AccountAmount = 1500;
         private const decimal CashAmount = 100;
@@ -23,6 +26,12 @@ namespace Domain.UnitTests
         public MovementMonthTests()
         {
             _sut = new MovementMonth.MovementMonth(Year, Month);
+
+            _sut.AddMonthMovement(Name1, Amount1, MovementType1);
+            _sut.AddMonthMovement(Name2, Amount2, MovementType2);
+
+            _sut.MonthMovements.First().SetIdentity(1);
+            _sut.MonthMovements.Last().SetIdentity(2);
         }
 
         [Fact]
@@ -36,12 +45,13 @@ namespace Domain.UnitTests
         [Fact]
         public void AddMonthMovement_Adds_A_New_AddMonthMovement()
         {
-            _sut.AddMonthMovement(Name, Amount, MovementType);
+            _sut.MonthMovements.Clear();
+            _sut.AddMonthMovement(Name1, Amount1, MovementType1);
 
             _sut.MonthMovements.Count.Should().Be(1);
-            _sut.MonthMovements.First().Name.Should().Be(Name);
-            _sut.MonthMovements.First().Amount.Should().Be(Amount);
-            _sut.MonthMovements.First().Type.Should().Be(MovementType);
+            _sut.MonthMovements.First().Name.Should().Be(Name1);
+            _sut.MonthMovements.First().Amount.Should().Be(Amount1);
+            _sut.MonthMovements.First().Type.Should().Be(MovementType1);
             _sut.MonthMovements.First().Paid.Should().BeFalse();
 
         }
@@ -49,11 +59,9 @@ namespace Domain.UnitTests
         [Fact]
         public void PayMonthMovement_Sets_MonthMovement_Paid()
         {
-            _sut.AddMonthMovement(Name, Amount, MovementType);
-
             _sut.MonthMovements.First().Paid.Should().BeFalse();
 
-            _sut.PayMonthMovement(0);
+            _sut.PayMonthMovement(1);
 
             _sut.MonthMovements.First().Paid.Should().BeTrue();
         }
@@ -61,7 +69,7 @@ namespace Domain.UnitTests
         [Fact]
         public void PayMonthMovement_Throws_InvalidOperationException_If_MonthMovement_Not_Exists()
         {
-            Action action = () => _sut.PayMonthMovement(0);
+            Action action = () => _sut.PayMonthMovement(3);
 
             action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
         }
@@ -69,13 +77,11 @@ namespace Domain.UnitTests
         [Fact]
         public void UnPayMonthMovement_Sets_MonthMovement_UnPaid()
         {
-            _sut.AddMonthMovement(Name, Amount, MovementType);
-
-            _sut.PayMonthMovement(0);
+            _sut.PayMonthMovement(1);
 
             _sut.MonthMovements.First().Paid.Should().BeTrue();
 
-            _sut.UnPayMonthMovement(0);
+            _sut.UnPayMonthMovement(1);
 
             _sut.MonthMovements.First().Paid.Should().BeFalse();
         }
@@ -83,7 +89,7 @@ namespace Domain.UnitTests
         [Fact]
         public void UnPayMonthMovement_Throws_InvalidOperationException_If_MonthMovement_Not_Exists()
         {
-            Action action = () => _sut.UnPayMonthMovement(0);
+            Action action = () => _sut.UnPayMonthMovement(3);
 
             action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
         }
@@ -91,11 +97,9 @@ namespace Domain.UnitTests
         [Fact]
         public void UpdateMonthMovementAmount_Updates_MonthMovement_Amount()
         {
-            _sut.AddMonthMovement(Name, Amount, MovementType);
-
             _sut.MonthMovements.First().Amount.Should().Be(50m);
 
-            _sut.UpdateMonthMovementAmount(0, 60);
+            _sut.UpdateMonthMovementAmount(1, 60);
 
             _sut.MonthMovements.First().Amount.Should().Be(60m);
         }
@@ -103,7 +107,25 @@ namespace Domain.UnitTests
         [Fact]
         public void UpdateMonthMovementAmount_Throws_InvalidOperationException_If_MonthMovement_Not_Exists()
         {
-            Action action = () => _sut.UpdateMonthMovementAmount(0, 40m);
+            Action action = () => _sut.UpdateMonthMovementAmount(3, 40m);
+
+            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
+        }
+
+        [Fact]
+        public void DeleteMonthMovementAmount_Deletes_MonthMovement()
+        {
+            _sut.MonthMovements.SingleOrDefault(monthMovement => monthMovement.Id == 1).Should().NotBeNull();
+
+            _sut.DeleteMonthMovement(1);
+
+            _sut.MonthMovements.SingleOrDefault(monthMovement => monthMovement.Id == 1).Should().BeNull();
+        }
+
+        [Fact]
+        public void DeleteMonthMovementAmount_Throws_InvalidOperationException_If_MonthMovement_Not_Exists()
+        {
+            Action action = () => _sut.DeleteMonthMovement(3);
 
             action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
         }

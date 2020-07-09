@@ -1,16 +1,16 @@
-﻿using Domain.Movements;
-using FluentAssertions;
+﻿using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 {
-    public class AddMonthMovementTests : FunctionalTestBase
+    public class DeleteMonthMovementTests : FunctionalTestBase
     {
-        private AddMonthMovement.Command _command;
+        private DeleteMonthMovement.Command _command;
 
         [Fact]
         public async Task Should_Add_MonthMovement_And_Return_Resume()
@@ -19,30 +19,26 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
             var movementMonth = await CreateMovementMonth();
 
-            _command = new AddMonthMovement.Command
+            _command = new DeleteMonthMovement.Command
             {
                 MovementMonthId = movementMonth.Id,
-                Name = "new",
-                Type = MovementType.Expense,
-                Amount = 50
+                MonthMovementId = movementMonth.MonthMovements.First().Id
             };
 
             var result = await Fixture.SendToMediatRAsync(_command);
 
-            result.Status.PendingTotalExpenses.Should().Be(170m);
+            result.Status.PendingTotalExpenses.Should().Be(60m);
             result.Status.PendingTotalIncomes.Should().Be(70m);
-            result.MonthMovements.Length.Should().Be(4);
+            result.MonthMovements.Length.Should().Be(2);
         }
 
         [Fact]
         public void Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
         {
-            _command = new AddMonthMovement.Command
+            _command = new DeleteMonthMovement.Command
             {
                 MovementMonthId = 0,
-                Name = "new",
-                Type = MovementType.Expense,
-                Amount = 50
+                MonthMovementId = 0
             };
 
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);

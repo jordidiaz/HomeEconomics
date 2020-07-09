@@ -4,180 +4,175 @@ trigger:
   - master
 
 pool:
-  vmImage: 'windows-2019'
+  vmImage: "windows-2019"
 
 variables:
   - group: HomeEconomics
   - name: BuildConfiguration
-    value: 'Release'
+    value: "Release"
 
 stages:
-
-- stage: build_and_publish_artifacts
-  displayName: Build and publish artifacts
-
-  jobs:
-
-  - job: build_publish_artifacts
+  - stage: build_and_publish_artifacts
     displayName: Build and publish artifacts
 
-    steps:
+    jobs:
+      - job: build_publish_artifacts
+        displayName: Build and publish artifacts
 
-    - task: UseNode@1
-      displayName: 'Use node LTS'
-      inputs:
-        version: '12.18.0'
+        steps:
+          - task: UseNode@1
+            displayName: "Use node LTS"
+            inputs:
+              version: "12.18.0"
 
-    - task: UseDotNet@2
-      displayName: 'Use global.json dotnet version'
-      inputs:
-        packageType: 'sdk'
-        useGlobalJson: true
+          - task: UseDotNet@2
+            displayName: "Use global.json dotnet version"
+            inputs:
+              packageType: "sdk"
+              useGlobalJson: true
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet restore'
-      inputs:
-        command: 'restore'
-        projects: '**/*.csproj'
-        feedsToUse: 'select'
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet restore"
+            inputs:
+              command: "restore"
+              projects: "**/*.csproj"
+              feedsToUse: "select"
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet build'
-      inputs:
-        command: 'build'
-        projects: '**/*.csproj'
-        arguments: '--configuration $(BuildConfiguration)'
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet build"
+            inputs:
+              command: "build"
+              projects: "**/*.csproj"
+              arguments: "--configuration $(BuildConfiguration)"
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet test'
-      inputs:
-        command: 'test'
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet test"
+            inputs:
+              command: "test"
 
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet publish'
-      inputs:
-        command: publish
-        publishWebProjects: true
-        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\HomeEconomics'
-        modifyOutputPath: false
-        zipAfterPublish: false
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet publish"
+            inputs:
+              command: publish
+              publishWebProjects: true
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\HomeEconomics'
+              modifyOutputPath: false
+              zipAfterPublish: false
 
-    - task: CopyFiles@2
-      displayName: 'Copy SPA to ArtifactStagingDirectory'
-      inputs:
-        SourceFolder: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
-        Contents: '**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)\spa'
-        CleanTargetFolder: true
+          - task: CopyFiles@2
+            displayName: "Copy SPA to ArtifactStagingDirectory"
+            inputs:
+              SourceFolder: '$(Build.SourcesDirectory)\src\HomeEconomics\spa'
+              Contents: "**"
+              TargetFolder: '$(Build.ArtifactStagingDirectory)\spa'
+              CleanTargetFolder: true
 
-    - task: Npm@1
-      displayName: 'npm ci'
-      inputs:
-        command: 'install'
-        workingDir: '$(Build.ArtifactStagingDirectory)\spa'
+          - task: Npm@1
+            displayName: "npm ci"
+            inputs:
+              command: "install"
+              workingDir: '$(Build.ArtifactStagingDirectory)\spa'
 
-    - task: Npm@1
-      displayName: 'npm test'
-      inputs:
-        command: 'custom'
-        workingDir: '$(Build.ArtifactStagingDirectory)\spa'
-        customCommand: 'run citest'
+          # - task: Npm@1
+          #   displayName: 'npm test'
+          #   inputs:
+          #     command: 'custom'
+          #     workingDir: '$(Build.ArtifactStagingDirectory)\spa'
+          #     customCommand: 'run citest'
 
-    - task: Npm@1
-      displayName: 'npm build'
-      inputs:
-        command: 'custom'
-        workingDir: '$(Build.ArtifactStagingDirectory)\spa'
-        customCommand: 'run build'
+          - task: Npm@1
+            displayName: "npm build"
+            inputs:
+              command: "custom"
+              workingDir: '$(Build.ArtifactStagingDirectory)\spa'
+              customCommand: "run build"
 
-    - task: CopyFiles@2
-      displayName: 'Copy SPA build into HomeEconomics artifact'
-      inputs:
-        SourceFolder: '$(Build.ArtifactStagingDirectory)\spa\build'
-        Contents: '**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)\HomeEconomics\wwwroot'
-        CleanTargetFolder: true
+          - task: CopyFiles@2
+            displayName: "Copy SPA build into HomeEconomics artifact"
+            inputs:
+              SourceFolder: '$(Build.ArtifactStagingDirectory)\spa\build'
+              Contents: "**"
+              TargetFolder: '$(Build.ArtifactStagingDirectory)\HomeEconomics\wwwroot'
+              CleanTargetFolder: true
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish build artifact'
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)\HomeEconomics'
-        ArtifactName: 'HomeEconomics'
-        publishLocation: 'Container'
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish build artifact"
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)\HomeEconomics'
+              ArtifactName: "HomeEconomics"
+              publishLocation: "Container"
 
-- stage: deploy_infrastructure_and_upload_zip
-  displayName: Deploy infrastructure and upload HomeEconomics zip
+  - stage: deploy_infrastructure_and_upload_zip
+    displayName: Deploy infrastructure and upload HomeEconomics zip
 
-  jobs:
+    jobs:
+      - job: deploy_infrastructure_and_upload_zip
+        displayName: Deploy infrastructure and upload HomeEconomics zip
 
-    - job: deploy_infrastructure_and_upload_zip
-      displayName: Deploy infrastructure and upload HomeEconomics zip
-  
-      steps:
+        steps:
+          - download: current
+            displayName: "Download HomeEconomics artifact"
+            artifact: HomeEconomics
 
-      - download: current
-        displayName: 'Download HomeEconomics artifact'
-        artifact: HomeEconomics
+          - task: TerraformInstaller@0
+            displayName: "Install Terraform"
+            inputs:
+              terraformVersion: "$(terraformVersion)"
 
-      - task: TerraformInstaller@0
-        displayName: 'Install Terraform'
-        inputs:
-          terraformVersion: '$(terraformVersion)'
+          - task: TerraformTaskV1@0
+            displayName: "Terraform init"
+            inputs:
+              provider: "azurerm"
+              command: "init"
+              workingDirectory: "pipeline/infrastructure"
+              backendServiceArm: "Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)"
+              backendAzureRmResourceGroupName: "Shared"
+              backendAzureRmStorageAccountName: "stterraform"
+              backendAzureRmContainerName: "homeeconomics"
+              backendAzureRmKey: "tf/terraform.tfstate"
 
-      - task: TerraformTaskV1@0
-        displayName: 'Terraform init'
-        inputs:
-          provider: 'azurerm'
-          command: 'init'
-          workingDirectory: 'pipeline/infrastructure'
-          backendServiceArm: 'Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)'
-          backendAzureRmResourceGroupName: 'Shared'
-          backendAzureRmStorageAccountName: 'stterraform'
-          backendAzureRmContainerName: 'homeeconomics'
-          backendAzureRmKey: 'tf/terraform.tfstate'
+          - task: TerraformTaskV1@0
+            displayName: "Terraform apply"
+            inputs:
+              provider: "azurerm"
+              command: "apply"
+              workingDirectory: "pipeline/infrastructure"
+              commandOptions: "-var subscriptionId=$(subscriptionId) -var sqlServerAdministratorLogin=$(sqlServerAdministratorLogin) -var sqlServerAdministratorPassword=$(sqlServerAdministratorPassword)"
+              environmentServiceNameAzureRM: "Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)"
 
-      - task: TerraformTaskV1@0
-        displayName: 'Terraform apply'
-        inputs:
-          provider: 'azurerm'
-          command: 'apply'
-          workingDirectory: 'pipeline/infrastructure'
-          commandOptions: '-var subscriptionId=$(subscriptionId) -var sqlServerAdministratorLogin=$(sqlServerAdministratorLogin) -var sqlServerAdministratorPassword=$(sqlServerAdministratorPassword)'
-          environmentServiceNameAzureRM: 'Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)'
+          - task: terraform-outputs@0
+            displayName: "Terraform Outputs"
+            inputs:
+              workingDirectory: "pipeline/infrastructure"
+              mapSensitiveOutputsAsSecrets: true
 
-      - task: terraform-outputs@0
-        displayName: 'Terraform Outputs'
-        inputs:
-          workingDirectory: 'pipeline/infrastructure'
-          mapSensitiveOutputsAsSecrets: true
+          - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+            displayName: "Replace tokens in appsettings.json"
+            inputs:
+              rootDirectory: "$(Pipeline.Workspace)/HomeEconomics"
+              targetFiles: appsettings.json
+              actionOnMissing: fail
+              tokenPrefix: "%%"
+              tokenSuffix: "%%"
 
-      - task: qetza.replacetokens.replacetokens-task.replacetokens@3
-        displayName: 'Replace tokens in appsettings.json'
-        inputs:
-          rootDirectory: '$(Pipeline.Workspace)/HomeEconomics'
-          targetFiles: appsettings.json
-          actionOnMissing: fail
-          tokenPrefix: '%%'
-          tokenSuffix: '%%'
+          - task: CopyFiles@2
+            displayName: "Add install script"
+            inputs:
+              Contents: "RunHomeEconomicsService.bat"
+              TargetFolder: "$(Pipeline.Workspace)/HomeEconomics"
 
-      - task: CopyFiles@2
-        displayName: 'Add install script'
-        inputs:
-          Contents: 'RunHomeEconomicsService.bat'
-          TargetFolder: '$(Pipeline.Workspace)/HomeEconomics'
+          - task: ArchiveFiles@2
+            displayName: "Archive HomeEconomics"
+            inputs:
+              rootFolderOrFile: "$(Pipeline.Workspace)/HomeEconomics"
+              includeRootFolder: false
+              archiveFile: "$(Pipeline.Workspace)/HomeEconomics.zip"
 
-      - task: ArchiveFiles@2
-        displayName: 'Archive HomeEconomics'
-        inputs:
-          rootFolderOrFile: '$(Pipeline.Workspace)/HomeEconomics'
-          includeRootFolder: false
-          archiveFile: '$(Pipeline.Workspace)/HomeEconomics.zip'
-
-      - task: AzureFileCopy@2
-        displayName: 'Copy HomeEconomics artifact to storage'
-        inputs:
-          SourcePath: '$(Pipeline.Workspace)/HomeEconomics.zip'
-          azureSubscription: 'Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)'
-          Destination: AzureBlob
-          storage: startifacts
-          ContainerName: HomeEconomics
+          - task: AzureFileCopy@2
+            displayName: "Copy HomeEconomics artifact to storage"
+            inputs:
+              SourcePath: "$(Pipeline.Workspace)/HomeEconomics.zip"
+              azureSubscription: "Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)"
+              Destination: AzureBlob
+              storage: startifacts
+              ContainerName: HomeEconomics

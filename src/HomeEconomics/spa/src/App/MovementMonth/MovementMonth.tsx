@@ -60,6 +60,10 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
     setMovementMonth(await movementMonthService.addMonthMovement(movementMonth as TMovementMonth, name, amount, movementType));
   }
 
+  async function deleteMonthMovement(monthMovement: TMonthMovement): Promise<void> {
+    setMovementMonth(await movementMonthService.deleteMonthMovement(movementMonth as TMovementMonth, monthMovement));
+  }
+
   async function addStatus(movementMonth: TMovementMonth, accountAmount: number, cashAmount: number): Promise<void> {
     setMovementMonth(await movementMonthService.addStatus(movementMonth, accountAmount, cashAmount));
   }
@@ -121,7 +125,7 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
       <ul>
         {
           movementMonth?.monthMovements.filter(filterByShowPaid).map((monthMovement: TMonthMovement) =>
-            <li key={monthMovement.id}><MonthMovement monthMovement={monthMovement} payMonthMovement={payMonthMovement} unpayMonthMovement={unpayMonthMovement} updateMonthMovementAmount={updateMonthMovementAmount} /></li>
+            <li key={monthMovement.id}><MonthMovement monthMovement={monthMovement} payMonthMovement={payMonthMovement} unpayMonthMovement={unpayMonthMovement} updateMonthMovementAmount={updateMonthMovementAmount} deleteMonthMovement={deleteMonthMovement} /></li>
           )
         }
       </ul>

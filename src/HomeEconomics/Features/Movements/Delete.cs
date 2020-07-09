@@ -1,12 +1,10 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Domain;
-using FluentValidation;
-using HomeEconomics.Helpers;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HomeEconomics.Features.Movements
 {
