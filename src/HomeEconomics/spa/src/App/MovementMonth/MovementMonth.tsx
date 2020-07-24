@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import CheckBox from '../components/CheckBox/CheckBox';
 import useForm from '../hooks/useForm';
-import { MovementType } from '../Movements/models/movement.models';
+import { MovementType, TMovement } from '../Movements/models/movement.models';
 import AddMonthMovementForm from './components/AddMonthMovementForm/AddMonthMovementForm';
 import MonthMovement from './components/MonthMovement/MonthMovement';
 import MonthStatus from './components/MonthStatus/MonthStatus';
@@ -13,6 +13,8 @@ import { parseNumber } from '../helpers/number-parser';
 
 export type MovementMonthProps = {
   initialShowPaid: boolean;
+  movementToAdd: TMovement;
+  addMovementSuccess: () => void;
 }
 
 type MonthSelectorValues = {
@@ -26,7 +28,7 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
 
-  const { initialShowPaid } = props;
+  const { initialShowPaid, movementToAdd, addMovementSuccess } = props;
 
   const initialValues: MonthSelectorValues = {
     year: currentYear.toString(),
@@ -76,6 +78,11 @@ const MovementMonth: React.FC<MovementMonthProps> = (props: MovementMonthProps) 
     return showPaid
       ? true
       : !monthMovement.paid;
+  }
+
+  if (movementToAdd.id !== -1) {
+    addMonthMovement(movementToAdd.name, movementToAdd.amount, movementToAdd.type);
+    addMovementSuccess();
   }
 
   return (

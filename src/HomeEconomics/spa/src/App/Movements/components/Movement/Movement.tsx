@@ -7,11 +7,12 @@ export type MovementProps = {
   movement: TMovement;
   deleteMovement: (movement: TMovement) => void;
   loadMovement: (movement: TMovement) => void;
+  addMovementToCurrentMonth: (movement: TMovement) => void;
 }
 
 const Movement: React.FC<MovementProps> = (props: MovementProps) => {
 
-  const { movement, deleteMovement, loadMovement } = props;
+  const { movement, deleteMovement, loadMovement, addMovementToCurrentMonth } = props;
 
   const onClickDelete = (): void => {
     deleteMovement(movement);
@@ -19,6 +20,10 @@ const Movement: React.FC<MovementProps> = (props: MovementProps) => {
 
   const onClickEdit = (): void => {
     loadMovement(movement);
+  };
+
+  const onClickAdd = (): void => {
+    addMovementToCurrentMonth(movement);
   };
 
   const type: string = movement.type === MovementType.Expense
@@ -60,6 +65,7 @@ const Movement: React.FC<MovementProps> = (props: MovementProps) => {
         </div>
       }
       <div className="Movement__actions">
+        <i className="action-icon icon--plus" onClick={onClickAdd}></i>
         <i className="action-icon icon--pencil" onClick={onClickEdit}></i>
         <i className="action-icon icon--bin" onClick={onClickDelete}></i>
       </div>

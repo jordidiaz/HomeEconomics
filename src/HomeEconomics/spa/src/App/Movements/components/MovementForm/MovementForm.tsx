@@ -4,7 +4,7 @@ import RadioButton from '../../../components/RadioButton/RadioButton';
 import useForm from '../../../hooks/useForm';
 import { getMonthName, months } from '../../helpers/months';
 import { useMovement } from '../../hooks/useMovement';
-import { createEmpyMovement, emptyMovement, FrequencyType, TMovement, MovementType } from '../../models/movement.models';
+import { createEmptyMovement, emptyMovement, FrequencyType, TMovement, MovementType } from '../../models/movement.models';
 import './MovementForm.scss';
 import { parseNumber } from '../../../helpers/number-parser';
 
@@ -84,13 +84,13 @@ const MovementForm: React.FC<MovementFormProps> = (props: MovementFormProps) => 
 
   function submit(): void {
     createOrEditMovement().then(() => {
-      setValues(createValuesFromTMovement(createEmpyMovement()));
+      setValues(createValuesFromTMovement(createEmptyMovement()));
     });
   }
 
   function cancel(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
     event.preventDefault();
-    setValues(createValuesFromTMovement(createEmpyMovement()));
+    setValues(createValuesFromTMovement(createEmptyMovement()));
   }
 
   return (

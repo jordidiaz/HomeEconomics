@@ -32,7 +32,7 @@ export const emptyMovement: TMovement = {
   frequencyMonths: Array.from({ length: 12 }, () => false)
 };
 
-export const createEmpyMovement = (): TMovement => {
+export const createEmptyMovement = (): TMovement => {
   const movement = { ...emptyMovement };
   movement.frequencyMonths = Array.from({ length: 12 }, () => false);
   return movement;
