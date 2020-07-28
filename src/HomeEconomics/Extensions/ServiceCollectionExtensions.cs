@@ -3,6 +3,8 @@ using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using System;
 
@@ -10,6 +12,8 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
+        private const string SelfName = "self";
+
         public static IServiceCollection AddHomeEconomicsApi(this IServiceCollection services)
         {
             return services
@@ -50,6 +54,19 @@ namespace Microsoft.Extensions.DependencyInjection
                     swaggerGenOptions.SwaggerDoc("hm", new OpenApiInfo { Title = "HomeEconomics API" });
                     swaggerGenOptions.CustomSchemaIds(type => type.FullName);
                 });
+        }
+
+        internal static IServiceCollection AddHomeEconomicsHealthChecks(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("HomeEconomics");
+
+            services
+                .AddHealthChecks()
+                .AddCheck(name: SelfName, timeout: TimeSpan.FromSeconds(30), check: () => HealthCheckResult.Healthy())
+                .AddSqlServer(connectionString)
+                .AddApplicationInsightsPublisher();
+
+            return services;
         }
 
         internal static IServiceCollection AddIf(this IServiceCollection services, bool condition, Func<IServiceCollection, IServiceCollection> action)

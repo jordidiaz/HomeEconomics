@@ -27,7 +27,8 @@ namespace HomeEconomics
                 .AddHomeEconomicsAutoMapper()
                 .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment())
                 .AddHomeEconomicsSwagger()
-                .AddApplicationInsightsTelemetry();
+                .AddApplicationInsightsTelemetry()
+                .AddHomeEconomicsHealthChecks(Configuration);
         }
 
         public void Configure(IApplicationBuilder applicationBuilder)

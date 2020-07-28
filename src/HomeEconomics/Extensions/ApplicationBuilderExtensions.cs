@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using System;
 
 namespace Microsoft.AspNetCore.Builder
 {
     public static class ApplicationBuilderExtensions
     {
+        private const string SelfName = "self";
+        private const string SqlServer = "sqlserver";
+
         internal static IApplicationBuilder UseHomeEconomicsSwagger(this IApplicationBuilder appBuilder)
         {
             return appBuilder
@@ -32,7 +36,18 @@ namespace Microsoft.AspNetCore.Builder
 
         internal static IApplicationBuilder UseHomeEconomicsEndpoints(this IApplicationBuilder appBuilder)
         {
-            return appBuilder.UseEndpoints(endpointRouteBuilder => endpointRouteBuilder.MapControllers());
+            return appBuilder.UseEndpoints(endpointRouteBuilder =>
+            {
+                endpointRouteBuilder.MapControllers();
+                endpointRouteBuilder.MapHealthChecks("/self", new HealthCheckOptions
+                {
+                    Predicate = registration => registration.Name == SelfName,
+                });
+                endpointRouteBuilder.MapHealthChecks("/sqlserver", new HealthCheckOptions
+                {
+                    Predicate = registration => registration.Name == SqlServer,
+                });
+            });
         }
 
         internal static IApplicationBuilder UseIf(this IApplicationBuilder appBuilder, bool condition, Func<IApplicationBuilder, IApplicationBuilder> action)

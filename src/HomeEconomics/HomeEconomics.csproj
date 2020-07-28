@@ -10,6 +10,7 @@
 
   <PropertyGroup>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
+    <UserSecretsId>c755dea3-beda-4f5d-967b-4efa6937efb0</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.Publisher.ApplicationInsights" Version="3.1.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="3.1.1" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.2" />
