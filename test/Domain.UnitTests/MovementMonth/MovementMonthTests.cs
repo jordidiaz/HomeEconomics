@@ -5,12 +5,12 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace Domain.UnitTests
+namespace Domain.UnitTests.MovementMonth
 {
     public class MovementMonthTests
     {
         private const int Year = 2020;
-        private const Month Month = MovementMonth.Month.Jan;
+        private const Month Month = Domain.MovementMonth.Month.Jan;
         private const string Name1 = nameof(Name1);
         private const string Name2 = nameof(Name2);
         private const decimal Amount1 = 50m;
@@ -21,11 +21,11 @@ namespace Domain.UnitTests
         private const decimal AccountAmount = 1500;
         private const decimal CashAmount = 100;
 
-        private readonly MovementMonth.MovementMonth _sut;
+        private readonly Domain.MovementMonth.MovementMonth _sut;
 
         public MovementMonthTests()
         {
-            _sut = new MovementMonth.MovementMonth(Year, Month);
+            _sut = new Domain.MovementMonth.MovementMonth(Year, Month);
 
             _sut.AddMonthMovement(Name1, Amount1, MovementType1);
             _sut.AddMonthMovement(Name2, Amount2, MovementType2);
@@ -37,7 +37,7 @@ namespace Domain.UnitTests
         [Fact]
         public void New_MovementMonth_Throws_ArgumentOutOfRangeException_If_Year_Invalid()
         {
-            Action action = () => new MovementMonth.MovementMonth(2019, Month.Aug);
+            Action action = () => new Domain.MovementMonth.MovementMonth(2019, Month.Aug);
 
             action.Should().Throw<ArgumentOutOfRangeException>();
         }

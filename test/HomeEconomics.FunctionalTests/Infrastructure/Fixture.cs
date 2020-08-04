@@ -1,4 +1,7 @@
-﻿using FakeItEasy;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using FakeItEasy;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -6,9 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using Respawn;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace HomeEconomics.FunctionalTests.Infrastructure
 {

@@ -4,18 +4,18 @@ using Domain.Movements;
 using FluentAssertions;
 using Xunit;
 
-namespace Domain.UnitTests
+namespace Domain.UnitTests.Movement
 {
     public class MovementTests
     {
         private const string Name = nameof(Name);
         private const decimal Amount = 10m;
 
-        private readonly Movement _sut;
+        private readonly Movements.Movement _sut;
 
         public MovementTests()
         {
-            _sut = new Movement(Name, Amount, MovementType.Income);
+            _sut = new Movements.Movement(Name, Amount, MovementType.Income);
         }
 
         [Theory]
@@ -24,7 +24,7 @@ namespace Domain.UnitTests
         [InlineData(" ")]
         public void New_Movement_Throws_ArgumentNullException_If_Name_Invalid(string name)
         {
-            Action action = () => new Movement(name, Amount, MovementType.Expense);
+            Action action = () => new Movements.Movement(name, Amount, MovementType.Expense);
 
             action.Should().Throw<ArgumentNullException>();
         }
@@ -32,7 +32,7 @@ namespace Domain.UnitTests
         [Fact]
         public void New_Movement_Throws_ArgumentOutOfRangeException_If_Amount_Invalid()
         {
-            Action action = () => new Movement(Name, -0.1m, MovementType.Income);
+            Action action = () => new Movements.Movement(Name, -0.1m, MovementType.Income);
 
             action.Should().Throw<ArgumentOutOfRangeException>();
         }

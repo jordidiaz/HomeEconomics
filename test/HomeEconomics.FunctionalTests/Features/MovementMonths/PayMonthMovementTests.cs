@@ -5,7 +5,6 @@ using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
 using Xunit;
-using CreateMovementMonth = HomeEconomics.Features.MovementMonths.Create.Command;
 
 namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 {

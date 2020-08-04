@@ -11,6 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Domain\Domain
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1C37AD96-7358-40AF-9313-6C3A5D89D4CF}"
 	ProjectSection(SolutionItems) = preProject
+		CodeCoverage.runsettings = CodeCoverage.runsettings
 		Directory.Build.props = Directory.Build.props
 		global.json = global.json
 		RunHomeEconomicsService.bat = RunHomeEconomicsService.bat
@@ -21,8 +22,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.UnitTests", "test\Domain.UnitTests\Domain.UnitTests.csproj", "{D2A14C4E-2ADE-4D45-BBE0-B45656F8F45B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "src\Persistence\Persistence.csproj", "{51906E92-C12B-46E0-9985-71F915FA16E6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.FunctionalTests", "test\HomeEconomics.FunctionalTests\HomeEconomics.FunctionalTests.csproj", "{B51D133A-D342-49AA-973B-2801537F9346}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.IntegrationTests", "test\HomeEconomics.IntegrationTests\HomeEconomics.IntegrationTests.csproj", "{5475C031-2B77-485E-BAB1-F2125D991DE0}"
 EndProject
@@ -39,6 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastru
 		pipeline\infrastructure\main.tf = pipeline\infrastructure\main.tf
 		pipeline\infrastructure\variables.tf = pipeline\infrastructure\variables.tf
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.FunctionalTests", "test\HomeEconomics.FunctionalTests\HomeEconomics.FunctionalTests.csproj", "{B84F2D7B-CCFC-4359-B3E3-936B3766FA80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,10 +63,6 @@ Global
 		{51906E92-C12B-46E0-9985-71F915FA16E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51906E92-C12B-46E0-9985-71F915FA16E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51906E92-C12B-46E0-9985-71F915FA16E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B51D133A-D342-49AA-973B-2801537F9346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B51D133A-D342-49AA-973B-2801537F9346}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B51D133A-D342-49AA-973B-2801537F9346}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B51D133A-D342-49AA-973B-2801537F9346}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5475C031-2B77-485E-BAB1-F2125D991DE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5475C031-2B77-485E-BAB1-F2125D991DE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5475C031-2B77-485E-BAB1-F2125D991DE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -74,6 +71,10 @@ Global
 		{3EFFBACD-15D1-47C9-A955-3C7764983618}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EFFBACD-15D1-47C9-A955-3C7764983618}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EFFBACD-15D1-47C9-A955-3C7764983618}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B84F2D7B-CCFC-4359-B3E3-936B3766FA80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B84F2D7B-CCFC-4359-B3E3-936B3766FA80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B84F2D7B-CCFC-4359-B3E3-936B3766FA80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B84F2D7B-CCFC-4359-B3E3-936B3766FA80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,10 +84,10 @@ Global
 		{AB3CCAB4-B7CF-47F8-A3A2-29E0B12F8A59} = {2BA55308-73F6-4818-BCD6-BD3AA86384E8}
 		{D2A14C4E-2ADE-4D45-BBE0-B45656F8F45B} = {464E6D58-952A-46C6-AD64-700E29620583}
 		{51906E92-C12B-46E0-9985-71F915FA16E6} = {2BA55308-73F6-4818-BCD6-BD3AA86384E8}
-		{B51D133A-D342-49AA-973B-2801537F9346} = {464E6D58-952A-46C6-AD64-700E29620583}
 		{5475C031-2B77-485E-BAB1-F2125D991DE0} = {464E6D58-952A-46C6-AD64-700E29620583}
 		{3EFFBACD-15D1-47C9-A955-3C7764983618} = {464E6D58-952A-46C6-AD64-700E29620583}
 		{18D4630F-8F22-4839-B389-E6EE98FA68D3} = {6D2938A6-38A3-4B04-AD0E-2DA5B2068318}
+		{B84F2D7B-CCFC-4359-B3E3-936B3766FA80} = {464E6D58-952A-46C6-AD64-700E29620583}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CD6A584-4AA0-416F-B5FE-9D8D46A83195}

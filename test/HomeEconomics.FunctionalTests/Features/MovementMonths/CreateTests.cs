@@ -3,9 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Domain.MovementMonth;
 using FluentAssertions;
-using MovementMonth = HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
 using Xunit;
+using MovementMonth = HomeEconomics.Features.MovementMonths;
 
 namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 {
