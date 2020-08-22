@@ -42,6 +42,25 @@ namespace Domain.UnitTests.MovementMonth
             action.Should().Throw<ArgumentOutOfRangeException>();
         }
 
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void AddMonthMovement_Throws_ArgumentNullException_If_Name_Invalid(string name)
+        {
+            Action action = () => _sut.AddMonthMovement(name, Amount1, MovementType1);
+
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void AddMonthMovement_Throws_ArgumentOutOfRangeException_If_Amount_Invalid()
+        {
+            Action action = () => _sut.AddMonthMovement(Name1, -1, MovementType1);
+
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
         [Fact]
         public void AddMonthMovement_Adds_A_New_AddMonthMovement()
         {
@@ -95,6 +114,14 @@ namespace Domain.UnitTests.MovementMonth
         }
 
         [Fact]
+        public void UpdateMonthMovementAmount_Throws_ArgumentOutOfRangeException_If_Amount_Invalid()
+        {
+            Action action = () => _sut.UpdateMonthMovementAmount(1, -1);
+
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Fact]
         public void UpdateMonthMovementAmount_Updates_MonthMovement_Amount()
         {
             _sut.MonthMovements.First().Amount.Should().Be(50m);
@@ -128,6 +155,32 @@ namespace Domain.UnitTests.MovementMonth
             Action action = () => _sut.DeleteMonthMovement(3);
 
             action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(32)]
+        public void AddStatus_Throws_ArgumentOutOfRangeException_If_Day_Invalid(int day)
+        {
+            Action action = () => _sut.AddStatus(day, AccountAmount, CashAmount);
+
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Fact]
+        public void AddStatus_Throws_ArgumentOutOfRangeException_If_AccountAmount_Invalid()
+        {
+            Action action = () => _sut.AddStatus(Day, -1, CashAmount);
+
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Fact]
+        public void AddStatus_Throws_ArgumentOutOfRangeException_If_CashAmount_Invalid()
+        {
+            Action action = () => _sut.AddStatus(Day, AccountAmount, -1);
+
+            action.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Fact]

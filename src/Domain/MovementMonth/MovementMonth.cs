@@ -63,6 +63,11 @@ namespace Domain.MovementMonth
 
         public void AddStatus(int day, decimal accountAmount, decimal cashAmount)
         {
+            if (day < 0 || day > 31)
+            {
+                throw new ArgumentOutOfRangeException(nameof(day));
+            }
+
             if (accountAmount < Constants.MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(accountAmount));

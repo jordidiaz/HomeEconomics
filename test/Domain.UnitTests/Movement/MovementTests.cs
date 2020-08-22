@@ -1,7 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using Domain.MovementMonth;
 using Domain.Movements;
 using FluentAssertions;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace Domain.UnitTests.Movement
@@ -86,7 +87,7 @@ namespace Domain.UnitTests.Movement
         [Fact]
         public void SetCustomFrequency_Throws_ArgumentOutOfRangeException_If_Months_Count_Not_12()
         {
-            var months = new[] {true, false, true};
+            var months = new[] { true, false, true };
 
             Action action = () => _sut.SetCustomFrequency(months);
 
@@ -150,6 +151,115 @@ namespace Domain.UnitTests.Movement
             _sut.SetAmount(56m);
 
             _sut.Amount.Should().Be(56m);
+        }
+
+        [Fact]
+        public void GetFrequencyType_Should_Return_FrequencyType_None()
+        {
+            _sut.GetFrequencyType().Should().Be(FrequencyType.None);
+        }
+
+        [Fact]
+        public void GetFrequencyType_Should_Return_FrequencyType_Monthly()
+        {
+            _sut.SetMonthlyFrequency();
+            _sut.GetFrequencyType().Should().Be(FrequencyType.Monthly);
+        }
+
+        [Fact]
+        public void GetFrequencyType_Should_Return_FrequencyType_Yearly()
+        {
+            _sut.SetYearlyFrequency(2);
+            _sut.GetFrequencyType().Should().Be(FrequencyType.Yearly);
+        }
+
+        [Fact]
+        public void GetFrequencyType_Should_Return_FrequencyType_Custom()
+        {
+            _sut.SetCustomFrequency(new[]
+            {
+                true,
+                false,
+                true,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+            });
+            _sut.GetFrequencyType().Should().Be(FrequencyType.Custom);
+        }
+
+        [Fact]
+        public void HasMonthInFrequency_Should_Return_False_If_FrequencyType_None()
+        {
+            _sut.HasMonthInFrequency(Month.Aug).Should().Be(false);
+        }
+
+        [Fact]
+        public void HasMonthInFrequency_Should_Return_False_If_FrequencyType_Monthly()
+        {
+            _sut.HasMonthInFrequency(Month.Aug).Should().Be(false);
+        }
+
+        [Fact]
+        public void HasMonthInFrequency_Should_Return_False_If_FrequencyType_Yearly()
+        {
+            _sut.SetYearlyFrequency(1);
+            _sut.HasMonthInFrequency(Month.Aug).Should().Be(false);
+        }
+
+        [Fact]
+        public void HasMonthInFrequency_Should_Return_False_If_FrequencyType_Custom()
+        {
+            _sut.SetCustomFrequency(new[]
+            {
+                true,
+                false,
+                true,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+            });
+            _sut.HasMonthInFrequency(Month.Aug).Should().Be(false);
+        }
+
+        [Fact]
+        public void HasMonthInFrequency_Should_Return_True_If_FrequencyType_Yearly()
+        {
+            _sut.SetYearlyFrequency(8);
+            _sut.HasMonthInFrequency(Month.Aug).Should().Be(true);
+        }
+
+        [Fact]
+        public void HasMonthInFrequency_Should_Return_True_If_FrequencyType_Custom()
+        {
+            _sut.SetCustomFrequency(new[]
+            {
+                true,
+                false,
+                true,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+            });
+            _sut.HasMonthInFrequency(Month.Jan).Should().Be(true);
         }
     }
 }

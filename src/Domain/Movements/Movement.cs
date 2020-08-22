@@ -1,5 +1,5 @@
-﻿using System;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
+using System;
 
 namespace Domain.Movements
 {
@@ -78,7 +78,7 @@ namespace Domain.Movements
                 return false;
             }
 
-            var monthNumber = (int) month;
+            var monthNumber = (int)month;
 
             return Frequency.Months[monthNumber - 1];
         }
