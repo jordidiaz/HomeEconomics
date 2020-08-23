@@ -47,7 +47,7 @@ stages:
             displayName: "dotnet test"
             inputs:
               command: "test"
-              arguments: '--no-restore -c Release -l trx;LogFileName=/tests/homeeconomics-results.trx -r /tests/ /p:CollectCoverage=true /p:Include="[Domain.*]*" /p:Exclude="[*]*Test*,[*Test*]*" /p:CoverletOutputFormat="cobertura" /p:CoverletOutput=/tests/homeeconomics'
+              arguments: '--no-restore -c Release -l trx;LogFileName=/tests/homeeconomics-results.trx -r /tests/ /p:CollectCoverage=true /p:Include="[Domain.*]*" /p:Exclude="[*]*Test*%2c[*Test*]*" /p:CoverletOutputFormat="cobertura" /p:CoverletOutput=/tests/homeeconomics'
               publishTestResults: false
 
           - task: PublishTestResults@2
