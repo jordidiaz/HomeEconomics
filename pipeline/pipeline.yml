@@ -8,8 +8,6 @@ pool:
 
 variables:
   - group: HomeEconomics
-  - name: BuildConfiguration
-    value: "Release"
 
 stages:
   - stage: build_and_publish_artifacts
@@ -43,19 +41,30 @@ stages:
             inputs:
               command: "build"
               projects: "**/*.csproj"
-              arguments: "--configuration $(BuildConfiguration)"
+              arguments: "--no-restore -c Release"
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet test"
             inputs:
               command: "test"
+              arguments: "--no-restore -c Release -l trx;LogFileName=/tests/homeeconomics-results.trx -r /tests/ /p:CollectCoverage=true /p:Include=[Domain.*]* /p:Exclude=[*]*Test*,[*Test*]* /p:CoverletOutputFormat='cobertura' /p:CoverletOutput=/tests/homeeconomics"
+
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: "VSTest"
+              testResultsFiles: "**/*.trx"
+
+          - task: PublishCodeCoverageResults@1
+            inputs:
+              codeCoverageTool: "Cobertura"
+              summaryFileLocation: "$(System.DefaultWorkingDirectory)/**/*.cobertura.xml"
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet publish"
             inputs:
               command: publish
               publishWebProjects: true
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)\HomeEconomics'
+              arguments: '--no-restore --no-build -c Release -o $(Build.ArtifactStagingDirectory)\HomeEconomics'
               modifyOutputPath: false
               zipAfterPublish: false
 
