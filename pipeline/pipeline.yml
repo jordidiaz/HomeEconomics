@@ -56,7 +56,7 @@ stages:
           - script: 'reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports -reporttypes:"Cobertura"'
             displayName: "Create reports"
 
-          - task: PublishTestResults@1
+          - task: PublishCodeCoverageResults@1
             displayName: "Publish code coverage"
             inputs:
               codeCoverageTool: Cobertura
