@@ -11,6 +11,8 @@ namespace HomeEconomics.Features.MovementMonths
 
         public int Month { get; set; }
 
+        public bool NextMovementMonthExists { get; set; }
+
         public StatusResult Status { get; set; }
 
         public MonthMovementResult[] MonthMovements { get; set; }

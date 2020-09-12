@@ -1,10 +1,9 @@
-﻿using System;
+﻿using HomeEconomics.Services;
+using MediatR;
+using Persistence;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 namespace HomeEconomics.Features.MovementMonths
 {
@@ -18,22 +17,20 @@ namespace HomeEconomics.Features.MovementMonths
 
         public class Handler : IRequestHandler<Command, MovementMonthResponse>
         {
+            private readonly IMovementMonthService _movementMonthService;
             private readonly HomeEconomicsDbContext _dbContext;
-            private readonly IMapper _mapper;
 
-            public Handler(HomeEconomicsDbContext dbContext, IMapper mapper)
+            public Handler(HomeEconomicsDbContext dbContext, IMovementMonthService movementMonthService)
             {
                 _dbContext = dbContext;
-                _mapper = mapper;
+                _movementMonthService = movementMonthService;
             }
 
             public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
             {
-                var movementMonth = await _dbContext
-                    .MovementMonths
-                    .Include(mm => mm.MonthMovements)
-                    .Include(mm => mm.Statuses)
-                    .SingleOrDefaultAsync(mm => mm.Id == request.MovementMonthId, cancellationToken: cancellationToken);
+                var movementMonth =
+                    await _movementMonthService.GetMovementMonthAsync(mm => mm.Id == request.MovementMonthId,
+                        cancellationToken: cancellationToken);
 
                 if (movementMonth is null)
                 {
@@ -44,7 +41,7 @@ namespace HomeEconomics.Features.MovementMonths
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
-                return _mapper.Map<MovementMonthResponse>(movementMonth);
+                return await _movementMonthService.MapToMovementMonthResponseAsync(movementMonth, cancellationToken);
             }
         }
     }

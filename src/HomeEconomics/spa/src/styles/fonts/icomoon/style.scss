@@ -2,11 +2,11 @@
 
 @font-face {
   font-family: '#{$icomoon-font-family}';
-  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?qlqokp');
-  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?qlqokp#iefix') format('embedded-opentype'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?qlqokp') format('truetype'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?qlqokp') format('woff'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?qlqokp##{$icomoon-font-family}') format('svg');
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?k2514z');
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?k2514z#iefix') format('embedded-opentype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?k2514z') format('truetype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?k2514z') format('woff'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?k2514z##{$icomoon-font-family}') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -55,6 +55,11 @@ i {
 .icon--checkmark {
   &:before {
     content: $icon--checkmark; 
+  }
+}
+.icon--arrow-right2 {
+  &:before {
+    content: $icon--arrow-right2; 
   }
 }
 .icon--checkbox-checked {

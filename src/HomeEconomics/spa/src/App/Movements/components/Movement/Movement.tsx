@@ -20,6 +20,7 @@ const Movement: React.FC<MovementProps> = (props: MovementProps) => {
 
   const onClickEdit = (): void => {
     loadMovement(movement);
+    document.documentElement.scrollTop = 0;
   };
 
   const onClickAdd = (): void => {

@@ -125,5 +125,20 @@ namespace HomeEconomics.Features.MovementMonths
 
             return Ok(result);
         }
+
+        [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/to-next-movement-month")]
+        [ProducesDefaultResponseType]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<ActionResult> MonthMovementToNextMovementMonth(int movementMonthId, int monthMovementId)
+        {
+            var result = await _mediator.Send(new MonthMovementToNextMovementMonth.Command
+            {
+                MovementMonthId = movementMonthId,
+                MonthMovementId = monthMovementId
+            });
+
+            return Ok(result);
+        }
     }
 }

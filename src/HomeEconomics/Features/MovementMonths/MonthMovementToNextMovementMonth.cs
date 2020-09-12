@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HomeEconomics.Features.MovementMonths
 {
-    public class UnPayMonthMovement
+    public class MonthMovementToNextMovementMonth
     {
         public class Command : IRequest<MovementMonthResponse>
         {
@@ -37,7 +37,21 @@ namespace HomeEconomics.Features.MovementMonths
                     throw new InvalidOperationException(Properties.Messages.MovementMonthNotExists);
                 }
 
-                movementMonth.UnPayMonthMovement(request.MonthMovementId);
+                var monthMovement = movementMonth.GetMonthMovement(request.MonthMovementId);
+                if (monthMovement is null)
+                {
+                    throw new InvalidOperationException(Properties.Messages.MonthMovementNotExists);
+                }
+
+                var nextMovementMonth =
+                    await _movementMonthService.GetNextMovementMonthAsync(movementMonth, cancellationToken);
+                if (nextMovementMonth is null)
+                {
+                    throw new InvalidOperationException(Properties.Messages.NextMovementMonthNotExists);
+                }
+
+                movementMonth.DeleteMonthMovement(request.MonthMovementId);
+                nextMovementMonth.AddMonthMovement(monthMovement.Name, monthMovement.Amount, monthMovement.Type);
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
 

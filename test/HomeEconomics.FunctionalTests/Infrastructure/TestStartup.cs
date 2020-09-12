@@ -22,6 +22,7 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
         {
             services
                 .AddHomeEconomicsApi()
+                .AddHomeEconomicsServices()
                 .AddHomeEconomicsMediatR()
                 .AddHomeEconomicsAutoMapper()
                 .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment());

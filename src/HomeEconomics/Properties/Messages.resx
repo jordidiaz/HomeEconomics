@@ -123,6 +123,9 @@
   <data name="IncomeExists" xml:space="preserve">
     <value>El ingreso ya existe</value>
   </data>
+  <data name="MonthMovementNotExists" xml:space="preserve">
+    <value>El gasto/ingreso no existe</value>
+  </data>
   <data name="MovementMonthExists" xml:space="preserve">
     <value>El mes ya existe</value>
   </data>
@@ -134,5 +137,8 @@
   </data>
   <data name="MovementsNotExists" xml:space="preserve">
     <value>No existen movimientos</value>
+  </data>
+  <data name="NextMovementMonthNotExists" xml:space="preserve">
+    <value>El siguiente mes no existe</value>
   </data>
 </root>

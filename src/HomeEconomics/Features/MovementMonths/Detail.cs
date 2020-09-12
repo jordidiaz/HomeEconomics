@@ -1,10 +1,8 @@
-﻿using MediatR;
+﻿using Domain.MovementMonth;
+using HomeEconomics.Services;
+using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using Domain.MovementMonth;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 
 namespace HomeEconomics.Features.MovementMonths
 {
@@ -19,23 +17,18 @@ namespace HomeEconomics.Features.MovementMonths
 
         public class Handler : IRequestHandler<Query, MovementMonthResponse>
         {
-            private readonly HomeEconomicsDbContext _dbContext;
-            private readonly IMapper _mapper;
+            private readonly IMovementMonthService _movementMonthService;
 
-            public Handler(HomeEconomicsDbContext dbContext, IMapper mapper)
+            public Handler(IMovementMonthService movementMonthService)
             {
-                _dbContext = dbContext;
-                _mapper = mapper;
+                _movementMonthService = movementMonthService;
             }
 
             public async Task<MovementMonthResponse> Handle(Query request, CancellationToken cancellationToken)
             {
-                var movementMonth = await _dbContext.MovementMonths
-                    .Include(mm => mm.MonthMovements)
-                    .Include(mm => mm.Statuses)
-                    .SingleOrDefaultAsync(mm => mm.Year == request.Year && mm.Month == (Month) request.Month, cancellationToken: cancellationToken);
-
-                return _mapper.Map<MovementMonthResponse>(movementMonth);
+                return await _movementMonthService.GetMovementMonthResponseAsync(
+                    mm => mm.Year == request.Year && mm.Month == (Month)request.Month,
+                    cancellationToken: cancellationToken);
             }
         }
     }

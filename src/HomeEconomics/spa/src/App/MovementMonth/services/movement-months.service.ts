@@ -51,6 +51,11 @@ const unpayMonthMovement = async (movementMonth: TMovementMonth, monthMovement: 
   return response;
 };
 
+const monthMovementToNextMovementMonth = async (movementMonth: TMovementMonth, monthMovement: TMonthMovement): Promise<TMovementMonth> => {
+  const response: TMovementMonth = await http.post(`movement-months/${movementMonth.id}/month-movements/${monthMovement.id}/to-next-movement-month`, {});
+  return response;
+};
+
 const updateMonthMovementAmount = async (movementMonth: TMovementMonth, monthMovement: TMonthMovement, newAmount: number): Promise<TMovementMonth> => {
   const updateMonthMovementAmountDTO: UpdateMonthMovementAmountDTO = {
     movementMonthId: movementMonth.id,
@@ -96,7 +101,8 @@ const movementMonthsService = {
   updateMonthMovementAmount,
   addMonthMovement,
   deleteMonthMovement,
-  addStatus
+  addStatus,
+  monthMovementToNextMovementMonth
 };
 
 export default movementMonthsService;

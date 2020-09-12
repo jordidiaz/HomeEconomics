@@ -1,15 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
 using Domain.Movements;
 using FluentValidation;
 using HomeEconomics.Helpers;
+using HomeEconomics.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HomeEconomics.Features.MovementMonths
 {
@@ -33,20 +33,19 @@ namespace HomeEconomics.Features.MovementMonths
 
         public class Handler : IRequestHandler<Command, MovementMonthResponse>
         {
+            private readonly IMovementMonthService _movementMonthService;
             private readonly HomeEconomicsDbContext _dbContext;
-            private readonly IMapper _mapper;
 
-            public Handler(HomeEconomicsDbContext dbContext, IMapper mapper)
+            public Handler(HomeEconomicsDbContext dbContext, IMovementMonthService movementMonthService)
             {
                 _dbContext = dbContext;
-                _mapper = mapper;
+                _movementMonthService = movementMonthService;
             }
 
             public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
             {
-                var movementMonth = await _dbContext
-                    .MovementMonths
-                    .SingleOrDefaultAsync(mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
+                var movementMonth = await _movementMonthService.GetMovementMonthAsync(
+                    mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
 
                 if (movementMonth != null)
                 {
@@ -77,12 +76,8 @@ namespace HomeEconomics.Features.MovementMonths
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
-                var result = await _dbContext.MovementMonths
-                    .Include(mm => mm.MonthMovements)
-                    .Include(mm => mm.Statuses)
-                    .SingleOrDefaultAsync(mm => mm.Id == movementMonth.Id, cancellationToken: cancellationToken);
-
-                return _mapper.Map<MovementMonthResponse>(result);
+                return await _movementMonthService.GetMovementMonthResponseAsync(mm => mm.Id == movementMonth.Id,
+                    cancellationToken: cancellationToken);
             }
 
             private static bool UseMovement(Movement movement, Month month)

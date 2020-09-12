@@ -1,0 +1,96 @@
+﻿using Domain.MovementMonth;
+using FluentAssertions;
+using HomeEconomics.Features.MovementMonths;
+using HomeEconomics.FunctionalTests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace HomeEconomics.FunctionalTests.Features.MovementMonths
+{
+    public class MonthMovementToNextMovementMonthTests : FunctionalTestBase
+    {
+        private MonthMovementToNextMovementMonth.Command _command;
+
+        [Fact]
+        public async Task Should_Pass_MonthMovementToNextMovementMonth_And_Return_Resume()
+        {
+            await CreateMovements();
+
+            var movementMonthResponse = await CreateMovementMonth(Month.Feb);
+            var nextMovementMonthResponse = await CreateMovementMonth(Month.Mar);
+
+            movementMonthResponse.MonthMovements.Length.Should().Be(2);
+            movementMonthResponse.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon").Should().NotBeNull();
+            nextMovementMonthResponse.MonthMovements.Length.Should().Be(1);
+            nextMovementMonthResponse.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon").Should().BeNull();
+
+            _command = new MonthMovementToNextMovementMonth.Command
+            {
+                MovementMonthId = movementMonthResponse.Id,
+                MonthMovementId = movementMonthResponse.MonthMovements.Single(mm => mm.Name == "Amazon").Id
+            };
+
+            movementMonthResponse = await Fixture.SendToMediatRAsync(_command);
+
+            var nextMovementMonth = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
+            {
+                return await homeEconomicsDbContext
+                    .MovementMonths
+                    .Include(mm => mm.MonthMovements)
+                    .SingleOrDefaultAsync(mm => mm.Id == nextMovementMonthResponse.Id);
+            });
+
+            movementMonthResponse.MonthMovements.Length.Should().Be(1);
+            movementMonthResponse.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon").Should().BeNull();
+            nextMovementMonth.MonthMovements.Count.Should().Be(2);
+            nextMovementMonth.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon").Should().NotBeNull();
+        }
+
+        [Fact]
+        public void Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
+        {
+            Func<Task> action = async () => await Fixture.SendToMediatRAsync(new MonthMovementToNextMovementMonth.Command
+            {
+                MovementMonthId = 1,
+                MonthMovementId = 1
+            });
+
+            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
+        }
+
+        [Fact]
+        public async Task Should_Throw_InvalidOperationException_If_MonthMovement_Not_Exists()
+        {
+            await CreateMovements();
+
+            var movementMonthResponse = await CreateMovementMonth();
+
+            Func<Task> action = async () => await Fixture.SendToMediatRAsync(new MonthMovementToNextMovementMonth.Command
+            {
+                MovementMonthId = movementMonthResponse.Id,
+                MonthMovementId = 99
+            });
+
+            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
+        }
+
+        [Fact]
+        public async Task Should_Throw_InvalidOperationException_If_NextMovementMonth_Not_Exists()
+        {
+            await CreateMovements();
+
+            var movementMonthResponse = await CreateMovementMonth();
+
+            Func<Task> action = async () => await Fixture.SendToMediatRAsync(new MonthMovementToNextMovementMonth.Command
+            {
+                MovementMonthId = movementMonthResponse.Id,
+                MonthMovementId = movementMonthResponse.MonthMovements.First().Id
+            });
+
+            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.NextMovementMonthNotExists);
+        }
+    }
+}

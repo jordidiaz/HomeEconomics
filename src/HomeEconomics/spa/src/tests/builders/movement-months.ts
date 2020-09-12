@@ -6,6 +6,7 @@ export const getMovementMonth = (): TMovementMonth => {
     id: 1,
     year: 2020,
     month: 3,
+    nextMovementMonthExists: false,
     status: {
       pendingTotalExpenses: 132.86,
       pendingTotalIncomes: 22,
@@ -27,6 +28,6 @@ export const getMovementMonth = (): TMovementMonth => {
         amount: 72,
         paid: true
       }
-    ]
+    ],
   };
 };

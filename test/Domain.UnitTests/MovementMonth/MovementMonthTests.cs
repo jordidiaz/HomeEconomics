@@ -217,19 +217,21 @@ namespace Domain.UnitTests.MovementMonth
         }
 
         [Fact]
-        public void AddStatus_Throws_ArgumentOutOfRangeException_If_AccountAmount_Not_Valid()
+        public void GetMonthMovement_Returns_MonthMovement()
         {
-            Action action = () => _sut.AddStatus(Day, -1, CashAmount);
+            var monthMovement = _sut.GetMonthMovement(1);
 
-            action.Should().Throw<ArgumentOutOfRangeException>();
+            monthMovement.Name.Should().Be(Name1);
+            monthMovement.Amount.Should().Be(Amount1);
+            monthMovement.Type.Should().Be(MovementType1);
         }
 
         [Fact]
-        public void AddStatus_Throws_ArgumentOutOfRangeException_If_CashAmount_Not_Valid()
+        public void GetMonthMovement_Returns_Null()
         {
-            Action action = () => _sut.AddStatus(Day, AccountAmount, -1);
+            var monthMovement = _sut.GetMonthMovement(6);
 
-            action.Should().Throw<ArgumentOutOfRangeException>();
+            monthMovement.Should().BeNull();
         }
     }
 }

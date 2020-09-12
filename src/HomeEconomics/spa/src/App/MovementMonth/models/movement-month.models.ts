@@ -6,6 +6,7 @@ export type TMovementMonth = {
   month: number;
   status: TStatus;
   monthMovements: TMonthMovement[];
+  nextMovementMonthExists: boolean;
 }
 
 export type TStatus = {

@@ -10,11 +10,13 @@ export type MonthMovementProps = {
   unpayMonthMovement: (monthMovement: TMonthMovement) => void;
   updateMonthMovementAmount: (monthMovement: TMonthMovement, newAmount: number) => void;
   deleteMonthMovement: (monthMovement: TMonthMovement) => void;
+  monthMovementToNextMovementMonth: (monthMovement: TMonthMovement) => void;
+  nextMovementMonthExists: boolean;
 }
 
 const MonthMovement: React.FC<MonthMovementProps> = (props: MonthMovementProps) => {
 
-  const { monthMovement, payMonthMovement, unpayMonthMovement, updateMonthMovementAmount, deleteMonthMovement } = props;
+  const { monthMovement, payMonthMovement, unpayMonthMovement, updateMonthMovementAmount, deleteMonthMovement, monthMovementToNextMovementMonth, nextMovementMonthExists } = props;
 
   const [editingAmount, setEditingAmount] = useState<boolean>(false);
   const [newAmount, setNewAmount] = useState<string>(monthMovement.amount.toString());
@@ -43,6 +45,10 @@ const MonthMovement: React.FC<MonthMovementProps> = (props: MonthMovementProps) 
   const accept = (): void => {
     updateMonthMovementAmount(monthMovement, parseNumber(newAmount));
     setEditingAmount(false);
+  };
+
+  const toNextMonth = (): void => {
+    monthMovementToNextMovementMonth(monthMovement);
   };
 
   function handleAmountChange(event: ChangeEvent<HTMLInputElement>): void {
@@ -81,6 +87,12 @@ const MonthMovement: React.FC<MonthMovementProps> = (props: MonthMovementProps) 
         </div>
       }
       <div className="MonthMovement__actions">
+        {
+          (!monthMovement.paid && !editingAmount && nextMovementMonthExists) &&
+          <>
+            <i className="action-icon icon--arrow-right2" onClick={toNextMonth}></i>
+          </>
+        }
         {
           (!monthMovement.paid && !editingAmount) &&
           <>

@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.MovementMonth;
 using Domain.Movements;
 using HomeEconomics.Features.MovementMonths;
+using System.Linq;
 
 namespace HomeEconomics.AutoMapper
 {

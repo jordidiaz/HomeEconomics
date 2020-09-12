@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
+using HomeEconomics.Services;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -44,6 +45,12 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return services
                 .AddAutoMapper(typeof(HomeEconomics.HomeEconomicsApp));
+        }
+
+        public static IServiceCollection AddHomeEconomicsServices(this IServiceCollection services)
+        {
+            return services
+                .AddTransient<IMovementMonthService, MovementMonthService>();
         }
 
         internal static IServiceCollection AddHomeEconomicsSwagger(this IServiceCollection services)

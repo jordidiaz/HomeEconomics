@@ -22,6 +22,7 @@ namespace HomeEconomics
         {
             services
                 .AddHomeEconomicsApi()
+                .AddHomeEconomicsServices()
                 .AddIf(WebHostEnvironment.IsDevelopment(), serviceCollection => serviceCollection.AddCors())
                 .AddHomeEconomicsMediatR()
                 .AddHomeEconomicsAutoMapper()

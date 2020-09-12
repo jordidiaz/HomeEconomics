@@ -90,9 +90,14 @@ namespace Domain.MovementMonth
             }
         }
 
+        public MonthMovement GetMonthMovement(int monthMovementId)
+        {
+            return MonthMovements.SingleOrDefault(mm => mm.Id == monthMovementId);
+        }
+
         private MonthMovement GetMonthMovementOrThrow(int monthMovementId)
         {
-            var monthMovement = MonthMovements.SingleOrDefault(mm => mm.Id == monthMovementId);
+            var monthMovement = GetMonthMovement(monthMovementId);
             if (monthMovement is null)
             {
                 throw new InvalidOperationException(Properties.Messages.MonthMovementNotExists);
