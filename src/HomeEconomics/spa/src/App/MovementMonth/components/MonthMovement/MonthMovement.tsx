@@ -55,6 +55,14 @@ const MonthMovement: React.FC<MonthMovementProps> = (props: MonthMovementProps) 
     setNewAmount(event.target.value);
   }
 
+  function keyPressed(event: React.KeyboardEvent<HTMLInputElement>): void {
+    if (event.key === "Enter") {
+      accept();
+    } else if (event.key === "Escape") {
+      cancel();
+    }
+  }
+
   const type: string = monthMovement.type === MovementType.Expense
     ? 'expense'
     : 'income';
@@ -77,7 +85,7 @@ const MonthMovement: React.FC<MonthMovementProps> = (props: MonthMovementProps) 
         }
         {
           editingAmount &&
-          <input className="input form-control" value={newAmount} placeholder="Importe" type="number" min="0" onChange={handleAmountChange} />
+          <input className="input form-control" value={newAmount} placeholder="Importe" type="number" min="0" onChange={handleAmountChange} onKeyUp={keyPressed} />
         }
       </div>
       {
