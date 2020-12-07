@@ -134,23 +134,23 @@ stages:
           - task: TerraformTaskV1@0
             displayName: "Terraform init"
             inputs:
-              provider: "azurerm"
-              command: "init"
-              workingDirectory: "pipeline/infrastructure"
-              backendServiceArm: "Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)"
-              backendAzureRmResourceGroupName: "Shared"
-              backendAzureRmStorageAccountName: "stterraform"
-              backendAzureRmContainerName: "homeeconomics"
-              backendAzureRmKey: "tf/terraform.tfstate"
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: 'pipeline/infrastructure'
+              backendServiceArm: 'Jordi personal(79a59bf0-cee0-43f3-96f5-fbb350d5c2b7)'
+              backendAzureRmResourceGroupName: 'Shared'
+              backendAzureRmStorageAccountName: 'stterraform'
+              backendAzureRmContainerName: 'homeeconomics'
+              backendAzureRmKey: 'tf/terraform.tfstate'
 
           - task: TerraformTaskV1@0
             displayName: "Terraform apply"
             inputs:
-              provider: "azurerm"
-              command: "apply"
-              workingDirectory: "pipeline/infrastructure"
-              commandOptions: "-var subscriptionId=$(subscriptionId) -var sqlServerAdministratorLogin=$(sqlServerAdministratorLogin) -var sqlServerAdministratorPassword=$(sqlServerAdministratorPassword)"
-              environmentServiceNameAzureRM: "Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)"
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: 'pipeline/infrastructure'
+              commandOptions: '-var subscriptionId=$(subscriptionId) -var sqlServerAdministratorLogin=$(sqlServerAdministratorLogin) -var sqlServerAdministratorPassword=$(sqlServerAdministratorPassword)'
+              environmentServiceNameAzureRM: 'Jordi personal(79a59bf0-cee0-43f3-96f5-fbb350d5c2b7)'
 
           - task: terraform-outputs@0
             displayName: "Terraform Outputs"
@@ -183,8 +183,8 @@ stages:
           - task: AzureFileCopy@2
             displayName: "Copy HomeEconomics artifact to storage"
             inputs:
-              SourcePath: "$(Pipeline.Workspace)/HomeEconomics.zip"
-              azureSubscription: "Jordi Plain (0314db34-92eb-4428-ba91-c1f018d5c742)"
-              Destination: AzureBlob
-              storage: startifacts
-              ContainerName: HomeEconomics
+              SourcePath: '$(Pipeline.Workspace)/HomeEconomics.zip'
+              azureSubscription: 'Jordi personal(79a59bf0-cee0-43f3-96f5-fbb350d5c2b7)'
+              Destination: 'AzureBlob'
+              storage: 'startifacts'
+              ContainerName: 'HomeEconomics'
