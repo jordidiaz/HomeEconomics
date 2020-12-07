@@ -186,5 +186,5 @@ stages:
               SourcePath: '$(Pipeline.Workspace)/HomeEconomics.zip'
               azureSubscription: 'Jordi personal(79a59bf0-cee0-43f3-96f5-fbb350d5c2b7)'
               Destination: 'AzureBlob'
-              storage: 'startifacts'
-              ContainerName: 'HomeEconomics'
+              storage: 'artifactsst'
+              ContainerName: 'homeeconomics'
