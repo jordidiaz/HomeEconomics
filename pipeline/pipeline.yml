@@ -21,7 +21,7 @@ stages:
           - task: UseNode@1
             displayName: "Use node LTS"
             inputs:
-              version: "12.18.0"
+              version: '14.15.1'
 
           - task: UseDotNet@2
             displayName: "Use global.json dotnet version"
