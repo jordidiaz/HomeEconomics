@@ -3,5 +3,6 @@
     <NetTargetVersion>net5.0</NetTargetVersion>
     <LangVersion>8</LangVersion>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 </Project>

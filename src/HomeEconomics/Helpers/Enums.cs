@@ -6,7 +6,7 @@ namespace HomeEconomics.Helpers
     {
         public static bool IsAValidEnumValue<TEnum>(TEnum value)
         {
-            return Enum.IsDefined(typeof(TEnum), value);
+            return value != null && Enum.IsDefined(typeof(TEnum), value);
         }
     }
 }

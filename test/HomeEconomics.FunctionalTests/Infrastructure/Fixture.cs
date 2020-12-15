@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using FakeItEasy;
+﻿using FakeItEasy;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using Respawn;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace HomeEconomics.FunctionalTests.Infrastructure
 {
@@ -46,31 +46,33 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
 
         private static IServiceScopeFactory GetScopeFactory()
         {
-            return ServiceProvider.GetService<IServiceScopeFactory>();
+            return ServiceProvider.GetService<IServiceScopeFactory>() ?? throw new ArgumentNullException("ServiceScopeFactory is null");
         }
 
         private static void MigrateDatabase()
         {
             var dbContext = ServiceProvider.GetService<HomeEconomicsDbContext>();
-            dbContext.Database.Migrate();
+            dbContext?.Database.Migrate();
         }
 
         private static void DeleteDatabase()
         {
             var dbContext = ServiceProvider.GetService<HomeEconomicsDbContext>();
-            dbContext.Database.EnsureDeleted();
+            dbContext?.Database.EnsureDeleted();
         }
 
         public static Task ResetCheckpointAsync() => Checkpoint.Reset(Configuration.GetConnectionString("HomeEconomics"));
 
         public static async Task<TResponse> SendToMediatRAsync<TResponse>(IRequest<TResponse> request)
         {
-            using (var scope = ScopeFactory.CreateScope())
+            using var scope = ScopeFactory.CreateScope();
+            var mediator = scope.ServiceProvider.GetService<IMediator>();
+            if (mediator is null)
             {
-                var mediator = scope.ServiceProvider.GetService<IMediator>();
-
-                return await mediator.Send(request);
+                throw new ArgumentNullException("Mediator is null");
             }
+
+            return await mediator.Send(request);
         }
 
         public static async Task<T> QueryDbContextAsync<T>(Func<HomeEconomicsDbContext, Task<T>> query)
@@ -96,6 +98,10 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
             using (var scope = ScopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetService<HomeEconomicsDbContext>();
+                if (dbContext is null)
+                {
+                    throw new ArgumentNullException("HomeEconomicsDbContext is null");
+                }
 
                 return await action(dbContext);
             }

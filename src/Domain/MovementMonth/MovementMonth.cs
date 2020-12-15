@@ -33,7 +33,7 @@ namespace Domain.MovementMonth
 
         public void AddMonthMovement(string name, decimal amount, MovementType type)
         {
-            var monthMovement = new MonthMovement(name, amount, type);
+            var monthMovement = new MonthMovement(this, name, amount, type);
             MonthMovements.Add(monthMovement);
         }
 
@@ -81,7 +81,7 @@ namespace Domain.MovementMonth
             var status = Statuses.SingleOrDefault(s => s.Day == day);
             if (status is null)
             {
-                Statuses.Add(new Status(day, accountAmount, cashAmount));
+                Statuses.Add(new Status(this, day, accountAmount, cashAmount));
             }
             else
             {
@@ -90,7 +90,7 @@ namespace Domain.MovementMonth
             }
         }
 
-        public MonthMovement GetMonthMovement(int monthMovementId)
+        public MonthMovement? GetMonthMovement(int monthMovementId)
         {
             return MonthMovements.SingleOrDefault(mm => mm.Id == monthMovementId);
         }

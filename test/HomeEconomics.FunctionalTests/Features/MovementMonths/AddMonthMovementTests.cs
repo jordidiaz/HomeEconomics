@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Domain.Movements;
+﻿using Domain.Movements;
 using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
+using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.FunctionalTests.Features.MovementMonths
@@ -11,6 +11,11 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
     public class AddMonthMovementTests : FunctionalTestBase
     {
         private AddMonthMovement.Command _command;
+
+        public AddMonthMovementTests()
+        {
+            _command = new AddMonthMovement.Command();
+        }
 
         [Fact]
         public async Task Should_Add_MonthMovement_And_Return_Resume()

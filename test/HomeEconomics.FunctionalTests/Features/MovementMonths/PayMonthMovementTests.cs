@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.FunctionalTests.Features.MovementMonths
@@ -11,6 +11,11 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
     public class PayMonthMovementTests : FunctionalTestBase
     {
         private PayMonthMovement.Command _command;
+
+        public PayMonthMovementTests()
+        {
+            _command = new PayMonthMovement.Command();
+        }
 
         [Fact]
         public async Task Should_Pay_MonthMovement_And_Return_Resume()

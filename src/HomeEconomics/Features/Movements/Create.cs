@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Domain;
+﻿using Domain;
 using Domain.Movements;
 using FluentValidation;
 using HomeEconomics.Helpers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HomeEconomics.Features.Movements
 {
@@ -17,13 +17,13 @@ namespace HomeEconomics.Features.Movements
     {
         public class Command : IRequest<int>
         {
-            public string Name { get; set; }
+            public string Name { get; set; } = string.Empty;
 
             public decimal Amount { get; set; }
 
             public MovementType Type { get; set; }
 
-            public Frequency Frequency { get; set; }
+            public Frequency Frequency { get; set; } = new Frequency();
         }
 
         public class Frequency

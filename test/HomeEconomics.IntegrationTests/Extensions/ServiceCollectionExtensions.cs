@@ -1,6 +1,5 @@
 ﻿using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
-using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +17,7 @@ namespace HomeEconomics.IntegrationTests.Extensions
                     problemDetailsOptions.Map<InvalidOperationException>(ex => new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
                 })
                 .AddMvcCore()
-                .AddApplicationPart(typeof(TestStartup).Assembly)
+                .AddApplicationPart(typeof(HomeEconomicsApp).Assembly)
                 .AddNewtonsoftJson()
                 .AddFluentValidation(fluentValidationMvcConfiguration =>
                 {

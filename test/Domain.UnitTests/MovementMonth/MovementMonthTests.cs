@@ -221,9 +221,9 @@ namespace Domain.UnitTests.MovementMonth
         {
             var monthMovement = _sut.GetMonthMovement(1);
 
-            monthMovement.Name.Should().Be(Name1);
-            monthMovement.Amount.Should().Be(Amount1);
-            monthMovement.Type.Should().Be(MovementType1);
+            monthMovement?.Name.Should().Be(Name1);
+            monthMovement?.Amount.Should().Be(Amount1);
+            monthMovement?.Type.Should().Be(MovementType1);
         }
 
         [Fact]

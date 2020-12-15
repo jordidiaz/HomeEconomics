@@ -31,7 +31,7 @@ namespace HomeEconomics.Features.MovementMonths
             }
         }
 
-        public class Handler : IRequestHandler<Command, MovementMonthResponse>
+        public class Handler : IRequestHandler<Command, MovementMonthResponse?>
         {
             private readonly IMovementMonthService _movementMonthService;
             private readonly HomeEconomicsDbContext _dbContext;
@@ -42,7 +42,7 @@ namespace HomeEconomics.Features.MovementMonths
                 _movementMonthService = movementMonthService;
             }
 
-            public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<MovementMonthResponse?> Handle(Command request, CancellationToken cancellationToken)
             {
                 var movementMonth = await _movementMonthService.GetMovementMonthAsync(
                     mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);

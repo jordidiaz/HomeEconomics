@@ -21,7 +21,7 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         public async Task Should_Return_200_Ok()
         {
             var response = await HttpClient
-                .PostAsync(Uri, null);
+                .PostAsync(Uri, null!);
 
             response.EnsureSuccessStatusCode();
             response.StatusCode.Should().Be(HttpStatusCode.OK);

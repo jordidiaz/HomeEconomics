@@ -1,11 +1,18 @@
-﻿using System;
-using Domain.Movements;
+﻿using Domain.Movements;
+using System;
 
 namespace Domain.MovementMonth
 {
     public class MonthMovement : Entity
     {
-        internal MonthMovement(string name, decimal amount, MovementType type)
+#nullable disable
+        protected MonthMovement()
+        {
+
+        }
+#nullable enable
+
+        internal MonthMovement(MovementMonth movementMonth, string name, decimal amount, MovementType type)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -20,6 +27,7 @@ namespace Domain.MovementMonth
             Amount = amount;
             Type = type;
             Name = name;
+            MovementMonth = movementMonth;
         }
 
         public string Name { get; private set; }

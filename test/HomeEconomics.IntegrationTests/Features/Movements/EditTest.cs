@@ -1,13 +1,13 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Domain.Movements;
+﻿using Domain.Movements;
 using FluentAssertions;
 using HomeEconomics.Features.Movements;
 using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
-using Xunit;
+using System.Net;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.Movements
 {
@@ -15,7 +15,7 @@ namespace HomeEconomics.IntegrationTests.Features.Movements
     {
         private readonly Edit.Command _command;
 
-        private string _uri;
+        private const string Uri = "api/movements/42";
 
         public EditTest(Fixture fixture) : base(fixture)
         {
@@ -35,10 +35,8 @@ namespace HomeEconomics.IntegrationTests.Features.Movements
         [Fact]
         public async Task Should_Return_204_NoContent()
         {
-            _uri = "api/movements/42";
-
             var response = await HttpClient
-                .PutAsync(_uri, _command);
+                .PutAsync(Uri, _command);
 
             response.EnsureSuccessStatusCode();
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);

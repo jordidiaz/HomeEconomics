@@ -117,10 +117,13 @@ namespace Domain.UnitTests.Movement
             _sut.Frequency.Months.SequenceEqual(months).Should().BeTrue();
         }
 
-        [Fact]
-        public void SetName_Throws_ArgumentNullException_If_Name_Is_Null()
+        [Theory]
+        [InlineData(default(string))]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void SetName_Throws_ArgumentNullException_If_Name_Is_Invalid(string name)
         {
-            Action action = () => _sut.SetName(null);
+            Action action = () => _sut.SetName(name);
 
             action.Should().Throw<ArgumentNullException>();
         }

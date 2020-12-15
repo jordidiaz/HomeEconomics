@@ -20,7 +20,7 @@ namespace Domain.Movements
             Name = name;
             Amount = amount;
             Type = type;
-            Frequency = new Frequency(FrequencyType.None);
+            Frequency = new Frequency(this, FrequencyType.None);
         }
 
         public string Name { get; private set; }
@@ -53,7 +53,12 @@ namespace Domain.Movements
 
         public void SetName(string name)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            Name = name;
         }
 
         public void SetAmount(decimal amount)

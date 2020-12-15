@@ -21,7 +21,7 @@ namespace HomeEconomics.Services
             _mapper = mapper;
         }
 
-        public async Task<MovementMonthResponse> GetMovementMonthResponseAsync(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
+        public async Task<MovementMonthResponse?> GetMovementMonthResponseAsync(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
         {
             var movementMonth = await GetMovementMonthAsync(predicate, cancellationToken);
             if (movementMonth is null)
@@ -37,7 +37,7 @@ namespace HomeEconomics.Services
             return movementMonthResponse;
         }
 
-        public async Task<MovementMonth> GetMovementMonthAsync(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
+        public async Task<MovementMonth?> GetMovementMonthAsync(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
         {
             return await _dbContext.MovementMonths
                 .Include(mm => mm.MonthMovements)
@@ -46,7 +46,7 @@ namespace HomeEconomics.Services
                     cancellationToken: cancellationToken);
         }
 
-        public async Task<MovementMonth> GetNextMovementMonthAsync(MovementMonth movementMonth, CancellationToken cancellationToken)
+        public async Task<MovementMonth?> GetNextMovementMonthAsync(MovementMonth movementMonth, CancellationToken cancellationToken)
         {
             var year = movementMonth.Year;
             var month = movementMonth.Month;

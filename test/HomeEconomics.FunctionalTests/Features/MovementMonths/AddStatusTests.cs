@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
 using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
+using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.FunctionalTests.Features.MovementMonths
@@ -12,6 +12,11 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
     {
         private AddStatus.Command _command;
 
+
+        public AddStatusTests()
+        {
+            _command = new AddStatus.Command();
+        }
 
         [Fact]
         public async Task Should_Add_Status()

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Movements;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HomeEconomics.Features.Movements
 {
@@ -18,13 +18,13 @@ namespace HomeEconomics.Features.Movements
 
         public class Result
         {
-            public Movement[] Movements { get; set; }
+            public Movement[] Movements { get; set; } = { };
 
             public class Movement
             {
                 public int Id { get; set; }
 
-                public string Name { get; set; }
+                public string Name { get; set; } = string.Empty;
 
                 public decimal Amount { get; set; }
 
@@ -32,7 +32,7 @@ namespace HomeEconomics.Features.Movements
 
                 public int FrequencyType { get; set; }
 
-                public bool[] FrequencyMonths { get; set; }
+                public bool[] FrequencyMonths { get; set; } = new bool[12];
 
                 public int FrequencyMonth { get; set; }
             }

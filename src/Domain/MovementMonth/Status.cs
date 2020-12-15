@@ -4,7 +4,14 @@ namespace Domain.MovementMonth
 {
     public class Status : Entity
     {
-        internal Status(int day, decimal accountAmount, decimal cashAmount)
+#nullable disable
+        protected Status()
+        {
+
+        }
+#nullable enable
+
+        internal Status(MovementMonth movementMonth, int day, decimal accountAmount, decimal cashAmount)
         {
             if (day < 0 || day > 31)
             {
@@ -24,6 +31,7 @@ namespace Domain.MovementMonth
             Day = day;
             AccountAmount = accountAmount;
             CashAmount = cashAmount;
+            MovementMonth = movementMonth;
         }
 
         public int Day { get; private set; }

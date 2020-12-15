@@ -1,30 +1,28 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using HomeEconomics.Features.Movements;
 using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.Movements
 {
     public class DeleteTests : IntegrationTestBase
     {
-        private string _uri;
+        private const string Uri = "api/movements/42";
 
         public DeleteTests(Fixture fixture) : base(fixture)
         {
-            
+
         }
 
         [Fact]
         public async Task Should_Return_204_NoContent()
         {
-            _uri = "api/movements/42";
-
             var response = await HttpClient
-                .DeleteAsync(_uri);
+                .DeleteAsync(Uri);
 
             response.EnsureSuccessStatusCode();
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);

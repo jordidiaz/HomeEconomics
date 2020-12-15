@@ -1,10 +1,10 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths
@@ -41,7 +41,7 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         {
             public Task<MovementMonthResponse> Handle(Detail.Query request, CancellationToken cancellationToken)
             {
-                return request.Year == 2020 ? Task.FromResult(new MovementMonthResponse()) : Task.FromResult<MovementMonthResponse>(null);
+                return request.Year == 2020 ? Task.FromResult(new MovementMonthResponse()) : Task.FromResult<MovementMonthResponse>(null!);
             }
         }
     }

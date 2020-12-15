@@ -14,6 +14,11 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
     {
         private MonthMovementToNextMovementMonth.Command _command;
 
+        public MonthMovementToNextMovementMonthTests()
+        {
+            _command = new MonthMovementToNextMovementMonth.Command();
+        }
+
         [Fact]
         public async Task Should_Pass_MonthMovementToNextMovementMonth_And_Return_Resume()
         {

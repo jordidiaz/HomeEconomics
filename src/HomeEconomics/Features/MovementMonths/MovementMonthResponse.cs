@@ -13,15 +13,15 @@ namespace HomeEconomics.Features.MovementMonths
 
         public bool NextMovementMonthExists { get; set; }
 
-        public StatusResult Status { get; set; }
+        public StatusResult Status { get; set; } = new StatusResult();
 
-        public MonthMovementResult[] MonthMovements { get; set; }
+        public MonthMovementResult[] MonthMovements { get; set; } = { };
 
         public class MonthMovementResult
         {
             public int Id { get; set; }
 
-            public string Name { get; set; }
+            public string Name { get; set; } = string.Empty;
 
             public decimal Amount { get; set; }
 

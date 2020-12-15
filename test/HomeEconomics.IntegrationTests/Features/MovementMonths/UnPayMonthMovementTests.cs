@@ -1,10 +1,10 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths
@@ -21,7 +21,7 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         public async Task Should_Return_200_Ok()
         {
             var response = await HttpClient
-                .PostAsync(Uri, null);
+                .PostAsync(Uri, null!);
 
             response.EnsureSuccessStatusCode();
             response.StatusCode.Should().Be(HttpStatusCode.OK);

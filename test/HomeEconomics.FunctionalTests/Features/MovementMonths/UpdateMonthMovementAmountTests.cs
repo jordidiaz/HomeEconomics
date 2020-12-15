@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
 using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.FunctionalTests.Features.MovementMonths
@@ -12,6 +12,11 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
     public class UpdateMonthMovementAmountTests : FunctionalTestBase
     {
         private UpdateMonthMovementAmount.Command _command;
+
+        public UpdateMonthMovementAmountTests()
+        {
+            _command = new UpdateMonthMovementAmount.Command();
+        }
 
         [Fact]
         public async Task Should_Update_MonthMovement_Amount_Return_Resume()

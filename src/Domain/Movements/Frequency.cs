@@ -5,9 +5,18 @@ namespace Domain.Movements
 {
     public class Frequency : Entity
     {
-        internal Frequency(FrequencyType type)
+#nullable disable
+        public Frequency()
+        {
+
+        }
+#nullable enable
+
+        internal Frequency(Movement movement, FrequencyType type)
         {
             Type = type;
+            Months = new bool[12];
+            Movement = movement;
         }
 
         public FrequencyType Type { get; private set; }
@@ -21,13 +30,11 @@ namespace Domain.Movements
         internal void SetNoneFrequency()
         {
             Type = FrequencyType.None;
-            Months = new bool[12];
         }
 
         internal void SetMonthlyFrequency()
         {
             Type = FrequencyType.Monthly;
-            Months = new bool[12];
         }
 
         internal void SetYearlyFrequency(int month)
@@ -38,7 +45,6 @@ namespace Domain.Movements
             }
 
             Type = FrequencyType.Yearly;
-            Months = new bool[12];
             Months[month - 1] = true;
         }
 

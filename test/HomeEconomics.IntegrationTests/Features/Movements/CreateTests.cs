@@ -1,13 +1,13 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using Domain.Movements;
+﻿using Domain.Movements;
+using FluentAssertions;
 using HomeEconomics.Features.Movements;
 using HomeEconomics.IntegrationTests.Infrastructure;
-using Xunit;
+using MediatR;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
-using FluentAssertions;
-using MediatR;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.Movements
 {
@@ -44,7 +44,7 @@ namespace HomeEconomics.IntegrationTests.Features.Movements
         [Fact]
         public async Task Should_Return_400_BadRequest()
         {
-            _command.Name = null;
+            _command.Name = "";
 
             var response = await HttpClient
                 .PostAsync(Uri, _command);

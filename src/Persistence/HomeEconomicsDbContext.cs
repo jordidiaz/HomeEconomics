@@ -1,4 +1,6 @@
-﻿using Domain.MovementMonth;
+﻿#nullable disable
+
+using Domain.MovementMonth;
 using Domain.Movements;
 using Microsoft.EntityFrameworkCore;
 
