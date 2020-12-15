@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+    <TargetFramework>$(NetTargetVersion)</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,7 +1,6 @@
 ﻿<Project>
   <PropertyGroup>
-    <NetCoreTargetVersion>netcoreapp3.1</NetCoreTargetVersion>
-    <NetStandardTargetVersion>netstandard2.1</NetStandardTargetVersion>
+    <NetTargetVersion>net5.0</NetTargetVersion>
     <LangVersion>8</LangVersion>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
