@@ -1,19 +1,19 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
 using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths
 {
     public class CreateTests : IntegrationTestBase
     {
-        private readonly Create.Command _command;
+        private Create.Command _command;
 
         private const string Uri = "api/movement-months";
 
@@ -39,7 +39,11 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         [Fact]
         public async Task Should_Return_400_BadRequest()
         {
-            _command.Year = 2019;
+            _command = new Create.Command
+            {
+                Year = 2019,
+                Month = Month.Feb
+            };
 
             var response = await HttpClient
                 .PostAsync(Uri, _command);

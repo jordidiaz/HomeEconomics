@@ -5,40 +5,40 @@ namespace HomeEconomics.Features.MovementMonths
 {
     public class MovementMonthResponse
     {
-        public int Id { get; set; }
+        public int Id { get; init; }
 
-        public int Year { get; set; }
+        public int Year { get; init; }
 
-        public int Month { get; set; }
+        public int Month { get; init; }
 
         public bool NextMovementMonthExists { get; set; }
 
-        public StatusResult Status { get; set; } = new StatusResult();
+        public StatusResult Status { get; init; } = new();
 
         public MonthMovementResult[] MonthMovements { get; set; } = { };
 
         public class MonthMovementResult
         {
-            public int Id { get; set; }
+            public int Id { get; init; }
 
-            public string Name { get; set; } = string.Empty;
+            public string Name { get; init; } = string.Empty;
 
-            public decimal Amount { get; set; }
+            public decimal Amount { get; init; }
 
-            public int Type { get; set; }
+            public int Type { get; init; }
 
-            public bool Paid { get; set; }
+            public bool Paid { get; init; }
         }
 
         public class StatusResult
         {
-            public decimal PendingTotalExpenses { get; set; }
+            public decimal PendingTotalExpenses { get; init; }
 
-            public decimal PendingTotalIncomes { get; set; }
+            public decimal PendingTotalIncomes { get; init; }
 
-            public decimal AccountAmount { get; set; }
+            public decimal AccountAmount { get; init; }
 
-            public decimal CashAmount { get; set; }
+            public decimal CashAmount { get; init; }
         }
     }
 

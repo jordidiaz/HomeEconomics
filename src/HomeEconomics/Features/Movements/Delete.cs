@@ -12,10 +12,10 @@ namespace HomeEconomics.Features.Movements
     {
         public class Command : IRequest
         {
-            public int Id { get; set; }
+            public int Id { get; init; }
         }
 
-        public class Validator : AbstractValidator<Delete.Command>
+        public class Validator : AbstractValidator<Command>
         {
             public Validator()
             {

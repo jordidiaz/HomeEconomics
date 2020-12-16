@@ -11,8 +11,8 @@ namespace HomeEconomics.Features.MovementMonths
     {
         public class Command : IRequest<MovementMonthResponse>
         {
-            public int MovementMonthId { get; set; }
-            public int MonthMovementId { get; set; }
+            public int MovementMonthId { get; init; }
+            public int MonthMovementId { get; init; }
         }
 
         public class Handler : IRequestHandler<Command, MovementMonthResponse>

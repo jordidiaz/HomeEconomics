@@ -13,9 +13,9 @@ namespace HomeEconomics.Features.MovementMonths
     {
         public class Command : IRequest<MovementMonthResponse>
         {
-            public int MovementMonthId { get; set; }
-            public int MonthMovementId { get; set; }
-            public decimal Amount { get; set; }
+            public int MovementMonthId { get; init; }
+            public int MonthMovementId { get; init; }
+            public decimal Amount { get; init; }
         }
 
         public class Validator : AbstractValidator<Command>

@@ -17,13 +17,13 @@ namespace HomeEconomics.Features.Movements
     {
         public class Command : IRequest<int>
         {
-            public string Name { get; set; } = string.Empty;
+            public string Name { get; init; } = string.Empty;
 
-            public decimal Amount { get; set; }
+            public decimal Amount { get; init; }
 
-            public MovementType Type { get; set; }
+            public MovementType Type { get; init; }
 
-            public Frequency Frequency { get; set; } = new Frequency();
+            public Frequency Frequency { get; init; } = new();
         }
 
         public class Frequency
@@ -33,11 +33,11 @@ namespace HomeEconomics.Features.Movements
                 Months = new List<bool>().ToArray();
             }
 
-            public FrequencyType Type { get; set; }
+            public FrequencyType Type { get; init; }
 
-            public int Month { get; set; }
+            public int Month { get; init; }
 
-            public bool[] Months { get; set; }
+            public bool[] Months { get; init; }
         }
 
         public class Validator : AbstractValidator<Command>

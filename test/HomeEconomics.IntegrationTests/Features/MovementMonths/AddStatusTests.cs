@@ -1,12 +1,12 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
 using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths
@@ -15,7 +15,7 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
     {
         private const string Uri = "api/movement-months/1/add-status";
 
-        private readonly AddStatus.Command _command;
+        private AddStatus.Command _command;
 
         public AddStatusTests(Fixture fixture) : base(fixture)
         {
@@ -42,7 +42,13 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         [Fact]
         public async Task Should_Return_400_BadRequest()
         {
-            _command.Month = 0;
+            _command = new AddStatus.Command
+            {
+                Year = 2020,
+                Month = 0,
+                AccountAmount = 900,
+                CashAmount = 50
+            };
 
             var response = await HttpClient
                 .PostAsync(Uri, _command);

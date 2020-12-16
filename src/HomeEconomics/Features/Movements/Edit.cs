@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Domain.Movements;
+﻿using Domain.Movements;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HomeEconomics.Features.Movements
 {
@@ -12,12 +12,12 @@ namespace HomeEconomics.Features.Movements
     {
         public class Command : Create.Command, IRequest<Unit>
         {
-            public int Id { get; set; }
+            public int Id { get; init; }
         }
 
-        public class Validator: Create.Validator
+        public class Validator : Create.Validator
         {
-            
+
         }
 
         public class Handler : IRequestHandler<Command, Unit>

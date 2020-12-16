@@ -13,7 +13,7 @@ namespace HomeEconomics.IntegrationTests.Features.Movements
 {
     public class CreateTests : IntegrationTestBase
     {
-        private readonly Create.Command _command;
+        private Create.Command _command;
 
         private const string Uri = "api/movements";
 
@@ -44,7 +44,16 @@ namespace HomeEconomics.IntegrationTests.Features.Movements
         [Fact]
         public async Task Should_Return_400_BadRequest()
         {
-            _command.Name = "";
+            _command = new Create.Command
+            {
+                Name = string.Empty,
+                Amount = 50m,
+                Type = MovementType.Expense,
+                Frequency = new Create.Frequency
+                {
+                    Type = FrequencyType.Monthly
+                }
+            };
 
             var response = await HttpClient
                 .PostAsync(Uri, _command);

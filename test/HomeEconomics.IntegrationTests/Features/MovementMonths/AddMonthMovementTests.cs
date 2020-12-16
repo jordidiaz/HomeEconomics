@@ -15,7 +15,7 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
     {
         private const string Uri = "api/movement-months/1/month-movements";
 
-        private readonly AddMonthMovement.Command _command;
+        private AddMonthMovement.Command _command;
 
         public AddMonthMovementTests(Fixture fixture) : base(fixture)
         {
@@ -41,7 +41,13 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         [Fact]
         public async Task Should_Return_400_BadRequest()
         {
-            _command.Amount = -0.1m;
+            _command = new AddMonthMovement.Command
+            {
+                MovementMonthId = 1,
+                Name = "Gasolina",
+                Amount = -0.1m,
+                Type = MovementType.Expense
+            };
 
             var response = await HttpClient
                 .PostAsync(Uri, _command);

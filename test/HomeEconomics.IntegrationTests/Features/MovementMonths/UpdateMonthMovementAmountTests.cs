@@ -1,18 +1,18 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
-using Xunit;
+using System.Net;
 using System.Net.Http;
-using FluentAssertions;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths
 {
     public class UpdateMonthMovementAmountTests : IntegrationTestBase
     {
-        private readonly UpdateMonthMovementAmount.Command _command;
+        private UpdateMonthMovementAmount.Command _command;
 
         private const string Uri = "api/movement-months/1/month-movements/1/update-amount";
 
@@ -39,7 +39,12 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         [Fact]
         public async Task Should_Return_400_BadRequest()
         {
-            _command.Amount = -1;
+            _command = new UpdateMonthMovementAmount.Command
+            {
+                MovementMonthId = 1,
+                MonthMovementId = 1,
+                Amount = -1
+            };
 
             var response = await HttpClient
                 .PostAsync(Uri, _command);

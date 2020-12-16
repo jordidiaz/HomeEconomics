@@ -18,23 +18,23 @@ namespace HomeEconomics.Features.Movements
 
         public class Result
         {
-            public Movement[] Movements { get; set; } = { };
+            public Movement[] Movements { get; init; } = { };
 
             public class Movement
             {
-                public int Id { get; set; }
+                public int Id { get; init; }
 
-                public string Name { get; set; } = string.Empty;
+                public string Name { get; init; } = string.Empty;
 
-                public decimal Amount { get; set; }
+                public decimal Amount { get; init; }
 
-                public int Type { get; set; }
+                public int Type { get; init; }
 
-                public int FrequencyType { get; set; }
+                public int FrequencyType { get; init; }
 
-                public bool[] FrequencyMonths { get; set; } = new bool[12];
+                public bool[] FrequencyMonths { get; init; } = new bool[12];
 
-                public int FrequencyMonth { get; set; }
+                public int FrequencyMonth { get; init; }
             }
         }
 
