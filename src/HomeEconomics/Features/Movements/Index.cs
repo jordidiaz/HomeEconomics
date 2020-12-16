@@ -12,15 +12,15 @@ namespace HomeEconomics.Features.Movements
 {
     public class Index
     {
-        public class Query : IRequest<Result>
+        public record Query : IRequest<Result>
         {
         }
 
-        public class Result
+        public record Result
         {
             public Movement[] Movements { get; init; } = { };
 
-            public class Movement
+            public record Movement
             {
                 public int Id { get; init; }
 

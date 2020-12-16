@@ -10,7 +10,7 @@ namespace HomeEconomics.Features.Movements
 {
     public class Delete
     {
-        public class Command : IRequest
+        public record Command : IRequest
         {
             public int Id { get; init; }
         }

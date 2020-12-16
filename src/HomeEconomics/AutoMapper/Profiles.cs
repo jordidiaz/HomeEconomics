@@ -11,7 +11,7 @@ namespace HomeEconomics.AutoMapper
         public MovementMonthToResultProfile()
         {
             CreateMap<MovementMonth, MovementMonthResponse>()
-            .AfterMap((source, destination) => destination.MonthMovements = destination.MonthMovements.OrderBy(mm => mm.Name).ToArray())
+            .AfterMap((_, destination) => destination.MonthMovements = destination.MonthMovements.OrderBy(mm => mm.Name).ToArray())
             .ForPath(destination => destination.Status.AccountAmount,
                 expression => expression.MapFrom(source => source.Statuses.Count > 0 ? source.Statuses.OrderByDescending(s => s.Day).First().AccountAmount : 0))
             .ForPath(destination => destination.Status.CashAmount,

@@ -25,7 +25,7 @@ namespace HomeEconomics.IntegrationTests.Features.Movements
                 Name = "EPSV",
                 Amount = 50m,
                 Type = MovementType.Expense,
-                Frequency = new Create.Frequency
+                Frequency = new Edit.Frequency
                 {
                     Type = FrequencyType.Monthly
                 }

@@ -15,7 +15,7 @@ namespace HomeEconomics.Features.Movements
 {
     public class Create
     {
-        public class Command : IRequest<int>
+        public record Command : IRequest<int>
         {
             public string Name { get; init; } = string.Empty;
 
@@ -26,7 +26,7 @@ namespace HomeEconomics.Features.Movements
             public Frequency Frequency { get; init; } = new();
         }
 
-        public class Frequency
+        public record Frequency
         {
             public Frequency()
             {

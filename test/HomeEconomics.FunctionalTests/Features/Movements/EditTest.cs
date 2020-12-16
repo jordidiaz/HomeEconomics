@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.Movements;
+﻿using Domain.Movements;
 using FluentAssertions;
 using HomeEconomics.Features.Movements;
 using HomeEconomics.FunctionalTests.Infrastructure;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.FunctionalTests.Features.Movements
@@ -27,16 +26,16 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
                 }
             });
 
-            await Fixture.SendToMediatRAsync<Unit>(new Edit.Command
+            await Fixture.SendToMediatRAsync(new Edit.Command
             {
                 Id = movementId,
                 Name = "EPSV",
                 Amount = 50m,
                 Type = MovementType.Income,
-                Frequency = new Create.Frequency
+                Frequency = new Edit.Frequency
                 {
                     Type = FrequencyType.Custom,
-                    Months = new []
+                    Months = new[]
                     {
                         true,
                         false,
@@ -87,13 +86,13 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
         [Fact]
         public void Should_Throw_InvalidOperationException_If_Movement_Not_Exists()
         {
-            Func<Task> action = async () => await Fixture.SendToMediatRAsync<Unit>(new Edit.Command
+            Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Edit.Command
             {
                 Id = 42,
                 Name = "Gasolina",
                 Amount = 60m,
                 Type = MovementType.Expense,
-                Frequency = new Create.Frequency
+                Frequency = new Edit.Frequency
                 {
                     Type = FrequencyType.Monthly
                 }

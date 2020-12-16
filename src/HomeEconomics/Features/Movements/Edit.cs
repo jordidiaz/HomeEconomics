@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,9 +11,31 @@ namespace HomeEconomics.Features.Movements
 {
     public class Edit
     {
-        public class Command : Create.Command, IRequest<Unit>
+        public record Command : IRequest<Unit>
         {
             public int Id { get; init; }
+
+            public string Name { get; init; } = string.Empty;
+
+            public decimal Amount { get; init; }
+
+            public MovementType Type { get; init; }
+
+            public Frequency Frequency { get; init; } = new();
+        }
+
+        public record Frequency
+        {
+            public Frequency()
+            {
+                Months = new List<bool>().ToArray();
+            }
+
+            public FrequencyType Type { get; init; }
+
+            public int Month { get; init; }
+
+            public bool[] Months { get; init; }
         }
 
         public class Validator : Create.Validator
