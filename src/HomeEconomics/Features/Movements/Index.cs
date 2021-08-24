@@ -51,7 +51,7 @@ namespace HomeEconomics.Features.Movements
                         memberConfigurationExpression.MapFrom(source => (int)source.Frequency.Type))
                 .ForMember(destination => destination.FrequencyMonth,
                     memberConfigurationExpression => memberConfigurationExpression.MapFrom(source => source.Frequency.Type == FrequencyType.Yearly
-                        ? Array.IndexOf(source.Frequency.Months, true) + 1
+                        ? Array.IndexOf(source.Frequency.Months.ToArray(), true) + 1
                         : 0));
             }
         }

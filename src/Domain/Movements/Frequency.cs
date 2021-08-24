@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Domain.Movements
@@ -8,21 +9,21 @@ namespace Domain.Movements
 #nullable disable
         public Frequency()
         {
-
+            Months = MonthCollection.Init();
         }
 #nullable enable
 
         internal Frequency(Movement movement, FrequencyType type)
         {
             Type = type;
-            Months = new bool[12];
             Movement = movement;
             MovementId = movement.Id;
+            Months = MonthCollection.Init();
         }
 
         public FrequencyType Type { get; private set; }
 
-        public bool[] Months { get; private set; }
+        public MonthCollection Months { get; private set; }
 
         public int MovementId { get; private set; }
 
@@ -40,13 +41,13 @@ namespace Domain.Movements
 
         internal void SetYearlyFrequency(int month)
         {
-            if (month < 1 || month > 12)
+            if (month is < 1 or > 12)
             {
                 throw new ArgumentOutOfRangeException(nameof(month));
             }
 
             Type = FrequencyType.Yearly;
-            Months[month - 1] = true;
+            Months.EnableMonth(month);
         }
 
         internal void SetCustomFrequency(bool[] months)
@@ -62,7 +63,12 @@ namespace Domain.Movements
             }
 
             Type = FrequencyType.Custom;
-            Months = months;
+            Months = MonthCollection.Init(months);
+        }
+        
+        internal bool IsMonthEnabled(int month)
+        {
+            return Months.IsMonthEnabled(month);
         }
     }
 }

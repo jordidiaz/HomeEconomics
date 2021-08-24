@@ -88,7 +88,7 @@ namespace Domain.Movements
 
             var monthNumber = (int)month;
 
-            return Frequency.Months[monthNumber - 1];
+            return Frequency.IsMonthEnabled(monthNumber);
         }
     }
 }

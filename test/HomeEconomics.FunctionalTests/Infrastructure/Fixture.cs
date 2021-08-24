@@ -14,7 +14,7 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
 {
     public static class Fixture
     {
-        private static readonly Checkpoint Checkpoint = new Checkpoint();
+        private static readonly Checkpoint Checkpoint = new();
         private static readonly IConfigurationRoot Configuration = GetConfigurationRoot();
         private static readonly ServiceProvider ServiceProvider = GetServiceProvider();
         private static readonly IServiceScopeFactory ScopeFactory = GetScopeFactory();
