@@ -17,7 +17,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
         {
             _command = new MovementMonth.Create.Command
             {
-                Year = 2020,
+                Year = DateTime.Now.Year,
                 Month = Month.Jan
             };
         }
@@ -30,7 +30,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
             var result = await Fixture.SendToMediatRAsync(_command);
 
             result.Id.Should().Be(result.Id);
-            result.Year.Should().Be(2020);
+            result.Year.Should().Be(DateTime.Now.Year);
             result.Month.Should().Be(1);
             result.Status.PendingTotalExpenses.Should().Be(120m);
             result.Status.PendingTotalIncomes.Should().Be(70m);

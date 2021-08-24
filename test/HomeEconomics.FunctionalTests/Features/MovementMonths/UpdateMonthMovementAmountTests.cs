@@ -24,9 +24,9 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
             await CreateMovements();
 
             var createMovementMonthResult = await Fixture.SendToMediatRAsync(
-                new HomeEconomics.Features.MovementMonths.Create.Command
+                new Create.Command
                 {
-                    Year = 2020,
+                    Year = DateTime.Now.Year,
                     Month = Month.Jan
                 });
 

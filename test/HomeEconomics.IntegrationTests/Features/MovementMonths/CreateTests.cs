@@ -1,4 +1,5 @@
-﻿using Domain.MovementMonth;
+﻿using System;
+using Domain.MovementMonth;
 using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.IntegrationTests.Infrastructure;
@@ -21,7 +22,7 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         {
             _command = new Create.Command
             {
-                Year = 2020,
+                Year = DateTime.Now.Year,
                 Month = Month.Feb
             };
         }
@@ -41,7 +42,7 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         {
             _command = new Create.Command
             {
-                Year = 2019,
+                Year = DateTime.Now.Year - 1,
                 Month = Month.Feb
             };
 

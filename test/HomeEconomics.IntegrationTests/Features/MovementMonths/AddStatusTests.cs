@@ -1,4 +1,5 @@
-﻿using Domain.MovementMonth;
+﻿using System;
+using Domain.MovementMonth;
 using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.IntegrationTests.Infrastructure;
@@ -21,7 +22,7 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         {
             _command = new AddStatus.Command
             {
-                Year = 2020,
+                Year = DateTime.Now.Year,
                 Month = Month.Jan,
                 AccountAmount = 900,
                 CashAmount = 50
@@ -44,7 +45,7 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         {
             _command = new AddStatus.Command
             {
-                Year = 2020,
+                Year = DateTime.Now.Year - 1,
                 Month = 0,
                 AccountAmount = 900,
                 CashAmount = 50

@@ -1,4 +1,5 @@
-﻿using Domain.MovementMonth;
+﻿using System;
+using Domain.MovementMonth;
 using FluentValidation.TestHelper;
 using HomeEconomics.Features.MovementMonths;
 using Xunit;
@@ -21,13 +22,12 @@ namespace HomeEconomics.UnitTests.Features.MovementMonths
         {
             _sut.ShouldHaveValidationErrorFor(x => x.Year, year);
         }
-
-        [Theory]
-        [InlineData(2020)]
-        [InlineData(3456)]
-        public void Should_Not_Have_Error_If_Year_Valid(int year)
+        
+        [Fact]
+        public void Should_Not_Have_Error_If_Year_Valid()
         {
-            _sut.ShouldNotHaveValidationErrorFor(x => x.Year, year);
+            _sut.ShouldNotHaveValidationErrorFor(x => x.Year, DateTime.Now.Year);
+            _sut.ShouldNotHaveValidationErrorFor(x => x.Year, DateTime.Now.Year + 1);
         }
 
         [Fact]

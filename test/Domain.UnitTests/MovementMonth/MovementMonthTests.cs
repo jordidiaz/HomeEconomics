@@ -9,7 +9,7 @@ namespace Domain.UnitTests.MovementMonth
 {
     public class MovementMonthTests
     {
-        private const int Year = 2020;
+        private readonly int _year = DateTime.Now.Year;
         private const Month Month = Domain.MovementMonth.Month.Jan;
         private const string Name1 = nameof(Name1);
         private const string Name2 = nameof(Name2);
@@ -25,7 +25,7 @@ namespace Domain.UnitTests.MovementMonth
 
         public MovementMonthTests()
         {
-            _sut = new Domain.MovementMonth.MovementMonth(Year, Month);
+            _sut = new Domain.MovementMonth.MovementMonth(_year, Month);
 
             _sut.AddMonthMovement(Name1, Amount1, MovementType1);
             _sut.AddMonthMovement(Name2, Amount2, MovementType2);
