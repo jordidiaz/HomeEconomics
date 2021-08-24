@@ -1,11 +1,11 @@
-﻿using Domain;
-using FluentValidation;
+﻿using FluentValidation;
 using HomeEconomics.Services;
 using MediatR;
 using Persistence;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain.Movements;
 
 namespace HomeEconomics.Features.MovementMonths
 {
@@ -22,7 +22,7 @@ namespace HomeEconomics.Features.MovementMonths
         {
             public Validator()
             {
-                RuleFor(command => command.Amount).GreaterThanOrEqualTo(Constants.MinAmount);
+                RuleFor(command => command.Amount).GreaterThanOrEqualTo(Movement.MinAmount);
             }
         }
 

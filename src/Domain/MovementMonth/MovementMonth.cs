@@ -68,12 +68,12 @@ namespace Domain.MovementMonth
                 throw new ArgumentOutOfRangeException(nameof(day));
             }
 
-            if (accountAmount < Constants.MinAmount)
+            if (accountAmount < Movement.MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(accountAmount));
             }
 
-            if (cashAmount < Constants.MinAmount)
+            if (cashAmount < Movement.MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(cashAmount));
             }

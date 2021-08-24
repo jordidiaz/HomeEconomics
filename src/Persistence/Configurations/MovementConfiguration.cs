@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Movements;
+﻿using Domain.Movements;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,7 +16,7 @@ namespace Persistence.Configurations
                 .IsUnique();
 
             builder.Property(m => m.Name)
-                .HasMaxLength(Constants.MovementNameMaxLength)
+                .HasMaxLength(Movement.MovementNameMaxLength)
                 .IsRequired();
 
             builder.HasOne(movement => movement.Frequency)

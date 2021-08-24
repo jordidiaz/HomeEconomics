@@ -1,5 +1,5 @@
-﻿using Domain;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
+using Domain.Movements;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,7 +14,7 @@ namespace Persistence.Configurations
             builder.HasKey(monthMovement => monthMovement.Id);
 
             builder.Property(monthMovement => monthMovement.Name)
-                .HasMaxLength(Constants.MovementNameMaxLength)
+                .HasMaxLength(Movement.MovementNameMaxLength)
                 .IsRequired();
 
             builder.Property(monthMovement => monthMovement.Amount)

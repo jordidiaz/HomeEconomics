@@ -5,6 +5,9 @@ namespace Domain.Movements
 {
     public class Movement : Entity, IAggregateRoot
     {
+        public const int MovementNameMaxLength = 30;
+        public const decimal MinAmount = 0;
+        
         public Movement(string name, decimal amount, MovementType type)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -12,7 +15,7 @@ namespace Domain.Movements
                 throw new ArgumentNullException(nameof(name));
             }
 
-            if (amount < Constants.MinAmount)
+            if (amount < MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(amount));
             }
@@ -63,7 +66,7 @@ namespace Domain.Movements
 
         public void SetAmount(decimal amount)
         {
-            if (amount < Constants.MinAmount)
+            if (amount < MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(amount));
             }

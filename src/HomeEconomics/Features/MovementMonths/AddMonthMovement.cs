@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Movements;
+﻿using Domain.Movements;
 using FluentValidation;
 using HomeEconomics.Helpers;
 using HomeEconomics.Services;
@@ -29,8 +28,8 @@ namespace HomeEconomics.Features.MovementMonths
         {
             public Validator()
             {
-                RuleFor(command => command.Name).NotNull().NotEmpty().MaximumLength(Constants.MovementNameMaxLength);
-                RuleFor(command => command.Amount).GreaterThanOrEqualTo(Constants.MinAmount);
+                RuleFor(command => command.Name).NotNull().NotEmpty().MaximumLength(Movement.MovementNameMaxLength);
+                RuleFor(command => command.Amount).GreaterThanOrEqualTo(Movement.MinAmount);
                 RuleFor(command => command.Type).Must(Enums.IsAValidEnumValue);
             }
         }

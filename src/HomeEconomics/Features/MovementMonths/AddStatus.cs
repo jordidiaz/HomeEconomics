@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
 using FluentValidation;
 using HomeEconomics.Helpers;
 using HomeEconomics.Services;
@@ -8,6 +7,7 @@ using Persistence;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain.Movements;
 
 namespace HomeEconomics.Features.MovementMonths
 {
@@ -30,8 +30,8 @@ namespace HomeEconomics.Features.MovementMonths
             {
                 RuleFor(command => command.Year).GreaterThanOrEqualTo(DateTime.Now.Year);
                 RuleFor(command => command.Month).Must(Enums.IsAValidEnumValue);
-                RuleFor(command => command.AccountAmount).GreaterThanOrEqualTo(Constants.MinAmount);
-                RuleFor(command => command.CashAmount).GreaterThanOrEqualTo(Constants.MinAmount);
+                RuleFor(command => command.AccountAmount).GreaterThanOrEqualTo(Movement.MinAmount);
+                RuleFor(command => command.CashAmount).GreaterThanOrEqualTo(Movement.MinAmount);
             }
         }
 

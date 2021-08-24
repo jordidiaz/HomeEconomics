@@ -1,4 +1,5 @@
 ﻿using System;
+using Domain.Movements;
 
 namespace Domain.MovementMonth
 {
@@ -18,12 +19,12 @@ namespace Domain.MovementMonth
                 throw new ArgumentOutOfRangeException(nameof(day));
             }
 
-            if (accountAmount < Constants.MinAmount)
+            if (accountAmount < Movement.MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(accountAmount));
             }
 
-            if (cashAmount < Constants.MinAmount)
+            if (cashAmount < Movement.MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(cashAmount));
             }
@@ -32,6 +33,7 @@ namespace Domain.MovementMonth
             AccountAmount = accountAmount;
             CashAmount = cashAmount;
             MovementMonth = movementMonth;
+            MovementMonthId = movementMonth.Id;
         }
 
         public int Day { get; private set; }
@@ -47,7 +49,7 @@ namespace Domain.MovementMonth
 
         internal void SetAccountAmount(decimal accountAmount)
         {
-            if (accountAmount < Constants.MinAmount)
+            if (accountAmount < Movement.MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(accountAmount));
             }
@@ -57,7 +59,7 @@ namespace Domain.MovementMonth
 
         internal void SetCashAmount(decimal cashAmount)
         {
-            if (cashAmount < Constants.MinAmount)
+            if (cashAmount < Movement.MinAmount)
             {
                 throw new ArgumentOutOfRangeException(nameof(cashAmount));
             }

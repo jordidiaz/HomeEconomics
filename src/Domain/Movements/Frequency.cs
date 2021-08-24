@@ -17,6 +17,7 @@ namespace Domain.Movements
             Type = type;
             Months = new bool[12];
             Movement = movement;
+            MovementId = movement.Id;
         }
 
         public FrequencyType Type { get; private set; }
