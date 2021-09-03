@@ -64,10 +64,10 @@ namespace Domain.UnitTests.MovementMonth
         [Fact]
         public void AddMonthMovement_Adds_A_New_AddMonthMovement()
         {
-            _sut.MonthMovements.Clear();
+            _sut.ClearMovementMonths();
             _sut.AddMonthMovement(Name1, Amount1, MovementType1);
 
-            _sut.MonthMovements.Count.Should().Be(1);
+            _sut.MonthMovements.Count().Should().Be(1);
             _sut.MonthMovements.First().Name.Should().Be(Name1);
             _sut.MonthMovements.First().Amount.Should().Be(Amount1);
             _sut.MonthMovements.First().Type.Should().Be(MovementType1);

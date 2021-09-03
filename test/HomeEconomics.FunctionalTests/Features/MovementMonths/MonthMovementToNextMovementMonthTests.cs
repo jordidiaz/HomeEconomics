@@ -50,7 +50,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
             movementMonthResponse.MonthMovements.Length.Should().Be(1);
             movementMonthResponse.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon").Should().BeNull();
-            nextMovementMonth.MonthMovements.Count.Should().Be(2);
+            nextMovementMonth.MonthMovements.Count().Should().Be(2);
             nextMovementMonth.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon").Should().NotBeNull();
         }
 

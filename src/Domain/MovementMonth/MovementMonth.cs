@@ -1,7 +1,6 @@
 ﻿using Domain.Movements;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Domain.MovementMonth
 {
@@ -18,23 +17,27 @@ namespace Domain.MovementMonth
 
             Year = year;
             Month = month;
-            MonthMovements = new List<MonthMovement>();
-            Statuses = new List<Status>();
+            _monthMovements = MonthMovementCollection.Init();
+            _statuses = StatusCollection.Init();
         }
 
         public int Year { get; private set; }
 
         public Month Month { get; private set; }
 
-        public List<MonthMovement> MonthMovements { get; private set; }
+        private readonly MonthMovementCollection _monthMovements;
+        
+        public IEnumerable<MonthMovement> MonthMovements => _monthMovements;
 
-        public List<Status> Statuses { get; private set; }
+        private readonly StatusCollection _statuses;
+
+        public ICollection<Status> Statuses => _statuses;
 
 
         public void AddMonthMovement(string name, decimal amount, MovementType type)
         {
             var monthMovement = new MonthMovement(this, name, amount, type);
-            MonthMovements.Add(monthMovement);
+            _monthMovements.Add(monthMovement);
         }
 
         public void PayMonthMovement(int monthMovementId)
@@ -58,30 +61,15 @@ namespace Domain.MovementMonth
         public void DeleteMonthMovement(int monthMovementId)
         {
             var monthMovement = GetMonthMovementOrThrow(monthMovementId);
-            MonthMovements.Remove(monthMovement);
+            _monthMovements.Remove(monthMovement);
         }
 
         public void AddStatus(int day, decimal accountAmount, decimal cashAmount)
         {
-            if (day < 0 || day > 31)
-            {
-                throw new ArgumentOutOfRangeException(nameof(day));
-            }
-
-            if (accountAmount < Movement.MinAmount)
-            {
-                throw new ArgumentOutOfRangeException(nameof(accountAmount));
-            }
-
-            if (cashAmount < Movement.MinAmount)
-            {
-                throw new ArgumentOutOfRangeException(nameof(cashAmount));
-            }
-
-            var status = Statuses.SingleOrDefault(s => s.Day == day);
+            var status = _statuses.GetByDay(day);
             if (status is null)
             {
-                Statuses.Add(new Status(this, day, accountAmount, cashAmount));
+                _statuses.Add(new Status(this, day, accountAmount, cashAmount));
             }
             else
             {
@@ -92,7 +80,12 @@ namespace Domain.MovementMonth
 
         public MonthMovement? GetMonthMovement(int monthMovementId)
         {
-            return MonthMovements.SingleOrDefault(mm => mm.Id == monthMovementId);
+            return _monthMovements.Get(monthMovementId);
+        }
+
+        public void ClearMovementMonths()
+        {
+            _monthMovements.Clear();
         }
 
         private MonthMovement GetMonthMovementOrThrow(int monthMovementId)
