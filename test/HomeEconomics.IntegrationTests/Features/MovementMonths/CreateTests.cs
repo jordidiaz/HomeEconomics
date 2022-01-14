@@ -20,11 +20,9 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
 
         public CreateTests(Fixture fixture) : base(fixture)
         {
-            _command = new Create.Command
-            {
-                Year = DateTime.Now.Year,
-                Month = Month.Feb
-            };
+            _command = new Create.Command(
+                DateTime.Now.Year,
+                Month.Feb);
         }
 
         [Fact]
@@ -40,11 +38,9 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         [Fact]
         public async Task Should_Return_400_BadRequest()
         {
-            _command = new Create.Command
-            {
-                Year = DateTime.Now.Year - 1,
-                Month = Month.Feb
-            };
+            _command = new Create.Command(
+                DateTime.Now.Year - 1,
+                Month.Feb);
 
             var response = await HttpClient
                 .PostAsync(Uri, _command);

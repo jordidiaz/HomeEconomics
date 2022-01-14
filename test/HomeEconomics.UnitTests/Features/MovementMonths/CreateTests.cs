@@ -1,5 +1,5 @@
-﻿using System;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
+using FluentAssertions;
 using FluentValidation.TestHelper;
 using HomeEconomics.Features.MovementMonths;
 using Xunit;
@@ -22,26 +22,22 @@ namespace HomeEconomics.UnitTests.Features.MovementMonths
             [InlineData(1000)]
             public void Should_Have_Error_If_Year_Invalid(int year)
             {
-                _sut.ShouldHaveValidationErrorFor(x => x.Year, year);
-            }
-
-            [Fact]
-            public void Should_Not_Have_Error_If_Year_Valid()
-            {
-                _sut.ShouldNotHaveValidationErrorFor(x => x.Year, DateTime.Now.Year);
-                _sut.ShouldNotHaveValidationErrorFor(x => x.Year, DateTime.Now.Year + 1);
+                var result = _sut.TestValidate(new Create.Command(year, Month.Apr));
+                result.IsValid.Should().BeFalse();
             }
 
             [Fact]
             public void Should_Have_Error_If_Month_Invalid()
             {
-                _sut.ShouldHaveValidationErrorFor(x => x.Month, (Month)13);
+                var result = _sut.TestValidate(new Create.Command(2022, (Month)13));
+                result.IsValid.Should().BeFalse();
             }
 
             [Fact]
-            public void Should_Not_Have_Error_If_Month_Valid()
+            public void Should_Not_Have_Error_If_All_Valid()
             {
-                _sut.ShouldNotHaveValidationErrorFor(x => x.Month, Month.Aug);
+                var result = _sut.TestValidate(new Create.Command(2022, Month.Apr));
+                result.IsValid.Should().BeTrue();
             }
         }
     }

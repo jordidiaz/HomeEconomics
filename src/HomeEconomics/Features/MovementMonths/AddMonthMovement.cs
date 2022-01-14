@@ -13,16 +13,7 @@ namespace HomeEconomics.Features.MovementMonths
     public class AddMonthMovement
     {
 
-        public class Command : IRequest<MovementMonthResponse>
-        {
-            public int MovementMonthId { get; init; }
-
-            public string Name { get; init; } = string.Empty;
-
-            public decimal Amount { get; init; }
-
-            public MovementType Type { get; init; }
-        }
+        public record Command(int MovementMonthId, string Name, decimal Amount, MovementType Type) : IRequest<MovementMonthResponse>;
 
         public class Validator : AbstractValidator<Command>
         {

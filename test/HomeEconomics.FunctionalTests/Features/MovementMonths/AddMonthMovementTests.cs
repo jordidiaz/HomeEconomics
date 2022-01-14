@@ -10,12 +10,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 {
     public class AddMonthMovementTests : FunctionalTestBase
     {
-        private AddMonthMovement.Command _command;
-
-        public AddMonthMovementTests()
-        {
-            _command = new AddMonthMovement.Command();
-        }
+        private AddMonthMovement.Command _command = default!;
 
         [Fact]
         public async Task Should_Add_MonthMovement_And_Return_Resume()
@@ -24,13 +19,11 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
             var movementMonth = await CreateMovementMonth();
 
-            _command = new AddMonthMovement.Command
-            {
-                MovementMonthId = movementMonth.Id,
-                Name = "new",
-                Type = MovementType.Expense,
-                Amount = 50
-            };
+            _command = new AddMonthMovement.Command(
+                movementMonth.Id,
+                "new",
+                50,
+                MovementType.Expense);
 
             var result = await Fixture.SendToMediatRAsync(_command);
 
@@ -42,13 +35,11 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
         [Fact]
         public void Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
         {
-            _command = new AddMonthMovement.Command
-            {
-                MovementMonthId = 0,
-                Name = "new",
-                Type = MovementType.Expense,
-                Amount = 50
-            };
+            _command = new AddMonthMovement.Command(
+                0,
+                "new",
+                50,
+                MovementType.Expense);
 
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 

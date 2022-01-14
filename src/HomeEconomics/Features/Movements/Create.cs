@@ -14,16 +14,7 @@ namespace HomeEconomics.Features.Movements
 {
     public class Create
     {
-        public record Command : IRequest<int>
-        {
-            public string Name { get; init; } = string.Empty;
-
-            public decimal Amount { get; init; }
-
-            public MovementType Type { get; init; }
-
-            public Frequency Frequency { get; init; } = new();
-        }
+        public record Command(string Name, decimal Amount, MovementType Type, Frequency Frequency) : IRequest<int>;
 
         public record Frequency
         {

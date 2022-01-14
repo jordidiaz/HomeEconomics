@@ -13,16 +13,7 @@ namespace HomeEconomics.Features.MovementMonths
 {
     public class AddStatus
     {
-        public class Command : IRequest<MovementMonthResponse>
-        {
-            public int Year { get; init; }
-
-            public Month Month { get; init; }
-
-            public decimal AccountAmount { get; init; }
-
-            public decimal CashAmount { get; init; }
-        }
+        public record Command(int Year, Month Month, decimal AccountAmount, decimal CashAmount) : IRequest<MovementMonthResponse>;
 
         public class Validator : AbstractValidator<Command>
         {

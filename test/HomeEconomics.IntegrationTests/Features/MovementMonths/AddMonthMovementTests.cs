@@ -19,13 +19,11 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
 
         public AddMonthMovementTests(Fixture fixture) : base(fixture)
         {
-            _command = new AddMonthMovement.Command
-            {
-                MovementMonthId = 1,
-                Name = "Gasolina",
-                Amount = 60,
-                Type = MovementType.Expense
-            };
+            _command = new AddMonthMovement.Command(
+                1,
+                "Gasolina",
+                60,
+                MovementType.Expense);
         }
 
         [Fact]
@@ -41,13 +39,11 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         [Fact]
         public async Task Should_Return_400_BadRequest()
         {
-            _command = new AddMonthMovement.Command
-            {
-                MovementMonthId = 1,
-                Name = "Gasolina",
-                Amount = -0.1m,
-                Type = MovementType.Expense
-            };
+            _command = new AddMonthMovement.Command(
+                1,
+                "Gasolina",
+                -0.1m,
+                MovementType.Expense);
 
             var response = await HttpClient
                 .PostAsync(Uri, _command);

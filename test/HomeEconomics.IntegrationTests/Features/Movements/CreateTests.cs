@@ -19,16 +19,10 @@ namespace HomeEconomics.IntegrationTests.Features.Movements
 
         public CreateTests(Fixture fixture) : base(fixture)
         {
-            _command = new Create.Command
+            _command = new Create.Command("EPSV", 50m, MovementType.Expense, new Create.Frequency
             {
-                Name = "EPSV",
-                Amount = 50m,
-                Type = MovementType.Expense,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.Monthly
-                }
-            };
+                Type = FrequencyType.Monthly
+            });
         }
 
         [Fact]
@@ -44,16 +38,10 @@ namespace HomeEconomics.IntegrationTests.Features.Movements
         [Fact]
         public async Task Should_Return_400_BadRequest()
         {
-            _command = new Create.Command
+            _command = new Create.Command(string.Empty, 50m, MovementType.Expense, new Create.Frequency
             {
-                Name = string.Empty,
-                Amount = 50m,
-                Type = MovementType.Expense,
-                Frequency = new Create.Frequency
-                {
-                    Type = FrequencyType.Monthly
-                }
-            };
+                Type = FrequencyType.Monthly
+            });
 
             var response = await HttpClient
                 .PostAsync(Uri, _command);

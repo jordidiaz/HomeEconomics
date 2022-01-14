@@ -1,5 +1,5 @@
-﻿using System;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
+using FluentAssertions;
 using FluentValidation.TestHelper;
 using HomeEconomics.Features.MovementMonths;
 using Xunit;
@@ -8,6 +8,11 @@ namespace HomeEconomics.UnitTests.Features.MovementMonths
 {
     public class AddStatusTests
     {
+        private const int Year = 2022;
+        private const Month Month = Domain.MovementMonth.Month.Aug;
+        private const decimal AccountAmount = 50m;
+        private const decimal CashAmount = 10m;
+        
         private readonly AddStatus.Validator _sut;
 
         public AddStatusTests()
@@ -20,50 +25,36 @@ namespace HomeEconomics.UnitTests.Features.MovementMonths
         [InlineData(1000)]
         public void Should_Have_Error_If_Year_Invalid(int year)
         {
-            _sut.ShouldHaveValidationErrorFor(x => x.Year, year);
-        }
-        
-        [Fact]
-        public void Should_Not_Have_Error_If_Year_Valid()
-        {
-            _sut.ShouldNotHaveValidationErrorFor(x => x.Year, DateTime.Now.Year);
-            _sut.ShouldNotHaveValidationErrorFor(x => x.Year, DateTime.Now.Year + 1);
+            var result = _sut.TestValidate(new AddStatus.Command(year, Month, AccountAmount, CashAmount));
+            result.IsValid.Should().BeFalse();
         }
 
         [Fact]
         public void Should_Have_Error_If_Month_Invalid()
         {
-            _sut.ShouldHaveValidationErrorFor(x => x.Month, (Month)13);
-        }
-
-        [Fact]
-        public void Should_Not_Have_Error_If_Month_Valid()
-        {
-            _sut.ShouldNotHaveValidationErrorFor(x => x.Month, Month.Aug);
+            var result = _sut.TestValidate(new AddStatus.Command(Year, (Month)13, AccountAmount, CashAmount));
+            result.IsValid.Should().BeFalse();
         }
 
         [Fact]
         public void Should_Have_Error_If_AccountAmount_Invalid()
         {
-            _sut.ShouldHaveValidationErrorFor(x => x.AccountAmount, -0.1m);
-        }
-
-        [Fact]
-        public void Should_Not_Have_Error_If_AccountAmount_Valid()
-        {
-            _sut.ShouldNotHaveValidationErrorFor(x => x.AccountAmount, 10);
+            var result = _sut.TestValidate(new AddStatus.Command(Year, Month, -1, CashAmount));
+            result.IsValid.Should().BeFalse();
         }
 
         [Fact]
         public void Should_Have_Error_If_CashAmount_Invalid()
         {
-            _sut.ShouldHaveValidationErrorFor(x => x.CashAmount, -0.1m);
+            var result = _sut.TestValidate(new AddStatus.Command(Year, Month, AccountAmount, -1));
+            result.IsValid.Should().BeFalse();
         }
 
         [Fact]
         public void Should_Not_Have_Error_If_CashAmount_Valid()
         {
-            _sut.ShouldNotHaveValidationErrorFor(x => x.CashAmount, 10);
+            var result = _sut.TestValidate(new AddStatus.Command(Year, Month, AccountAmount, CashAmount));
+            result.IsValid.Should().BeTrue();
         }
     }
 }

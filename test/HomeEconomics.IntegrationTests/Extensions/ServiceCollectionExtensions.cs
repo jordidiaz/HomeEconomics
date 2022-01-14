@@ -24,7 +24,7 @@ namespace HomeEconomics.IntegrationTests.Extensions
                     fluentValidationMvcConfiguration
                         .RegisterValidatorsFromAssemblyContaining<HomeEconomicsApp>();
                     fluentValidationMvcConfiguration.ImplicitlyValidateChildProperties = true;
-                    fluentValidationMvcConfiguration.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                    fluentValidationMvcConfiguration.DisableDataAnnotationsValidation = true;
                 })
                 .Services;
         }

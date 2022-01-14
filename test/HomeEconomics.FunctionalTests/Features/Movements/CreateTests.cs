@@ -15,16 +15,14 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
         [Fact]
         public async Task Should_Create_A_New_Movement()
         {
-            var movementId = await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "Gasolina",
-                Amount = 60m,
-                Type = MovementType.Expense,
-                Frequency = new Create.Frequency
+            var movementId = await Fixture.SendToMediatRAsync(new Create.Command(
+                "Gasolina",
+                60m,
+                MovementType.Expense,
+                new Create.Frequency
                 {
                     Type = FrequencyType.Monthly
-                }
-            });
+                }));
 
             var movement = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
                 {
@@ -49,16 +47,14 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
             var movement = new Movement("Gasolina", 60m, MovementType.Expense);
             await Fixture.InsertDbContextAsync(movement);
 
-            Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "Gasolina",
-                Amount = 60m,
-                Type = MovementType.Expense,
-                Frequency = new Create.Frequency
+            Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Create.Command(
+                "Gasolina",
+                60m,
+                MovementType.Expense,
+                new Create.Frequency
                 {
                     Type = FrequencyType.Monthly
-                }
-            });
+                }));
 
             action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.ExpenseExists);
         }

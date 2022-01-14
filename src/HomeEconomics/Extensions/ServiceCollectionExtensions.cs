@@ -29,7 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         fluentValidationMvcConfiguration
                             .RegisterValidatorsFromAssemblyContaining<HomeEconomics.HomeEconomicsApp>();
                         fluentValidationMvcConfiguration.ImplicitlyValidateChildProperties = true;
-                        fluentValidationMvcConfiguration.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                        fluentValidationMvcConfiguration.DisableDataAnnotationsValidation = true;
                     })
                 .AddApiExplorer()
                 .Services;

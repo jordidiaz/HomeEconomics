@@ -9,11 +9,7 @@ namespace HomeEconomics.Features.MovementMonths
 {
     public class MonthMovementToNextMovementMonth
     {
-        public class Command : IRequest<MovementMonthResponse>
-        {
-            public int MovementMonthId { get; init; }
-            public int MonthMovementId { get; init; }
-        }
+        public record Command(int MovementMonthId, int MonthMovementId) : IRequest<MovementMonthResponse>;
 
         public class Handler : IRequestHandler<Command, MovementMonthResponse>
         {

@@ -15,16 +15,14 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
         [Fact]
         public async Task Should_Edit_The_Movement()
         {
-            var movementId = await Fixture.SendToMediatRAsync(new Create.Command
-            {
-                Name = "Gasolina",
-                Amount = 60m,
-                Type = MovementType.Expense,
-                Frequency = new Create.Frequency
+            var movementId = await Fixture.SendToMediatRAsync(new Create.Command(
+                "Gasolina",
+                60m,
+                MovementType.Expense,
+                new Create.Frequency
                 {
                     Type = FrequencyType.Monthly
-                }
-            });
+                }));
 
             await Fixture.SendToMediatRAsync(new Edit.Command
             {

@@ -10,13 +10,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 {
     public class AddStatusTests : FunctionalTestBase
     {
-        private AddStatus.Command _command;
-
-
-        public AddStatusTests()
-        {
-            _command = new AddStatus.Command();
-        }
+        private AddStatus.Command _command = default!;
 
         [Fact]
         public async Task Should_Add_Status()
@@ -25,13 +19,11 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
             var movementMonth = await CreateMovementMonth();
 
-            _command = new AddStatus.Command
-            {
-                Year = movementMonth.Year,
-                Month = (Month)movementMonth.Month,
-                AccountAmount = 1000,
-                CashAmount = 50
-            };
+            _command = new AddStatus.Command(
+                movementMonth.Year,
+                (Month)movementMonth.Month,
+                1000,
+                50);
 
             var result = await Fixture.SendToMediatRAsync(_command);
 
@@ -48,13 +40,11 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
             await CreateMovementMonth();
 
-            _command = new AddStatus.Command
-            {
-                Year = 0,
-                Month = 0,
-                AccountAmount = 1000,
-                CashAmount = 50
-            };
+            _command = new AddStatus.Command(
+                0,
+                0,
+                1000,
+                50);
 
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 

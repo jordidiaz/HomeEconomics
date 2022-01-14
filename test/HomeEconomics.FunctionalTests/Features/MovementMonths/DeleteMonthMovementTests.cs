@@ -10,12 +10,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 {
     public class DeleteMonthMovementTests : FunctionalTestBase
     {
-        private DeleteMonthMovement.Command _command;
-
-        public DeleteMonthMovementTests()
-        {
-            _command = new DeleteMonthMovement.Command();
-        }
+        private DeleteMonthMovement.Command _command = default!;
 
         [Fact]
         public async Task Should_Add_MonthMovement_And_Return_Resume()
@@ -24,11 +19,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
             var movementMonth = await CreateMovementMonth();
 
-            _command = new DeleteMonthMovement.Command
-            {
-                MovementMonthId = movementMonth.Id,
-                MonthMovementId = movementMonth.MonthMovements.First().Id
-            };
+            _command = new DeleteMonthMovement.Command(movementMonth.Id, movementMonth.MonthMovements.First().Id);
 
             var result = await Fixture.SendToMediatRAsync(_command);
 
@@ -40,11 +31,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
         [Fact]
         public void Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
         {
-            _command = new DeleteMonthMovement.Command
-            {
-                MovementMonthId = 0,
-                MonthMovementId = 0
-            };
+            _command = new DeleteMonthMovement.Command(0, 0);
 
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 

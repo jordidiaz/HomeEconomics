@@ -1,4 +1,5 @@
 ﻿using Domain.Movements;
+using FluentAssertions;
 using FluentValidation.TestHelper;
 using HomeEconomics.Features.Movements;
 using Xunit;
@@ -11,6 +12,10 @@ namespace HomeEconomics.UnitTests.Features.Movements
         {
             private readonly Create.Validator _sut;
 
+            private const string Name = nameof(Name);
+            private const decimal Amount = 10;
+            private const MovementType Type = MovementType.Expense;
+
             public CommandValidatorTests()
             {
                 _sut = new Create.Validator();
@@ -22,59 +27,49 @@ namespace HomeEconomics.UnitTests.Features.Movements
             [InlineData("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")]
             public void Should_Have_Error_If_Name_Invalid(string name)
             {
-                _sut.ShouldHaveValidationErrorFor(x => x.Name, name);
-            }
-
-            [Fact]
-            public void Should_Not_Have_Error_If_Name_Valid()
-            {
-                _sut.ShouldNotHaveValidationErrorFor(x => x.Name, "Valid");
+                var result = _sut.TestValidate(new Create.Command(name, Amount, Type, new Create.Frequency()));
+                result.IsValid.Should().BeFalse();
             }
 
             [Fact]
             public void Should_Have_Error_If_Amount_Invalid()
             {
-                _sut.ShouldHaveValidationErrorFor(x => x.Amount, -0.1m);
-            }
-
-            [Fact]
-            public void Should_Not_Have_Error_If_Amount_Valid()
-            {
-                _sut.ShouldNotHaveValidationErrorFor(x => x.Amount, 10);
+                var result = _sut.TestValidate(new Create.Command(Name, -1, Type, new Create.Frequency()));
+                result.IsValid.Should().BeFalse();
             }
 
             [Fact]
             public void Should_Have_Error_If_Type_Invalid()
             {
-                _sut.ShouldHaveValidationErrorFor(x => x.Type, (MovementType)5);
+                var result = _sut.TestValidate(new Create.Command(Name, Amount, (MovementType)4, new Create.Frequency()));
+                result.IsValid.Should().BeFalse();
             }
-
+        
             [Fact]
-            public void Should_Not_Have_Error_If_Type_Valid()
+            public void Should_Not_Have_Error_If_All_Valid()
             {
-                _sut.ShouldNotHaveValidationErrorFor(x => x.Type, MovementType.Expense);
+                var result = _sut.TestValidate(new Create.Command(Name, Amount, Type, new Create.Frequency()));
+                result.IsValid.Should().BeTrue();
             }
         }
-
+        
         public class FrequencyValidatorTests
         {
             private readonly Create.FrequencyValidator _sut;
-
+        
             public FrequencyValidatorTests()
             {
                 _sut = new Create.FrequencyValidator();
             }
-
+        
             [Fact]
             public void Should_Have_Error_If_Type_Invalid()
             {
-                _sut.ShouldHaveValidationErrorFor(x => x.Type, (FrequencyType)5);
-            }
-
-            [Fact]
-            public void Should_Not_Have_Error_If_Type_Valid()
-            {
-                _sut.ShouldNotHaveValidationErrorFor(x => x.Type, FrequencyType.Yearly);
+                var result = _sut.TestValidate(new Create.Frequency
+                {
+                    Type = (FrequencyType)5
+                });
+                result.IsValid.Should().BeFalse();
             }
 
             [Theory]
@@ -87,13 +82,8 @@ namespace HomeEconomics.UnitTests.Features.Movements
                     Type = FrequencyType.Yearly,
                     Month = month
                 };
-                _sut.ShouldHaveValidationErrorFor(x => x.Month, frequency);
-            }
-
-            [Fact]
-            public void Should_Not_Have_Error_If_Month_Valid()
-            {
-                _sut.ShouldNotHaveValidationErrorFor(x => x.Month, 6);
+                var result = _sut.TestValidate(frequency);
+                result.IsValid.Should().BeFalse();
             }
 
             [Fact]
@@ -104,20 +94,28 @@ namespace HomeEconomics.UnitTests.Features.Movements
                     Type = FrequencyType.Custom,
                     Months = new[] { true, false }
                 };
-                _sut.ShouldHaveValidationErrorFor(x => x.Months, frequency1);
-
+                var result = _sut.TestValidate(frequency1);
+                result.IsValid.Should().BeFalse();
+        
                 var frequency2 = new Create.Frequency
                 {
                     Type = FrequencyType.Custom,
                     Months = new[] { true, false, false, false, false, false, false, false, false, false, false, false }
-                };
-                _sut.ShouldHaveValidationErrorFor(x => x.Months, frequency2);
+                }; 
+                result = _sut.TestValidate(frequency2);
+                result.IsValid.Should().BeFalse();
             }
-
+        
             [Fact]
-            public void Should_Not_Have_Error_If_Months_Valid()
+            public void Should_Not_Have_Error_If_All_Valid()
             {
-                _sut.ShouldNotHaveValidationErrorFor(x => x.Months, new[] { true, false, false, false, false, true, false, false, false, false, false, false });
+                var frequency = new Create.Frequency
+                {
+                    Type = FrequencyType.Custom,
+                    Months = new[] { true, true, false, false, false, false, false, false, false, false, false, false }
+                }; 
+                var result = _sut.TestValidate(frequency);
+                result.IsValid.Should().BeTrue();
             }
         }
     }

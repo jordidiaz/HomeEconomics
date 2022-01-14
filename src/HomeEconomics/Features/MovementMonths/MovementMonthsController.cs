@@ -34,11 +34,7 @@ namespace HomeEconomics.Features.MovementMonths
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Detail(int year, int month)
         {
-            var movementMonth = await _mediator.Send(new Detail.Query
-            {
-                Year = year,
-                Month = month
-            });
+            var movementMonth = await _mediator.Send(new Detail.Query(year, month));
 
             if (movementMonth is null)
             {
@@ -54,11 +50,7 @@ namespace HomeEconomics.Features.MovementMonths
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> PayMonthMovement(int movementMonthId, int monthMovementId)
         {
-            var result = await _mediator.Send(new PayMonthMovement.Command
-            {
-                MovementMonthId = movementMonthId,
-                MonthMovementId = monthMovementId
-            });
+            var result = await _mediator.Send(new PayMonthMovement.Command(movementMonthId, monthMovementId));
 
             return Ok(result);
         }
@@ -69,11 +61,7 @@ namespace HomeEconomics.Features.MovementMonths
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> UnPayMonthMovement(int movementMonthId, int monthMovementId)
         {
-            var result = await _mediator.Send(new UnPayMonthMovement.Command
-            {
-                MovementMonthId = movementMonthId,
-                MonthMovementId = monthMovementId
-            });
+            var result = await _mediator.Send(new UnPayMonthMovement.Command(movementMonthId, monthMovementId));
 
             return Ok(result);
         }
@@ -84,11 +72,7 @@ namespace HomeEconomics.Features.MovementMonths
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> DeleteMonthMovement(int movementMonthId, int monthMovementId)
         {
-            var result = await _mediator.Send(new DeleteMonthMovement.Command
-            {
-                MovementMonthId = movementMonthId,
-                MonthMovementId = monthMovementId
-            });
+            var result = await _mediator.Send(new DeleteMonthMovement.Command(movementMonthId, monthMovementId));
 
             return Ok(result);
         }
@@ -132,11 +116,7 @@ namespace HomeEconomics.Features.MovementMonths
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> MonthMovementToNextMovementMonth(int movementMonthId, int monthMovementId)
         {
-            var result = await _mediator.Send(new MonthMovementToNextMovementMonth.Command
-            {
-                MovementMonthId = movementMonthId,
-                MonthMovementId = monthMovementId
-            });
+            var result = await _mediator.Send(new MonthMovementToNextMovementMonth.Command(movementMonthId, monthMovementId));
 
             return Ok(result);
         }

@@ -8,12 +8,7 @@ namespace HomeEconomics.Features.MovementMonths
 {
     public class Detail
     {
-        public class Query : IRequest<MovementMonthResponse>
-        {
-            public int Year { get; init; }
-
-            public int Month { get; init; }
-        }
+        public record Query(int Year, int Month) : IRequest<MovementMonthResponse>;
 
         public class Handler : IRequestHandler<Query, MovementMonthResponse?>
         {

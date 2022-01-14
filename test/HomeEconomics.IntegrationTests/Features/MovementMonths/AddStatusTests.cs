@@ -20,13 +20,11 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
 
         public AddStatusTests(Fixture fixture) : base(fixture)
         {
-            _command = new AddStatus.Command
-            {
-                Year = DateTime.Now.Year,
-                Month = Month.Jan,
-                AccountAmount = 900,
-                CashAmount = 50
-            };
+            _command = new AddStatus.Command(
+                DateTime.Now.Year,
+                Month.Jan,
+                900,
+                50);
         }
 
         [Fact]
@@ -43,13 +41,11 @@ namespace HomeEconomics.IntegrationTests.Features.MovementMonths
         [Fact]
         public async Task Should_Return_400_BadRequest()
         {
-            _command = new AddStatus.Command
-            {
-                Year = DateTime.Now.Year - 1,
-                Month = 0,
-                AccountAmount = 900,
-                CashAmount = 50
-            };
+            _command = new AddStatus.Command(
+                DateTime.Now.Year - 1,
+                0,
+                900,
+                50);
 
             var response = await HttpClient
                 .PostAsync(Uri, _command);

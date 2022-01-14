@@ -15,11 +15,9 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
         public CreateTests()
         {
-            _command = new MovementMonth.Create.Command
-            {
-                Year = DateTime.Now.Year,
-                Month = Month.Jan
-            };
+            _command = new MovementMonth.Create.Command(
+                DateTime.Now.Year,
+                Month.Jan);
         }
 
         [Fact]

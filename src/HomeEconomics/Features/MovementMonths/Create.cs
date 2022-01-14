@@ -15,12 +15,7 @@ namespace HomeEconomics.Features.MovementMonths
 {
     public class Create
     {
-        public class Command : IRequest<MovementMonthResponse>
-        {
-            public int Year { get; init; }
-
-            public Month Month { get; init; }
-        }
+        public record Command(int Year, Month Month) : IRequest<MovementMonthResponse>;
 
         public class Validator : AbstractValidator<Command>
         {

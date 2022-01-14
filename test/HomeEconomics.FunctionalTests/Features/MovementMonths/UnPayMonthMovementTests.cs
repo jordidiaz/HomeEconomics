@@ -10,12 +10,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 {
     public class UnPayMonthMovementTests : FunctionalTestBase
     {
-        private UnPayMonthMovement.Command _command;
-
-        public UnPayMonthMovementTests()
-        {
-            _command = new UnPayMonthMovement.Command();
-        }
+        private UnPayMonthMovement.Command _command = default!;
 
         [Fact]
         public async Task Should_Unpay_MonthMovement_And_Return_Resume()
@@ -26,17 +21,13 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
             await AddStatus(movementMonth.Year, movementMonth.Month, 1000, 50);
 
-            await Fixture.SendToMediatRAsync(new PayMonthMovement.Command
-            {
-                MovementMonthId = movementMonth.Id,
-                MonthMovementId = movementMonth.MonthMovements.First().Id
-            });
+            await Fixture.SendToMediatRAsync(new PayMonthMovement.Command(
+                movementMonth.Id,
+                movementMonth.MonthMovements.First().Id));
 
-            _command = new UnPayMonthMovement.Command
-            {
-                MovementMonthId = movementMonth.Id,
-                MonthMovementId = movementMonth.MonthMovements.First().Id
-            };
+            _command = new UnPayMonthMovement.Command(
+                movementMonth.Id,
+                movementMonth.MonthMovements.First().Id);
 
             var result = await Fixture.SendToMediatRAsync(_command);
 
@@ -49,11 +40,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
         [Fact]
         public void Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
         {
-            _command = new UnPayMonthMovement.Command
-            {
-                MovementMonthId = 0,
-                MonthMovementId = 0
-            };
+            _command = new UnPayMonthMovement.Command(0, 0);
 
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 
