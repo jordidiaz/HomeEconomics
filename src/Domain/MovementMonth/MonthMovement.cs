@@ -5,12 +5,11 @@ namespace Domain.MovementMonth
 {
     public class MonthMovement : Entity
     {
-#nullable disable
+        // ReSharper disable once UnusedMember.Global
         protected MonthMovement()
         {
 
         }
-#nullable enable
 
         internal MonthMovement(MovementMonth movementMonth, string name, decimal amount, MovementType type)
         {
@@ -27,11 +26,10 @@ namespace Domain.MovementMonth
             Amount = amount;
             Type = type;
             Name = name;
-            MovementMonth = movementMonth;
             MovementMonthId = movementMonth.Id;
         }
 
-        public string Name { get; private set; }
+        public string Name { get; private set; } = string.Empty;
 
         public decimal Amount { get; private set; }
 
@@ -40,9 +38,6 @@ namespace Domain.MovementMonth
         public bool Paid { get; private set; }
 
         public int MovementMonthId { get; private set; }
-
-        public MovementMonth MovementMonth { get; private set; }
-
 
         internal void Pay()
         {

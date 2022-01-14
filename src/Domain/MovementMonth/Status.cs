@@ -5,16 +5,15 @@ namespace Domain.MovementMonth
 {
     public class Status : Entity
     {
-#nullable disable
+        // ReSharper disable once UnusedMember.Global
         protected Status()
         {
 
         }
-#nullable enable
 
         internal Status(MovementMonth movementMonth, int day, decimal accountAmount, decimal cashAmount)
         {
-            if (day < 0 || day > 31)
+            if (day is < 0 or > 31)
             {
                 throw new ArgumentOutOfRangeException(nameof(day));
             }
@@ -32,7 +31,6 @@ namespace Domain.MovementMonth
             Day = day;
             AccountAmount = accountAmount;
             CashAmount = cashAmount;
-            MovementMonth = movementMonth;
             MovementMonthId = movementMonth.Id;
         }
 
@@ -43,9 +41,6 @@ namespace Domain.MovementMonth
         public decimal CashAmount { get; private set; }
 
         public int MovementMonthId { get; private set; }
-
-        public MovementMonth MovementMonth { get; private set; }
-
 
         internal void SetAccountAmount(decimal accountAmount)
         {

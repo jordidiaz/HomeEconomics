@@ -40,8 +40,8 @@ namespace HomeEconomics.Services
         public async Task<MovementMonth?> GetMovementMonthAsync(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
         {
             return await _dbContext.MovementMonths
-                .Include(mm => mm.MonthMovements)
-                .Include(mm => mm.Statuses)
+                .Include("_monthMovements")
+                .Include("_statuses")
                 .SingleOrDefaultAsync(predicate,
                     cancellationToken: cancellationToken);
         }

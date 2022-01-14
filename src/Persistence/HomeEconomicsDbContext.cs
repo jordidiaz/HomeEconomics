@@ -12,11 +12,11 @@ namespace Persistence
         {
         }
 
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DbSet<Movement> Movements { get; set; }
 
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DbSet<MovementMonth> MovementMonths { get; set; }
-
-        public DbSet<Status> Statuses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

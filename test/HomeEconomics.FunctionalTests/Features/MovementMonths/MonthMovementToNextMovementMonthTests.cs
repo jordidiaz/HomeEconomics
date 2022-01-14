@@ -44,14 +44,14 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
             {
                 return await homeEconomicsDbContext
                     .MovementMonths
-                    .Include(mm => mm.MonthMovements)
+                    .Include("_monthMovements")
                     .SingleOrDefaultAsync(mm => mm.Id == nextMovementMonthResponse.Id);
             });
 
             movementMonthResponse.MonthMovements.Length.Should().Be(1);
             movementMonthResponse.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon").Should().BeNull();
-            nextMovementMonth.MonthMovements.Count().Should().Be(2);
-            nextMovementMonth.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon").Should().NotBeNull();
+            nextMovementMonth.GetMonthMovements().Count().Should().Be(2);
+            nextMovementMonth.GetMonthMovements().SingleOrDefault(mm => mm.Name == "Amazon").Should().NotBeNull();
         }
 
         [Fact]

@@ -30,8 +30,8 @@ namespace Domain.UnitTests.MovementMonth
             _sut.AddMonthMovement(Name1, Amount1, MovementType1);
             _sut.AddMonthMovement(Name2, Amount2, MovementType2);
 
-            _sut.MonthMovements.First().SetIdentity(1);
-            _sut.MonthMovements.Last().SetIdentity(2);
+            _sut.GetMonthMovements().First().SetIdentity(1);
+            _sut.GetMonthMovements().Last().SetIdentity(2);
         }
 
         [Fact]
@@ -67,22 +67,22 @@ namespace Domain.UnitTests.MovementMonth
             _sut.ClearMovementMonths();
             _sut.AddMonthMovement(Name1, Amount1, MovementType1);
 
-            _sut.MonthMovements.Count().Should().Be(1);
-            _sut.MonthMovements.First().Name.Should().Be(Name1);
-            _sut.MonthMovements.First().Amount.Should().Be(Amount1);
-            _sut.MonthMovements.First().Type.Should().Be(MovementType1);
-            _sut.MonthMovements.First().Paid.Should().BeFalse();
+            _sut.GetMonthMovements().Count().Should().Be(1);
+            _sut.GetMonthMovements().First().Name.Should().Be(Name1);
+            _sut.GetMonthMovements().First().Amount.Should().Be(Amount1);
+            _sut.GetMonthMovements().First().Type.Should().Be(MovementType1);
+            _sut.GetMonthMovements().First().Paid.Should().BeFalse();
 
         }
 
         [Fact]
         public void PayMonthMovement_Sets_MonthMovement_Paid()
         {
-            _sut.MonthMovements.First().Paid.Should().BeFalse();
+            _sut.GetMonthMovements().First().Paid.Should().BeFalse();
 
             _sut.PayMonthMovement(1);
 
-            _sut.MonthMovements.First().Paid.Should().BeTrue();
+            _sut.GetMonthMovements().First().Paid.Should().BeTrue();
         }
 
         [Fact]
@@ -98,11 +98,11 @@ namespace Domain.UnitTests.MovementMonth
         {
             _sut.PayMonthMovement(1);
 
-            _sut.MonthMovements.First().Paid.Should().BeTrue();
+            _sut.GetMonthMovements().First().Paid.Should().BeTrue();
 
             _sut.UnPayMonthMovement(1);
 
-            _sut.MonthMovements.First().Paid.Should().BeFalse();
+            _sut.GetMonthMovements().First().Paid.Should().BeFalse();
         }
 
         [Fact]
@@ -124,11 +124,11 @@ namespace Domain.UnitTests.MovementMonth
         [Fact]
         public void UpdateMonthMovementAmount_Updates_MonthMovement_Amount()
         {
-            _sut.MonthMovements.First().Amount.Should().Be(50m);
+            _sut.GetMonthMovements().First().Amount.Should().Be(50m);
 
             _sut.UpdateMonthMovementAmount(1, 60);
 
-            _sut.MonthMovements.First().Amount.Should().Be(60m);
+            _sut.GetMonthMovements().First().Amount.Should().Be(60m);
         }
 
         [Fact]
@@ -142,11 +142,11 @@ namespace Domain.UnitTests.MovementMonth
         [Fact]
         public void DeleteMonthMovementAmount_Deletes_MonthMovement()
         {
-            _sut.MonthMovements.SingleOrDefault(monthMovement => monthMovement.Id == 1).Should().NotBeNull();
+            _sut.GetMonthMovements().SingleOrDefault(monthMovement => monthMovement.Id == 1).Should().NotBeNull();
 
             _sut.DeleteMonthMovement(1);
 
-            _sut.MonthMovements.SingleOrDefault(monthMovement => monthMovement.Id == 1).Should().BeNull();
+            _sut.GetMonthMovements().SingleOrDefault(monthMovement => monthMovement.Id == 1).Should().BeNull();
         }
 
         [Fact]
@@ -186,11 +186,11 @@ namespace Domain.UnitTests.MovementMonth
         [Fact]
         public void AddStatus_Adds_Status()
         {
-            _sut.Statuses.Count.Should().Be(0);
+            _sut.GetStatuses().Count().Should().Be(0);
 
             _sut.AddStatus(Day, AccountAmount, CashAmount);
 
-            _sut.Statuses.Count.Should().Be(1);
+            _sut.GetStatuses().Count().Should().Be(1);
 
         }
 
@@ -201,9 +201,9 @@ namespace Domain.UnitTests.MovementMonth
 
             _sut.AddStatus(Day, AccountAmount, 33);
 
-            _sut.Statuses.Count.Should().Be(1);
-            _sut.Statuses.Single(s => s.Day == Day).AccountAmount.Should().Be(AccountAmount);
-            _sut.Statuses.Single(s => s.Day == Day).CashAmount.Should().Be(33);
+            _sut.GetStatuses().Count().Should().Be(1);
+            _sut.GetStatuses().Single(s => s.Day == Day).AccountAmount.Should().Be(AccountAmount);
+            _sut.GetStatuses().Single(s => s.Day == Day).CashAmount.Should().Be(33);
         }
 
         [Theory]

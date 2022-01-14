@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Domain.Movements
 {
-    public class MonthCollection : IList<bool>
+    public class MonthCollection : ICollection<bool>
     {
         private readonly IList<bool> _months;
 
@@ -70,25 +70,11 @@ namespace Domain.Movements
 
         public int Count => _months.Count;
         public bool IsReadOnly => _months.IsReadOnly;
-        
-        public int IndexOf(bool item)
-        {
-            return _months.IndexOf(item);
-        }
-
-        public void Insert(int index, bool item)
-        {
-            _months.Insert(index, item);
-        }
-
-        public void RemoveAt(int index)
-        {
-            _months.RemoveAt(index);
-        }
 
         public bool this[int index]
         {
             get => _months[index];
+            // ReSharper disable once UnusedMember.Global
             set => _months[index] = value;
         }
     }

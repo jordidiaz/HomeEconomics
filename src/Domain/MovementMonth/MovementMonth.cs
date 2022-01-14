@@ -27,12 +27,7 @@ namespace Domain.MovementMonth
 
         private readonly MonthMovementCollection _monthMovements;
         
-        public IEnumerable<MonthMovement> MonthMovements => _monthMovements;
-
         private readonly StatusCollection _statuses;
-
-        public ICollection<Status> Statuses => _statuses;
-
 
         public void AddMonthMovement(string name, decimal amount, MovementType type)
         {
@@ -87,6 +82,12 @@ namespace Domain.MovementMonth
         {
             _monthMovements.Clear();
         }
+        
+        public IEnumerable<MonthMovement> GetMonthMovements()
+            => _monthMovements;
+        
+        public IEnumerable<Status> GetStatuses()
+            => _statuses;
 
         private MonthMovement GetMonthMovementOrThrow(int monthMovementId)
         {

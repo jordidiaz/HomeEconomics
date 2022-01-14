@@ -15,14 +15,14 @@ namespace Persistence.Configurations
             builder.HasIndex(movementMonth => new { movementMonth.Year, movementMonth.Month })
                 .IsUnique();
 
-            builder.HasMany(movementMonth => movementMonth.MonthMovements)
-                .WithOne(monthMovement => monthMovement.MovementMonth)
-                .HasForeignKey(monthMovement => monthMovement.MovementMonthId)
+            builder.HasMany("_monthMovements")
+                .WithOne()
+                .HasForeignKey(nameof(MonthMovement.MovementMonthId))
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(movementMonth => movementMonth.Statuses)
-                .WithOne(status => status.MovementMonth)
-                .HasForeignKey(monthMovement => monthMovement.MovementMonthId)
+            builder.HasMany("_statuses")
+                .WithOne()
+                .HasForeignKey(nameof(Status.MovementMonthId))
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

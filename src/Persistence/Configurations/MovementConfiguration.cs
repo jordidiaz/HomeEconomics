@@ -20,7 +20,7 @@ namespace Persistence.Configurations
                 .IsRequired();
 
             builder.HasOne(movement => movement.Frequency)
-                .WithOne(frequency => frequency.Movement)
+                .WithOne()
                 .HasForeignKey<Frequency>(frequency => frequency.MovementId)
                 .OnDelete(DeleteBehavior.Cascade);
 
