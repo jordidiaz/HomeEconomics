@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
 using Domain.Movements;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,10 +11,10 @@ namespace Persistence
         }
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
-        public DbSet<Movement> Movements { get; set; }
+        public DbSet<Movement> Movements { get; set; } = default!;
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
-        public DbSet<MovementMonth> MovementMonths { get; set; }
+        public DbSet<MovementMonth> MovementMonths { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -5,17 +5,14 @@ namespace Domain.Movements
 {
     public class Frequency : Entity
     {
-#nullable disable
         public Frequency()
         {
             Months = MonthCollection.Init();
         }
-#nullable enable
 
         internal Frequency(Movement movement, FrequencyType type)
         {
             Type = type;
-            Movement = movement;
             MovementId = movement.Id;
             Months = MonthCollection.Init();
         }
@@ -25,8 +22,6 @@ namespace Domain.Movements
         public MonthCollection Months { get; private set; }
 
         public int MovementId { get; private set; }
-
-        public Movement Movement { get; private set; }
 
         internal void SetNoneFrequency()
         {
