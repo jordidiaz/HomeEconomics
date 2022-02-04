@@ -33,10 +33,7 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
 
             movement.Should().NotBeNull();
 
-            await Fixture.SendToMediatRAsync(new Delete.Command
-            {
-                Id = movementId
-            });
+            await Fixture.SendToMediatRAsync(new Delete.Command(movementId));
 
             movement = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
             {
@@ -52,10 +49,7 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
         [Fact]
         public void Should_Throw_InvalidOperationException_If_Movement_Not_Exists()
         {
-            Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Delete.Command
-            {
-                Id = 42
-            });
+            Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Delete.Command(42));
 
             action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MovementNotExists);
         }

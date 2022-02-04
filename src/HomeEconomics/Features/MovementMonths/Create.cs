@@ -39,7 +39,7 @@ namespace HomeEconomics.Features.MovementMonths
 
             public async Task<MovementMonthResponse?> Handle(Command request, CancellationToken cancellationToken)
             {
-                var movementMonth = await _movementMonthService.GetMovementMonthAsync(
+                var movementMonth = await _dbContext.GetMovementMonthAsync(
                     mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
 
                 if (movementMonth != null)
@@ -48,8 +48,7 @@ namespace HomeEconomics.Features.MovementMonths
                 }
 
                 var movements = _dbContext
-                    .Movements
-                    .Include(m => m.Frequency)
+                    .GetMovements()
                     .AsEnumerable()
                     .Where(m => UseMovement(m, request.Month))
                     .ToArray();

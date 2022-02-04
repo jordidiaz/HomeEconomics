@@ -44,10 +44,7 @@ namespace HomeEconomics.Features.Movements
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> Delete(int id)
         {
-            await _mediator.Send(new Delete.Command
-            {
-                Id = id
-            });
+            await _mediator.Send(new Delete.Command(id));
 
             return NoContent();
         }

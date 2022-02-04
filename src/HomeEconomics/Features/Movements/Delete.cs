@@ -10,10 +10,7 @@ namespace HomeEconomics.Features.Movements
 {
     public class Delete
     {
-        public record Command : IRequest
-        {
-            public int Id { get; init; }
-        }
+        public record Command(int Id) : IRequest;
 
         public class Validator : AbstractValidator<Command>
         {
@@ -34,8 +31,8 @@ namespace HomeEconomics.Features.Movements
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var movement = await _dbContext.Movements
-                    .SingleOrDefaultAsync(m => m.Id == request.Id, cancellationToken: cancellationToken);
+                var movement =
+                    await _dbContext.GetMovementAsync(m => m.Id == request.Id, cancellationToken: cancellationToken);
 
                 if (movement is null)
                 {

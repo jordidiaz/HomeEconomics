@@ -3,11 +3,12 @@ using FluentValidation;
 using HomeEconomics.Helpers;
 using HomeEconomics.Services;
 using MediatR;
-using Persistence;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain.Movements;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 namespace HomeEconomics.Features.MovementMonths
 {
@@ -31,16 +32,15 @@ namespace HomeEconomics.Features.MovementMonths
             private readonly IMovementMonthService _movementMonthService;
             private readonly HomeEconomicsDbContext _dbContext;
 
-            public Handler(HomeEconomicsDbContext dbContext, IMovementMonthService movementMonthService)
+            public Handler(IMovementMonthService movementMonthService, HomeEconomicsDbContext dbContext)
             {
-                _dbContext = dbContext;
                 _movementMonthService = movementMonthService;
+                _dbContext = dbContext;
             }
 
             public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
             {
-                var movementMonth = await _movementMonthService.GetMovementMonthAsync(
-                    mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
+                var movementMonth = await _dbContext.GetMovementMonthAsync(mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
 
                 if (movementMonth is null)
                 {

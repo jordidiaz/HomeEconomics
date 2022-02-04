@@ -67,17 +67,20 @@ namespace HomeEconomics.Features.Movements
                 _mapper = mapper;
             }
 
-            public async Task<Result> Handle(Query request, CancellationToken cancellationToken)
+            public Task<Result> Handle(Query request, CancellationToken cancellationToken)
             {
-                var movements = await _mapper.ProjectTo<Result.Movement>(_dbContext.Movements
-                        .Include(m => m.Frequency)
-                        .OrderBy(m => m.Name))
-                        .ToArrayAsync(cancellationToken: cancellationToken);
+                var queryable = _dbContext.GetMovements()
+                    .OrderBy(m => m.Name)
+                    .AsQueryable();
+                
+                var movements = _mapper
+                    .ProjectTo<Result.Movement>(queryable)
+                    .ToArray();
 
-                return new Result
+                return Task.FromResult(new Result
                 {
                     Movements = movements
-                };
+                });
             }
         }
     }

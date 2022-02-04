@@ -71,10 +71,8 @@ namespace HomeEconomics.Features.Movements
 
             public async Task<int> Handle(Command request, CancellationToken cancellationToken)
             {
-                var movement = await _dbContext
-                    .Movements
-                    .Include(m => m.Frequency)
-                    .SingleOrDefaultAsync(m => m.Name == request.Name, cancellationToken: cancellationToken);
+                var movement = await _dbContext.GetMovementAsync(m => m.Name == request.Name,
+                    cancellationToken: cancellationToken);
 
                 if (movement != null)
                 {

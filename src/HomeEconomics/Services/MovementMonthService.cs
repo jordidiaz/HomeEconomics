@@ -23,7 +23,7 @@ namespace HomeEconomics.Services
 
         public async Task<MovementMonthResponse?> GetMovementMonthResponseAsync(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
         {
-            var movementMonth = await GetMovementMonthAsync(predicate, cancellationToken);
+            var movementMonth = await _dbContext.GetMovementMonthAsync(predicate, cancellationToken);
             if (movementMonth is null)
             {
                 return null;
@@ -37,16 +37,7 @@ namespace HomeEconomics.Services
             return movementMonthResponse;
         }
 
-        public async Task<MovementMonth?> GetMovementMonthAsync(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
-        {
-            return await _dbContext.MovementMonths
-                .Include("_monthMovements")
-                .Include("_statuses")
-                .SingleOrDefaultAsync(predicate,
-                    cancellationToken: cancellationToken);
-        }
-
-        public async Task<MovementMonth?> GetNextMovementMonthAsync(MovementMonth movementMonth, CancellationToken cancellationToken)
+        private async Task<MovementMonth?> GetNextMovementMonthAsync(MovementMonth movementMonth, CancellationToken cancellationToken)
         {
             var year = movementMonth.Year;
             var month = movementMonth.Month;
@@ -65,7 +56,7 @@ namespace HomeEconomics.Services
                 nextMonth = (Month)((int)month + 1);
             }
 
-            var nextMovementMonth = await GetMovementMonthAsync(mm => mm.Year == nextYear && mm.Month == nextMonth,
+            var nextMovementMonth = await _dbContext.GetMovementMonthAsync(mm => mm.Year == nextYear && mm.Month == nextMonth,
                 cancellationToken: cancellationToken);
 
             return nextMovementMonth;
