@@ -28,12 +28,12 @@ namespace HomeEconomics.Features.MovementMonths
 
         public class Handler : IRequestHandler<Command, MovementMonthResponse>
         {
-            private readonly IMovementMonthService _movementMonthService;
+            private readonly IMovementMonthResponseService _movementMonthResponseService;
             private readonly HomeEconomicsDbContext _dbContext;
 
-            public Handler(IMovementMonthService movementMonthService, HomeEconomicsDbContext dbContext)
+            public Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
             {
-                _movementMonthService = movementMonthService;
+                _movementMonthResponseService = movementMonthResponseService;
                 _dbContext = dbContext;
             }
 
@@ -52,7 +52,7 @@ namespace HomeEconomics.Features.MovementMonths
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
-                return await _movementMonthService.MapToMovementMonthResponseAsync(movementMonth, cancellationToken);
+                return await _movementMonthResponseService.Get(movementMonth, cancellationToken);
             }
         }
     }

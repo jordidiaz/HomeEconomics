@@ -12,16 +12,16 @@ namespace HomeEconomics.Features.MovementMonths
 
         public class Handler : IRequestHandler<Query, MovementMonthResponse?>
         {
-            private readonly IMovementMonthService _movementMonthService;
+            private readonly IMovementMonthResponseService _movementMonthResponseService;
 
-            public Handler(IMovementMonthService movementMonthService)
+            public Handler(IMovementMonthResponseService movementMonthResponseService)
             {
-                _movementMonthService = movementMonthService;
+                _movementMonthResponseService = movementMonthResponseService;
             }
 
             public async Task<MovementMonthResponse?> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _movementMonthService.GetMovementMonthResponseAsync(
+                return await _movementMonthResponseService.Get(
                     mm => mm.Year == request.Year && mm.Month == (Month)request.Month,
                     cancellationToken: cancellationToken);
             }

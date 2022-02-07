@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddHomeEconomicsServices(this IServiceCollection services)
         {
             return services
-                .AddTransient<IMovementMonthService, MovementMonthService>();
+                .AddTransient<IMovementMonthResponseService, MovementMonthResponseService>();
         }
 
         internal static IServiceCollection AddHomeEconomicsSwagger(this IServiceCollection services)

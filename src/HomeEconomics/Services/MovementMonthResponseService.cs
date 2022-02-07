@@ -10,18 +10,18 @@ using System.Threading.Tasks;
 
 namespace HomeEconomics.Services
 {
-    public class MovementMonthService : IMovementMonthService
+    public class MovementMonthResponseService : IMovementMonthResponseService
     {
         private readonly HomeEconomicsDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        public MovementMonthService(HomeEconomicsDbContext dbContext, IMapper mapper)
+        public MovementMonthResponseService(HomeEconomicsDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
         }
 
-        public async Task<MovementMonthResponse?> GetMovementMonthResponseAsync(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
+        public async Task<MovementMonthResponse?> Get(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
         {
             var movementMonth = await _dbContext.GetMovementMonthAsync(predicate, cancellationToken);
             if (movementMonth is null)
@@ -29,6 +29,11 @@ namespace HomeEconomics.Services
                 return null;
             }
 
+            return await Get(movementMonth, cancellationToken);
+        }
+
+        public async Task<MovementMonthResponse> Get(MovementMonth movementMonth, CancellationToken cancellationToken)
+        {
             var nextMovementMonth = await GetNextMovementMonthAsync(movementMonth, cancellationToken);
 
             var movementMonthResponse = _mapper.Map<MovementMonthResponse>(movementMonth);
@@ -60,18 +65,6 @@ namespace HomeEconomics.Services
                 cancellationToken: cancellationToken);
 
             return nextMovementMonth;
-        }
-
-        public async Task<MovementMonthResponse> MapToMovementMonthResponseAsync(MovementMonth movementMonth, CancellationToken cancellationToken)
-        {
-            var movementMonthResponse = _mapper.Map<MovementMonthResponse>(movementMonth);
-
-            var nextMovementMonth = await GetNextMovementMonthAsync(movementMonth, cancellationToken);
-
-            movementMonthResponse.NextMovementMonthExists = nextMovementMonth != null;
-
-            return movementMonthResponse;
-
         }
     }
 }
