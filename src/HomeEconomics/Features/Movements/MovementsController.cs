@@ -25,7 +25,7 @@ namespace HomeEconomics.Features.Movements
         {
             var id = await _mediator.Send(command);
 
-            return Ok(id);
+            return Ok();
         }
 
         [HttpGet]

@@ -25,7 +25,6 @@ namespace HomeEconomics
                 .AddHomeEconomicsServices()
                 .AddIf(WebHostEnvironment.IsDevelopment(), serviceCollection => serviceCollection.AddCors())
                 .AddHomeEconomicsMediatR()
-                .AddHomeEconomicsAutoMapper()
                 .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment())
                 .AddHomeEconomicsSwagger()
                 .AddApplicationInsightsTelemetry()

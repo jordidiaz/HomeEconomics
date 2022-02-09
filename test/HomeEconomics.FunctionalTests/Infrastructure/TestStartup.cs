@@ -24,7 +24,6 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
                 .AddHomeEconomicsApi()
                 .AddHomeEconomicsServices()
                 .AddHomeEconomicsMediatR()
-                .AddHomeEconomicsAutoMapper()
                 .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment());
         }
 

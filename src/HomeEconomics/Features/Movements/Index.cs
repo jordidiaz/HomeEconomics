@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Domain.Movements;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
@@ -12,9 +10,7 @@ namespace HomeEconomics.Features.Movements
 {
     public class Index
     {
-        public record Query : IRequest<Result>
-        {
-        }
+        public record Query : IRequest<Result>;
 
         public record Result
         {
@@ -35,51 +31,43 @@ namespace HomeEconomics.Features.Movements
                 public bool[] FrequencyMonths { get; init; } = new bool[12];
 
                 public int FrequencyMonth { get; init; }
-            }
-        }
 
-        public class MovementsIndexProfile : Profile
-        {
-            public MovementsIndexProfile()
-            {
-                CreateMap<Movement, Result.Movement>()
-                .ForMember(destination => destination.Type,
-                    memberConfigurationExpression =>
-                        memberConfigurationExpression.MapFrom(source => (int)source.Type))
-                .ForMember(destination => destination.FrequencyType,
-                    memberConfigurationExpression =>
-                        memberConfigurationExpression.MapFrom(source => (int)source.Frequency.Type))
-                .ForMember(destination => destination.FrequencyMonth,
-                    memberConfigurationExpression => memberConfigurationExpression.MapFrom(source => source.Frequency.Type == FrequencyType.Yearly
-                        ? Array.IndexOf(source.Frequency.Months.ToArray(), true) + 1
-                        : 0));
+                public static Movement FromMovement(Domain.Movements.Movement movement)
+                {
+                    return new Movement
+                    {
+                        Id = movement.Id,
+                        Name = movement.Name,
+                        Amount = movement.Amount,
+                        Type = (int)movement.Type,
+                        FrequencyType = (int)movement.Frequency.Type,
+                        FrequencyMonth = movement.Frequency.Type == Domain.Movements.FrequencyType.Yearly
+                            ? Array.IndexOf(movement.Frequency.Months.ToArray(), true) + 1
+                            : 0
+                    };
+                }
             }
         }
 
         public class Handler : IRequestHandler<Query, Result>
         {
             private readonly HomeEconomicsDbContext _dbContext;
-            private readonly IMapper _mapper;
 
-            public Handler(HomeEconomicsDbContext dbContext, IMapper mapper)
+            public Handler(HomeEconomicsDbContext dbContext)
             {
                 _dbContext = dbContext;
-                _mapper = mapper;
             }
 
             public Task<Result> Handle(Query request, CancellationToken cancellationToken)
             {
-                var queryable = _dbContext.GetMovements()
-                    .OrderBy(m => m.Name)
-                    .AsQueryable();
-                
-                var movements = _mapper
-                    .ProjectTo<Result.Movement>(queryable)
-                    .ToArray();
+                var movements = _dbContext.GetMovements()
+                    .OrderBy(m => m.Name);
 
                 return Task.FromResult(new Result
                 {
                     Movements = movements
+                        .Select(Result.Movement.FromMovement)
+                        .ToArray()
                 });
             }
         }

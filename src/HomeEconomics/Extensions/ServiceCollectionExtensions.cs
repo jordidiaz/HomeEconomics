@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using HomeEconomics.Services;
 using MediatR;
@@ -20,7 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services
                 .AddProblemDetails(problemDetailsOptions =>
                 {
-                    problemDetailsOptions.Map<InvalidOperationException>(ex => new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
+                    problemDetailsOptions.Map<InvalidOperationException>(_ => new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
                 })
                 .AddMvcCore()
                 .AddNewtonsoftJson()
@@ -39,12 +38,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return services
                 .AddMediatR(typeof(HomeEconomics.HomeEconomicsApp));
-        }
-
-        public static IServiceCollection AddHomeEconomicsAutoMapper(this IServiceCollection services)
-        {
-            return services
-                .AddAutoMapper(typeof(HomeEconomics.HomeEconomicsApp));
         }
 
         public static IServiceCollection AddHomeEconomicsServices(this IServiceCollection services)

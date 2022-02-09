@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
 using HomeEconomics.Features.MovementMonths;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -13,12 +12,10 @@ namespace HomeEconomics.Services
     public class MovementMonthResponseService : IMovementMonthResponseService
     {
         private readonly HomeEconomicsDbContext _dbContext;
-        private readonly IMapper _mapper;
 
-        public MovementMonthResponseService(HomeEconomicsDbContext dbContext, IMapper mapper)
+        public MovementMonthResponseService(HomeEconomicsDbContext dbContext)
         {
             _dbContext = dbContext;
-            _mapper = mapper;
         }
 
         public async Task<MovementMonthResponse?> Get(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
@@ -36,7 +33,7 @@ namespace HomeEconomics.Services
         {
             var nextMovementMonth = await GetNextMovementMonthAsync(movementMonth, cancellationToken);
 
-            var movementMonthResponse = _mapper.Map<MovementMonthResponse>(movementMonth);
+            var movementMonthResponse = MovementMonthResponse.FromMovementMonth(movementMonth);
             movementMonthResponse.NextMovementMonthExists = nextMovementMonth != null;
 
             return movementMonthResponse;
