@@ -90,5 +90,10 @@ namespace Domain.Movements
 
             return Frequency.IsMonthEnabled(monthNumber);
         }
+
+        public bool[] GetMonths()
+        {
+            return Frequency.GetMonths();
+        }
     }
 }

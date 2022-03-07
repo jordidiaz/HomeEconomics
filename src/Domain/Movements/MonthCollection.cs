@@ -77,5 +77,10 @@ namespace Domain.Movements
             // ReSharper disable once UnusedMember.Global
             set => _months[index] = value;
         }
+
+        internal bool[] GetMonths()
+        {
+            return _months.ToArray();
+        }
     }
 }

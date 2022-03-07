@@ -64,5 +64,10 @@ namespace Domain.Movements
         {
             return Months.IsMonthEnabled(month);
         }
+
+        internal bool[] GetMonths()
+        {
+            return Months.GetMonths();
+        }
     }
 }

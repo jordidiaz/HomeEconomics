@@ -40,9 +40,10 @@ namespace HomeEconomics.Features.Movements
                         Name = movement.Name,
                         Amount = movement.Amount,
                         Type = (int)movement.Type,
-                        FrequencyType = (int)movement.Frequency.Type,
-                        FrequencyMonth = movement.Frequency.Type == Domain.Movements.FrequencyType.Yearly
-                            ? Array.IndexOf(movement.Frequency.Months.ToArray(), true) + 1
+                        FrequencyType = (int)movement.GetFrequencyType(),
+                        FrequencyMonths = movement.GetMonths().ToArray(),
+                        FrequencyMonth = movement.GetFrequencyType() == Domain.Movements.FrequencyType.Yearly
+                            ? Array.IndexOf(movement.GetMonths(), true) + 1
                             : 0
                     };
                 }
