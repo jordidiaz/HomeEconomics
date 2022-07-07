@@ -20,7 +20,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     problemDetailsOptions.Map<InvalidOperationException>(_ => new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
                 })
                 .AddMvcCore()
-                .AddNewtonsoftJson()
                 .AddFluentValidation(fluentValidationMvcConfiguration =>
                     {
                         fluentValidationMvcConfiguration

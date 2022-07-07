@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Text;
+﻿using System.Text;
+using System.Text.Json;
 
 // ReSharper disable once CheckNamespace
 namespace System.Net.Http
@@ -18,7 +18,7 @@ namespace System.Net.Http
 
         private static HttpContent CreateHttpContent(object data)
         {
-            var content = JsonConvert.SerializeObject(data);
+            var content = JsonSerializer.Serialize(data);
             return new StringContent(content, Encoding.Unicode, "application/json");
         }
     }

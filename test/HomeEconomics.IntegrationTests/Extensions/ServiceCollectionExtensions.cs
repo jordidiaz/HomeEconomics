@@ -11,11 +11,10 @@ namespace HomeEconomics.IntegrationTests.Extensions
             return services
                 .AddProblemDetails(problemDetailsOptions =>
                 {
-                    problemDetailsOptions.Map<InvalidOperationException>(ex => new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
+                    problemDetailsOptions.Map<InvalidOperationException>(_ => new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
                 })
                 .AddMvcCore()
                 .AddApplicationPart(typeof(HomeEconomicsApp).Assembly)
-                .AddNewtonsoftJson()
                 .AddFluentValidation(fluentValidationMvcConfiguration =>
                 {
                     fluentValidationMvcConfiguration
