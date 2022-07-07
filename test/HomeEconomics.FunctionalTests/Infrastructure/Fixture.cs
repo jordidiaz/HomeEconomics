@@ -6,9 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using Respawn;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace HomeEconomics.FunctionalTests.Infrastructure
 {

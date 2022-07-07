@@ -3,5 +3,6 @@
     <NetTargetVersion>net6.0</NetTargetVersion>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
   </PropertyGroup>
 </Project>

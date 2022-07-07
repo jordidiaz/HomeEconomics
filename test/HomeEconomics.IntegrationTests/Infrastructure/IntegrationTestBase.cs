@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using Xunit;
+﻿using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Infrastructure
 {

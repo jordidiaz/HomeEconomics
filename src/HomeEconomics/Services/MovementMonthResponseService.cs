@@ -2,10 +2,7 @@
 using HomeEconomics.Features.MovementMonths;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HomeEconomics.Services
 {

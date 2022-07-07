@@ -1,5 +1,4 @@
-﻿using System;
-using Domain.Movements;
+﻿using Domain.Movements;
 
 namespace Domain.MovementMonth
 {

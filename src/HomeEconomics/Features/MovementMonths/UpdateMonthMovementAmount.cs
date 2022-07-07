@@ -1,10 +1,6 @@
 ﻿using FluentValidation;
 using HomeEconomics.Services;
 using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Domain.MovementMonth;
 using Domain.Movements;
 using Microsoft.EntityFrameworkCore;
 using Persistence;

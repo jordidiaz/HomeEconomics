@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Persistence;
+﻿using Persistence;
 using Serilog;
-using System;
-using System.Threading.Tasks;
 
 namespace HomeEconomics
 {

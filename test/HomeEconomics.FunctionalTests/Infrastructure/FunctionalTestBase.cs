@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
 using Domain.Movements;
 using HomeEconomics.Features.MovementMonths;
 using Xunit;

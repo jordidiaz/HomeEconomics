@@ -4,9 +4,6 @@ using HomeEconomics.Features.Movements;
 using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
 using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.Movements

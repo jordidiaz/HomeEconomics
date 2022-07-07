@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Domain.Movements
+﻿namespace Domain.Movements
 {
     public class Frequency : Entity
     {

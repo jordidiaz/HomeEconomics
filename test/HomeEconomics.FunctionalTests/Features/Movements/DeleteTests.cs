@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Domain.Movements;
+﻿using Domain.Movements;
 using FluentAssertions;
 using HomeEconomics.Features.Movements;
 using HomeEconomics.FunctionalTests.Infrastructure;

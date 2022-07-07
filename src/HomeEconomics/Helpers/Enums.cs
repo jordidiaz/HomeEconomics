@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HomeEconomics.Helpers
+﻿namespace HomeEconomics.Helpers
 {
     public static class Enums
     {

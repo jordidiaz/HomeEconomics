@@ -1,8 +1,6 @@
 ﻿using Domain.MovementMonth;
 using Domain.Movements;
 using FluentAssertions;
-using System;
-using System.Linq;
 using Xunit;
 
 namespace Domain.UnitTests.MovementMonth

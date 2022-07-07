@@ -1,9 +1,6 @@
 ﻿using Domain.MovementMonth;
 using HomeEconomics.Features.MovementMonths;
-using System;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HomeEconomics.Services
 {

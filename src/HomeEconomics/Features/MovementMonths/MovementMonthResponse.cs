@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
 using Domain.Movements;
 
 namespace HomeEconomics.Features.MovementMonths

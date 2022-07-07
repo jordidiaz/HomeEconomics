@@ -1,6 +1,4 @@
 ﻿using Hellang.Middleware.ProblemDetails;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using ServiceCollectionExtensions = HomeEconomics.IntegrationTests.Extensions.ServiceCollectionExtensions;
 
 namespace HomeEconomics.IntegrationTests.Infrastructure

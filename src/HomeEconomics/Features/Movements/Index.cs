@@ -1,10 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HomeEconomics.Features.Movements
 {

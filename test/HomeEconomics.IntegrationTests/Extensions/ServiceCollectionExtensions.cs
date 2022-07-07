@@ -1,9 +1,6 @@
 ﻿using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace HomeEconomics.IntegrationTests.Extensions
 {

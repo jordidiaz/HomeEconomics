@@ -1,9 +1,6 @@
 ﻿using Domain.Movements;
 using FluentAssertions;
-using HomeEconomics.Features.Movements;
 using HomeEconomics.FunctionalTests.Infrastructure;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HomeEconomics.FunctionalTests.Features.Movements
@@ -23,7 +20,7 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
             };
             await Fixture.InsertDbContextAsync(entities);
 
-            var result = await Fixture.SendToMediatRAsync(new Index.Query());
+            var result = await Fixture.SendToMediatRAsync(new HomeEconomics.Features.Movements.Index.Query());
 
             result.Movements.Length.Should().Be(3);
 

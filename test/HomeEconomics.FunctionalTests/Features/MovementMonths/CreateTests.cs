@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.MovementMonth;
+﻿using Domain.MovementMonth;
 using FluentAssertions;
 using HomeEconomics.FunctionalTests.Infrastructure;
 using Xunit;

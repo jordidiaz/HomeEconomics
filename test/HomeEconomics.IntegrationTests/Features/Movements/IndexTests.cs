@@ -1,11 +1,9 @@
 ﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
-using HomeEconomics.Features.Movements;
 using HomeEconomics.IntegrationTests.Infrastructure;
 using MediatR;
 using Xunit;
+using Index = HomeEconomics.Features.Movements.Index;
 
 namespace HomeEconomics.IntegrationTests.Features.Movements
 {
