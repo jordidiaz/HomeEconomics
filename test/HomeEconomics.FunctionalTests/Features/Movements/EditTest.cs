@@ -59,7 +59,7 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
                     .SingleOrDefaultAsync(m => m.Id == movementId);
             });
 
-            movement.Id.Should().Be(movementId);
+            movement!.Id.Should().Be(movementId);
             movement.Name.Should().Be("EPSV");
             movement.Amount.Should().Be(50m);
             movement.Type.Should().Be(MovementType.Income);

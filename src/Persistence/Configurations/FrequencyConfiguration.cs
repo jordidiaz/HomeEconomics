@@ -19,7 +19,7 @@ namespace Persistence.Configurations
 
             // https://github.com/dotnet/efcore/issues/17471
             var comparer = new ValueComparer<MonthCollection>(
-                (months1, months2) => months1.SequenceEqual(months2),
+                (months1, months2) => months1!.SequenceEqual(months2!),
                 months => months.Aggregate(0, (i, b) => HashCode.Combine(i, b.GetHashCode())));
 
             builder.ToTable("Frequencies");

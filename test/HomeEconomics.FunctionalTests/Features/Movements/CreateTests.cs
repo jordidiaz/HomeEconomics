@@ -32,7 +32,7 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
                         .SingleOrDefaultAsync(m => m.Id == movementId);
                 });
 
-            movement.Id.Should().Be(movementId);
+            movement!.Id.Should().Be(movementId);
             movement.Name.Should().Be("Gasolina");
             movement.Amount.Should().Be(60m);
             movement.Type.Should().Be(MovementType.Expense);
