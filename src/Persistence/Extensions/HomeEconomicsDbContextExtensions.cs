@@ -7,6 +7,7 @@ using Domain.MovementMonth;
 using Domain.Movements;
 using Persistence;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.EntityFrameworkCore
 {
     public static class HomeEconomicsDbContextExtensions

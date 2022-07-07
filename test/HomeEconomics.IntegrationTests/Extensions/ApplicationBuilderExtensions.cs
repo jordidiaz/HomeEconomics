@@ -1,4 +1,5 @@
-﻿namespace Microsoft.AspNetCore.Builder
+﻿// ReSharper disable once CheckNamespace
+namespace Microsoft.AspNetCore.Builder
 {
     internal static class ApplicationBuilderExtensions
     {
