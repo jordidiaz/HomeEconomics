@@ -150,7 +150,7 @@ stages:
               command: 'apply'
               workingDirectory: 'pipeline/infrastructure'
               commandOptions: '-var subscriptionId=$(subscriptionId) -var sqlServerAdministratorLogin=$(sqlServerAdministratorLogin) -var sqlServerAdministratorPassword=$(sqlServerAdministratorPassword)'
-              environmentServiceNameAzureRM: 'Jordi personal(1)(79a59bf0-cee0-43f3-96f5-fbb350d5c2b7)'
+              environmentServiceNameAzureRM: 'tfstate'
 
           - task: terraform-outputs@0
             displayName: "Terraform Outputs"
