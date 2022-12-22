@@ -137,7 +137,7 @@ stages:
               provider: 'azurerm'
               command: 'init'
               workingDirectory: 'pipeline/infrastructure'
-              backendServiceArm: 'Jordi personal(1)(79a59bf0-cee0-43f3-96f5-fbb350d5c2b7)'
+              backendServiceArm: 'tfstate'
               backendAzureRmResourceGroupName: 'Shared'
               backendAzureRmStorageAccountName: 'tfstatesst'
               backendAzureRmContainerName: 'homeeconomics'
