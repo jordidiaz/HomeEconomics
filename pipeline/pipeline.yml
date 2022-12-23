@@ -137,7 +137,7 @@ stages:
               provider: 'azurerm'
               command: 'init'
               workingDirectory: 'pipeline/infrastructure'
-              backendServiceArm: 'Shared'
+              backendServiceArm: 'HomeEconomics'
               backendAzureRmResourceGroupName: 'Shared'
               backendAzureRmStorageAccountName: 'tfstatesst'
               backendAzureRmContainerName: 'homeeconomics'
@@ -184,7 +184,7 @@ stages:
             displayName: "Copy HomeEconomics artifact to storage"
             inputs:
               SourcePath: '$(Pipeline.Workspace)/HomeEconomics.zip'
-              azureSubscription: 'Shared'
+              azureSubscription: 'HomeEconomics'
               Destination: 'AzureBlob'
               storage: 'artifactsst'
               ContainerName: 'homeeconomics'
