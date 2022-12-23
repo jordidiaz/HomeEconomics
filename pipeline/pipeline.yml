@@ -137,7 +137,7 @@ stages:
               provider: 'azurerm'
               command: 'init'
               workingDirectory: 'pipeline/infrastructure'
-              backendServiceArm: 'tfstate'
+              backendServiceArm: 'Shared'
               backendAzureRmResourceGroupName: 'Shared'
               backendAzureRmStorageAccountName: 'tfstatesst'
               backendAzureRmContainerName: 'homeeconomics'
