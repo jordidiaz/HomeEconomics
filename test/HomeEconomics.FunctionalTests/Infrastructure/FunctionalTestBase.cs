@@ -9,7 +9,7 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
     {
         public async Task InitializeAsync()
         {
-            await Fixture.ResetCheckpointAsync();
+            await Fixture.ResetDatabaseAsync();
         }
 
         public Task DisposeAsync()
