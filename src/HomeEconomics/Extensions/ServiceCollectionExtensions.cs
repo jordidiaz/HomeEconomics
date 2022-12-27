@@ -1,4 +1,5 @@
-﻿using FluentValidation.AspNetCore;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using HomeEconomics.Services;
 using MediatR;
@@ -14,21 +15,23 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddHomeEconomicsApi(this IServiceCollection services)
         {
-            return services
+            services
                 .AddProblemDetails(problemDetailsOptions =>
                 {
-                    problemDetailsOptions.Map<InvalidOperationException>(_ => new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
+                    problemDetailsOptions.Map<InvalidOperationException>(_ =>
+                        new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
                 })
                 .AddMvcCore()
-                .AddFluentValidation(fluentValidationMvcConfiguration =>
-                    {
-                        fluentValidationMvcConfiguration
-                            .RegisterValidatorsFromAssemblyContaining<HomeEconomics.HomeEconomicsApp>();
-                        fluentValidationMvcConfiguration.ImplicitlyValidateChildProperties = true;
-                        fluentValidationMvcConfiguration.DisableDataAnnotationsValidation = true;
-                    })
-                .AddApiExplorer()
-                .Services;
+                .AddApiExplorer();
+
+            services
+                .AddFluentValidationAutoValidation(configuration =>
+                {
+                    configuration.DisableDataAnnotationsValidation = true;
+                })
+                .AddValidatorsFromAssemblyContaining<HomeEconomics.HomeEconomicsApp>();
+            
+            return services;
         }
 
         public static IServiceCollection AddHomeEconomicsMediatR(this IServiceCollection services)
@@ -60,7 +63,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services
                 .AddHealthChecks()
                 .AddCheck(name: SelfName, timeout: TimeSpan.FromSeconds(30), check: () => HealthCheckResult.Healthy())
-                .AddSqlServer(connectionString)
+                .AddSqlServer(connectionString!)
                 .AddApplicationInsightsPublisher();
 
             return services;

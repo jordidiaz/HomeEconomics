@@ -11,10 +11,11 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
 {
     public static class Fixture
     {
-        private static readonly Checkpoint Checkpoint = new();
         private static readonly IConfigurationRoot Configuration = GetConfigurationRoot();
         private static readonly ServiceProvider ServiceProvider = GetServiceProvider();
         private static readonly IServiceScopeFactory ScopeFactory = GetScopeFactory();
+        private static readonly string ConnectionString = Configuration.GetConnectionString("HomeEconomics")!;
+        private static readonly Respawner Respawner = Respawner.CreateAsync(ConnectionString).Result;
 
         static Fixture()
         {
@@ -58,7 +59,7 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
             dbContext?.Database.EnsureDeleted();
         }
 
-        public static Task ResetCheckpointAsync() => Checkpoint.Reset(Configuration.GetConnectionString("HomeEconomics"));
+        public static Task ResetCheckpointAsync() => Respawner.ResetAsync(ConnectionString);
 
         public static async Task<TResponse> SendToMediatRAsync<TResponse>(IRequest<TResponse> request)
         {

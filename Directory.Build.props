@@ -1,6 +1,6 @@
 ﻿<Project>
   <PropertyGroup>
-    <NetTargetVersion>net6.0</NetTargetVersion>
+    <NetTargetVersion>net7.0</NetTargetVersion>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>

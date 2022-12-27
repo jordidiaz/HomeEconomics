@@ -10,7 +10,9 @@ namespace Persistence.Migrations
 {
     [DbContext(typeof(HomeEconomicsDbContext))]
     [Migration("20200218202846_paid")]
+#pragma warning disable CS8981
     partial class paid
+#pragma warning restore CS8981
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

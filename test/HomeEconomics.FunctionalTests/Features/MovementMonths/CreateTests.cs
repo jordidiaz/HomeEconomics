@@ -71,15 +71,15 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 
-            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthExists);
+            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthExists);
         }
 
         [Fact]
-        public void Should_Throw_InvalidOperationException_If_No_Movements()
+        public async Task Should_Throw_InvalidOperationException_If_No_Movements()
         {
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 
-            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MovementsNotExists);
+            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementsNotExists);
         }
     }
 }

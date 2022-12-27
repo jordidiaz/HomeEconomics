@@ -53,7 +53,7 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
                     Type = FrequencyType.Monthly
                 }));
 
-            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.ExpenseExists);
+            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.ExpenseExists);
         }
     }
 }

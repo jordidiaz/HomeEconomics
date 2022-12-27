@@ -19,7 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     dbContextOptionsBuilder
                         .UseSqlServer(
-                            connectionString,
+                            connectionString!,
                             sqlServerDbContextOptionsBuilder => sqlServerDbContextOptionsBuilder.EnableRetryOnFailure())
                         .EnableSensitiveDataLogging(isDevelopment);
                 });

@@ -45,11 +45,11 @@ namespace HomeEconomics.FunctionalTests.Features.Movements
         }
 
         [Fact]
-        public void Should_Throw_InvalidOperationException_If_Movement_Not_Exists()
+        public async Task Should_Throw_InvalidOperationException_If_Movement_Not_Exists()
         {
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Delete.Command(42));
 
-            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MovementNotExists);
+            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementNotExists);
         }
     }
 }

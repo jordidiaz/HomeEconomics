@@ -1,4 +1,5 @@
-﻿using FluentValidation.AspNetCore;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using MediatR;
 
@@ -8,21 +9,21 @@ namespace HomeEconomics.IntegrationTests.Extensions
     {
         internal static IServiceCollection AddHomeEconomicsApi(this IServiceCollection services)
         {
-            return services
+            services
                 .AddProblemDetails(problemDetailsOptions =>
                 {
                     problemDetailsOptions.Map<InvalidOperationException>(_ => new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
                 })
                 .AddMvcCore()
-                .AddApplicationPart(typeof(HomeEconomicsApp).Assembly)
-                .AddFluentValidation(fluentValidationMvcConfiguration =>
+                .AddApplicationPart(typeof(HomeEconomicsApp).Assembly);
+            services
+                .AddFluentValidationAutoValidation(configuration =>
                 {
-                    fluentValidationMvcConfiguration
-                        .RegisterValidatorsFromAssemblyContaining<HomeEconomicsApp>();
-                    fluentValidationMvcConfiguration.ImplicitlyValidateChildProperties = true;
-                    fluentValidationMvcConfiguration.DisableDataAnnotationsValidation = true;
+                    configuration.DisableDataAnnotationsValidation = true;
                 })
-                .Services;
+                .AddValidatorsFromAssemblyContaining<HomeEconomicsApp>();
+            
+            return services;
         }
 
         internal static IServiceCollection AddHomeEconomicsMediatR(this IServiceCollection services)

@@ -32,7 +32,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
         }
 
         [Fact]
-        public void Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
+        public async Task Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
         {
             _command = new UpdateMonthMovementAmount.Command(
                 0,
@@ -41,7 +41,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 
-            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
+            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
         }
     }
 }

@@ -17,15 +17,15 @@ namespace HomeEconomics
         {
             return Host.CreateDefaultBuilder(args)
                 .UseWindowsService()
+                .UseSerilog(ConfigureSerilog())
                 .ConfigureWebHostDefaults(webHostBuilder =>
                 {
                     webHostBuilder.UseStartup<Startup>();
-                    webHostBuilder.UseSerilog(ConfigureSerilog());
                     webHostBuilder.UseUrls(GetUrl());
                 });
         }
 
-        private static Action<WebHostBuilderContext, LoggerConfiguration> ConfigureSerilog()
+        private static Action<HostBuilderContext, LoggerConfiguration> ConfigureSerilog()
         {
             return (webHostBuilderContext, loggerConfiguration) =>
             {

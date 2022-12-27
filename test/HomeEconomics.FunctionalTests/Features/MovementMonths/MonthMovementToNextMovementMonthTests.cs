@@ -45,11 +45,11 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
         }
 
         [Fact]
-        public void Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
+        public async Task Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
         {
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(new MonthMovementToNextMovementMonth.Command(1, 1));
 
-            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
+            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(new MonthMovementToNextMovementMonth.Command(movementMonthResponse.Id, 99));
 
-            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
+            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
                 movementMonthResponse.Id,
                 movementMonthResponse.MonthMovements.First().Id));
 
-            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.NextMovementMonthNotExists);
+            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.NextMovementMonthNotExists);
         }
     }
 }

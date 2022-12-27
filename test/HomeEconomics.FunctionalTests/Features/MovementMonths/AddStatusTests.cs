@@ -46,7 +46,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths
 
             Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 
-            action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
+            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
         }
     }
 }
