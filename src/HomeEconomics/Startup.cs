@@ -22,7 +22,6 @@ namespace HomeEconomics
                 .AddHomeEconomicsMediatR()
                 .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment())
                 .AddHomeEconomicsSwagger()
-                .AddApplicationInsightsTelemetry()
                 .AddHomeEconomicsHealthChecks(Configuration);
         }
 

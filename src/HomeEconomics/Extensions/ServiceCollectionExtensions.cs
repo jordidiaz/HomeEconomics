@@ -63,8 +63,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services
                 .AddHealthChecks()
                 .AddCheck(name: SelfName, timeout: TimeSpan.FromSeconds(30), check: () => HealthCheckResult.Healthy())
-                .AddSqlServer(connectionString!)
-                .AddApplicationInsightsPublisher();
+                .AddSqlServer(connectionString!);
 
             return services;
         }

@@ -49,17 +49,6 @@ resource "azurerm_sql_database" "sqlDatabase" {
   edition             = "Basic"
 }
 
-resource "azurerm_application_insights" "applicationInsights" {
-  name                = "${local.prefix}-appinsights"
-  location            = "${local.location}"
-  resource_group_name = "${azurerm_resource_group.resourceGroup.name}"
-  application_type    = "web"
-}
-
 output "ConnectionStrings_HomeEconomics" {
   value = "Server=tcp:${azurerm_sql_server.sqlServer.fully_qualified_domain_name},1433;Initial Catalog=${azurerm_sql_database.sqlDatabase.name};Persist Security Info=False;User ID=${azurerm_sql_server.sqlServer.administrator_login};Password=${azurerm_sql_server.sqlServer.administrator_login_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-}
-
-output "ApplicationInsights_InstrumentationKey" {
-  value = "${azurerm_application_insights.applicationInsights.instrumentation_key}"
 }
