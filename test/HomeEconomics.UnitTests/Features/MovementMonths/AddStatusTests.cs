@@ -8,7 +8,7 @@ namespace HomeEconomics.UnitTests.Features.MovementMonths
 {
     public class AddStatusTests
     {
-        private const int Year = 2022;
+        private readonly int _year = DateTime.Now.Year + 1;
         private const Month Month = Domain.MovementMonth.Month.Aug;
         private const decimal AccountAmount = 50m;
         private const decimal CashAmount = 10m;
@@ -32,28 +32,28 @@ namespace HomeEconomics.UnitTests.Features.MovementMonths
         [Fact]
         public void Should_Have_Error_If_Month_Invalid()
         {
-            var result = _sut.TestValidate(new AddStatus.Command(Year, (Month)13, AccountAmount, CashAmount));
+            var result = _sut.TestValidate(new AddStatus.Command(_year, (Month)13, AccountAmount, CashAmount));
             result.IsValid.Should().BeFalse();
         }
 
         [Fact]
         public void Should_Have_Error_If_AccountAmount_Invalid()
         {
-            var result = _sut.TestValidate(new AddStatus.Command(Year, Month, -1, CashAmount));
+            var result = _sut.TestValidate(new AddStatus.Command(_year, Month, -1, CashAmount));
             result.IsValid.Should().BeFalse();
         }
 
         [Fact]
         public void Should_Have_Error_If_CashAmount_Invalid()
         {
-            var result = _sut.TestValidate(new AddStatus.Command(Year, Month, AccountAmount, -1));
+            var result = _sut.TestValidate(new AddStatus.Command(_year, Month, AccountAmount, -1));
             result.IsValid.Should().BeFalse();
         }
 
         [Fact]
         public void Should_Not_Have_Error_If_CashAmount_Valid()
         {
-            var result = _sut.TestValidate(new AddStatus.Command(Year, Month, AccountAmount, CashAmount));
+            var result = _sut.TestValidate(new AddStatus.Command(_year, Month, AccountAmount, CashAmount));
             result.IsValid.Should().BeTrue();
         }
     }

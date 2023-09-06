@@ -10,6 +10,7 @@ namespace HomeEconomics.UnitTests.Features.MovementMonths
     {
         public class CommandValidatorTests
         {
+            private readonly int _year = DateTime.Now.Year + 1;
             private readonly Create.Validator _sut;
 
             public CommandValidatorTests()
@@ -29,14 +30,14 @@ namespace HomeEconomics.UnitTests.Features.MovementMonths
             [Fact]
             public void Should_Have_Error_If_Month_Invalid()
             {
-                var result = _sut.TestValidate(new Create.Command(2022, (Month)13));
+                var result = _sut.TestValidate(new Create.Command(_year, (Month)13));
                 result.IsValid.Should().BeFalse();
             }
 
             [Fact]
             public void Should_Not_Have_Error_If_All_Valid()
             {
-                var result = _sut.TestValidate(new Create.Command(2022, Month.Apr));
+                var result = _sut.TestValidate(new Create.Command(_year, Month.Apr));
                 result.IsValid.Should().BeTrue();
             }
         }
