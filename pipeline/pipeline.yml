@@ -18,14 +18,6 @@ stages:
         displayName: Build and publish artifacts
 
         steps:
-          - task: DockerCompose@0
-            displayName: "docker-compose up"
-            inputs:
-              containerregistrytype: 'Container Registry'
-              dockerRegistryEndpoint: 'DockerHub'
-              dockerComposeFile: '**/docker-compose.yaml'
-              action: 'Run a Docker Compose command'
-              dockerComposeCommand: 'up'
 
           - task: UseNode@1
             displayName: "Use node LTS"
@@ -57,9 +49,9 @@ stages:
             inputs:
               containerregistrytype: 'Container Registry'
               dockerRegistryEndpoint: 'DockerHub'
-              dockerComposeFile: '**/docker-compose.yml'
+              dockerComposeFile: '**/docker-compose.yaml'
               action: 'Run a Docker Compose command'
-              dockerComposeCommand: 'up'
+              dockerComposeCommand: 'up -d'
 
           - task: DotNetCoreCLI@2
             displayName: "dotnet test"
@@ -73,7 +65,7 @@ stages:
             inputs:
               containerregistrytype: 'Container Registry'
               dockerRegistryEndpoint: 'DockerHub'
-              dockerComposeFile: '**/docker-compose.yml'
+              dockerComposeFile: '**/docker-compose.yaml'
               action: 'Run a Docker Compose command'
               dockerComposeCommand: 'down'
 
