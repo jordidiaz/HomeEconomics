@@ -104,13 +104,6 @@ stages:
               command: "install"
               workingDir: '$(Build.ArtifactStagingDirectory)\spa'
 
-          # - task: Npm@1
-          #   displayName: 'npm test'
-          #   inputs:
-          #     command: 'custom'
-          #     workingDir: '$(Build.ArtifactStagingDirectory)\spa'
-          #     customCommand: 'run citest'
-
           - task: Npm@1
             displayName: "npm build"
             inputs:
@@ -145,37 +138,37 @@ stages:
             displayName: "Download HomeEconomics artifact"
             artifact: HomeEconomics
 
-          - task: TerraformInstaller@0
-            displayName: "Install Terraform"
-            inputs:
-              terraformVersion: "$(terraformVersion)"
+#          - task: TerraformInstaller@0
+#            displayName: "Install Terraform"
+#            inputs:
+#              terraformVersion: "$(terraformVersion)"
 
-          - task: TerraformTaskV1@0
-            displayName: "Terraform init"
-            inputs:
-              provider: 'azurerm'
-              command: 'init'
-              workingDirectory: 'pipeline/infrastructure'
-              backendServiceArm: 'HomeEconomics'
-              backendAzureRmResourceGroupName: 'Shared'
-              backendAzureRmStorageAccountName: 'tfstatesst'
-              backendAzureRmContainerName: 'homeeconomics'
-              backendAzureRmKey: 'tf/terraform.tfstate'
+#          - task: TerraformTaskV1@0
+#            displayName: "Terraform init"
+#            inputs:
+#              provider: 'azurerm'
+#              command: 'init'
+#              workingDirectory: 'pipeline/infrastructure'
+#              backendServiceArm: 'HomeEconomics'
+#              backendAzureRmResourceGroupName: 'Shared'
+#              backendAzureRmStorageAccountName: 'tfstatesst'
+#              backendAzureRmContainerName: 'homeeconomics'
+#              backendAzureRmKey: 'tf/terraform.tfstate'
 
-          - task: TerraformTaskV1@0
-            displayName: "Terraform apply"
-            inputs:
-              provider: 'azurerm'
-              command: 'apply'
-              workingDirectory: 'pipeline/infrastructure'
-              commandOptions: '-var subscriptionId=$(subscriptionId) -var sqlServerAdministratorLogin=$(sqlServerAdministratorLogin) -var sqlServerAdministratorPassword=$(sqlServerAdministratorPassword)'
-              environmentServiceNameAzureRM: 'HomeEconomics'
+#          - task: TerraformTaskV1@0
+#            displayName: "Terraform apply"
+#            inputs:
+#              provider: 'azurerm'
+#              command: 'apply'
+#              workingDirectory: 'pipeline/infrastructure'
+#              commandOptions: '-var subscriptionId=$(subscriptionId) -var sqlServerAdministratorLogin=$(sqlServerAdministratorLogin) -var sqlServerAdministratorPassword=$(sqlServerAdministratorPassword)'
+#              environmentServiceNameAzureRM: 'HomeEconomics'
 
-          - task: terraform-outputs@0
-            displayName: "Terraform Outputs"
-            inputs:
-              workingDirectory: "pipeline/infrastructure"
-              mapSensitiveOutputsAsSecrets: true
+#          - task: terraform-outputs@0
+#            displayName: "Terraform Outputs"
+#            inputs:
+#              workingDirectory: "pipeline/infrastructure"
+#              mapSensitiveOutputsAsSecrets: true
 
           - task: qetza.replacetokens.replacetokens-task.replacetokens@3
             displayName: "Replace tokens in appsettings.json"
