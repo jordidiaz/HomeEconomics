@@ -130,46 +130,14 @@ stages:
     displayName: Deploy infrastructure and upload HomeEconomics zip
 
     jobs:
-      - job: deploy_infrastructure_and_upload_zip
-        displayName: Deploy infrastructure and upload HomeEconomics zip
+      - job: upload_zip
+        displayName: Upload HomeEconomics zip
 
         steps:
           - download: current
             displayName: "Download HomeEconomics artifact"
             artifact: HomeEconomics
-
-#          - task: TerraformInstaller@0
-#            displayName: "Install Terraform"
-#            inputs:
-#              terraformVersion: "$(terraformVersion)"
-
-#          - task: TerraformTaskV1@0
-#            displayName: "Terraform init"
-#            inputs:
-#              provider: 'azurerm'
-#              command: 'init'
-#              workingDirectory: 'pipeline/infrastructure'
-#              backendServiceArm: 'HomeEconomics'
-#              backendAzureRmResourceGroupName: 'Shared'
-#              backendAzureRmStorageAccountName: 'tfstatesst'
-#              backendAzureRmContainerName: 'homeeconomics'
-#              backendAzureRmKey: 'tf/terraform.tfstate'
-
-#          - task: TerraformTaskV1@0
-#            displayName: "Terraform apply"
-#            inputs:
-#              provider: 'azurerm'
-#              command: 'apply'
-#              workingDirectory: 'pipeline/infrastructure'
-#              commandOptions: '-var subscriptionId=$(subscriptionId) -var sqlServerAdministratorLogin=$(sqlServerAdministratorLogin) -var sqlServerAdministratorPassword=$(sqlServerAdministratorPassword)'
-#              environmentServiceNameAzureRM: 'HomeEconomics'
-
-#          - task: terraform-outputs@0
-#            displayName: "Terraform Outputs"
-#            inputs:
-#              workingDirectory: "pipeline/infrastructure"
-#              mapSensitiveOutputsAsSecrets: true
-
+            
           - task: qetza.replacetokens.replacetokens-task.replacetokens@3
             displayName: "Replace tokens in appsettings.json"
             inputs:

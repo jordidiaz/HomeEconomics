@@ -33,13 +33,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pipeline", "pipeline", "{6D
 		pipeline\pipeline.yml = pipeline\pipeline.yml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastructure", "{18D4630F-8F22-4839-B389-E6EE98FA68D3}"
-	ProjectSection(SolutionItems) = preProject
-		pipeline\infrastructure\infrastructure.tf = pipeline\infrastructure\infrastructure.tf
-		pipeline\infrastructure\main.tf = pipeline\infrastructure\main.tf
-		pipeline\infrastructure\variables.tf = pipeline\infrastructure\variables.tf
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.FunctionalTests", "test\HomeEconomics.FunctionalTests\HomeEconomics.FunctionalTests.csproj", "{B84F2D7B-CCFC-4359-B3E3-936B3766FA80}"
 EndProject
 Global
@@ -87,7 +80,6 @@ Global
 		{51906E92-C12B-46E0-9985-71F915FA16E6} = {2BA55308-73F6-4818-BCD6-BD3AA86384E8}
 		{5475C031-2B77-485E-BAB1-F2125D991DE0} = {464E6D58-952A-46C6-AD64-700E29620583}
 		{3EFFBACD-15D1-47C9-A955-3C7764983618} = {464E6D58-952A-46C6-AD64-700E29620583}
-		{18D4630F-8F22-4839-B389-E6EE98FA68D3} = {6D2938A6-38A3-4B04-AD0E-2DA5B2068318}
 		{B84F2D7B-CCFC-4359-B3E3-936B3766FA80} = {464E6D58-952A-46C6-AD64-700E29620583}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
