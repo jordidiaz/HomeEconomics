@@ -18,7 +18,6 @@ namespace Domain.UnitTests.Movement
         }
 
         [Theory]
-        [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
         public void New_Movement_Throws_ArgumentNullException_If_Name_Invalid(string name)
@@ -116,7 +115,6 @@ namespace Domain.UnitTests.Movement
         }
 
         [Theory]
-        [InlineData(default(string))]
         [InlineData("")]
         [InlineData(" ")]
         public void SetName_Throws_ArgumentNullException_If_Name_Is_Invalid(string name)

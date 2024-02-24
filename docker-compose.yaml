@@ -1,13 +1,20 @@
-version: "3.1"
+# Use postgres/example user/password credentials
+version: '3.9'
 
 services:
+
   db:
-    image: "octopusdeploy/mssql-server-windows-express"
-    container_name: sql_server
-    ports:
-      - "1433:1433" 
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
     environment:
-      - ACCEPT_EULA=y
-      - SA_PASSWORD=A&VeryComplex123Password
-         
-       
+      POSTGRES_PASSWORD: example
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

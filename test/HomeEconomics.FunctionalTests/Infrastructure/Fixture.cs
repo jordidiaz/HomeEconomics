@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using Persistence;
 using Respawn;
 
@@ -60,8 +61,17 @@ namespace HomeEconomics.FunctionalTests.Infrastructure
 
         public static async Task ResetDatabaseAsync()
         {
-            var respawner = await Respawner.CreateAsync(ConnectionString);
-            await respawner.ResetAsync(ConnectionString);
+            await using var npgsqlConnection = new NpgsqlConnection(ConnectionString);
+            await npgsqlConnection.OpenAsync();
+            var respawner = await Respawner.CreateAsync(npgsqlConnection, new RespawnerOptions
+            {
+                SchemasToInclude =
+                [
+                    "public"
+                ],
+                DbAdapter = DbAdapter.Postgres
+            });
+            await respawner.ResetAsync(npgsqlConnection);
         }
 
         public static async Task<TResponse> SendToMediatRAsync<TResponse>(IRequest<TResponse> request)

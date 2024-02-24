@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddDbContext<HomeEconomicsDbContext>(dbContextOptionsBuilder =>
                 {
                     dbContextOptionsBuilder
-                        .UseSqlServer(
+                        .UseNpgsql(
                             connectionString!,
                             sqlServerDbContextOptionsBuilder => sqlServerDbContextOptionsBuilder.EnableRetryOnFailure())
                         .EnableSensitiveDataLogging(isDevelopment);

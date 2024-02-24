@@ -22,7 +22,6 @@ namespace HomeEconomics.UnitTests.Features.Movements
             }
 
             [Theory]
-            [InlineData(null)]
             [InlineData("")]
             [InlineData("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")]
             public void Should_Have_Error_If_Name_Invalid(string name)

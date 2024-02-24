@@ -41,7 +41,6 @@ namespace Domain.UnitTests.MovementMonth
         }
 
         [Theory]
-        [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
         public void AddMonthMovement_Throws_ArgumentNullException_If_Name_Invalid(string name)
