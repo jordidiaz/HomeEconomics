@@ -20,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     dbContextOptionsBuilder
                         .UseNpgsql(
                             connectionString!,
-                            sqlServerDbContextOptionsBuilder => sqlServerDbContextOptionsBuilder.EnableRetryOnFailure())
+                            sqlServerDbContextOptionsBuilder => sqlServerDbContextOptionsBuilder.SetPostgresVersion(new Version(9, 6)))
                         .EnableSensitiveDataLogging(isDevelopment);
                 });
         }
