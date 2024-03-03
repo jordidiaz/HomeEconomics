@@ -16,7 +16,6 @@ namespace HomeEconomics
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .UseWindowsService()
                 .UseSerilog(ConfigureSerilog())
                 .ConfigureWebHostDefaults(webHostBuilder =>
                 {
