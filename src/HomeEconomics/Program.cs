@@ -9,7 +9,6 @@ namespace HomeEconomics
         {
             var host = CreateHostBuilder(args).Build();
             host.InitializeDbContext<HomeEconomicsDbContext>();
-
             await CreateHostBuilder(args).Build().RunAsync();
         }
 
@@ -20,7 +19,9 @@ namespace HomeEconomics
                 .ConfigureWebHostDefaults(webHostBuilder =>
                 {
                     webHostBuilder.UseStartup<Startup>();
-                    webHostBuilder.UseUrls(GetUrl());
+                    var port = GetPort();
+                    var dockerPort = port + 1;
+                    webHostBuilder.UseUrls($"http://localhost:{port}", $"http://0.0.0.0:{dockerPort}");
                 });
         }
 
@@ -33,13 +34,11 @@ namespace HomeEconomics
             };
         }
 
-        private static string GetUrl()
+        private static int GetPort()
         {
-            var port = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"
+            return Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"
                 ? 5000
                 : 6001;
-
-            return $"http://localhost:{port}";
         }
     }
 }
