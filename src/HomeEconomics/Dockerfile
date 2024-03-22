@@ -1,4 +1,12 @@
+FROM node:14.21.3-alpine as base-spa
+COPY src/HomeEconomics/spa spa
+WORKDIR /spa
+RUN npm install
+RUN npm run build
+
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+EXPOSE 6001
+ENV ASPNETCORE_URLS=http://*:6001
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 COPY ["HomeEconomics.sln", "."]
@@ -14,6 +22,7 @@ RUN dotnet restore
 COPY src src
 COPY test test
 RUN dotnet build --no-restore -c Release --no-cache /restore
+COPY --from=base-spa /spa/build src/HomeEconomics/wwwroot
 
 FROM build AS publish
 RUN dotnet publish "src/HomeEconomics/HomeEconomics.csproj" --no-restore --no-build -c Release -o /app/publish

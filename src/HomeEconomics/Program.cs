@@ -19,9 +19,6 @@ namespace HomeEconomics
                 .ConfigureWebHostDefaults(webHostBuilder =>
                 {
                     webHostBuilder.UseStartup<Startup>();
-                    var port = GetPort();
-                    var dockerPort = port + 1;
-                    webHostBuilder.UseUrls($"http://localhost:{port}", $"http://0.0.0.0:{dockerPort}");
                 });
         }
 
@@ -32,13 +29,6 @@ namespace HomeEconomics
                 loggerConfiguration
                     .ReadFrom.Configuration(webHostBuilderContext.Configuration);
             };
-        }
-
-        private static int GetPort()
-        {
-            return Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"
-                ? 5000
-                : 6001;
         }
     }
 }
