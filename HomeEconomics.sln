@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		RunHomeEconomicsService.bat = RunHomeEconomicsService.bat
 		docker-compose.yaml = docker-compose.yaml
 		src\HomeEconomics\Dockerfile = src\HomeEconomics\Dockerfile
+		docker-compose.development.yaml = docker-compose.development.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{464E6D58-952A-46C6-AD64-700E29620583}"
