@@ -359,3 +359,19 @@ src/HomeEconomics/spa/build
 
 # Jetbrains Rider
 .idea
+
+# MacOS
+.DS_Store
+
+# Environment files - Never commit sensitive data
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+*.env
+
+# Secrets and sensitive configuration
+appsettings.Production.json
+appsettings.Staging.json
+secrets.json
