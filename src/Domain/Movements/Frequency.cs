@@ -48,7 +48,7 @@
                 throw new ArgumentOutOfRangeException(nameof(months));
             }
 
-            if (months.All(month => !month))
+            if (months.All(month => month == false))
             {
                 throw new InvalidOperationException(Properties.Messages.NoMonthSelected);
             }
