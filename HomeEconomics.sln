@@ -11,13 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Domain\Domain
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1C37AD96-7358-40AF-9313-6C3A5D89D4CF}"
 	ProjectSection(SolutionItems) = preProject
-		CodeCoverage.runsettings = CodeCoverage.runsettings
-		Directory.Build.props = Directory.Build.props
-		global.json = global.json
-		RunHomeEconomicsService.bat = RunHomeEconomicsService.bat
 		docker-compose.yaml = docker-compose.yaml
 		src\HomeEconomics\Dockerfile = src\HomeEconomics\Dockerfile
 		docker-compose.development.yaml = docker-compose.development.yaml
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{464E6D58-952A-46C6-AD64-700E29620583}"
@@ -29,11 +26,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.IntegrationTests", "test\HomeEconomics.IntegrationTests\HomeEconomics.IntegrationTests.csproj", "{5475C031-2B77-485E-BAB1-F2125D991DE0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.UnitTests", "test\HomeEconomics.UnitTests\HomeEconomics.UnitTests.csproj", "{3EFFBACD-15D1-47C9-A955-3C7764983618}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pipeline", "pipeline", "{6D2938A6-38A3-4B04-AD0E-2DA5B2068318}"
-	ProjectSection(SolutionItems) = preProject
-		pipeline\pipeline.yml = pipeline\pipeline.yml
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeEconomics.FunctionalTests", "test\HomeEconomics.FunctionalTests\HomeEconomics.FunctionalTests.csproj", "{B84F2D7B-CCFC-4359-B3E3-936B3766FA80}"
 EndProject
