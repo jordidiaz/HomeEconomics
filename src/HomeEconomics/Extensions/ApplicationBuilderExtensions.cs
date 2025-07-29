@@ -6,7 +6,7 @@ namespace Microsoft.AspNetCore.Builder
     public static class ApplicationBuilderExtensions
     {
         private const string SelfName = "self";
-        private const string SqlServer = "sqlserver";
+        private const string Npgsql = "npgsql";
 
         internal static IApplicationBuilder UseHomeEconomicsSwagger(this IApplicationBuilder appBuilder)
         {
@@ -43,9 +43,9 @@ namespace Microsoft.AspNetCore.Builder
                 {
                     Predicate = registration => registration.Name == SelfName,
                 });
-                endpointRouteBuilder.MapHealthChecks("/sqlserver", new HealthCheckOptions
+                endpointRouteBuilder.MapHealthChecks("/npgsql", new HealthCheckOptions
                 {
-                    Predicate = registration => registration.Name == SqlServer,
+                    Predicate = registration => registration.Name == Npgsql,
                 });
             });
         }
