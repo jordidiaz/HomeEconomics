@@ -20,7 +20,7 @@ public class DetailTests : FunctionalTestBase
 
         var result = await Fixture.SendToMediatRAsync(new Detail.Query(movementMonth.Year, movementMonth.Month));
 
-        result.Status.PendingTotalExpenses.Should().Be(120m);
+        result!.Status.PendingTotalExpenses.Should().Be(120m);
         result.Status.PendingTotalIncomes.Should().Be(70m);
         result.Status.AccountAmount.Should().Be(900);
         result.Status.CashAmount.Should().Be(60);
@@ -41,7 +41,7 @@ public class DetailTests : FunctionalTestBase
 
         var result = await Fixture.SendToMediatRAsync(new Detail.Query(movementMonth.Year, movementMonth.Month));
 
-        result.Status.PendingTotalExpenses.Should().Be(120m);
+        result!.Status.PendingTotalExpenses.Should().Be(120m);
         result.Status.PendingTotalIncomes.Should().Be(70m);
         result.Status.AccountAmount.Should().Be(900);
         result.Status.CashAmount.Should().Be(60);

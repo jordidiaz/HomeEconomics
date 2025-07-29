@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Persistence;
 using Respawn;
+// ReSharper disable NotResolvedInText
 
 namespace HomeEconomics.FunctionalTests.Infrastructure;
 

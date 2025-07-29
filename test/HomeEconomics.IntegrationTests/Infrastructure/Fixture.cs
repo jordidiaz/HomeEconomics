@@ -15,6 +15,6 @@ public sealed class Fixture :
 
     public void Dispose()
     {
-        HttpClient?.Dispose();
+        HttpClient.Dispose();
     }
 }

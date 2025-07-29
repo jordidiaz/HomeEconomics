@@ -7,14 +7,10 @@ using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths;
 
-public class DetailTests : IntegrationTestBase
+public class DetailTests(Fixture fixture) : IntegrationTestBase(fixture)
 {
     private const string Uri2020 = "api/movement-months/2020/2";
     private const string Uri2019 = "api/movement-months/2019/2";
-
-    public DetailTests(Fixture fixture) : base(fixture)
-    {
-    }
 
     [Fact]
     public async Task Should_Return_200_Ok()
@@ -35,11 +31,13 @@ public class DetailTests : IntegrationTestBase
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
-    public class Handler : IRequestHandler<Detail.Query, MovementMonthResponse>
+    public class Handler : IRequestHandler<Detail.Query, MovementMonthResponse?>
     {
-        public Task<MovementMonthResponse> Handle(Detail.Query request, CancellationToken cancellationToken)
+        public Task<MovementMonthResponse?> Handle(Detail.Query request, CancellationToken cancellationToken)
         {
-            return request.Year == 2020 ? Task.FromResult(new MovementMonthResponse()) : Task.FromResult<MovementMonthResponse>(null!);
+            return request.Year == 2020 
+                ? Task.FromResult<MovementMonthResponse?>(new MovementMonthResponse()) 
+                : Task.FromResult<MovementMonthResponse?>(null!);
         }
     }
 }

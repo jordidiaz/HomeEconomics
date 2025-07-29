@@ -2,6 +2,7 @@
 using Domain.Movements;
 using FluentAssertions;
 using Xunit;
+// ReSharper disable ObjectCreationAsStatement
 
 namespace Domain.UnitTests.MovementMonth;
 

@@ -23,7 +23,7 @@ public class MovementsController : ControllerBase
     {
         var id = await _mediator.Send(command);
 
-        return Ok();
+        return Ok(id);
     }
 
     [HttpGet]
@@ -53,7 +53,7 @@ public class MovementsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> Edit(Edit.Command command)
     {
-        await _mediator.Send<Unit>(command);
+        await _mediator.Send(command);
 
         return NoContent();
     }
