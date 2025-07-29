@@ -1,6 +1,5 @@
-﻿namespace Persistence
+﻿namespace Persistence;
+
+public abstract class HomeEconomicsPersistence
 {
-    public abstract class HomeEconomicsPersistence
-    {
-    }
 }

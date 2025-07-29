@@ -1,61 +1,60 @@
 ﻿using Domain.Movements;
 
-namespace Domain.MovementMonth
+namespace Domain.MovementMonth;
+
+public class MonthMovement : Entity
 {
-    public class MonthMovement : Entity
+    // ReSharper disable once UnusedMember.Global
+    protected MonthMovement()
     {
-        // ReSharper disable once UnusedMember.Global
-        protected MonthMovement()
-        {
 
+    }
+
+    internal MonthMovement(MovementMonth movementMonth, string name, decimal amount, MovementType type)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentNullException(nameof(name));
         }
 
-        internal MonthMovement(MovementMonth movementMonth, string name, decimal amount, MovementType type)
+        if (amount < Movement.MinAmount)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            if (amount < Movement.MinAmount)
-            {
-                throw new ArgumentOutOfRangeException(nameof(amount));
-            }
-
-            Amount = amount;
-            Type = type;
-            Name = name;
-            MovementMonthId = movementMonth.Id;
+            throw new ArgumentOutOfRangeException(nameof(amount));
         }
 
-        public string Name { get; private set; } = string.Empty;
+        Amount = amount;
+        Type = type;
+        Name = name;
+        MovementMonthId = movementMonth.Id;
+    }
 
-        public decimal Amount { get; private set; }
+    public string Name { get; private set; } = string.Empty;
 
-        public MovementType Type { get; private set; }
+    public decimal Amount { get; private set; }
 
-        public bool Paid { get; private set; }
+    public MovementType Type { get; private set; }
 
-        public int MovementMonthId { get; private set; }
+    public bool Paid { get; private set; }
 
-        internal void Pay()
+    public int MovementMonthId { get; private set; }
+
+    internal void Pay()
+    {
+        Paid = true;
+    }
+
+    internal void UnPay()
+    {
+        Paid = false;
+    }
+
+    internal void SetAmount(decimal amount)
+    {
+        if (amount < Movement.MinAmount)
         {
-            Paid = true;
+            throw new ArgumentOutOfRangeException(nameof(amount));
         }
 
-        internal void UnPay()
-        {
-            Paid = false;
-        }
-
-        internal void SetAmount(decimal amount)
-        {
-            if (amount < Movement.MinAmount)
-            {
-                throw new ArgumentOutOfRangeException(nameof(amount));
-            }
-
-            Amount = amount;
-        }
+        Amount = amount;
     }
 }

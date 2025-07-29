@@ -1,61 +1,60 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HomeEconomics.Features.Movements
+namespace HomeEconomics.Features.Movements;
+
+[ApiController]
+[Route("api/movements")]
+public class MovementsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/movements")]
-    public class MovementsController : ControllerBase
+    private readonly IMediator _mediator;
+
+    public MovementsController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public MovementsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+    [HttpPost]
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> Create(Create.Command command)
+    {
+        var id = await _mediator.Send(command);
 
-        [HttpPost]
-        [ProducesDefaultResponseType]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Create(Create.Command command)
-        {
-            var id = await _mediator.Send(command);
+        return Ok();
+    }
 
-            return Ok();
-        }
+    [HttpGet]
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<Index.Result>> Index()
+    {
+        var movements = await _mediator.Send(new Index.Query());
 
-        [HttpGet]
-        [ProducesDefaultResponseType]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Index.Result>> Index()
-        {
-            var movements = await _mediator.Send(new Index.Query());
+        return Ok(movements);
+    }
 
-            return Ok(movements);
-        }
+    [HttpDelete("{id:int}")]
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult> Delete(int id)
+    {
+        await _mediator.Send(new Delete.Command(id));
 
-        [HttpDelete("{id:int}")]
-        [ProducesDefaultResponseType]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> Delete(int id)
-        {
-            await _mediator.Send(new Delete.Command(id));
+        return NoContent();
+    }
 
-            return NoContent();
-        }
+    [HttpPut("{id:int}")]
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult> Edit(Edit.Command command)
+    {
+        await _mediator.Send<Unit>(command);
 
-        [HttpPut("{id:int}")]
-        [ProducesDefaultResponseType]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> Edit(Edit.Command command)
-        {
-            await _mediator.Send<Unit>(command);
-
-            return NoContent();
-        }
+        return NoContent();
     }
 }

@@ -4,63 +4,62 @@ using Domain.Movements;
 using Persistence;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.EntityFrameworkCore
+namespace Microsoft.EntityFrameworkCore;
+
+public static class HomeEconomicsDbContextExtensions
 {
-    public static class HomeEconomicsDbContextExtensions
+    public static async Task<MovementMonth?> GetMovementMonthAsync(
+        this HomeEconomicsDbContext dbContext, 
+        Expression<Func<MovementMonth, bool>> predicate,
+        CancellationToken cancellationToken)
     {
-        public static async Task<MovementMonth?> GetMovementMonthAsync(
-            this HomeEconomicsDbContext dbContext, 
-            Expression<Func<MovementMonth, bool>> predicate,
-            CancellationToken cancellationToken)
-        {
-            return await GetAsync(dbContext, predicate, cancellationToken, "_monthMovements", "_statuses");
-        }
+        return await GetAsync(dbContext, predicate, cancellationToken, "_monthMovements", "_statuses");
+    }
         
-        public static async Task<Movement?> GetMovementAsync(
-            this HomeEconomicsDbContext dbContext, 
-            Expression<Func<Movement, bool>> predicate,
-            CancellationToken cancellationToken)
-        {
-            return await GetAsync(dbContext, predicate, cancellationToken, "Frequency");
-        }
+    public static async Task<Movement?> GetMovementAsync(
+        this HomeEconomicsDbContext dbContext, 
+        Expression<Func<Movement, bool>> predicate,
+        CancellationToken cancellationToken)
+    {
+        return await GetAsync(dbContext, predicate, cancellationToken, "Frequency");
+    }
         
-        public static IEnumerable<Movement> GetMovements(this HomeEconomicsDbContext dbContext)
-        {
-            return GetCollection<Movement>(dbContext, "Frequency");
-        }
+    public static IEnumerable<Movement> GetMovements(this HomeEconomicsDbContext dbContext)
+    {
+        return GetCollection<Movement>(dbContext, "Frequency");
+    }
         
-        private static async Task<T?> GetAsync<T>(
-            DbContext dbContext, 
-            Expression<Func<T, bool>> predicate,
-            CancellationToken cancellationToken,
-            params string[] includes) where T : class
-        {
-            var context = dbContext
-                .Set<T>()
-                .AsQueryable();
+    private static async Task<T?> GetAsync<T>(
+        DbContext dbContext, 
+        Expression<Func<T, bool>> predicate,
+        CancellationToken cancellationToken,
+        params string[] includes) where T : class
+    {
+        var context = dbContext
+            .Set<T>()
+            .AsQueryable();
             
-            foreach (var include in includes)
-            {
-                context = context.Include(include);
-            }
-
-            return await context.SingleOrDefaultAsync(predicate, cancellationToken);
-        }
-        
-        private static IEnumerable<T> GetCollection<T>(
-            DbContext dbContext, 
-            params string[] includes) where T : class
+        foreach (var include in includes)
         {
-            var queryable = dbContext
-                .Set<T>()
-                .AsQueryable();
-            
-            foreach (var include in includes)
-            {
-                queryable = queryable.Include(include);
-            }
-
-            return queryable;
+            context = context.Include(include);
         }
+
+        return await context.SingleOrDefaultAsync(predicate, cancellationToken);
+    }
+        
+    private static IEnumerable<T> GetCollection<T>(
+        DbContext dbContext, 
+        params string[] includes) where T : class
+    {
+        var queryable = dbContext
+            .Set<T>()
+            .AsQueryable();
+            
+        foreach (var include in includes)
+        {
+            queryable = queryable.Include(include);
+        }
+
+        return queryable;
     }
 }

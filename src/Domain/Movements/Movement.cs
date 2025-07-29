@@ -1,98 +1,97 @@
 ﻿using Domain.MovementMonth;
 
-namespace Domain.Movements
+namespace Domain.Movements;
+
+public class Movement : Entity, IAggregateRoot
 {
-    public class Movement : Entity, IAggregateRoot
-    {
-        public const int MovementNameMaxLength = 30;
-        public const decimal MinAmount = 0;
+    public const int MovementNameMaxLength = 30;
+    public const decimal MinAmount = 0;
         
-        public Movement(string name, decimal amount, MovementType type)
+    public Movement(string name, decimal amount, MovementType type)
+    {
+        if (string.IsNullOrWhiteSpace(name))
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            if (amount < MinAmount)
-            {
-                throw new ArgumentOutOfRangeException(nameof(amount));
-            }
-
-            Name = name;
-            Amount = amount;
-            Type = type;
-            Frequency = new Frequency(this, FrequencyType.None);
+            throw new ArgumentNullException(nameof(name));
         }
 
-        public string Name { get; private set; }
-
-        public decimal Amount { get; private set; }
-
-        public MovementType Type { get; set; }
-
-        public Frequency Frequency { get; private set; }
-
-        public void SetNoneFrequency()
+        if (amount < MinAmount)
         {
-            Frequency.SetNoneFrequency();
+            throw new ArgumentOutOfRangeException(nameof(amount));
         }
 
-        public void SetMonthlyFrequency()
+        Name = name;
+        Amount = amount;
+        Type = type;
+        Frequency = new Frequency(this, FrequencyType.None);
+    }
+
+    public string Name { get; private set; }
+
+    public decimal Amount { get; private set; }
+
+    public MovementType Type { get; set; }
+
+    public Frequency Frequency { get; private set; }
+
+    public void SetNoneFrequency()
+    {
+        Frequency.SetNoneFrequency();
+    }
+
+    public void SetMonthlyFrequency()
+    {
+        Frequency.SetMonthlyFrequency();
+    }
+
+    public void SetYearlyFrequency(int month)
+    {
+        Frequency.SetYearlyFrequency(month);
+    }
+
+    public void SetCustomFrequency(bool[] months)
+    {
+        Frequency.SetCustomFrequency(months);
+    }
+
+    public void SetName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
         {
-            Frequency.SetMonthlyFrequency();
+            throw new ArgumentNullException(nameof(name));
         }
 
-        public void SetYearlyFrequency(int month)
+        Name = name;
+    }
+
+    public void SetAmount(decimal amount)
+    {
+        if (amount < MinAmount)
         {
-            Frequency.SetYearlyFrequency(month);
+            throw new ArgumentOutOfRangeException(nameof(amount));
         }
 
-        public void SetCustomFrequency(bool[] months)
+        Amount = amount;
+    }
+
+    public FrequencyType GetFrequencyType()
+    {
+        return Frequency.Type;
+    }
+
+    public bool HasMonthInFrequency(Month month)
+    {
+        if (GetFrequencyType() == FrequencyType.None || GetFrequencyType() == FrequencyType.Monthly)
         {
-            Frequency.SetCustomFrequency(months);
+            return false;
         }
 
-        public void SetName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+        var monthNumber = (int)month;
 
-            Name = name;
-        }
+        return Frequency.IsMonthEnabled(monthNumber);
+    }
 
-        public void SetAmount(decimal amount)
-        {
-            if (amount < MinAmount)
-            {
-                throw new ArgumentOutOfRangeException(nameof(amount));
-            }
-
-            Amount = amount;
-        }
-
-        public FrequencyType GetFrequencyType()
-        {
-            return Frequency.Type;
-        }
-
-        public bool HasMonthInFrequency(Month month)
-        {
-            if (GetFrequencyType() == FrequencyType.None || GetFrequencyType() == FrequencyType.Monthly)
-            {
-                return false;
-            }
-
-            var monthNumber = (int)month;
-
-            return Frequency.IsMonthEnabled(monthNumber);
-        }
-
-        public bool[] GetMonths()
-        {
-            return Frequency.GetMonths();
-        }
+    public bool[] GetMonths()
+    {
+        return Frequency.GetMonths();
     }
 }

@@ -3,22 +3,21 @@ using Domain.Movements;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistence.Configurations
+namespace Persistence.Configurations;
+
+internal class MonthMovementConfiguration : IEntityTypeConfiguration<MonthMovement>
 {
-    internal class MonthMovementConfiguration : IEntityTypeConfiguration<MonthMovement>
+    public void Configure(EntityTypeBuilder<MonthMovement> builder)
     {
-        public void Configure(EntityTypeBuilder<MonthMovement> builder)
-        {
-            builder.ToTable("MonthMovements");
+        builder.ToTable("MonthMovements");
 
-            builder.HasKey(monthMovement => monthMovement.Id);
+        builder.HasKey(monthMovement => monthMovement.Id);
 
-            builder.Property(monthMovement => monthMovement.Name)
-                .HasMaxLength(Movement.MovementNameMaxLength)
-                .IsRequired();
+        builder.Property(monthMovement => monthMovement.Name)
+            .HasMaxLength(Movement.MovementNameMaxLength)
+            .IsRequired();
 
-            builder.Property(monthMovement => monthMovement.Amount)
-                .HasColumnType("decimal(18,2)");
-        }
+        builder.Property(monthMovement => monthMovement.Amount)
+            .HasColumnType("decimal(18,2)");
     }
 }

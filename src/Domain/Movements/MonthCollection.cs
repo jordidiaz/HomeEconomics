@@ -1,84 +1,83 @@
 ﻿using System.Collections;
 
-namespace Domain.Movements
+namespace Domain.Movements;
+
+public class MonthCollection : ICollection<bool>
 {
-    public class MonthCollection : ICollection<bool>
+    private readonly IList<bool> _months;
+
+    private MonthCollection(IList<bool>? months)
     {
-        private readonly IList<bool> _months;
+        _months = months ?? Enumerable.Repeat(false, 12).ToList();
+    }
 
-        private MonthCollection(IList<bool>? months)
-        {
-            _months = months ?? Enumerable.Repeat(false, 12).ToList();
-        }
-
-        public static MonthCollection Init(IList<bool> months)
-        {
-            return new MonthCollection(months);
-        }
+    public static MonthCollection Init(IList<bool> months)
+    {
+        return new MonthCollection(months);
+    }
         
-        public static MonthCollection Init()
-        {
-            return new MonthCollection(null);
-        }
+    public static MonthCollection Init()
+    {
+        return new MonthCollection(null);
+    }
 
-        internal void EnableMonth(int month)
-        {
-            _months[month - 1] = true;
-        }
+    internal void EnableMonth(int month)
+    {
+        _months[month - 1] = true;
+    }
 
-        internal bool IsMonthEnabled(int month)
-        {
-            return _months[month - 1];
-        }
+    internal bool IsMonthEnabled(int month)
+    {
+        return _months[month - 1];
+    }
 
-        public IEnumerator<bool> GetEnumerator()
-        {
-            return _months.GetEnumerator();
-        }
+    public IEnumerator<bool> GetEnumerator()
+    {
+        return _months.GetEnumerator();
+    }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
-        public void Add(bool item)
-        {
-            _months.Add(item);
-        }
+    public void Add(bool item)
+    {
+        _months.Add(item);
+    }
 
-        public void Clear()
-        {
-            _months.Clear();
-        }
+    public void Clear()
+    {
+        _months.Clear();
+    }
 
-        public bool Contains(bool item)
-        {
-            return _months.Contains(item);
-        }
+    public bool Contains(bool item)
+    {
+        return _months.Contains(item);
+    }
 
-        public void CopyTo(bool[] array, int arrayIndex)
-        {
-            _months.CopyTo(array, arrayIndex);
-        }
+    public void CopyTo(bool[] array, int arrayIndex)
+    {
+        _months.CopyTo(array, arrayIndex);
+    }
 
-        public bool Remove(bool item)
-        {
-            return _months.Remove(item);
-        }
+    public bool Remove(bool item)
+    {
+        return _months.Remove(item);
+    }
 
-        public int Count => _months.Count;
-        public bool IsReadOnly => _months.IsReadOnly;
+    public int Count => _months.Count;
+    public bool IsReadOnly => _months.IsReadOnly;
 
-        public bool this[int index]
-        {
-            get => _months[index];
-            // ReSharper disable once UnusedMember.Global
-            set => _months[index] = value;
-        }
+    public bool this[int index]
+    {
+        get => _months[index];
+        // ReSharper disable once UnusedMember.Global
+        set => _months[index] = value;
+    }
 
-        internal bool[] GetMonths()
-        {
-            return _months.ToArray();
-        }
+    internal bool[] GetMonths()
+    {
+        return _months.ToArray();
     }
 }

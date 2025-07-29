@@ -1,22 +1,21 @@
 ﻿using Hellang.Middleware.ProblemDetails;
 using ServiceCollectionExtensions = HomeEconomics.IntegrationTests.Extensions.ServiceCollectionExtensions;
 
-namespace HomeEconomics.IntegrationTests.Infrastructure
-{
-    public class TestStartup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            ServiceCollectionExtensions.AddHomeEconomicsApi(services);
-            ServiceCollectionExtensions.AddHomeEconomicsMediatR(services);
-        }
+namespace HomeEconomics.IntegrationTests.Infrastructure;
 
-        public void Configure(IApplicationBuilder applicationBuilder)
-        {
-            applicationBuilder
-                .UseRouting()
-                .UseProblemDetails()
-                .UseHomeEconomicsEndpoints();
-        }
+public class TestStartup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        ServiceCollectionExtensions.AddHomeEconomicsApi(services);
+        ServiceCollectionExtensions.AddHomeEconomicsMediatR(services);
+    }
+
+    public void Configure(IApplicationBuilder applicationBuilder)
+    {
+        applicationBuilder
+            .UseRouting()
+            .UseProblemDetails()
+            .UseHomeEconomicsEndpoints();
     }
 }

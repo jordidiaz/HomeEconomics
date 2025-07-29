@@ -3,39 +3,38 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace HomeEconomics.Features.MovementMonths
+namespace HomeEconomics.Features.MovementMonths;
+
+public class DeleteMonthMovement
 {
-    public class DeleteMonthMovement
+    public record Command(int MovementMonthId, int MonthMovementId) : IRequest<MovementMonthResponse>;
+
+    public class Handler : IRequestHandler<Command, MovementMonthResponse>
     {
-        public record Command(int MovementMonthId, int MonthMovementId) : IRequest<MovementMonthResponse>;
+        private readonly IMovementMonthResponseService _movementMonthResponseService;
+        private readonly HomeEconomicsDbContext _dbContext;
 
-        public class Handler : IRequestHandler<Command, MovementMonthResponse>
+        public Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
         {
-            private readonly IMovementMonthResponseService _movementMonthResponseService;
-            private readonly HomeEconomicsDbContext _dbContext;
+            _movementMonthResponseService = movementMonthResponseService;
+            _dbContext = dbContext;
+        }
 
-            public Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
+        public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
+        {
+            var movementMonth = await _dbContext
+                .GetMovementMonthAsync(mm => mm.Id == request.MovementMonthId, cancellationToken: cancellationToken);
+
+            if (movementMonth is null)
             {
-                _movementMonthResponseService = movementMonthResponseService;
-                _dbContext = dbContext;
+                throw new InvalidOperationException(Properties.Messages.MovementMonthNotExists);
             }
 
-            public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var movementMonth = await _dbContext
-                    .GetMovementMonthAsync(mm => mm.Id == request.MovementMonthId, cancellationToken: cancellationToken);
+            movementMonth.DeleteMonthMovement(request.MonthMovementId);
 
-                if (movementMonth is null)
-                {
-                    throw new InvalidOperationException(Properties.Messages.MovementMonthNotExists);
-                }
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
-                movementMonth.DeleteMonthMovement(request.MonthMovementId);
-
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                return await _movementMonthResponseService.Get(movementMonth, cancellationToken);
-            }
+            return await _movementMonthResponseService.Get(movementMonth, cancellationToken);
         }
     }
 }

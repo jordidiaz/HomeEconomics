@@ -1,8 +1,7 @@
-﻿namespace Domain.Movements
+﻿namespace Domain.Movements;
+
+public enum MovementType
 {
-    public enum MovementType
-    {
-        Income,
-        Expense
-    }
+    Income,
+    Expense
 }

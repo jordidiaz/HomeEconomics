@@ -1,10 +1,9 @@
 ﻿using Xunit;
 
-namespace HomeEconomics.IntegrationTests.Infrastructure
+namespace HomeEconomics.IntegrationTests.Infrastructure;
+
+[CollectionDefinition(Collections.IntegrationTestCollection)]
+public class IntegrationTestCollection : ICollectionFixture<Fixture>
 {
-    [CollectionDefinition(Collections.IntegrationTestCollection)]
-    public class IntegrationTestCollection : ICollectionFixture<Fixture>
-    {
         
-    }
 }

@@ -4,82 +4,81 @@ using HomeEconomics.FunctionalTests.Infrastructure;
 using Xunit;
 using MovementMonth = HomeEconomics.Features.MovementMonths;
 
-namespace HomeEconomics.FunctionalTests.Features.MovementMonths
+namespace HomeEconomics.FunctionalTests.Features.MovementMonths;
+
+public class CreateTests : FunctionalTestBase
 {
-    public class CreateTests : FunctionalTestBase
+    private readonly MovementMonth.Create.Command _command;
+
+    public CreateTests()
     {
-        private readonly MovementMonth.Create.Command _command;
+        _command = new MovementMonth.Create.Command(
+            DateTime.Now.Year,
+            Month.Jan);
+    }
 
-        public CreateTests()
-        {
-            _command = new MovementMonth.Create.Command(
-                DateTime.Now.Year,
-                Month.Jan);
-        }
-
-        [Fact]
-        public async Task Should_Create_A_New_MovementMonth()
-        {
-            await CreateMovements();
+    [Fact]
+    public async Task Should_Create_A_New_MovementMonth()
+    {
+        await CreateMovements();
             
-            var result = await Fixture.SendToMediatRAsync(_command);
+        var result = await Fixture.SendToMediatRAsync(_command);
 
-            result.Id.Should().Be(result.Id);
-            result.Year.Should().Be(DateTime.Now.Year);
-            result.Month.Should().Be(1);
-            result.Status.PendingTotalExpenses.Should().Be(120m);
-            result.Status.PendingTotalIncomes.Should().Be(70m);
-            result.Status.AccountAmount.Should().Be(0);
-            result.Status.CashAmount.Should().Be(0);
+        result.Id.Should().Be(result.Id);
+        result.Year.Should().Be(DateTime.Now.Year);
+        result.Month.Should().Be(1);
+        result.Status.PendingTotalExpenses.Should().Be(120m);
+        result.Status.PendingTotalIncomes.Should().Be(70m);
+        result.Status.AccountAmount.Should().Be(0);
+        result.Status.CashAmount.Should().Be(0);
 
-            result.MonthMovements.Length.Should().Be(3);
+        result.MonthMovements.Length.Should().Be(3);
 
-            var income = result.MonthMovements.SingleOrDefault(mm => mm.Name == "Income");
-            income.Should().BeNull();
+        var income = result.MonthMovements.SingleOrDefault(mm => mm.Name == "Income");
+        income.Should().BeNull();
 
-            var amazon = result.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon");
-            amazon.Should().BeNull();
+        var amazon = result.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon");
+        amazon.Should().BeNull();
 
-            var gasolina = result.MonthMovements.Single(mm => mm.Name == "Gasolina");
-            gasolina.Should().NotBeNull();
-            gasolina.Name.Should().Be("Gasolina");
-            gasolina.Amount.Should().Be(60m);
-            gasolina.Type.Should().Be(1);
-            gasolina.Paid.Should().BeFalse();
+        var gasolina = result.MonthMovements.Single(mm => mm.Name == "Gasolina");
+        gasolina.Should().NotBeNull();
+        gasolina.Name.Should().Be("Gasolina");
+        gasolina.Amount.Should().Be(60m);
+        gasolina.Type.Should().Be(1);
+        gasolina.Paid.Should().BeFalse();
 
-            var seguro = result.MonthMovements.Single(mm => mm.Name == "Seguro");
-            seguro.Should().NotBeNull();
-            seguro.Name.Should().Be("Seguro");
-            seguro.Amount.Should().Be(70m);
-            seguro.Type.Should().Be(0);
-            seguro.Paid.Should().BeFalse();
+        var seguro = result.MonthMovements.Single(mm => mm.Name == "Seguro");
+        seguro.Should().NotBeNull();
+        seguro.Name.Should().Be("Seguro");
+        seguro.Amount.Should().Be(70m);
+        seguro.Type.Should().Be(0);
+        seguro.Paid.Should().BeFalse();
 
-            var custom = result.MonthMovements.Single(mm => mm.Name == "Custom");
-            custom.Should().NotBeNull();
-            custom.Name.Should().Be("Custom");
-            custom.Amount.Should().Be(60m);
-            custom.Type.Should().Be(1);
-            custom.Paid.Should().BeFalse();
-        }
+        var custom = result.MonthMovements.Single(mm => mm.Name == "Custom");
+        custom.Should().NotBeNull();
+        custom.Name.Should().Be("Custom");
+        custom.Amount.Should().Be(60m);
+        custom.Type.Should().Be(1);
+        custom.Paid.Should().BeFalse();
+    }
 
-        [Fact]
-        public async Task Should_Throw_InvalidOperationException_If_MovementMonth_Exists()
-        {
-            await CreateMovements();
+    [Fact]
+    public async Task Should_Throw_InvalidOperationException_If_MovementMonth_Exists()
+    {
+        await CreateMovements();
 
-            await Fixture.SendToMediatRAsync(_command);
+        await Fixture.SendToMediatRAsync(_command);
 
-            Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
+        Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 
-            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthExists);
-        }
+        await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthExists);
+    }
 
-        [Fact]
-        public async Task Should_Throw_InvalidOperationException_If_No_Movements()
-        {
-            Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
+    [Fact]
+    public async Task Should_Throw_InvalidOperationException_If_No_Movements()
+    {
+        Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 
-            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementsNotExists);
-        }
+        await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementsNotExists);
     }
 }

@@ -3,45 +3,44 @@ using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
 using Xunit;
 
-namespace HomeEconomics.FunctionalTests.Features.MovementMonths
+namespace HomeEconomics.FunctionalTests.Features.MovementMonths;
+
+public class UnPayMonthMovementTests : FunctionalTestBase
 {
-    public class UnPayMonthMovementTests : FunctionalTestBase
+    private UnPayMonthMovement.Command _command = default!;
+
+    [Fact]
+    public async Task Should_Unpay_MonthMovement_And_Return_Resume()
     {
-        private UnPayMonthMovement.Command _command = default!;
+        await CreateMovements();
 
-        [Fact]
-        public async Task Should_Unpay_MonthMovement_And_Return_Resume()
-        {
-            await CreateMovements();
+        var movementMonth = await CreateMovementMonth();
 
-            var movementMonth = await CreateMovementMonth();
+        await AddStatus(movementMonth.Year, movementMonth.Month, 1000, 50);
 
-            await AddStatus(movementMonth.Year, movementMonth.Month, 1000, 50);
+        await Fixture.SendToMediatRAsync(new PayMonthMovement.Command(
+            movementMonth.Id,
+            movementMonth.MonthMovements.First().Id));
 
-            await Fixture.SendToMediatRAsync(new PayMonthMovement.Command(
-                movementMonth.Id,
-                movementMonth.MonthMovements.First().Id));
+        _command = new UnPayMonthMovement.Command(
+            movementMonth.Id,
+            movementMonth.MonthMovements.First().Id);
 
-            _command = new UnPayMonthMovement.Command(
-                movementMonth.Id,
-                movementMonth.MonthMovements.First().Id);
+        var result = await Fixture.SendToMediatRAsync(_command);
 
-            var result = await Fixture.SendToMediatRAsync(_command);
+        result.Status.PendingTotalExpenses.Should().Be(120m);
+        result.Status.PendingTotalIncomes.Should().Be(70m);
+        result.Status.AccountAmount.Should().Be(1000m);
+        result.Status.CashAmount.Should().Be(50);
+    }
 
-            result.Status.PendingTotalExpenses.Should().Be(120m);
-            result.Status.PendingTotalIncomes.Should().Be(70m);
-            result.Status.AccountAmount.Should().Be(1000m);
-            result.Status.CashAmount.Should().Be(50);
-        }
+    [Fact]
+    public async Task Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
+    {
+        _command = new UnPayMonthMovement.Command(0, 0);
 
-        [Fact]
-        public async Task Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
-        {
-            _command = new UnPayMonthMovement.Command(0, 0);
+        Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 
-            Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
-
-            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
-        }
+        await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
     }
 }

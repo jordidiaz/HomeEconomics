@@ -4,56 +4,55 @@ using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
 using Xunit;
 
-namespace HomeEconomics.FunctionalTests.Features.MovementMonths
+namespace HomeEconomics.FunctionalTests.Features.MovementMonths;
+
+public class DetailTests : FunctionalTestBase
 {
-    public class DetailTests : FunctionalTestBase
+    [Fact]
+    public async Task Should_Return_MovementMonth_Detail_And_NextMovementMonthExists_False()
     {
-        [Fact]
-        public async Task Should_Return_MovementMonth_Detail_And_NextMovementMonthExists_False()
-        {
-            await CreateMovements();
+        await CreateMovements();
 
-            var movementMonth = await CreateMovementMonth();
+        var movementMonth = await CreateMovementMonth();
 
-            await AddStatus(movementMonth.Year, movementMonth.Month, 1000, 50);
-            await AddStatus(movementMonth.Year, movementMonth.Month, 900, 60);
+        await AddStatus(movementMonth.Year, movementMonth.Month, 1000, 50);
+        await AddStatus(movementMonth.Year, movementMonth.Month, 900, 60);
 
-            var result = await Fixture.SendToMediatRAsync(new Detail.Query(movementMonth.Year, movementMonth.Month));
+        var result = await Fixture.SendToMediatRAsync(new Detail.Query(movementMonth.Year, movementMonth.Month));
 
-            result.Status.PendingTotalExpenses.Should().Be(120m);
-            result.Status.PendingTotalIncomes.Should().Be(70m);
-            result.Status.AccountAmount.Should().Be(900);
-            result.Status.CashAmount.Should().Be(60);
-            result.NextMovementMonthExists.Should().BeFalse();
-        }
+        result.Status.PendingTotalExpenses.Should().Be(120m);
+        result.Status.PendingTotalIncomes.Should().Be(70m);
+        result.Status.AccountAmount.Should().Be(900);
+        result.Status.CashAmount.Should().Be(60);
+        result.NextMovementMonthExists.Should().BeFalse();
+    }
 
-        [Fact]
-        public async Task Should_Return_MovementMonth_Detail_And_NextMovementMonthExists_True()
-        {
-            await CreateMovements();
+    [Fact]
+    public async Task Should_Return_MovementMonth_Detail_And_NextMovementMonthExists_True()
+    {
+        await CreateMovements();
 
-            var movementMonth = await CreateMovementMonth();
+        var movementMonth = await CreateMovementMonth();
 
-            await CreateMovementMonth(Month.Feb);
+        await CreateMovementMonth(Month.Feb);
 
-            await AddStatus(movementMonth.Year, movementMonth.Month, 1000, 50);
-            await AddStatus(movementMonth.Year, movementMonth.Month, 900, 60);
+        await AddStatus(movementMonth.Year, movementMonth.Month, 1000, 50);
+        await AddStatus(movementMonth.Year, movementMonth.Month, 900, 60);
 
-            var result = await Fixture.SendToMediatRAsync(new Detail.Query(movementMonth.Year, movementMonth.Month));
+        var result = await Fixture.SendToMediatRAsync(new Detail.Query(movementMonth.Year, movementMonth.Month));
 
-            result.Status.PendingTotalExpenses.Should().Be(120m);
-            result.Status.PendingTotalIncomes.Should().Be(70m);
-            result.Status.AccountAmount.Should().Be(900);
-            result.Status.CashAmount.Should().Be(60);
-            result.NextMovementMonthExists.Should().BeTrue();
-        }
+        result.Status.PendingTotalExpenses.Should().Be(120m);
+        result.Status.PendingTotalIncomes.Should().Be(70m);
+        result.Status.AccountAmount.Should().Be(900);
+        result.Status.CashAmount.Should().Be(60);
+        result.NextMovementMonthExists.Should().BeTrue();
+    }
 
-        [Fact]
-        public async Task Should_Return_Null_If_MovementMonth_Not_Exist()
-        {
-            var movementMonthDetail = await Fixture.SendToMediatRAsync(new Detail.Query(2020, 8));
+    [Fact]
+    public async Task Should_Return_Null_If_MovementMonth_Not_Exist()
+    {
+        var movementMonthDetail = await Fixture.SendToMediatRAsync(new Detail.Query(2020, 8));
 
-            movementMonthDetail.Should().BeNull();
-        }
+        movementMonthDetail.Should().BeNull();
     }
 }

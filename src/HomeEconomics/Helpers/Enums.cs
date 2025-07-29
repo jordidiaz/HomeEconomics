@@ -1,10 +1,9 @@
-﻿namespace HomeEconomics.Helpers
+﻿namespace HomeEconomics.Helpers;
+
+public static class Enums
 {
-    public static class Enums
+    public static bool IsAValidEnumValue<TEnum>(TEnum value)
     {
-        public static bool IsAValidEnumValue<TEnum>(TEnum value)
-        {
-            return value != null && Enum.IsDefined(typeof(TEnum), value);
-        }
+        return value != null && Enum.IsDefined(typeof(TEnum), value);
     }
 }

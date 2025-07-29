@@ -1,6 +1,5 @@
-﻿namespace Domain
+﻿namespace Domain;
+
+internal interface IAggregateRoot
 {
-    internal interface IAggregateRoot
-    {
-    }
 }

@@ -1,10 +1,9 @@
-﻿namespace Domain.Movements
+﻿namespace Domain.Movements;
+
+public enum FrequencyType
 {
-    public enum FrequencyType
-    {
-        None,
-        Monthly,
-        Yearly,
-        Custom
-    }
+    None,
+    Monthly,
+    Yearly,
+    Custom
 }

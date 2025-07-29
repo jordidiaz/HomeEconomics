@@ -2,21 +2,20 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistence.Configurations
+namespace Persistence.Configurations;
+
+internal class StatusConfiguration : IEntityTypeConfiguration<Status>
 {
-    internal class StatusConfiguration : IEntityTypeConfiguration<Status>
+    public void Configure(EntityTypeBuilder<Status> builder)
     {
-        public void Configure(EntityTypeBuilder<Status> builder)
-        {
-            builder.ToTable("Statuses");
+        builder.ToTable("Statuses");
 
-            builder.HasKey(status => status.Id);
+        builder.HasKey(status => status.Id);
 
-            builder.Property(status => status.AccountAmount)
-                .HasColumnType("decimal(18,2)");
+        builder.Property(status => status.AccountAmount)
+            .HasColumnType("decimal(18,2)");
 
-            builder.Property(status => status.CashAmount)
-                .HasColumnType("decimal(18,2)");
-        }
+        builder.Property(status => status.CashAmount)
+            .HasColumnType("decimal(18,2)");
     }
 }

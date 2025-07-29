@@ -7,70 +7,69 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    private const string SelfName = "self";
+
+    public static IServiceCollection AddHomeEconomicsApi(this IServiceCollection services)
     {
-        private const string SelfName = "self";
+        services
+            .AddProblemDetails(problemDetailsOptions =>
+            {
+                problemDetailsOptions.Map<InvalidOperationException>(_ =>
+                    new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
+            })
+            .AddMvcCore()
+            .AddApiExplorer();
 
-        public static IServiceCollection AddHomeEconomicsApi(this IServiceCollection services)
-        {
-            services
-                .AddProblemDetails(problemDetailsOptions =>
-                {
-                    problemDetailsOptions.Map<InvalidOperationException>(_ =>
-                        new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
-                })
-                .AddMvcCore()
-                .AddApiExplorer();
-
-            services
-                .AddFluentValidationAutoValidation(configuration =>
-                {
-                    configuration.DisableDataAnnotationsValidation = true;
-                })
-                .AddValidatorsFromAssemblyContaining<HomeEconomics.HomeEconomicsApp>();
+        services
+            .AddFluentValidationAutoValidation(configuration =>
+            {
+                configuration.DisableDataAnnotationsValidation = true;
+            })
+            .AddValidatorsFromAssemblyContaining<HomeEconomics.HomeEconomicsApp>();
             
-            return services;
-        }
+        return services;
+    }
 
-        public static IServiceCollection AddHomeEconomicsMediatR(this IServiceCollection services)
-        {
-            return services
-                .AddMediatR(typeof(HomeEconomics.HomeEconomicsApp));
-        }
+    public static IServiceCollection AddHomeEconomicsMediatR(this IServiceCollection services)
+    {
+        return services
+            .AddMediatR(typeof(HomeEconomics.HomeEconomicsApp));
+    }
 
-        public static IServiceCollection AddHomeEconomicsServices(this IServiceCollection services)
-        {
-            return services
-                .AddTransient<IMovementMonthResponseService, MovementMonthResponseService>();
-        }
+    public static IServiceCollection AddHomeEconomicsServices(this IServiceCollection services)
+    {
+        return services
+            .AddTransient<IMovementMonthResponseService, MovementMonthResponseService>();
+    }
 
-        internal static IServiceCollection AddHomeEconomicsSwagger(this IServiceCollection services)
-        {
-            return services
-                .AddSwaggerGen(swaggerGenOptions =>
-                {
-                    swaggerGenOptions.SwaggerDoc("hm", new OpenApiInfo { Title = "HomeEconomics API" });
-                    swaggerGenOptions.CustomSchemaIds(type => type.FullName);
-                });
-        }
+    internal static IServiceCollection AddHomeEconomicsSwagger(this IServiceCollection services)
+    {
+        return services
+            .AddSwaggerGen(swaggerGenOptions =>
+            {
+                swaggerGenOptions.SwaggerDoc("hm", new OpenApiInfo { Title = "HomeEconomics API" });
+                swaggerGenOptions.CustomSchemaIds(type => type.FullName);
+            });
+    }
 
-        internal static IServiceCollection AddHomeEconomicsHealthChecks(this IServiceCollection services, IConfiguration configuration)
-        {
-            var connectionString = configuration.GetConnectionString("HomeEconomics");
+    internal static IServiceCollection AddHomeEconomicsHealthChecks(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("HomeEconomics");
 
-            services
-                .AddHealthChecks()
-                .AddCheck(name: SelfName, timeout: TimeSpan.FromSeconds(30), check: () => HealthCheckResult.Healthy())
-                .AddNpgSql(connectionString!);
+        services
+            .AddHealthChecks()
+            .AddCheck(name: SelfName, timeout: TimeSpan.FromSeconds(30), check: () => HealthCheckResult.Healthy())
+            .AddNpgSql(connectionString!);
 
-            return services;
-        }
+        return services;
+    }
 
-        internal static IServiceCollection AddIf(this IServiceCollection services, bool condition, Func<IServiceCollection, IServiceCollection> action)
-        {
-            return condition ? action(services) : services;
-        }
+    internal static IServiceCollection AddIf(this IServiceCollection services, bool condition, Func<IServiceCollection, IServiceCollection> action)
+    {
+        return condition ? action(services) : services;
     }
 }

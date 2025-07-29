@@ -2,27 +2,26 @@
 using HomeEconomics.Services;
 using MediatR;
 
-namespace HomeEconomics.Features.MovementMonths
+namespace HomeEconomics.Features.MovementMonths;
+
+public class Detail
 {
-    public class Detail
+    public record Query(int Year, int Month) : IRequest<MovementMonthResponse>;
+
+    public class Handler : IRequestHandler<Query, MovementMonthResponse?>
     {
-        public record Query(int Year, int Month) : IRequest<MovementMonthResponse>;
+        private readonly IMovementMonthResponseService _movementMonthResponseService;
 
-        public class Handler : IRequestHandler<Query, MovementMonthResponse?>
+        public Handler(IMovementMonthResponseService movementMonthResponseService)
         {
-            private readonly IMovementMonthResponseService _movementMonthResponseService;
+            _movementMonthResponseService = movementMonthResponseService;
+        }
 
-            public Handler(IMovementMonthResponseService movementMonthResponseService)
-            {
-                _movementMonthResponseService = movementMonthResponseService;
-            }
-
-            public async Task<MovementMonthResponse?> Handle(Query request, CancellationToken cancellationToken)
-            {
-                return await _movementMonthResponseService.Get(
-                    mm => mm.Year == request.Year && mm.Month == (Month)request.Month,
-                    cancellationToken: cancellationToken);
-            }
+        public async Task<MovementMonthResponse?> Handle(Query request, CancellationToken cancellationToken)
+        {
+            return await _movementMonthResponseService.Get(
+                mm => mm.Year == request.Year && mm.Month == (Month)request.Month,
+                cancellationToken: cancellationToken);
         }
     }
 }

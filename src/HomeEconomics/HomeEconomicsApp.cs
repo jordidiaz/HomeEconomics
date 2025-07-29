@@ -1,6 +1,5 @@
-﻿namespace HomeEconomics
+﻿namespace HomeEconomics;
+
+public abstract class HomeEconomicsApp
 {
-    public abstract class HomeEconomicsApp
-    {
-    }
 }

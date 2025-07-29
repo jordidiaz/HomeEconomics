@@ -2,7 +2,7 @@
   <PropertyGroup>
     <NetTargetVersion>net8.0</NetTargetVersion>
     <LangVersion>12.0</LangVersion>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
   </PropertyGroup>

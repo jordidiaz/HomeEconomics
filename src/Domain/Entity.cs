@@ -1,15 +1,14 @@
-﻿namespace Domain
-{
-    public abstract class Entity
-    {
-        public int Id { get; private set; }
+﻿namespace Domain;
 
-        /*
-         * For testing purposes only
-         */
-        public void SetIdentity(int id)
-        {
-            Id = id;
-        }
+public abstract class Entity
+{
+    public int Id { get; private set; }
+
+    /*
+     * For testing purposes only
+     */
+    public void SetIdentity(int id)
+    {
+        Id = id;
     }
 }

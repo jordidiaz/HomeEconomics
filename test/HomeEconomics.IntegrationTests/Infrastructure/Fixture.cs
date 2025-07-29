@@ -1,21 +1,20 @@
 ﻿using Xunit;
 
-namespace HomeEconomics.IntegrationTests.Infrastructure
+namespace HomeEconomics.IntegrationTests.Infrastructure;
+
+public sealed class Fixture : 
+    ICollectionFixture<CustomWebApplicationFactory<TestStartup>>,
+    IDisposable
 {
-    public sealed class Fixture : 
-        ICollectionFixture<CustomWebApplicationFactory<TestStartup>>,
-        IDisposable
+    public Fixture()
     {
-        public Fixture()
-        {
-            HttpClient = new CustomWebApplicationFactory<TestStartup>().CreateClient();
-        }
+        HttpClient = new CustomWebApplicationFactory<TestStartup>().CreateClient();
+    }
 
-        public HttpClient HttpClient { get; }
+    public HttpClient HttpClient { get; }
 
-        public void Dispose()
-        {
-            HttpClient?.Dispose();
-        }
+    public void Dispose()
+    {
+        HttpClient?.Dispose();
     }
 }

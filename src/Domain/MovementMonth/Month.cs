@@ -1,18 +1,17 @@
-﻿namespace Domain.MovementMonth
+﻿namespace Domain.MovementMonth;
+
+public enum Month
 {
-    public enum Month
-    {
-        Jan = 1,
-        Feb,
-        Mar,
-        Apr,
-        May,
-        Jun,
-        Jul,
-        Aug,
-        Sep,
-        Oct,
-        Nov,
-        Dec
-    }
+    Jan = 1,
+    Feb,
+    Mar,
+    Apr,
+    May,
+    Jun,
+    Jul,
+    Aug,
+    Sep,
+    Oct,
+    Nov,
+    Dec
 }

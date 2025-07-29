@@ -3,45 +3,44 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace HomeEconomics.Features.Movements
-{
-    public class Delete
-    {
-        public record Command(int Id) : IRequest;
+namespace HomeEconomics.Features.Movements;
 
-        public class Validator : AbstractValidator<Command>
+public class Delete
+{
+    public record Command(int Id) : IRequest;
+
+    public class Validator : AbstractValidator<Command>
+    {
+        public Validator()
         {
-            public Validator()
-            {
-                RuleFor(command => command.Id).GreaterThan(0);
-            }
+            RuleFor(command => command.Id).GreaterThan(0);
+        }
+    }
+
+    public class Handler : IRequestHandler<Command>
+    {
+        private readonly HomeEconomicsDbContext _dbContext;
+
+        public Handler(HomeEconomicsDbContext dbContext)
+        {
+            _dbContext = dbContext;
         }
 
-        public class Handler : IRequestHandler<Command>
+        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly HomeEconomicsDbContext _dbContext;
+            var movement =
+                await _dbContext.GetMovementAsync(m => m.Id == request.Id, cancellationToken: cancellationToken);
 
-            public Handler(HomeEconomicsDbContext dbContext)
+            if (movement is null)
             {
-                _dbContext = dbContext;
+                throw new InvalidOperationException(Properties.Messages.MovementNotExists);
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var movement =
-                    await _dbContext.GetMovementAsync(m => m.Id == request.Id, cancellationToken: cancellationToken);
+            _dbContext.Movements.Remove(movement);
 
-                if (movement is null)
-                {
-                    throw new InvalidOperationException(Properties.Messages.MovementNotExists);
-                }
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
-                _dbContext.Movements.Remove(movement);
-
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                return Unit.Value;
-            }
+            return Unit.Value;
         }
     }
 }

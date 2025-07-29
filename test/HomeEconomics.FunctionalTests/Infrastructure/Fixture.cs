@@ -8,114 +8,113 @@ using Npgsql;
 using Persistence;
 using Respawn;
 
-namespace HomeEconomics.FunctionalTests.Infrastructure
+namespace HomeEconomics.FunctionalTests.Infrastructure;
+
+public static class Fixture
 {
-    public static class Fixture
+    private static readonly IConfigurationRoot Configuration = GetConfigurationRoot();
+    private static readonly ServiceProvider ServiceProvider = GetServiceProvider();
+    private static readonly IServiceScopeFactory ScopeFactory = GetScopeFactory();
+    private static readonly string ConnectionString = Configuration.GetConnectionString("HomeEconomics")!;
+
+    static Fixture()
     {
-        private static readonly IConfigurationRoot Configuration = GetConfigurationRoot();
-        private static readonly ServiceProvider ServiceProvider = GetServiceProvider();
-        private static readonly IServiceScopeFactory ScopeFactory = GetScopeFactory();
-        private static readonly string ConnectionString = Configuration.GetConnectionString("HomeEconomics")!;
+        DeleteDatabase();
+        MigrateDatabase();
+    }
 
-        static Fixture()
+    private static ServiceProvider GetServiceProvider()
+    {
+        var webHostEnvironment = A.Fake<IWebHostEnvironment>();
+        var startup = new TestStartup(Configuration, webHostEnvironment);
+        var serviceCollection = new ServiceCollection();
+        startup.ConfigureServices(serviceCollection);
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        return serviceProvider;
+    }
+
+    private static IConfigurationRoot GetConfigurationRoot()
+    {
+        return new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", false, false)
+            .AddEnvironmentVariables()
+            .Build();
+    }
+
+    private static IServiceScopeFactory GetScopeFactory()
+    {
+        return ServiceProvider.GetService<IServiceScopeFactory>() ?? throw new ArgumentNullException("ServiceScopeFactory is null");
+    }
+
+    private static void MigrateDatabase()
+    {
+        var dbContext = ServiceProvider.GetService<HomeEconomicsDbContext>();
+        dbContext?.Database.Migrate();
+    }
+
+    private static void DeleteDatabase()
+    {
+        var dbContext = ServiceProvider.GetService<HomeEconomicsDbContext>();
+        dbContext?.Database.EnsureDeleted();
+    }
+
+    public static async Task ResetDatabaseAsync()
+    {
+        await using var npgsqlConnection = new NpgsqlConnection(ConnectionString);
+        await npgsqlConnection.OpenAsync();
+        var respawner = await Respawner.CreateAsync(npgsqlConnection, new RespawnerOptions
         {
-            DeleteDatabase();
-            MigrateDatabase();
+            SchemasToInclude =
+            [
+                "public"
+            ],
+            DbAdapter = DbAdapter.Postgres
+        });
+        await respawner.ResetAsync(npgsqlConnection);
+    }
+
+    public static async Task<TResponse> SendToMediatRAsync<TResponse>(IRequest<TResponse> request)
+    {
+        using var scope = ScopeFactory.CreateScope();
+        var mediator = scope.ServiceProvider.GetService<IMediator>();
+        if (mediator is null)
+        {
+            throw new ArgumentNullException("Mediator is null");
         }
 
-        private static ServiceProvider GetServiceProvider()
-        {
-            var webHostEnvironment = A.Fake<IWebHostEnvironment>();
-            var startup = new TestStartup(Configuration, webHostEnvironment);
-            var serviceCollection = new ServiceCollection();
-            startup.ConfigureServices(serviceCollection);
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-            return serviceProvider;
-        }
+        return await mediator.Send(request);
+    }
 
-        private static IConfigurationRoot GetConfigurationRoot()
-        {
-            return new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false, false)
-                .AddEnvironmentVariables()
-                .Build();
-        }
+    public static async Task<T> QueryDbContextAsync<T>(Func<HomeEconomicsDbContext, Task<T>> query)
+    {
+        return await ExecuteDbContextAsync(query);
+    }
 
-        private static IServiceScopeFactory GetScopeFactory()
+    public static Task InsertDbContextAsync(params object[] entities)
+    {
+        return ExecuteDbContextAsync(dbContext =>
         {
-            return ServiceProvider.GetService<IServiceScopeFactory>() ?? throw new ArgumentNullException("ServiceScopeFactory is null");
-        }
-
-        private static void MigrateDatabase()
-        {
-            var dbContext = ServiceProvider.GetService<HomeEconomicsDbContext>();
-            dbContext?.Database.Migrate();
-        }
-
-        private static void DeleteDatabase()
-        {
-            var dbContext = ServiceProvider.GetService<HomeEconomicsDbContext>();
-            dbContext?.Database.EnsureDeleted();
-        }
-
-        public static async Task ResetDatabaseAsync()
-        {
-            await using var npgsqlConnection = new NpgsqlConnection(ConnectionString);
-            await npgsqlConnection.OpenAsync();
-            var respawner = await Respawner.CreateAsync(npgsqlConnection, new RespawnerOptions
+            foreach (var entity in entities)
             {
-                SchemasToInclude =
-                [
-                    "public"
-                ],
-                DbAdapter = DbAdapter.Postgres
-            });
-            await respawner.ResetAsync(npgsqlConnection);
-        }
-
-        public static async Task<TResponse> SendToMediatRAsync<TResponse>(IRequest<TResponse> request)
-        {
-            using var scope = ScopeFactory.CreateScope();
-            var mediator = scope.ServiceProvider.GetService<IMediator>();
-            if (mediator is null)
-            {
-                throw new ArgumentNullException("Mediator is null");
+                dbContext.Add(entity);
             }
 
-            return await mediator.Send(request);
-        }
+            return dbContext.SaveChangesAsync();
+        });
+    }
 
-        public static async Task<T> QueryDbContextAsync<T>(Func<HomeEconomicsDbContext, Task<T>> query)
+    private static async Task<T> ExecuteDbContextAsync<T>(Func<HomeEconomicsDbContext, Task<T>> action)
+    {
+        using (var scope = ScopeFactory.CreateScope())
         {
-            return await ExecuteDbContextAsync(query);
-        }
-
-        public static Task InsertDbContextAsync(params object[] entities)
-        {
-            return ExecuteDbContextAsync(dbContext =>
+            var dbContext = scope.ServiceProvider.GetService<HomeEconomicsDbContext>();
+            if (dbContext is null)
             {
-                foreach (var entity in entities)
-                {
-                    dbContext.Add(entity);
-                }
-
-                return dbContext.SaveChangesAsync();
-            });
-        }
-
-        private static async Task<T> ExecuteDbContextAsync<T>(Func<HomeEconomicsDbContext, Task<T>> action)
-        {
-            using (var scope = ScopeFactory.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetService<HomeEconomicsDbContext>();
-                if (dbContext is null)
-                {
-                    throw new ArgumentNullException("HomeEconomicsDbContext is null");
-                }
-
-                return await action(dbContext);
+                throw new ArgumentNullException("HomeEconomicsDbContext is null");
             }
+
+            return await action(dbContext);
         }
     }
 }

@@ -7,58 +7,57 @@ using Domain.Movements;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace HomeEconomics.Features.MovementMonths
-{
-    public class AddStatus
-    {
-        public record Command(int Year, Month Month, decimal AccountAmount, decimal CashAmount) : IRequest<MovementMonthResponse>;
+namespace HomeEconomics.Features.MovementMonths;
 
-        public class Validator : AbstractValidator<Command>
+public class AddStatus
+{
+    public record Command(int Year, Month Month, decimal AccountAmount, decimal CashAmount) : IRequest<MovementMonthResponse>;
+
+    public class Validator : AbstractValidator<Command>
+    {
+        public Validator()
         {
-            public Validator()
-            {
-                RuleFor(command => command.Year).GreaterThanOrEqualTo(DateTime.Now.Year);
-                RuleFor(command => command.Month).Must(Enums.IsAValidEnumValue);
-                RuleFor(command => command.AccountAmount).GreaterThanOrEqualTo(Movement.MinAmount);
-                RuleFor(command => command.CashAmount).GreaterThanOrEqualTo(Movement.MinAmount);
-            }
+            RuleFor(command => command.Year).GreaterThanOrEqualTo(DateTime.Now.Year);
+            RuleFor(command => command.Month).Must(Enums.IsAValidEnumValue);
+            RuleFor(command => command.AccountAmount).GreaterThanOrEqualTo(Movement.MinAmount);
+            RuleFor(command => command.CashAmount).GreaterThanOrEqualTo(Movement.MinAmount);
+        }
+    }
+
+    public class Handler : IRequestHandler<Command, MovementMonthResponse>
+    {
+        private readonly IMovementMonthResponseService _movementMonthResponseService;
+        private readonly HomeEconomicsDbContext _dbContext;
+
+        public Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
+        {
+            _movementMonthResponseService = movementMonthResponseService;
+            _dbContext = dbContext;
         }
 
-        public class Handler : IRequestHandler<Command, MovementMonthResponse>
+        public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
         {
-            private readonly IMovementMonthResponseService _movementMonthResponseService;
-            private readonly HomeEconomicsDbContext _dbContext;
+            var movementMonth = await _dbContext.GetMovementMonthAsync(mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
 
-            public Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
+            if (movementMonth is null)
             {
-                _movementMonthResponseService = movementMonthResponseService;
-                _dbContext = dbContext;
+                throw new InvalidOperationException(Properties.Messages.MovementMonthNotExists);
             }
 
-            public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
-            {
-                var movementMonth = await _dbContext.GetMovementMonthAsync(mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
+            var day = IsCurrentMonth(request.Year, (int)request.Month)
+                ? DateTime.Now.Day
+                : 0;
 
-                if (movementMonth is null)
-                {
-                    throw new InvalidOperationException(Properties.Messages.MovementMonthNotExists);
-                }
+            movementMonth.AddStatus(day, request.AccountAmount, request.CashAmount);
 
-                var day = IsCurrentMonth(request.Year, (int)request.Month)
-                    ? DateTime.Now.Day
-                    : 0;
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
-                movementMonth.AddStatus(day, request.AccountAmount, request.CashAmount);
+            return await _movementMonthResponseService.Get(movementMonth, cancellationToken);
+        }
 
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                return await _movementMonthResponseService.Get(movementMonth, cancellationToken);
-            }
-
-            private static bool IsCurrentMonth(int year, int month)
-            {
-                return DateTime.Now.Year == year && DateTime.Now.Month == month;
-            }
+        private static bool IsCurrentMonth(int year, int month)
+        {
+            return DateTime.Now.Year == year && DateTime.Now.Month == month;
         }
     }
 }

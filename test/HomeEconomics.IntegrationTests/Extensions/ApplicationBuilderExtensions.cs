@@ -1,11 +1,10 @@
 ﻿// ReSharper disable once CheckNamespace
-namespace Microsoft.AspNetCore.Builder
+namespace Microsoft.AspNetCore.Builder;
+
+internal static class ApplicationBuilderExtensions
 {
-    internal static class ApplicationBuilderExtensions
+    internal static IApplicationBuilder UseHomeEconomicsEndpoints(this IApplicationBuilder appBuilder)
     {
-        internal static IApplicationBuilder UseHomeEconomicsEndpoints(this IApplicationBuilder appBuilder)
-        {
-            return appBuilder.UseEndpoints(endpointRouteBuilder => endpointRouteBuilder.MapControllers());
-        }
+        return appBuilder.UseEndpoints(endpointRouteBuilder => endpointRouteBuilder.MapControllers());
     }
 }

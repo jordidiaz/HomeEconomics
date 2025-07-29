@@ -5,32 +5,31 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace HomeEconomics.FunctionalTests.Infrastructure
+namespace HomeEconomics.FunctionalTests.Infrastructure;
+
+public class TestStartup
 {
-    public class TestStartup
+    public TestStartup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
     {
-        public TestStartup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
-        {
-            Configuration = configuration;
-            WebHostEnvironment = webHostEnvironment;
-        }
+        Configuration = configuration;
+        WebHostEnvironment = webHostEnvironment;
+    }
 
-        private IConfiguration Configuration { get; }
-        private IWebHostEnvironment WebHostEnvironment { get; }
+    private IConfiguration Configuration { get; }
+    private IWebHostEnvironment WebHostEnvironment { get; }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services
-                .AddHomeEconomicsApi()
-                .AddHomeEconomicsServices()
-                .AddHomeEconomicsMediatR()
-                .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment());
-        }
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services
+            .AddHomeEconomicsApi()
+            .AddHomeEconomicsServices()
+            .AddHomeEconomicsMediatR()
+            .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment());
+    }
 
-        public void Configure(IApplicationBuilder applicationBuilder)
-        {
-            applicationBuilder
-                .UseProblemDetails();
-        }
+    public void Configure(IApplicationBuilder applicationBuilder)
+    {
+        applicationBuilder
+            .UseProblemDetails();
     }
 }

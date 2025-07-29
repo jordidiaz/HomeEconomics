@@ -2,30 +2,29 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistence.Configurations
+namespace Persistence.Configurations;
+
+internal class MovementConfiguration : IEntityTypeConfiguration<Movement>
 {
-    internal class MovementConfiguration : IEntityTypeConfiguration<Movement>
+    public void Configure(EntityTypeBuilder<Movement> builder)
     {
-        public void Configure(EntityTypeBuilder<Movement> builder)
-        {
-            builder.ToTable("Movements");
+        builder.ToTable("Movements");
 
-            builder.HasKey(m => m.Id);
+        builder.HasKey(m => m.Id);
 
-            builder.HasIndex(m => m.Name)
-                .IsUnique();
+        builder.HasIndex(m => m.Name)
+            .IsUnique();
 
-            builder.Property(m => m.Name)
-                .HasMaxLength(Movement.MovementNameMaxLength)
-                .IsRequired();
+        builder.Property(m => m.Name)
+            .HasMaxLength(Movement.MovementNameMaxLength)
+            .IsRequired();
 
-            builder.HasOne(movement => movement.Frequency)
-                .WithOne()
-                .HasForeignKey<Frequency>(frequency => frequency.MovementId)
-                .OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(movement => movement.Frequency)
+            .WithOne()
+            .HasForeignKey<Frequency>(frequency => frequency.MovementId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Property(movement => movement.Amount)
-                .HasColumnType("decimal(18,2)");
-        }
+        builder.Property(movement => movement.Amount)
+            .HasColumnType("decimal(18,2)");
     }
 }

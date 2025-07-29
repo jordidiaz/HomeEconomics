@@ -1,7 +1,6 @@
-﻿namespace HomeEconomics.IntegrationTests.Infrastructure
+﻿namespace HomeEconomics.IntegrationTests.Infrastructure;
+
+public static class Collections
 {
-    public static class Collections
-    {
-        public const string IntegrationTestCollection = nameof(IntegrationTestCollection);
-    }
+    public const string IntegrationTestCollection = nameof(IntegrationTestCollection);
 }

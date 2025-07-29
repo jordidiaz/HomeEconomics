@@ -5,51 +5,50 @@ using HomeEconomics.FunctionalTests.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace HomeEconomics.FunctionalTests.Features.Movements
+namespace HomeEconomics.FunctionalTests.Features.Movements;
+
+public class DeleteTests : FunctionalTestBase
 {
-    public class DeleteTests : FunctionalTestBase
+    [Fact]
+    public async Task Should_Delete_A_Movement()
     {
-        [Fact]
-        public async Task Should_Delete_A_Movement()
-        {
-            var movementId = await Fixture.SendToMediatRAsync(new Create.Command(
-                "Gasolina",
-                60m,
-                MovementType.Expense,
-                new Create.Frequency
-                {
-                    Type = FrequencyType.Monthly
-                }));
-
-            var movement = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
+        var movementId = await Fixture.SendToMediatRAsync(new Create.Command(
+            "Gasolina",
+            60m,
+            MovementType.Expense,
+            new Create.Frequency
             {
-                return await homeEconomicsDbContext
-                    .Movements
-                    .Include(m => m.Frequency)
-                    .SingleOrDefaultAsync(m => m.Id == movementId);
-            });
+                Type = FrequencyType.Monthly
+            }));
 
-            movement.Should().NotBeNull();
-
-            await Fixture.SendToMediatRAsync(new Delete.Command(movementId));
-
-            movement = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
-            {
-                return await homeEconomicsDbContext
-                    .Movements
-                    .Include(m => m.Frequency)
-                    .SingleOrDefaultAsync(m => m.Id == movementId);
-            });
-
-            movement.Should().BeNull();
-        }
-
-        [Fact]
-        public async Task Should_Throw_InvalidOperationException_If_Movement_Not_Exists()
+        var movement = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
         {
-            Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Delete.Command(42));
+            return await homeEconomicsDbContext
+                .Movements
+                .Include(m => m.Frequency)
+                .SingleOrDefaultAsync(m => m.Id == movementId);
+        });
 
-            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementNotExists);
-        }
+        movement.Should().NotBeNull();
+
+        await Fixture.SendToMediatRAsync(new Delete.Command(movementId));
+
+        movement = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
+        {
+            return await homeEconomicsDbContext
+                .Movements
+                .Include(m => m.Frequency)
+                .SingleOrDefaultAsync(m => m.Id == movementId);
+        });
+
+        movement.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Should_Throw_InvalidOperationException_If_Movement_Not_Exists()
+    {
+        Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Delete.Command(42));
+
+        await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementNotExists);
     }
 }

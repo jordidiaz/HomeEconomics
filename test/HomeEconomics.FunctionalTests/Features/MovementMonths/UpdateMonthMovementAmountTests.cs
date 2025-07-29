@@ -4,44 +4,43 @@ using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.FunctionalTests.Infrastructure;
 using Xunit;
 
-namespace HomeEconomics.FunctionalTests.Features.MovementMonths
+namespace HomeEconomics.FunctionalTests.Features.MovementMonths;
+
+public class UpdateMonthMovementAmountTests : FunctionalTestBase
 {
-    public class UpdateMonthMovementAmountTests : FunctionalTestBase
+    private UpdateMonthMovementAmount.Command _command = default!;
+
+    [Fact]
+    public async Task Should_Update_MonthMovement_Amount_Return_Resume()
     {
-        private UpdateMonthMovementAmount.Command _command = default!;
+        await CreateMovements();
 
-        [Fact]
-        public async Task Should_Update_MonthMovement_Amount_Return_Resume()
-        {
-            await CreateMovements();
+        var createMovementMonthResult = await Fixture.SendToMediatRAsync(
+            new Create.Command(
+                DateTime.Now.Year,
+                Month.Jan));
 
-            var createMovementMonthResult = await Fixture.SendToMediatRAsync(
-                new Create.Command(
-                    DateTime.Now.Year,
-                    Month.Jan));
+        _command = new UpdateMonthMovementAmount.Command(
+            createMovementMonthResult.Id,
+            createMovementMonthResult.MonthMovements.First().Id,
+            70m);
 
-            _command = new UpdateMonthMovementAmount.Command(
-                createMovementMonthResult.Id,
-                createMovementMonthResult.MonthMovements.First().Id,
-                70m);
+        var result = await Fixture.SendToMediatRAsync(_command);
 
-            var result = await Fixture.SendToMediatRAsync(_command);
+        result.Status.PendingTotalExpenses.Should().Be(130m);
+        result.Status.PendingTotalIncomes.Should().Be(70m);
+    }
 
-            result.Status.PendingTotalExpenses.Should().Be(130m);
-            result.Status.PendingTotalIncomes.Should().Be(70m);
-        }
+    [Fact]
+    public async Task Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
+    {
+        _command = new UpdateMonthMovementAmount.Command(
+            0,
+            0,
+            70m);
 
-        [Fact]
-        public async Task Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
-        {
-            _command = new UpdateMonthMovementAmount.Command(
-                0,
-                0,
-                70m);
+        Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
 
-            Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
-
-            await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
-        }
+        await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
     }
 }
