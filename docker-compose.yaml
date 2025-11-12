@@ -11,3 +11,4 @@ services:
       - "6001:6001"
     environment:
       - ConnectionStrings__HomeEconomics=${HOMEECONOMICS_CONNECTION_STRING}
+    restart: unless-stopped

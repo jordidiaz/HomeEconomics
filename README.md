@@ -212,7 +212,7 @@ cd src/HomeEconomics/spa && npm test
 Build and run with Docker:
 
 ```bash
-docker-compose up
+docker-compose up -d
 ```
 
 This will:
