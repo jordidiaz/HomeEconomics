@@ -27,9 +27,6 @@ public class MonthMovementToNextMovementMonthTests : IntegrationTestBase
 
     public class Handler : IRequestHandler<MonthMovementToNextMovementMonth.Command, MovementMonthResponse>
     {
-        public Task<MovementMonthResponse> Handle(MonthMovementToNextMovementMonth.Command request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(new MovementMonthResponse());
-        }
+        public Task<MovementMonthResponse> Handle(MonthMovementToNextMovementMonth.Command request, CancellationToken cancellationToken) => Task.FromResult(new MovementMonthResponse());
     }
 }

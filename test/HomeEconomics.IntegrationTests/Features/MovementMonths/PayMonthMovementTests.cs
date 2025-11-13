@@ -27,9 +27,6 @@ public class PayMonthMovementTests : IntegrationTestBase
 
     public class Handler : IRequestHandler<PayMonthMovement.Command, MovementMonthResponse>
     {
-        public Task<MovementMonthResponse> Handle(PayMonthMovement.Command request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(new MovementMonthResponse());
-        }
+        public Task<MovementMonthResponse> Handle(PayMonthMovement.Command request, CancellationToken cancellationToken) => Task.FromResult(new MovementMonthResponse());
     }
 }

@@ -10,12 +10,10 @@ public class CreateTests : FunctionalTestBase
 {
     private readonly MovementMonth.Create.Command _command;
 
-    public CreateTests()
-    {
+    public CreateTests() =>
         _command = new MovementMonth.Create.Command(
             DateTime.Now.Year,
             Month.Jan);
-    }
 
     [Fact]
     public async Task Should_Create_A_New_MovementMonth()

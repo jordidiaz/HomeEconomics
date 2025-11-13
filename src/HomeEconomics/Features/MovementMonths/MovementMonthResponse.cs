@@ -70,14 +70,10 @@ public record MovementMonthResponse
         };
     }
 
-    private static decimal GetPendingTotal(MonthMovement[] monthMovements, MovementType movementType)
-    {
-        return monthMovements.Where(mm => mm.Type == movementType && !mm.Paid).Sum(mm => mm.Amount);
-    }
+    private static decimal GetPendingTotal(MonthMovement[] monthMovements, MovementType movementType) => monthMovements.Where(mm => mm.Type == movementType && !mm.Paid).Sum(mm => mm.Amount);
 
-    private static MonthMovementResult FromMonthMovement(MonthMovement monthMovement)
-    {
-        return new MonthMovementResult
+    private static MonthMovementResult FromMonthMovement(MonthMovement monthMovement) =>
+        new()
         {
             Id = monthMovement.Id,
             Name = monthMovement.Name,
@@ -85,5 +81,4 @@ public record MovementMonthResponse
             Type = (int)monthMovement.Type,
             Paid = monthMovement.Paid
         };
-    }
 }

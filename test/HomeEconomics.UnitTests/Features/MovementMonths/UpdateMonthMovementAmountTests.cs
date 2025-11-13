@@ -11,10 +11,7 @@ public class UpdateMonthMovementAmountTests
     {
         private readonly UpdateMonthMovementAmount.Validator _sut;
 
-        public CommandValidatorTests()
-        {
-            _sut = new UpdateMonthMovementAmount.Validator();
-        }
+        public CommandValidatorTests() => _sut = new UpdateMonthMovementAmount.Validator();
 
         [Fact]
         public void Should_Have_Error_If_Amount_Invalid()

@@ -14,12 +14,10 @@ public class CreateTests : IntegrationTestBase
 
     private const string Uri = "api/movement-months";
 
-    public CreateTests(Fixture fixture) : base(fixture)
-    {
+    public CreateTests(Fixture fixture) : base(fixture) =>
         _command = new Create.Command(
             DateTime.Now.Year,
             Month.Feb);
-    }
 
     [Fact]
     public async Task Should_Return_200_Ok()
@@ -46,9 +44,6 @@ public class CreateTests : IntegrationTestBase
 
     public class Handler : IRequestHandler<Create.Command, MovementMonthResponse>
     {
-        public Task<MovementMonthResponse> Handle(Create.Command request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(new MovementMonthResponse());
-        }
+        public Task<MovementMonthResponse> Handle(Create.Command request, CancellationToken cancellationToken) => Task.FromResult(new MovementMonthResponse());
     }
 }

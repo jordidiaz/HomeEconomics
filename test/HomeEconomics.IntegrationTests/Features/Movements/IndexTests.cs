@@ -26,9 +26,6 @@ public class IndexTests : IntegrationTestBase
 
     public class Handler : IRequestHandler<Index.Query, Index.Result>
     {
-        public Task<Index.Result> Handle(Index.Query request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(new Index.Result());
-        }
+        public Task<Index.Result> Handle(Index.Query request, CancellationToken cancellationToken) => Task.FromResult(new Index.Result());
     }
 }

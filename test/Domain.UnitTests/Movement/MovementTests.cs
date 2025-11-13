@@ -13,10 +13,7 @@ public class MovementTests
 
     private readonly Movements.Movement _sut;
 
-    public MovementTests()
-    {
-        _sut = new Movements.Movement(Name, Amount, MovementType.Income);
-    }
+    public MovementTests() => _sut = new Movements.Movement(Name, Amount, MovementType.Income);
 
     [Theory]
     [InlineData("")]
@@ -154,10 +151,7 @@ public class MovementTests
     }
 
     [Fact]
-    public void GetFrequencyType_Should_Return_FrequencyType_None()
-    {
-        _sut.GetFrequencyType().Should().Be(FrequencyType.None);
-    }
+    public void GetFrequencyType_Should_Return_FrequencyType_None() => _sut.GetFrequencyType().Should().Be(FrequencyType.None);
 
     [Fact]
     public void GetFrequencyType_Should_Return_FrequencyType_Monthly()
@@ -195,16 +189,10 @@ public class MovementTests
     }
 
     [Fact]
-    public void HasMonthInFrequency_Should_Return_False_If_FrequencyType_None()
-    {
-        _sut.HasMonthInFrequency(Month.Aug).Should().Be(false);
-    }
+    public void HasMonthInFrequency_Should_Return_False_If_FrequencyType_None() => _sut.HasMonthInFrequency(Month.Aug).Should().Be(false);
 
     [Fact]
-    public void HasMonthInFrequency_Should_Return_False_If_FrequencyType_Monthly()
-    {
-        _sut.HasMonthInFrequency(Month.Aug).Should().Be(false);
-    }
+    public void HasMonthInFrequency_Should_Return_False_If_FrequencyType_Monthly() => _sut.HasMonthInFrequency(Month.Aug).Should().Be(false);
 
     [Fact]
     public void HasMonthInFrequency_Should_Return_False_If_FrequencyType_Yearly()

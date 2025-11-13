@@ -26,9 +26,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    internal static IServiceCollection AddHomeEconomicsMediatR(this IServiceCollection services)
-    {
-        return services
+    internal static IServiceCollection AddHomeEconomicsMediatR(this IServiceCollection services) =>
+        services
             .AddMediatR(typeof(HomeEconomicsIntegrationTests));
-    }
 }

@@ -13,10 +13,7 @@ public class CreateTests
         private readonly int _year = DateTime.Now.Year + 1;
         private readonly Create.Validator _sut;
 
-        public CommandValidatorTests()
-        {
-            _sut = new Create.Validator();
-        }
+        public CommandValidatorTests() => _sut = new Create.Validator();
 
         [Theory]
         [InlineData(2019)]

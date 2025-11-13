@@ -9,10 +9,7 @@ public class MovementMonthsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public MovementMonthsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    public MovementMonthsController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost]
     [ProducesDefaultResponseType]

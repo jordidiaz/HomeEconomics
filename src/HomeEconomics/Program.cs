@@ -12,22 +12,18 @@ public static class Program
         await CreateHostBuilder(args).Build().RunAsync();
     }
 
-    private static IHostBuilder CreateHostBuilder(string[] args)
-    {
-        return Host.CreateDefaultBuilder(args)
+    private static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
             .UseSerilog(ConfigureSerilog())
             .ConfigureWebHostDefaults(webHostBuilder =>
             {
                 webHostBuilder.UseStartup<Startup>();
             });
-    }
 
-    private static Action<HostBuilderContext, LoggerConfiguration> ConfigureSerilog()
-    {
-        return (webHostBuilderContext, loggerConfiguration) =>
+    private static Action<HostBuilderContext, LoggerConfiguration> ConfigureSerilog() =>
+        (webHostBuilderContext, loggerConfiguration) =>
         {
             loggerConfiguration
                 .ReadFrom.Configuration(webHostBuilderContext.Configuration);
         };
-    }
 }

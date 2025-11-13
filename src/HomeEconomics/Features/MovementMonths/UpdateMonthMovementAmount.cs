@@ -13,10 +13,7 @@ public class UpdateMonthMovementAmount
 
     public class Validator : AbstractValidator<Command>
     {
-        public Validator()
-        {
-            RuleFor(command => command.Amount).GreaterThanOrEqualTo(Movement.MinAmount);
-        }
+        public Validator() => RuleFor(command => command.Amount).GreaterThanOrEqualTo(Movement.MinAmount);
     }
 
     public class Handler : IRequestHandler<Command, MovementMonthResponse>

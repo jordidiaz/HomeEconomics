@@ -30,15 +30,13 @@ public sealed class Movement : Entity, IAggregateRoot
 
     public FrequencyType GetFrequencyType() => Frequency.Type;
 
-    public bool HasMonthInFrequency(Month month)
-    {
-        return GetFrequencyType() switch
+    public bool HasMonthInFrequency(Month month) =>
+        GetFrequencyType() switch
         {
             FrequencyType.None => false,
             FrequencyType.Monthly => false,
             _ => Frequency.IsMonthEnabled((int)month)
         };
-    }
 
     public bool[] GetMonths() => Frequency.GetMonths();
 }

@@ -34,27 +34,21 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddHomeEconomicsMediatR(this IServiceCollection services)
-    {
-        return services
+    public static IServiceCollection AddHomeEconomicsMediatR(this IServiceCollection services) =>
+        services
             .AddMediatR(typeof(HomeEconomics.HomeEconomicsApp));
-    }
 
-    public static IServiceCollection AddHomeEconomicsServices(this IServiceCollection services)
-    {
-        return services
+    public static IServiceCollection AddHomeEconomicsServices(this IServiceCollection services) =>
+        services
             .AddTransient<IMovementMonthResponseService, MovementMonthResponseService>();
-    }
 
-    internal static IServiceCollection AddHomeEconomicsSwagger(this IServiceCollection services)
-    {
-        return services
+    internal static IServiceCollection AddHomeEconomicsSwagger(this IServiceCollection services) =>
+        services
             .AddSwaggerGen(swaggerGenOptions =>
             {
                 swaggerGenOptions.SwaggerDoc("hm", new OpenApiInfo { Title = "HomeEconomics API" });
                 swaggerGenOptions.CustomSchemaIds(type => type.FullName);
             });
-    }
 
     internal static IServiceCollection AddHomeEconomicsHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
@@ -68,8 +62,5 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    internal static IServiceCollection AddIf(this IServiceCollection services, bool condition, Func<IServiceCollection, IServiceCollection> action)
-    {
-        return condition ? action(services) : services;
-    }
+    internal static IServiceCollection AddIf(this IServiceCollection services, bool condition, Func<IServiceCollection, IServiceCollection> action) => condition ? action(services) : services;
 }

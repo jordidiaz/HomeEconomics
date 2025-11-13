@@ -14,14 +14,12 @@ public class AddMonthMovementTests : IntegrationTestBase
 
     private AddMonthMovement.Command _command;
 
-    public AddMonthMovementTests(Fixture fixture) : base(fixture)
-    {
+    public AddMonthMovementTests(Fixture fixture) : base(fixture) =>
         _command = new AddMonthMovement.Command(
             1,
             "Gasolina",
             60,
             MovementType.Expense);
-    }
 
     [Fact]
     public async Task Should_Return_200_Ok()
@@ -50,9 +48,6 @@ public class AddMonthMovementTests : IntegrationTestBase
 
     public class Handler : IRequestHandler<AddMonthMovement.Command, MovementMonthResponse>
     {
-        public Task<MovementMonthResponse> Handle(AddMonthMovement.Command request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(new MovementMonthResponse());
-        }
+        public Task<MovementMonthResponse> Handle(AddMonthMovement.Command request, CancellationToken cancellationToken) => Task.FromResult(new MovementMonthResponse());
     }
 }

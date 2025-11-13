@@ -28,9 +28,6 @@ public class DeleteTests : IntegrationTestBase
 
     public class Handler : IRequestHandler<Delete.Command, Unit>
     {
-        public Task<Unit> Handle(Delete.Command request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(Unit.Value);
-        }
+        public Task<Unit> Handle(Delete.Command request, CancellationToken cancellationToken) => Task.FromResult(Unit.Value);
     }
 }

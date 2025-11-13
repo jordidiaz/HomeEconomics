@@ -28,9 +28,8 @@ public class Index
 
             public int FrequencyMonth { get; init; }
 
-            public static Movement FromMovement(Domain.Movements.Movement movement)
-            {
-                return new Movement
+            public static Movement FromMovement(Domain.Movements.Movement movement) =>
+                new()
                 {
                     Id = movement.Id,
                     Name = movement.Name,
@@ -42,7 +41,6 @@ public class Index
                         ? Array.IndexOf(movement.GetMonths(), true) + 1
                         : 0
                 };
-            }
         }
     }
 
@@ -50,10 +48,7 @@ public class Index
     {
         private readonly HomeEconomicsDbContext _dbContext;
 
-        public Handler(HomeEconomicsDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        public Handler(HomeEconomicsDbContext dbContext) => _dbContext = dbContext;
 
         public Task<Result> Handle(Query request, CancellationToken cancellationToken)
         {

@@ -6,56 +6,26 @@ public class MonthMovementCollection : ICollection<MonthMovement>
 {
     private readonly ICollection<MonthMovement> _monthMovements;
 
-    private MonthMovementCollection(ICollection<MonthMovement>? monthMovements = null)
-    {
-        _monthMovements = monthMovements ?? new List<MonthMovement>();
-    }
+    private MonthMovementCollection(ICollection<MonthMovement>? monthMovements = null) => _monthMovements = monthMovements ?? new List<MonthMovement>();
 
-    public static MonthMovementCollection Init(ICollection<MonthMovement>? monthMovements = null)
-    {
-        return new MonthMovementCollection(monthMovements);
-    }
+    public static MonthMovementCollection Init(ICollection<MonthMovement>? monthMovements = null) => new(monthMovements);
 
-    public IEnumerator<MonthMovement> GetEnumerator()
-    {
-        return _monthMovements.GetEnumerator();
-    }
+    public IEnumerator<MonthMovement> GetEnumerator() => _monthMovements.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    public void Add(MonthMovement item)
-    {
-        _monthMovements.Add(item);
-    }
+    public void Add(MonthMovement item) => _monthMovements.Add(item);
 
-    public void Clear()
-    {
-        _monthMovements.Clear();
-    }
+    public void Clear() => _monthMovements.Clear();
 
-    public bool Contains(MonthMovement item)
-    {
-        return _monthMovements.Contains(item);
-    }
+    public bool Contains(MonthMovement item) => _monthMovements.Contains(item);
 
-    public void CopyTo(MonthMovement[] array, int arrayIndex)
-    {
-        _monthMovements.CopyTo(array, arrayIndex);
-    }
+    public void CopyTo(MonthMovement[] array, int arrayIndex) => _monthMovements.CopyTo(array, arrayIndex);
 
-    public bool Remove(MonthMovement item)
-    {
-        return _monthMovements.Remove(item);
-    }
+    public bool Remove(MonthMovement item) => _monthMovements.Remove(item);
 
     public int Count => _monthMovements.Count;
     public bool IsReadOnly => _monthMovements.IsReadOnly;
 
-    internal MonthMovement? Get(int id)
-    {
-        return _monthMovements.SingleOrDefault(mm => mm.Id == id);
-    }
+    internal MonthMovement? Get(int id) => _monthMovements.SingleOrDefault(mm => mm.Id == id);
 }

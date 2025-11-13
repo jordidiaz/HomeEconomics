@@ -13,10 +13,7 @@ public class Create
 
     public record Frequency
     {
-        public Frequency()
-        {
-            Months = new List<bool>().ToArray();
-        }
+        public Frequency() => Months = new List<bool>().ToArray();
 
         public FrequencyType Type { get; init; }
 
@@ -59,10 +56,7 @@ public class Create
     {
         private readonly HomeEconomicsDbContext _dbContext;
 
-        public Handler(HomeEconomicsDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        public Handler(HomeEconomicsDbContext dbContext) => _dbContext = dbContext;
 
         public async Task<int> Handle(Command request, CancellationToken cancellationToken)
         {

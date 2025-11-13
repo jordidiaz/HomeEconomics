@@ -14,8 +14,7 @@ public class EditTest : IntegrationTestBase
 
     private const string Uri = "api/movements/42";
 
-    public EditTest(Fixture fixture) : base(fixture)
-    {
+    public EditTest(Fixture fixture) : base(fixture) =>
         _command = new Edit.Command
         {
             Id = 42,
@@ -27,7 +26,6 @@ public class EditTest : IntegrationTestBase
                 Type = FrequencyType.Monthly
             }
         };
-    }
 
     [Fact]
     public async Task Should_Return_204_NoContent()
@@ -41,9 +39,6 @@ public class EditTest : IntegrationTestBase
 
     public class Handler : IRequestHandler<Edit.Command, Unit>
     {
-        public Task<Unit> Handle(Edit.Command request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(Unit.Value);
-        }
+        public Task<Unit> Handle(Edit.Command request, CancellationToken cancellationToken) => Task.FromResult(Unit.Value);
     }
 }

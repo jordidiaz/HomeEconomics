@@ -11,20 +11,14 @@ public class Delete
 
     public class Validator : AbstractValidator<Command>
     {
-        public Validator()
-        {
-            RuleFor(command => command.Id).GreaterThan(0);
-        }
+        public Validator() => RuleFor(command => command.Id).GreaterThan(0);
     }
 
     public class Handler : IRequestHandler<Command>
     {
         private readonly HomeEconomicsDbContext _dbContext;
 
-        public Handler(HomeEconomicsDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        public Handler(HomeEconomicsDbContext dbContext) => _dbContext = dbContext;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {

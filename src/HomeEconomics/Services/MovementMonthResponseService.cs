@@ -10,10 +10,7 @@ public class MovementMonthResponseService : IMovementMonthResponseService
 {
     private readonly HomeEconomicsDbContext _dbContext;
 
-    public MovementMonthResponseService(HomeEconomicsDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    public MovementMonthResponseService(HomeEconomicsDbContext dbContext) => _dbContext = dbContext;
 
     public async Task<MovementMonthResponse?> Get(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
     {

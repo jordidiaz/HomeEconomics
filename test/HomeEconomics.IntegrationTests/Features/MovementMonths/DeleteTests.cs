@@ -27,9 +27,6 @@ public class DeleteTests : IntegrationTestBase
 
     public class Handler : IRequestHandler<DeleteMonthMovement.Command, MovementMonthResponse>
     {
-        public Task<MovementMonthResponse> Handle(DeleteMonthMovement.Command request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(new MovementMonthResponse());
-        }
+        public Task<MovementMonthResponse> Handle(DeleteMonthMovement.Command request, CancellationToken cancellationToken) => Task.FromResult(new MovementMonthResponse());
     }
 }

@@ -33,11 +33,9 @@ public class DetailTests(Fixture fixture) : IntegrationTestBase(fixture)
 
     public class Handler : IRequestHandler<Detail.Query, MovementMonthResponse?>
     {
-        public Task<MovementMonthResponse?> Handle(Detail.Query request, CancellationToken cancellationToken)
-        {
-            return request.Year == 2020 
+        public Task<MovementMonthResponse?> Handle(Detail.Query request, CancellationToken cancellationToken) =>
+            request.Year == 2020 
                 ? Task.FromResult<MovementMonthResponse?>(new MovementMonthResponse()) 
                 : Task.FromResult<MovementMonthResponse?>(null!);
-        }
     }
 }

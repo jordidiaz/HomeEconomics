@@ -18,18 +18,14 @@ public class TestStartup
     private IConfiguration Configuration { get; }
     private IWebHostEnvironment WebHostEnvironment { get; }
 
-    public void ConfigureServices(IServiceCollection services)
-    {
+    public void ConfigureServices(IServiceCollection services) =>
         services
             .AddHomeEconomicsApi()
             .AddHomeEconomicsServices()
             .AddHomeEconomicsMediatR()
             .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment());
-    }
 
-    public void Configure(IApplicationBuilder applicationBuilder)
-    {
+    public void Configure(IApplicationBuilder applicationBuilder) =>
         applicationBuilder
             .UseProblemDetails();
-    }
 }

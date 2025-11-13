@@ -16,10 +16,7 @@ public class CreateTests
         private const decimal Amount = 10;
         private const MovementType Type = MovementType.Expense;
 
-        public CommandValidatorTests()
-        {
-            _sut = new Create.Validator();
-        }
+        public CommandValidatorTests() => _sut = new Create.Validator();
 
         [Theory]
         [InlineData("")]
@@ -56,11 +53,8 @@ public class CreateTests
     {
         private readonly Create.FrequencyValidator _sut;
         
-        public FrequencyValidatorTests()
-        {
-            _sut = new Create.FrequencyValidator();
-        }
-        
+        public FrequencyValidatorTests() => _sut = new Create.FrequencyValidator();
+
         [Fact]
         public void Should_Have_Error_If_Type_Invalid()
         {

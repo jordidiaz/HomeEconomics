@@ -9,10 +9,7 @@ public class MovementsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public MovementsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    public MovementsController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost]
     [ProducesDefaultResponseType]

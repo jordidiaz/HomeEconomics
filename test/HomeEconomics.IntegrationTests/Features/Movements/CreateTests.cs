@@ -14,13 +14,11 @@ public class CreateTests : IntegrationTestBase
 
     private const string Uri = "api/movements";
 
-    public CreateTests(Fixture fixture) : base(fixture)
-    {
+    public CreateTests(Fixture fixture) : base(fixture) =>
         _command = new Create.Command("EPSV", 50m, MovementType.Expense, new Create.Frequency
         {
             Type = FrequencyType.Monthly
         });
-    }
 
     [Fact]
     public async Task Should_Return_200_Ok()
@@ -48,9 +46,6 @@ public class CreateTests : IntegrationTestBase
 
     public class Handler : IRequestHandler<Create.Command, int>
     {
-        public Task<int> Handle(Create.Command request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(1);
-        }
+        public Task<int> Handle(Create.Command request, CancellationToken cancellationToken) => Task.FromResult(1);
     }
 }

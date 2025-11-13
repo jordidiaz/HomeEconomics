@@ -15,10 +15,7 @@ public class AddStatusTests
         
     private readonly AddStatus.Validator _sut;
 
-    public AddStatusTests()
-    {
-        _sut = new AddStatus.Validator();
-    }
+    public AddStatusTests() => _sut = new AddStatus.Validator();
 
     [Theory]
     [InlineData(2019)]

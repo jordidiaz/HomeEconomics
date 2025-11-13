@@ -6,65 +6,29 @@ public class MonthCollection : ICollection<bool>
 {
     private readonly IList<bool> _months;
 
-    private MonthCollection(IList<bool>? months)
-    {
-        _months = months ?? Enumerable.Repeat(false, 12).ToList();
-    }
+    private MonthCollection(IList<bool>? months) => _months = months ?? Enumerable.Repeat(false, 12).ToList();
 
-    public static MonthCollection Init(IList<bool> months)
-    {
-        return new MonthCollection(months);
-    }
-        
-    public static MonthCollection Init()
-    {
-        return new MonthCollection(null);
-    }
+    public static MonthCollection Init(IList<bool> months) => new(months);
 
-    internal void EnableMonth(int month)
-    {
-        _months[month - 1] = true;
-    }
+    public static MonthCollection Init() => new(null);
 
-    internal bool IsMonthEnabled(int month)
-    {
-        return _months[month - 1];
-    }
+    internal void EnableMonth(int month) => _months[month - 1] = true;
 
-    public IEnumerator<bool> GetEnumerator()
-    {
-        return _months.GetEnumerator();
-    }
+    internal bool IsMonthEnabled(int month) => _months[month - 1];
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    public IEnumerator<bool> GetEnumerator() => _months.GetEnumerator();
 
-    public void Add(bool item)
-    {
-        _months.Add(item);
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    public void Clear()
-    {
-        _months.Clear();
-    }
+    public void Add(bool item) => _months.Add(item);
 
-    public bool Contains(bool item)
-    {
-        return _months.Contains(item);
-    }
+    public void Clear() => _months.Clear();
 
-    public void CopyTo(bool[] array, int arrayIndex)
-    {
-        _months.CopyTo(array, arrayIndex);
-    }
+    public bool Contains(bool item) => _months.Contains(item);
 
-    public bool Remove(bool item)
-    {
-        return _months.Remove(item);
-    }
+    public void CopyTo(bool[] array, int arrayIndex) => _months.CopyTo(array, arrayIndex);
+
+    public bool Remove(bool item) => _months.Remove(item);
 
     public int Count => _months.Count;
     public bool IsReadOnly => _months.IsReadOnly;
@@ -76,8 +40,5 @@ public class MonthCollection : ICollection<bool>
         set => _months[index] = value;
     }
 
-    internal bool[] GetMonths()
-    {
-        return _months.ToArray();
-    }
+    internal bool[] GetMonths() => _months.ToArray();
 }

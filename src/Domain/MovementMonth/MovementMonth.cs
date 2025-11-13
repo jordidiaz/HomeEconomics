@@ -71,16 +71,10 @@ public class MovementMonth : Entity, IAggregateRoot
         }
     }
 
-    public MonthMovement? GetMonthMovement(int monthMovementId)
-    {
-        return _monthMovements.Get(monthMovementId);
-    }
+    public MonthMovement? GetMonthMovement(int monthMovementId) => _monthMovements.Get(monthMovementId);
 
-    public void ClearMovementMonths()
-    {
-        _monthMovements.Clear();
-    }
-        
+    public void ClearMovementMonths() => _monthMovements.Clear();
+
     public IEnumerable<MonthMovement> GetMonthMovements()
         => _monthMovements;
         

@@ -34,19 +34,14 @@ public static class Fixture
         return serviceProvider;
     }
 
-    private static IConfigurationRoot GetConfigurationRoot()
-    {
-        return new ConfigurationBuilder()
+    private static IConfigurationRoot GetConfigurationRoot() =>
+        new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", false, false)
             .AddEnvironmentVariables()
             .Build();
-    }
 
-    private static IServiceScopeFactory GetScopeFactory()
-    {
-        return ServiceProvider.GetService<IServiceScopeFactory>() ?? throw new ArgumentNullException("ServiceScopeFactory is null");
-    }
+    private static IServiceScopeFactory GetScopeFactory() => ServiceProvider.GetService<IServiceScopeFactory>() ?? throw new ArgumentNullException("ServiceScopeFactory is null");
 
     private static void MigrateDatabase()
     {
@@ -87,14 +82,10 @@ public static class Fixture
         return await mediator.Send(request);
     }
 
-    public static async Task<T> QueryDbContextAsync<T>(Func<HomeEconomicsDbContext, Task<T>> query)
-    {
-        return await ExecuteDbContextAsync(query);
-    }
+    public static async Task<T> QueryDbContextAsync<T>(Func<HomeEconomicsDbContext, Task<T>> query) => await ExecuteDbContextAsync(query);
 
-    public static Task InsertDbContextAsync(params object[] entities)
-    {
-        return ExecuteDbContextAsync(dbContext =>
+    public static Task InsertDbContextAsync(params object[] entities) =>
+        ExecuteDbContextAsync(dbContext =>
         {
             foreach (var entity in entities)
             {
@@ -103,7 +94,6 @@ public static class Fixture
 
             return dbContext.SaveChangesAsync();
         });
-    }
 
     private static async Task<T> ExecuteDbContextAsync<T>(Func<HomeEconomicsDbContext, Task<T>> action)
     {

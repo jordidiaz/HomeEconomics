@@ -55,9 +55,6 @@ public class AddStatus
             return await _movementMonthResponseService.Get(movementMonth, cancellationToken);
         }
 
-        private static bool IsCurrentMonth(int year, int month)
-        {
-            return DateTime.Now.Year == year && DateTime.Now.Month == month;
-        }
+        private static bool IsCurrentMonth(int year, int month) => DateTime.Now.Year == year && DateTime.Now.Month == month;
     }
 }

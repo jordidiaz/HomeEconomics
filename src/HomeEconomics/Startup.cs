@@ -13,8 +13,7 @@ public class Startup
     private IConfiguration Configuration { get; }
     private IWebHostEnvironment WebHostEnvironment { get; }
 
-    public void ConfigureServices(IServiceCollection services)
-    {
+    public void ConfigureServices(IServiceCollection services) =>
         services
             .AddHomeEconomicsApi()
             .AddHomeEconomicsServices()
@@ -23,10 +22,8 @@ public class Startup
             .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment())
             .AddHomeEconomicsSwagger()
             .AddHomeEconomicsHealthChecks(Configuration);
-    }
 
-    public void Configure(IApplicationBuilder applicationBuilder)
-    {
+    public void Configure(IApplicationBuilder applicationBuilder) =>
         applicationBuilder
             .UseHomeEconomicsSpa()
             .UseRouting()
@@ -34,5 +31,4 @@ public class Startup
             .UseHomeEconomicsSwagger()
             .UseProblemDetails()
             .UseHomeEconomicsEndpoints();
-    }
 }

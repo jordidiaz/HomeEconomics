@@ -13,10 +13,7 @@ public class UpdateMonthMovementAmountTests : IntegrationTestBase
 
     private const string Uri = "api/movement-months/1/month-movements/1/update-amount";
 
-    public UpdateMonthMovementAmountTests(Fixture fixture) : base(fixture)
-    {
-        _command = new UpdateMonthMovementAmount.Command(1, 1, 50);
-    }
+    public UpdateMonthMovementAmountTests(Fixture fixture) : base(fixture) => _command = new UpdateMonthMovementAmount.Command(1, 1, 50);
 
     [Fact]
     public async Task Should_Return_200_Ok()
@@ -41,9 +38,6 @@ public class UpdateMonthMovementAmountTests : IntegrationTestBase
 
     public class Handler : IRequestHandler<UpdateMonthMovementAmount.Command, MovementMonthResponse>
     {
-        public Task<MovementMonthResponse> Handle(UpdateMonthMovementAmount.Command request, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(new MovementMonthResponse());
-        }
+        public Task<MovementMonthResponse> Handle(UpdateMonthMovementAmount.Command request, CancellationToken cancellationToken) => Task.FromResult(new MovementMonthResponse());
     }
 }

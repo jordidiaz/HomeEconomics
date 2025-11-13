@@ -7,15 +7,9 @@ namespace HomeEconomics.FunctionalTests.Infrastructure;
 
 public class FunctionalTestBase : IAsyncLifetime
 {
-    public async Task InitializeAsync()
-    {
-        await Fixture.ResetDatabaseAsync();
-    }
+    public async Task InitializeAsync() => await Fixture.ResetDatabaseAsync();
 
-    public Task DisposeAsync()
-    {
-        return Task.CompletedTask;
-    }
+    public Task DisposeAsync() => Task.CompletedTask;
 
     protected static async Task CreateMovements()
     {
@@ -93,12 +87,10 @@ public class FunctionalTestBase : IAsyncLifetime
         return movementMonth;
     }
 
-    protected static async Task AddStatus(int year, int month, decimal accountAmount, decimal cashAmount)
-    {
+    protected static async Task AddStatus(int year, int month, decimal accountAmount, decimal cashAmount) =>
         await Fixture.SendToMediatRAsync(new AddStatus.Command(
             year,
             (Month)month,
             accountAmount,
             cashAmount));
-    }
 }

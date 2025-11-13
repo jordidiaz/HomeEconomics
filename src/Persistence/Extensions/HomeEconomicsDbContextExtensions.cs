@@ -11,24 +11,17 @@ public static class HomeEconomicsDbContextExtensions
     public static async Task<MovementMonth?> GetMovementMonthAsync(
         this HomeEconomicsDbContext dbContext, 
         Expression<Func<MovementMonth, bool>> predicate,
-        CancellationToken cancellationToken)
-    {
-        return await GetAsync(dbContext, predicate, cancellationToken, "_monthMovements", "_statuses");
-    }
-        
+        CancellationToken cancellationToken) =>
+        await GetAsync(dbContext, predicate, cancellationToken, "_monthMovements", "_statuses");
+
     public static async Task<Movement?> GetMovementAsync(
         this HomeEconomicsDbContext dbContext, 
         Expression<Func<Movement, bool>> predicate,
-        CancellationToken cancellationToken)
-    {
-        return await GetAsync(dbContext, predicate, cancellationToken, "Frequency");
-    }
-        
-    public static IEnumerable<Movement> GetMovements(this HomeEconomicsDbContext dbContext)
-    {
-        return GetCollection<Movement>(dbContext, "Frequency");
-    }
-        
+        CancellationToken cancellationToken) =>
+        await GetAsync(dbContext, predicate, cancellationToken, "Frequency");
+
+    public static IEnumerable<Movement> GetMovements(this HomeEconomicsDbContext dbContext) => GetCollection<Movement>(dbContext, "Frequency");
+
     private static async Task<T?> GetAsync<T>(
         DbContext dbContext, 
         Expression<Func<T, bool>> predicate,

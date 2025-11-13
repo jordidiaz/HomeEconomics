@@ -7,11 +7,9 @@ namespace HomeEconomics.IntegrationTests.Infrastructure;
 public class CustomWebApplicationFactory<TStartup>
     : WebApplicationFactory<TStartup> where TStartup : class
 {
-    protected override IWebHostBuilder CreateWebHostBuilder()
-    {
-        return WebHost.CreateDefaultBuilder()
+    protected override IWebHostBuilder CreateWebHostBuilder() =>
+        WebHost.CreateDefaultBuilder()
             .UseStartup<TStartup>();
-    }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

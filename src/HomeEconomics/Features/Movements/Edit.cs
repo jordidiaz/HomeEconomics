@@ -22,10 +22,7 @@ public class Edit
 
     public record Frequency
     {
-        public Frequency()
-        {
-            Months = new List<bool>().ToArray();
-        }
+        public Frequency() => Months = new List<bool>().ToArray();
 
         public FrequencyType Type { get; init; }
 
@@ -43,10 +40,7 @@ public class Edit
     {
         private readonly HomeEconomicsDbContext _dbContext;
 
-        public Handler(HomeEconomicsDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        public Handler(HomeEconomicsDbContext dbContext) => _dbContext = dbContext;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {

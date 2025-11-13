@@ -2,10 +2,7 @@
 
 public sealed class Frequency : Entity
 {
-    public Frequency()
-    {
-        Months = MonthCollection.Init();
-    }
+    public Frequency() => Months = MonthCollection.Init();
 
     internal Frequency(Movement movement, FrequencyType type)
     {
@@ -33,7 +30,11 @@ public sealed class Frequency : Entity
 
     internal void SetCustomFrequency(bool[] months)
     {
-        if (months.Length != 12) throw new ArgumentOutOfRangeException(nameof(months));
+        if (months.Length != 12)
+        {
+            throw new ArgumentOutOfRangeException(nameof(months));
+        }
+
         if (months.All(m => m is false))
         {
             throw new InvalidOperationException(Properties.Messages.NoMonthSelected);

@@ -11,11 +11,9 @@ public class TestStartup
         ServiceCollectionExtensions.AddHomeEconomicsMediatR(services);
     }
 
-    public void Configure(IApplicationBuilder applicationBuilder)
-    {
+    public void Configure(IApplicationBuilder applicationBuilder) =>
         applicationBuilder
             .UseRouting()
             .UseProblemDetails()
             .UseHomeEconomicsEndpoints();
-    }
 }

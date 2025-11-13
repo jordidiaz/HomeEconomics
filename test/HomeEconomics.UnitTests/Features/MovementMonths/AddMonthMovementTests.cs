@@ -16,10 +16,7 @@ public class AddMonthMovementTests
     {
         private readonly Create.Validator _sut;
 
-        public CommandValidatorTests()
-        {
-            _sut = new Create.Validator();
-        }
+        public CommandValidatorTests() => _sut = new Create.Validator();
 
         [Theory]
         [InlineData("")]
