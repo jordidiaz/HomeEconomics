@@ -8,7 +8,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths;
 
 public class AddMonthMovementTests : FunctionalTestBase
 {
-    private AddMonthMovement.Command _command = default!;
+    private AddMonthMovement.Command _command = null!;
 
     [Fact]
     public async Task Should_Add_MonthMovement_And_Return_Resume()

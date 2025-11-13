@@ -8,7 +8,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths;
 
 public class UpdateMonthMovementAmountTests : FunctionalTestBase
 {
-    private UpdateMonthMovementAmount.Command _command = default!;
+    private UpdateMonthMovementAmount.Command _command = null!;
 
     [Fact]
     public async Task Should_Update_MonthMovement_Amount_Return_Resume()

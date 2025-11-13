@@ -1,6 +1,3 @@
 ﻿namespace HomeEconomics.IntegrationTests;
 
-public abstract class HomeEconomicsIntegrationTests
-{
-        
-}
+public abstract class HomeEconomicsIntegrationTests;

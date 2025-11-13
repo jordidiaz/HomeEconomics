@@ -8,10 +8,7 @@ public class MovementMonth : Entity, IAggregateRoot
     {
         var currentYear = DateTime.Now.Year;
 
-        if (year < currentYear)
-        {
-            throw new ArgumentOutOfRangeException(nameof(year));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(year, currentYear);
 
         Year = year;
         Month = month;

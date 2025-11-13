@@ -3,11 +3,7 @@
 namespace HomeEconomics.IntegrationTests.Infrastructure;
 
 [Collection(Collections.IntegrationTestCollection)]
-public abstract class IntegrationTestBase
+public abstract class IntegrationTestBase(Fixture fixture)
 {
-    private readonly Fixture _fixture;
-
-    protected IntegrationTestBase(Fixture fixture) => _fixture = fixture;
-
-    protected HttpClient HttpClient => _fixture.HttpClient;
+    protected HttpClient HttpClient => fixture.HttpClient;
 }

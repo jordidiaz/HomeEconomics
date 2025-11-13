@@ -9,7 +9,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths;
 
 public class MonthMovementToNextMovementMonthTests : FunctionalTestBase
 {
-    private MonthMovementToNextMovementMonth.Command _command = default!;
+    private MonthMovementToNextMovementMonth.Command _command = null!;
 
     [Fact]
     public async Task Should_Pass_MonthMovementToNextMovementMonth_And_Return_Resume()

@@ -8,18 +8,15 @@ using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths;
 
-public class AddMonthMovementTests : IntegrationTestBase
+public class AddMonthMovementTests(Fixture fixture) : IntegrationTestBase(fixture)
 {
     private const string Uri = "api/movement-months/1/month-movements";
 
-    private AddMonthMovement.Command _command;
-
-    public AddMonthMovementTests(Fixture fixture) : base(fixture) =>
-        _command = new AddMonthMovement.Command(
-            1,
-            "Gasolina",
-            60,
-            MovementType.Expense);
+    private AddMonthMovement.Command _command = new(
+        1,
+        "Gasolina",
+        60,
+        MovementType.Expense);
 
     [Fact]
     public async Task Should_Return_200_Ok()

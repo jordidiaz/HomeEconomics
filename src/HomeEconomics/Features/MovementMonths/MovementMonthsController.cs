@@ -5,12 +5,8 @@ namespace HomeEconomics.Features.MovementMonths;
 
 [ApiController]
 [Route("api/movement-months")]
-public class MovementMonthsController : ControllerBase
+public class MovementMonthsController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public MovementMonthsController(IMediator mediator) => _mediator = mediator;
-
     [HttpPost]
     [ProducesDefaultResponseType]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -18,7 +14,7 @@ public class MovementMonthsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> Create(Create.Command command)
     {
-        var id = await _mediator.Send(command);
+        var id = await mediator.Send(command);
 
         return Ok(id);
     }
@@ -29,7 +25,7 @@ public class MovementMonthsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> Detail(int year, int month)
     {
-        var movementMonth = await _mediator.Send(new Detail.Query(year, month));
+        var movementMonth = await mediator.Send(new Detail.Query(year, month));
 
         if (movementMonth is null)
         {
@@ -45,7 +41,7 @@ public class MovementMonthsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> PayMonthMovement(int movementMonthId, int monthMovementId)
     {
-        var result = await _mediator.Send(new PayMonthMovement.Command(movementMonthId, monthMovementId));
+        var result = await mediator.Send(new PayMonthMovement.Command(movementMonthId, monthMovementId));
 
         return Ok(result);
     }
@@ -56,7 +52,7 @@ public class MovementMonthsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> UnPayMonthMovement(int movementMonthId, int monthMovementId)
     {
-        var result = await _mediator.Send(new UnPayMonthMovement.Command(movementMonthId, monthMovementId));
+        var result = await mediator.Send(new UnPayMonthMovement.Command(movementMonthId, monthMovementId));
 
         return Ok(result);
     }
@@ -67,7 +63,7 @@ public class MovementMonthsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> DeleteMonthMovement(int movementMonthId, int monthMovementId)
     {
-        var result = await _mediator.Send(new DeleteMonthMovement.Command(movementMonthId, monthMovementId));
+        var result = await mediator.Send(new DeleteMonthMovement.Command(movementMonthId, monthMovementId));
 
         return Ok(result);
     }
@@ -78,7 +74,7 @@ public class MovementMonthsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> UpdateMonthMovementAmount(UpdateMonthMovementAmount.Command command)
     {
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
 
         return Ok(result);
     }
@@ -89,7 +85,7 @@ public class MovementMonthsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> AddMonthMovement(AddMonthMovement.Command command)
     {
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
 
         return Ok(result);
     }
@@ -100,7 +96,7 @@ public class MovementMonthsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> AddStatus(AddStatus.Command command)
     {
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
 
         return Ok(result);
     }
@@ -111,7 +107,7 @@ public class MovementMonthsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> MonthMovementToNextMovementMonth(int movementMonthId, int monthMovementId)
     {
-        var result = await _mediator.Send(new MonthMovementToNextMovementMonth.Command(movementMonthId, monthMovementId));
+        var result = await mediator.Send(new MonthMovementToNextMovementMonth.Command(movementMonthId, monthMovementId));
 
         return Ok(result);
     }

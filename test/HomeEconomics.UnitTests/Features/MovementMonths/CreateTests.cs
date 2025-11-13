@@ -2,18 +2,18 @@
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using HomeEconomics.Features.MovementMonths;
+using JetBrains.Annotations;
 using Xunit;
 
 namespace HomeEconomics.UnitTests.Features.MovementMonths;
 
+[UsedImplicitly]
 public class CreateTests
 {
     public class CommandValidatorTests
     {
         private readonly int _year = DateTime.Now.Year + 1;
-        private readonly Create.Validator _sut;
-
-        public CommandValidatorTests() => _sut = new Create.Validator();
+        private readonly Create.Validator _sut = new();
 
         [Theory]
         [InlineData(2019)]

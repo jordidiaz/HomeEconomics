@@ -1,4 +1,5 @@
-﻿namespace Domain.MovementMonth;
+﻿// ReSharper disable UnusedMember.Global
+namespace Domain.MovementMonth;
 
 public enum Month
 {

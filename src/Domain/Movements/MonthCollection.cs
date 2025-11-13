@@ -36,7 +36,7 @@ public class MonthCollection : ICollection<bool>
     public bool this[int index]
     {
         get => _months[index];
-        // ReSharper disable once UnusedMember.Global
+        // ReSharper disable once PropertyCanBeMadeInitOnly.Global
         set => _months[index] = value;
     }
 

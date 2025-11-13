@@ -13,9 +13,7 @@ public class AddStatusTests
     private const decimal AccountAmount = 50m;
     private const decimal CashAmount = 10m;
         
-    private readonly AddStatus.Validator _sut;
-
-    public AddStatusTests() => _sut = new AddStatus.Validator();
+    private readonly AddStatus.Validator _sut = new();
 
     [Theory]
     [InlineData(2019)]

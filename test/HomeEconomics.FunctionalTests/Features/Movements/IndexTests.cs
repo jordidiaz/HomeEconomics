@@ -13,11 +13,12 @@ public class IndexTests : FunctionalTestBase
         var movement1 = new Movement("Gasolina", 60m, MovementType.Expense);
         var movement2 = new Movement("EPSV", 50m, MovementType.Expense);
         var movement3 = new Movement("Crossfit", 75m, MovementType.Expense);
-        object[] entities = {
+        object[] entities =
+        [
             movement1,
             movement2,
             movement3
-        };
+        ];
         await Fixture.InsertDbContextAsync(entities);
 
         var result = await Fixture.SendToMediatRAsync(new HomeEconomics.Features.Movements.Index.Query());

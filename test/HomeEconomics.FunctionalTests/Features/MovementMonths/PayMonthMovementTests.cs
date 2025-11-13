@@ -7,7 +7,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths;
 
 public class PayMonthMovementTests : FunctionalTestBase
 {
-    private PayMonthMovement.Command _command = default!;
+    private PayMonthMovement.Command _command = null!;
 
     [Fact]
     public async Task Should_Pay_MonthMovement_And_Return_Resume()

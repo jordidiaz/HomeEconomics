@@ -1,21 +1,20 @@
 ﻿using Domain.MovementMonth;
 using HomeEconomics.Services;
+using JetBrains.Annotations;
 using MediatR;
 
 namespace HomeEconomics.Features.MovementMonths;
 
+[UsedImplicitly]
 public class Detail
 {
     public record Query(int Year, int Month) : IRequest<MovementMonthResponse?>;
 
-    public class Handler : IRequestHandler<Query, MovementMonthResponse?>
+    public class Handler(IMovementMonthResponseService movementMonthResponseService)
+        : IRequestHandler<Query, MovementMonthResponse?>
     {
-        private readonly IMovementMonthResponseService _movementMonthResponseService;
-
-        public Handler(IMovementMonthResponseService movementMonthResponseService) => _movementMonthResponseService = movementMonthResponseService;
-
         public async Task<MovementMonthResponse?> Handle(Query request, CancellationToken cancellationToken) =>
-            await _movementMonthResponseService.Get(
+            await movementMonthResponseService.Get(
                 mm => mm.Year == request.Year && mm.Month == (Month)request.Month,
                 cancellationToken: cancellationToken);
     }

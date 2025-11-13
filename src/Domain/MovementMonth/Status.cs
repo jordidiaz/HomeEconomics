@@ -17,15 +17,9 @@ public class Status : Entity
             throw new ArgumentOutOfRangeException(nameof(day));
         }
 
-        if (accountAmount < Movement.MinAmount)
-        {
-            throw new ArgumentOutOfRangeException(nameof(accountAmount));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(accountAmount, Movement.MinAmount);
 
-        if (cashAmount < Movement.MinAmount)
-        {
-            throw new ArgumentOutOfRangeException(nameof(cashAmount));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(cashAmount, Movement.MinAmount);
 
         Day = day;
         AccountAmount = accountAmount;
@@ -43,20 +37,14 @@ public class Status : Entity
 
     internal void SetAccountAmount(decimal accountAmount)
     {
-        if (accountAmount < Movement.MinAmount)
-        {
-            throw new ArgumentOutOfRangeException(nameof(accountAmount));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(accountAmount, Movement.MinAmount);
 
         AccountAmount = accountAmount;
     }
 
     internal void SetCashAmount(decimal cashAmount)
     {
-        if (cashAmount < Movement.MinAmount)
-        {
-            throw new ArgumentOutOfRangeException(nameof(cashAmount));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(cashAmount, Movement.MinAmount);
 
         CashAmount = cashAmount;
     }

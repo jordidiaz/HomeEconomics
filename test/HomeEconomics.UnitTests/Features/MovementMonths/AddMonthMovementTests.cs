@@ -2,10 +2,12 @@
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using HomeEconomics.Features.Movements;
+using JetBrains.Annotations;
 using Xunit;
 
 namespace HomeEconomics.UnitTests.Features.MovementMonths;
 
+[UsedImplicitly]
 public class AddMonthMovementTests
 {
     private const string Name = nameof(Name);
@@ -14,9 +16,7 @@ public class AddMonthMovementTests
         
     public class CommandValidatorTests
     {
-        private readonly Create.Validator _sut;
-
-        public CommandValidatorTests() => _sut = new Create.Validator();
+        private readonly Create.Validator _sut = new();
 
         [Theory]
         [InlineData("")]

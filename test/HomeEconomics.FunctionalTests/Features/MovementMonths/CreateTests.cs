@@ -8,12 +8,9 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths;
 
 public class CreateTests : FunctionalTestBase
 {
-    private readonly MovementMonth.Create.Command _command;
-
-    public CreateTests() =>
-        _command = new MovementMonth.Create.Command(
-            DateTime.Now.Year,
-            Month.Jan);
+    private readonly MovementMonth.Create.Command _command = new(
+        DateTime.Now.Year,
+        Month.Jan);
 
     [Fact]
     public async Task Should_Create_A_New_MovementMonth()

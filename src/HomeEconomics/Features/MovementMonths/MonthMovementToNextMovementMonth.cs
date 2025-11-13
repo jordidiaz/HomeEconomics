@@ -1,11 +1,13 @@
 ﻿using HomeEconomics.Services;
 using MediatR;
 using Domain.MovementMonth;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace HomeEconomics.Features.MovementMonths;
 
+[UsedImplicitly]
 public class MonthMovementToNextMovementMonth
 {
     public record Command(int MovementMonthId, int MonthMovementId) : IRequest<MovementMonthResponse>;

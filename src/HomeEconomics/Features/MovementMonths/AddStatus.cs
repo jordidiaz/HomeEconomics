@@ -4,11 +4,13 @@ using HomeEconomics.Helpers;
 using HomeEconomics.Services;
 using MediatR;
 using Domain.Movements;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace HomeEconomics.Features.MovementMonths;
 
+[UsedImplicitly]
 public class AddStatus
 {
     public record Command(int Year, Month Month, decimal AccountAmount, decimal CashAmount) : IRequest<MovementMonthResponse>;
@@ -24,20 +26,12 @@ public class AddStatus
         }
     }
 
-    public class Handler : IRequestHandler<Command, MovementMonthResponse>
+    public class Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
+        : IRequestHandler<Command, MovementMonthResponse>
     {
-        private readonly IMovementMonthResponseService _movementMonthResponseService;
-        private readonly HomeEconomicsDbContext _dbContext;
-
-        public Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
-        {
-            _movementMonthResponseService = movementMonthResponseService;
-            _dbContext = dbContext;
-        }
-
         public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
         {
-            var movementMonth = await _dbContext.GetMovementMonthAsync(mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
+            var movementMonth = await dbContext.GetMovementMonthAsync(mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
 
             if (movementMonth is null)
             {
@@ -50,9 +44,9 @@ public class AddStatus
 
             movementMonth.AddStatus(day, request.AccountAmount, request.CashAmount);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
-            return await _movementMonthResponseService.Get(movementMonth, cancellationToken);
+            return await movementMonthResponseService.Get(movementMonth, cancellationToken);
         }
 
         private static bool IsCurrentMonth(int year, int month) => DateTime.Now.Year == year && DateTime.Now.Month == month;

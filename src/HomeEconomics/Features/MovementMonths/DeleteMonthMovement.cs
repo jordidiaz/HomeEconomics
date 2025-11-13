@@ -1,28 +1,22 @@
 ﻿using HomeEconomics.Services;
+using JetBrains.Annotations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace HomeEconomics.Features.MovementMonths;
 
+[UsedImplicitly]
 public class DeleteMonthMovement
 {
     public record Command(int MovementMonthId, int MonthMovementId) : IRequest<MovementMonthResponse>;
 
-    public class Handler : IRequestHandler<Command, MovementMonthResponse>
+    public class Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
+        : IRequestHandler<Command, MovementMonthResponse>
     {
-        private readonly IMovementMonthResponseService _movementMonthResponseService;
-        private readonly HomeEconomicsDbContext _dbContext;
-
-        public Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
-        {
-            _movementMonthResponseService = movementMonthResponseService;
-            _dbContext = dbContext;
-        }
-
         public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
         {
-            var movementMonth = await _dbContext
+            var movementMonth = await dbContext
                 .GetMovementMonthAsync(mm => mm.Id == request.MovementMonthId, cancellationToken: cancellationToken);
 
             if (movementMonth is null)
@@ -32,9 +26,9 @@ public class DeleteMonthMovement
 
             movementMonth.DeleteMonthMovement(request.MonthMovementId);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
-            return await _movementMonthResponseService.Get(movementMonth, cancellationToken);
+            return await movementMonthResponseService.Get(movementMonth, cancellationToken);
         }
     }
 }

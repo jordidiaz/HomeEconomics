@@ -58,8 +58,8 @@ public class FunctionalTestBase : IAsyncLifetime
             new HomeEconomics.Features.Movements.Create.Frequency
             {
                 Type = FrequencyType.Custom,
-                Months = new[]
-                {
+                Months =
+                [
                     true,
                     false,
                     false,
@@ -72,7 +72,7 @@ public class FunctionalTestBase : IAsyncLifetime
                     false,
                     false,
                     false
-                }
+                ]
             }));
     }
 

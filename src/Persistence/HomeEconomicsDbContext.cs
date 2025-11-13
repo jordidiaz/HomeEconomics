@@ -4,17 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Persistence;
 
-public class HomeEconomicsDbContext : DbContext
+public class HomeEconomicsDbContext(DbContextOptions options) : DbContext(options)
 {
-    public HomeEconomicsDbContext(DbContextOptions options) : base(options)
-    {
-    }
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    public DbSet<Movement> Movements { get; set; } = null!;
 
     // ReSharper disable once UnusedAutoPropertyAccessor.Global
-    public DbSet<Movement> Movements { get; set; } = default!;
-
-    // ReSharper disable once UnusedAutoPropertyAccessor.Global
-    public DbSet<MovementMonth> MovementMonths { get; set; } = default!;
+    public DbSet<MovementMonth> MovementMonths { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

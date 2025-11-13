@@ -8,7 +8,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths;
 
 public class AddStatusTests : FunctionalTestBase
 {
-    private AddStatus.Command _command = default!;
+    private AddStatus.Command _command = null!;
 
     [Fact]
     public async Task Should_Add_Status()

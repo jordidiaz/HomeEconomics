@@ -7,13 +7,9 @@ using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths;
 
-public class MonthMovementToNextMovementMonthTests : IntegrationTestBase
+public class MonthMovementToNextMovementMonthTests(Fixture fixture) : IntegrationTestBase(fixture)
 {
     private const string Uri = "api/movement-months/1/month-movements/1/to-next-movement-month";
-
-    public MonthMovementToNextMovementMonthTests(Fixture fixture) : base(fixture)
-    {
-    }
 
     [Fact]
     public async Task Should_Return_200_Ok()

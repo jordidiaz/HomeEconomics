@@ -8,16 +8,13 @@ using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths;
 
-public class CreateTests : IntegrationTestBase
+public class CreateTests(Fixture fixture) : IntegrationTestBase(fixture)
 {
-    private Create.Command _command;
+    private Create.Command _command = new(
+        DateTime.Now.Year,
+        Month.Feb);
 
     private const string Uri = "api/movement-months";
-
-    public CreateTests(Fixture fixture) : base(fixture) =>
-        _command = new Create.Command(
-            DateTime.Now.Year,
-            Month.Feb);
 
     [Fact]
     public async Task Should_Return_200_Ok()

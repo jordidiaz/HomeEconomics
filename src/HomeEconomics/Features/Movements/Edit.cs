@@ -1,10 +1,12 @@
 ﻿using Domain.Movements;
+using JetBrains.Annotations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace HomeEconomics.Features.Movements;
 
+[UsedImplicitly]
 public class Edit
 {
     public record Command : IRequest<Unit>
@@ -22,30 +24,22 @@ public class Edit
 
     public record Frequency
     {
-        public Frequency() => Months = new List<bool>().ToArray();
-
         public FrequencyType Type { get; init; }
 
-        public int Month { get; init; }
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
+        public int Month { get; }
 
-        public bool[] Months { get; init; }
+        public bool[] Months { get; init; } = new List<bool>().ToArray();
     }
 
-    public class Validator : Create.Validator
+    public class Validator : Create.Validator;
+
+    public class Handler(HomeEconomicsDbContext dbContext) : IRequestHandler<Command, Unit>
     {
-
-    }
-
-    public class Handler : IRequestHandler<Command, Unit>
-    {
-        private readonly HomeEconomicsDbContext _dbContext;
-
-        public Handler(HomeEconomicsDbContext dbContext) => _dbContext = dbContext;
-
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var movement =
-                await _dbContext.GetMovementAsync(m => m.Id == request.Id,
+                await dbContext.GetMovementAsync(m => m.Id == request.Id,
                     cancellationToken: cancellationToken);
 
             if (movement is null)
@@ -75,7 +69,7 @@ public class Edit
                     throw new ArgumentOutOfRangeException(nameof(request));
             }
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

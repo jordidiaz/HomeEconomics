@@ -30,8 +30,8 @@ public class EditTest : FunctionalTestBase
             Frequency = new Edit.Frequency
             {
                 Type = FrequencyType.Custom,
-                Months = new[]
-                {
+                Months =
+                [
                     true,
                     false,
                     true,
@@ -44,7 +44,7 @@ public class EditTest : FunctionalTestBase
                     false,
                     false,
                     false
-                }
+                ]
             }
         });
 
@@ -61,8 +61,7 @@ public class EditTest : FunctionalTestBase
         movement.Amount.Should().Be(50m);
         movement.Type.Should().Be(MovementType.Income);
         movement.Frequency.Type.Should().Be(FrequencyType.Custom);
-        movement.Frequency.Months.SequenceEqual(new[]
-        {
+        movement.Frequency.Months.SequenceEqual([
             true,
             false,
             true,
@@ -75,7 +74,7 @@ public class EditTest : FunctionalTestBase
             false,
             false,
             false
-        }).Should().BeTrue();
+        ]).Should().BeTrue();
     }
 
     [Fact]

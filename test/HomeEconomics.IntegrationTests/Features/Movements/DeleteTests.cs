@@ -7,14 +7,9 @@ using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.Movements;
 
-public class DeleteTests : IntegrationTestBase
+public class DeleteTests(Fixture fixture) : IntegrationTestBase(fixture)
 {
     private const string Uri = "api/movements/42";
-
-    public DeleteTests(Fixture fixture) : base(fixture)
-    {
-
-    }
 
     [Fact]
     public async Task Should_Return_204_NoContent()

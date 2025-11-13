@@ -1,31 +1,35 @@
-﻿using MediatR;
+﻿using JetBrains.Annotations;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace HomeEconomics.Features.Movements;
 
+[UsedImplicitly]
 public class Index
 {
     public record Query : IRequest<Result>;
 
     public record Result
     {
-        public Movement[] Movements { get; init; } = { };
+        public Movement[] Movements { get; init; } = [];
 
         public record Movement
         {
+            // ReSharper disable once UnusedAutoPropertyAccessor.Global
             public int Id { get; init; }
 
-            public string Name { get; init; } = string.Empty;
+            public string Name { get; private init; } = string.Empty;
 
-            public decimal Amount { get; init; }
+            public decimal Amount { get; private init; }
 
-            public int Type { get; init; }
+            public int Type { get; private init; }
 
-            public int FrequencyType { get; init; }
+            public int FrequencyType { get; private init; }
 
-            public bool[] FrequencyMonths { get; init; } = new bool[12];
+            public bool[] FrequencyMonths { get; private init; } = new bool[12];
 
+            // ReSharper disable once UnusedAutoPropertyAccessor.Global
             public int FrequencyMonth { get; init; }
 
             public static Movement FromMovement(Domain.Movements.Movement movement) =>
@@ -44,15 +48,11 @@ public class Index
         }
     }
 
-    public class Handler : IRequestHandler<Query, Result>
+    public class Handler(HomeEconomicsDbContext dbContext) : IRequestHandler<Query, Result>
     {
-        private readonly HomeEconomicsDbContext _dbContext;
-
-        public Handler(HomeEconomicsDbContext dbContext) => _dbContext = dbContext;
-
         public Task<Result> Handle(Query request, CancellationToken cancellationToken)
         {
-            var movements = _dbContext.GetMovements()
+            var movements = dbContext.GetMovements()
                 .OrderBy(m => m.Name);
 
             return Task.FromResult(new Result

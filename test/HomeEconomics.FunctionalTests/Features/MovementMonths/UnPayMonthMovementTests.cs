@@ -7,7 +7,7 @@ namespace HomeEconomics.FunctionalTests.Features.MovementMonths;
 
 public class UnPayMonthMovementTests : FunctionalTestBase
 {
-    private UnPayMonthMovement.Command _command = default!;
+    private UnPayMonthMovement.Command _command = null!;
 
     [Fact]
     public async Task Should_Unpay_MonthMovement_And_Return_Resume()

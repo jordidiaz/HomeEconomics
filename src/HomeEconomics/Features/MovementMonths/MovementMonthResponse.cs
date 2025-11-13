@@ -5,17 +5,17 @@ namespace HomeEconomics.Features.MovementMonths;
 
 public record MovementMonthResponse
 {
-    public int Id { get; init; }
+    public int Id { get; private init; }
 
-    public int Year { get; init; }
+    public int Year { get; private init; }
 
-    public int Month { get; init; }
+    public int Month { get; private init; }
 
     public bool NextMovementMonthExists { get; set; }
 
-    public StatusResult Status { get; init; } = new();
+    public StatusResult Status { get; private init; } = new();
 
-    public MonthMovementResult[] MonthMovements { get; set; } = { };
+    public MonthMovementResult[] MonthMovements { get; private set; } = [];
 
     public class MonthMovementResult
     {

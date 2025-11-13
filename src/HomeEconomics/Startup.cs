@@ -2,16 +2,10 @@
 
 namespace HomeEconomics;
 
-public class Startup
+public class Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
 {
-    public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
-    {
-        Configuration = configuration;
-        WebHostEnvironment = webHostEnvironment;
-    }
-
-    private IConfiguration Configuration { get; }
-    private IWebHostEnvironment WebHostEnvironment { get; }
+    private IConfiguration Configuration { get; } = configuration;
+    private IWebHostEnvironment WebHostEnvironment { get; } = webHostEnvironment;
 
     public void ConfigureServices(IServiceCollection services) =>
         services

@@ -11,9 +11,7 @@ public class MovementTests
     private const string Name = nameof(Name);
     private const decimal Amount = 10m;
 
-    private readonly Movements.Movement _sut;
-
-    public MovementTests() => _sut = new Movements.Movement(Name, Amount, MovementType.Income);
+    private readonly Movements.Movement _sut = new(Name, Amount, MovementType.Income);
 
     [Theory]
     [InlineData("")]
@@ -62,7 +60,7 @@ public class MovementTests
     [InlineData(13)]
     public void SetYearlyFrequency_Throws_ArgumentOutOfRangeException_If_Month_Invalid(int month)
     {
-        Action action = () => _sut.SetYearlyFrequency(month);
+        var action = () => _sut.SetYearlyFrequency(month);
 
         action.Should().Throw<ArgumentOutOfRangeException>();
     }
@@ -84,7 +82,7 @@ public class MovementTests
     {
         var months = new[] { true, false, true };
 
-        Action action = () => _sut.SetCustomFrequency(months);
+        var action = () => _sut.SetCustomFrequency(months);
 
         action.Should().Throw<ArgumentOutOfRangeException>();
     }
@@ -94,7 +92,7 @@ public class MovementTests
     {
         var months = new[] { false, false, false, false, false, false, false, false, false, false, false, false };
 
-        Action action = () => _sut.SetCustomFrequency(months);
+        var action = () => _sut.SetCustomFrequency(months);
 
         action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.NoMonthSelected);
     }
@@ -117,7 +115,7 @@ public class MovementTests
     [InlineData(" ")]
     public void SetName_Throws_ArgumentNullException_If_Name_Is_Invalid(string name)
     {
-        Action action = () => _sut.SetName(name);
+        var action = () => _sut.SetName(name);
 
         action.Should().Throw<ArgumentNullException>();
     }
@@ -135,7 +133,7 @@ public class MovementTests
     [Fact]
     public void SetAmount_Throws_ArgumentOutOfRangeException_If_Amount_Is_Invalid()
     {
-        Action action = () => _sut.SetAmount(-0.1m);
+        var action = () => _sut.SetAmount(-0.1m);
 
         action.Should().Throw<ArgumentOutOfRangeException>();
     }
@@ -170,8 +168,7 @@ public class MovementTests
     [Fact]
     public void GetFrequencyType_Should_Return_FrequencyType_Custom()
     {
-        _sut.SetCustomFrequency(new[]
-        {
+        _sut.SetCustomFrequency([
             true,
             false,
             true,
@@ -184,7 +181,7 @@ public class MovementTests
             false,
             false,
             false
-        });
+        ]);
         _sut.GetFrequencyType().Should().Be(FrequencyType.Custom);
     }
 
@@ -204,8 +201,7 @@ public class MovementTests
     [Fact]
     public void HasMonthInFrequency_Should_Return_False_If_FrequencyType_Custom()
     {
-        _sut.SetCustomFrequency(new[]
-        {
+        _sut.SetCustomFrequency([
             true,
             false,
             true,
@@ -218,7 +214,7 @@ public class MovementTests
             false,
             false,
             false
-        });
+        ]);
         _sut.HasMonthInFrequency(Month.Aug).Should().Be(false);
     }
 
@@ -232,8 +228,7 @@ public class MovementTests
     [Fact]
     public void HasMonthInFrequency_Should_Return_True_If_FrequencyType_Custom()
     {
-        _sut.SetCustomFrequency(new[]
-        {
+        _sut.SetCustomFrequency([
             true,
             false,
             true,
@@ -246,7 +241,7 @@ public class MovementTests
             false,
             false,
             false
-        });
+        ]);
         _sut.HasMonthInFrequency(Month.Jan).Should().Be(true);
     }
 }

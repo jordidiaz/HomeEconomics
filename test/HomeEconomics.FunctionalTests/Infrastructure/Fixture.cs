@@ -97,15 +97,13 @@ public static class Fixture
 
     private static async Task<T> ExecuteDbContextAsync<T>(Func<HomeEconomicsDbContext, Task<T>> action)
     {
-        using (var scope = ScopeFactory.CreateScope())
+        using var scope = ScopeFactory.CreateScope();
+        var dbContext = scope.ServiceProvider.GetService<HomeEconomicsDbContext>();
+        if (dbContext is null)
         {
-            var dbContext = scope.ServiceProvider.GetService<HomeEconomicsDbContext>();
-            if (dbContext is null)
-            {
-                throw new ArgumentNullException("HomeEconomicsDbContext is null");
-            }
-
-            return await action(dbContext);
+            throw new ArgumentNullException("HomeEconomicsDbContext is null");
         }
+
+        return await action(dbContext);
     }
 }

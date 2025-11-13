@@ -1,17 +1,17 @@
 ﻿using FluentAssertions;
 using FluentValidation.TestHelper;
 using HomeEconomics.Features.MovementMonths;
+using JetBrains.Annotations;
 using Xunit;
 
 namespace HomeEconomics.UnitTests.Features.MovementMonths;
 
+[UsedImplicitly]
 public class UpdateMonthMovementAmountTests
 {
     public class CommandValidatorTests
     {
-        private readonly UpdateMonthMovementAmount.Validator _sut;
-
-        public CommandValidatorTests() => _sut = new UpdateMonthMovementAmount.Validator();
+        private readonly UpdateMonthMovementAmount.Validator _sut = new();
 
         [Fact]
         public void Should_Have_Error_If_Amount_Invalid()

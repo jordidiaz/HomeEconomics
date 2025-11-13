@@ -2,11 +2,13 @@
 using HomeEconomics.Services;
 using MediatR;
 using Domain.Movements;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace HomeEconomics.Features.MovementMonths;
 
+[UsedImplicitly]
 public class UpdateMonthMovementAmount
 {
     public record Command(int MovementMonthId, int MonthMovementId, decimal Amount) : IRequest<MovementMonthResponse>;
@@ -16,20 +18,12 @@ public class UpdateMonthMovementAmount
         public Validator() => RuleFor(command => command.Amount).GreaterThanOrEqualTo(Movement.MinAmount);
     }
 
-    public class Handler : IRequestHandler<Command, MovementMonthResponse>
+    public class Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
+        : IRequestHandler<Command, MovementMonthResponse>
     {
-        private readonly IMovementMonthResponseService _movementMonthResponseService;
-        private readonly HomeEconomicsDbContext _dbContext;
-
-        public Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
-        {
-            _movementMonthResponseService = movementMonthResponseService;
-            _dbContext = dbContext;
-        }
-
         public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
         {
-            var movementMonth = await _dbContext.GetMovementMonthAsync(mm => mm.Id == request.MovementMonthId, cancellationToken: cancellationToken);
+            var movementMonth = await dbContext.GetMovementMonthAsync(mm => mm.Id == request.MovementMonthId, cancellationToken: cancellationToken);
 
             if (movementMonth is null)
             {
@@ -38,9 +32,9 @@ public class UpdateMonthMovementAmount
 
             movementMonth.UpdateMonthMovementAmount(request.MonthMovementId, request.Amount);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
-            return await _movementMonthResponseService.Get(movementMonth, cancellationToken);
+            return await movementMonthResponseService.Get(movementMonth, cancellationToken);
         }
     }
 }

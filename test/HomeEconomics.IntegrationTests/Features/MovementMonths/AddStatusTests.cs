@@ -8,18 +8,15 @@ using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths;
 
-public class AddStatusTests : IntegrationTestBase
+public class AddStatusTests(Fixture fixture) : IntegrationTestBase(fixture)
 {
     private const string Uri = "api/movement-months/1/add-status";
 
-    private AddStatus.Command _command;
-
-    public AddStatusTests(Fixture fixture) : base(fixture) =>
-        _command = new AddStatus.Command(
-            DateTime.Now.Year,
-            Month.Jan,
-            900,
-            50);
+    private AddStatus.Command _command = new(
+        DateTime.Now.Year,
+        Month.Jan,
+        900,
+        50);
 
     [Fact]
     public async Task Should_Return_200_Ok()

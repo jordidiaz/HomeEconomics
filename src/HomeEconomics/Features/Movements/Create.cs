@@ -1,25 +1,25 @@
 ﻿using Domain.Movements;
 using FluentValidation;
 using HomeEconomics.Helpers;
+using JetBrains.Annotations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace HomeEconomics.Features.Movements;
 
+[UsedImplicitly]
 public class Create
 {
     public record Command(string Name, decimal Amount, MovementType Type, Frequency Frequency) : IRequest<int>;
 
     public record Frequency
     {
-        public Frequency() => Months = new List<bool>().ToArray();
-
         public FrequencyType Type { get; init; }
 
         public int Month { get; init; }
 
-        public bool[] Months { get; init; }
+        public bool[] Months { get; init; } = new List<bool>().ToArray();
     }
 
     public class Validator : AbstractValidator<Command>
@@ -41,7 +41,7 @@ public class Create
             When(frequency => frequency.Type == FrequencyType.Yearly,
                 () =>
                 {
-                    RuleFor(frequency => frequency.Month).Must(month => month >= 1 && month <= 12);
+                    RuleFor(frequency => frequency.Month).Must(month => month is >= 1 and <= 12);
                 });
             When(frequency => frequency.Type == FrequencyType.Custom,
                 () =>
@@ -52,15 +52,11 @@ public class Create
         }
     }
 
-    public class Handler : IRequestHandler<Command, int>
+    public class Handler(HomeEconomicsDbContext dbContext) : IRequestHandler<Command, int>
     {
-        private readonly HomeEconomicsDbContext _dbContext;
-
-        public Handler(HomeEconomicsDbContext dbContext) => _dbContext = dbContext;
-
         public async Task<int> Handle(Command request, CancellationToken cancellationToken)
         {
-            var movement = await _dbContext.GetMovementAsync(m => m.Name == request.Name,
+            var movement = await dbContext.GetMovementAsync(m => m.Name == request.Name,
                 cancellationToken: cancellationToken);
 
             if (movement != null)
@@ -91,9 +87,9 @@ public class Create
                     throw new ArgumentOutOfRangeException(nameof(request));
             }
 
-            _dbContext.Movements.Add(movement);
+            dbContext.Movements.Add(movement);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
             return movement.Id;
         }

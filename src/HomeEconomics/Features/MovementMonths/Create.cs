@@ -3,12 +3,14 @@ using Domain.Movements;
 using FluentValidation;
 using HomeEconomics.Helpers;
 using HomeEconomics.Services;
+using JetBrains.Annotations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace HomeEconomics.Features.MovementMonths;
 
+[UsedImplicitly]
 public class Create
 {
     public record Command(int Year, Month Month) : IRequest<MovementMonthResponse>;
@@ -22,20 +24,12 @@ public class Create
         }
     }
 
-    public class Handler : IRequestHandler<Command, MovementMonthResponse?>
+    public class Handler(HomeEconomicsDbContext dbContext, IMovementMonthResponseService movementMonthResponseService)
+        : IRequestHandler<Command, MovementMonthResponse?>
     {
-        private readonly IMovementMonthResponseService _movementMonthResponseService;
-        private readonly HomeEconomicsDbContext _dbContext;
-
-        public Handler(HomeEconomicsDbContext dbContext, IMovementMonthResponseService movementMonthResponseService)
-        {
-            _dbContext = dbContext;
-            _movementMonthResponseService = movementMonthResponseService;
-        }
-
         public async Task<MovementMonthResponse?> Handle(Command request, CancellationToken cancellationToken)
         {
-            var movementMonth = await _dbContext.GetMovementMonthAsync(
+            var movementMonth = await dbContext.GetMovementMonthAsync(
                 mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
 
             if (movementMonth != null)
@@ -43,7 +37,7 @@ public class Create
                 throw new InvalidOperationException(Properties.Messages.MovementMonthExists);
             }
 
-            var movements = _dbContext
+            var movements = dbContext
                 .GetMovements()
                 .AsEnumerable()
                 .Where(m => UseMovement(m, request.Month))
@@ -62,11 +56,11 @@ public class Create
                 movementMonth.AddMonthMovement(movement.Name, movement.Amount, movement.Type);
             }
 
-            _dbContext.MovementMonths.Add(movementMonth);
+            dbContext.MovementMonths.Add(movementMonth);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
-            return await _movementMonthResponseService.Get(mm => mm.Id == movementMonth.Id,
+            return await movementMonthResponseService.Get(mm => mm.Id == movementMonth.Id,
                 cancellationToken: cancellationToken);
         }
 

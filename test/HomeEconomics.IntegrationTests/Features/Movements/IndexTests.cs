@@ -7,13 +7,9 @@ using Index = HomeEconomics.Features.Movements.Index;
 
 namespace HomeEconomics.IntegrationTests.Features.Movements;
 
-public class IndexTests : IntegrationTestBase
+public class IndexTests(Fixture fixture) : IntegrationTestBase(fixture)
 {
     private const string Uri = "api/movements";
-
-    public IndexTests(Fixture fixture) : base(fixture)
-    {
-    }
 
     [Fact]
     public async Task Should_Return_200_And_Movements()

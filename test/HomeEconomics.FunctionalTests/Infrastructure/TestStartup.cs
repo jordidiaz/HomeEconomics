@@ -7,16 +7,10 @@ using Microsoft.Extensions.Hosting;
 
 namespace HomeEconomics.FunctionalTests.Infrastructure;
 
-public class TestStartup
+public class TestStartup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
 {
-    public TestStartup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
-    {
-        Configuration = configuration;
-        WebHostEnvironment = webHostEnvironment;
-    }
-
-    private IConfiguration Configuration { get; }
-    private IWebHostEnvironment WebHostEnvironment { get; }
+    private IConfiguration Configuration { get; } = configuration;
+    private IWebHostEnvironment WebHostEnvironment { get; } = webHostEnvironment;
 
     public void ConfigureServices(IServiceCollection services) =>
         services
