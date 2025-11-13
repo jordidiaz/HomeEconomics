@@ -2,96 +2,43 @@
 
 namespace Domain.Movements;
 
-public class Movement : Entity, IAggregateRoot
+public sealed class Movement : Entity, IAggregateRoot
 {
     public const int MovementNameMaxLength = 30;
     public const decimal MinAmount = 0;
-        
+
     public Movement(string name, decimal amount, MovementType type)
     {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentNullException(nameof(name));
-        }
-
-        if (amount < MinAmount)
-        {
-            throw new ArgumentOutOfRangeException(nameof(amount));
-        }
-
-        Name = name;
-        Amount = amount;
+        Name = string.IsNullOrWhiteSpace(name) ? throw new ArgumentNullException(nameof(name)) : name;
+        Amount = amount < MinAmount ? throw new ArgumentOutOfRangeException(nameof(amount)) : amount;
         Type = type;
         Frequency = new Frequency(this, FrequencyType.None);
     }
 
     public string Name { get; private set; }
-
     public decimal Amount { get; private set; }
-
     public MovementType Type { get; set; }
-
     public Frequency Frequency { get; private set; }
 
-    public void SetNoneFrequency()
-    {
-        Frequency.SetNoneFrequency();
-    }
+    public void SetNoneFrequency() => Frequency.SetNoneFrequency();
+    public void SetMonthlyFrequency() => Frequency.SetMonthlyFrequency();
+    public void SetYearlyFrequency(int month) => Frequency.SetYearlyFrequency(month);
+    public void SetCustomFrequency(bool[] months) => Frequency.SetCustomFrequency(months);
 
-    public void SetMonthlyFrequency()
-    {
-        Frequency.SetMonthlyFrequency();
-    }
+    public void SetName(string name) => Name = string.IsNullOrWhiteSpace(name) ? throw new ArgumentNullException(nameof(name)) : name;
+    public void SetAmount(decimal amount) => Amount = amount < MinAmount ? throw new ArgumentOutOfRangeException(nameof(amount)) : amount;
 
-    public void SetYearlyFrequency(int month)
-    {
-        Frequency.SetYearlyFrequency(month);
-    }
-
-    public void SetCustomFrequency(bool[] months)
-    {
-        Frequency.SetCustomFrequency(months);
-    }
-
-    public void SetName(string name)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            throw new ArgumentNullException(nameof(name));
-        }
-
-        Name = name;
-    }
-
-    public void SetAmount(decimal amount)
-    {
-        if (amount < MinAmount)
-        {
-            throw new ArgumentOutOfRangeException(nameof(amount));
-        }
-
-        Amount = amount;
-    }
-
-    public FrequencyType GetFrequencyType()
-    {
-        return Frequency.Type;
-    }
+    public FrequencyType GetFrequencyType() => Frequency.Type;
 
     public bool HasMonthInFrequency(Month month)
     {
-        if (GetFrequencyType() == FrequencyType.None || GetFrequencyType() == FrequencyType.Monthly)
+        return GetFrequencyType() switch
         {
-            return false;
-        }
-
-        var monthNumber = (int)month;
-
-        return Frequency.IsMonthEnabled(monthNumber);
+            FrequencyType.None => false,
+            FrequencyType.Monthly => false,
+            _ => Frequency.IsMonthEnabled((int)month)
+        };
     }
 
-    public bool[] GetMonths()
-    {
-        return Frequency.GetMonths();
-    }
+    public bool[] GetMonths() => Frequency.GetMonths();
 }
