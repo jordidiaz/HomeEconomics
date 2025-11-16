@@ -1,6 +1,6 @@
 # HomeEconomics
 
-A personal finance management application built with .NET 8 and React TypeScript to help track income, expenses, and monthly budgets with recurring movement patterns.
+A personal finance management application built with .NET 9 and React TypeScript to help track income, expenses, and monthly budgets with recurring movement patterns.
 
 ## Features
 
@@ -12,14 +12,14 @@ A personal finance management application built with .NET 8 and React TypeScript
 
 ## Technology Stack
 
-- **Backend**: .NET 8 ASP.NET Core Web API
+- **Backend**: .NET 9 ASP.NET Core Web API
 - **Frontend**: React 16.13.1 with TypeScript
 - **Database**: PostgreSQL with Entity Framework Core
-- **Architecture**: Clean Architecture with CQRS (MediatR)
+- **Architecture**: Clean Architecture with CQRS powered by LiteBus
 
 ## Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [Node.js 14+](https://nodejs.org/)
 - [PostgreSQL](https://www.postgresql.org/) (or Docker for development)
 

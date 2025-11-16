@@ -21,7 +21,7 @@ COPY ["test/HomeEconomics.UnitTests/HomeEconomics.UnitTests.csproj", "test/HomeE
 RUN dotnet restore
 COPY src src
 COPY test test
-RUN dotnet build --no-restore -c Release --no-cache /restore
+RUN dotnet build "HomeEconomics.sln" -c Release
 COPY --from=base-spa /spa/build src/HomeEconomics/wwwroot
 
 FROM build AS publish

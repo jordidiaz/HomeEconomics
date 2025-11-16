@@ -1,12 +1,9 @@
 # Use postgres/example user/password credentials
-version: '3.9'
-
 services:
   homeeconomics:
     build:
       context: .
       dockerfile: src/HomeEconomics/Dockerfile
-    image: hm
     ports:
       - "6001:6001"
     environment:

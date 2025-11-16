@@ -9,7 +9,7 @@ public static class Program
     {
         var host = CreateHostBuilder(args).Build();
         host.InitializeDbContext<HomeEconomicsDbContext>();
-        await CreateHostBuilder(args).Build().RunAsync();
+        await host.RunAsync();
     }
 
     private static IHostBuilder CreateHostBuilder(string[] args) =>
