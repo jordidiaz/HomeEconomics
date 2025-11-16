@@ -15,17 +15,17 @@ public class UpdateMonthMovementAmountTests : FunctionalTestBase
     {
         await CreateMovements();
 
-        var createMovementMonthResult = await Fixture.SendToMediatRAsync(
+        var createMovementMonthResult = await Fixture.SendCommandToMediatorAsync(
             new Create.Command(
                 DateTime.Now.Year,
                 Month.Jan));
 
         _command = new UpdateMonthMovementAmount.Command(
-            createMovementMonthResult.Id,
+            createMovementMonthResult!.Id,
             createMovementMonthResult.MonthMovements.First().Id,
             70m);
 
-        var result = await Fixture.SendToMediatRAsync(_command);
+        var result = await Fixture.SendCommandToMediatorAsync(_command);
 
         result.Status.PendingTotalExpenses.Should().Be(130m);
         result.Status.PendingTotalIncomes.Should().Be(70m);
@@ -39,7 +39,7 @@ public class UpdateMonthMovementAmountTests : FunctionalTestBase
             0,
             70m);
 
-        Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
+        Func<Task> action = async () => await Fixture.SendCommandToMediatorAsync(_command);
 
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
     }

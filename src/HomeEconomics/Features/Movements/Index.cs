@@ -1,5 +1,5 @@
 ﻿using JetBrains.Annotations;
-using MediatR;
+using LiteBus.Queries.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -8,7 +8,7 @@ namespace HomeEconomics.Features.Movements;
 [UsedImplicitly]
 public class Index
 {
-    public record Query : IRequest<Result>;
+    public record Query : IQuery<Result>;
 
     public record Result
     {
@@ -48,9 +48,9 @@ public class Index
         }
     }
 
-    public class Handler(HomeEconomicsDbContext dbContext) : IRequestHandler<Query, Result>
+    public class Handler(HomeEconomicsDbContext dbContext) : IQueryHandler<Query, Result>
     {
-        public Task<Result> Handle(Query request, CancellationToken cancellationToken)
+        public Task<Result> HandleAsync(Query request, CancellationToken cancellationToken)
         {
             var movements = dbContext.GetMovements()
                 .OrderBy(m => m.Name);

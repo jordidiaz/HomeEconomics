@@ -21,7 +21,7 @@ public class IndexTests : FunctionalTestBase
         ];
         await Fixture.InsertDbContextAsync(entities);
 
-        var result = await Fixture.SendToMediatRAsync(new HomeEconomics.Features.Movements.Index.Query());
+        var result = await Fixture.SendQueryToMediatorAsync(new HomeEconomics.Features.Movements.Index.Query());
 
         result.Movements.Length.Should().Be(3);
 

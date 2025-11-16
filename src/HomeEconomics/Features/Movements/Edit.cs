@@ -1,6 +1,6 @@
 ﻿using Domain.Movements;
 using JetBrains.Annotations;
-using MediatR;
+using LiteBus.Commands.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -9,7 +9,7 @@ namespace HomeEconomics.Features.Movements;
 [UsedImplicitly]
 public class Edit
 {
-    public record Command : IRequest<Unit>
+    public record Command : ICommand
     {
         public int Id { get; init; }
 
@@ -34,9 +34,9 @@ public class Edit
 
     public class Validator : Create.Validator;
 
-    public class Handler(HomeEconomicsDbContext dbContext) : IRequestHandler<Command, Unit>
+    public class Handler(HomeEconomicsDbContext dbContext) : ICommandHandler<Command>
     {
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task HandleAsync(Command request, CancellationToken cancellationToken)
         {
             var movement =
                 await dbContext.GetMovementAsync(m => m.Id == request.Id,
@@ -70,8 +70,6 @@ public class Edit
             }
 
             await dbContext.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

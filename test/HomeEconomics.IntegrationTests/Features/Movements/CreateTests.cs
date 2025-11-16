@@ -2,23 +2,20 @@
 using FluentAssertions;
 using HomeEconomics.Features.Movements;
 using HomeEconomics.IntegrationTests.Infrastructure;
-using MediatR;
 using System.Net;
+using LiteBus.Commands.Abstractions;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.Movements;
 
-public class CreateTests : IntegrationTestBase
+public class CreateTests(Fixture fixture) : IntegrationTestBase(fixture)
 {
-    private Create.Command _command;
+    private Create.Command _command = new("EPSV", 50m, MovementType.Expense, new Create.Frequency
+    {
+        Type = FrequencyType.Monthly
+    });
 
     private const string Uri = "api/movements";
-
-    public CreateTests(Fixture fixture) : base(fixture) =>
-        _command = new Create.Command("EPSV", 50m, MovementType.Expense, new Create.Frequency
-        {
-            Type = FrequencyType.Monthly
-        });
 
     [Fact]
     public async Task Should_Return_200_Ok()
@@ -44,8 +41,8 @@ public class CreateTests : IntegrationTestBase
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-    public class Handler : IRequestHandler<Create.Command, int>
+    public class Handler : ICommandHandler<Create.Command, int>
     {
-        public Task<int> Handle(Create.Command request, CancellationToken cancellationToken) => Task.FromResult(1);
+        public Task<int> HandleAsync(Create.Command request, CancellationToken cancellationToken) => Task.FromResult(1);
     }
 }

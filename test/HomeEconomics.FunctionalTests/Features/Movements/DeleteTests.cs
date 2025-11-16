@@ -12,7 +12,7 @@ public class DeleteTests : FunctionalTestBase
     [Fact]
     public async Task Should_Delete_A_Movement()
     {
-        var movementId = await Fixture.SendToMediatRAsync(new Create.Command(
+        var movementId = await Fixture.SendCommandToMediatorAsync(new Create.Command(
             "Gasolina",
             60m,
             MovementType.Expense,
@@ -31,7 +31,7 @@ public class DeleteTests : FunctionalTestBase
 
         movement.Should().NotBeNull();
 
-        await Fixture.SendToMediatRAsync(new Delete.Command(movementId));
+        await Fixture.SendCommandToMediatorAsync(new Delete.Command(movementId));
 
         movement = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
         {
@@ -47,7 +47,7 @@ public class DeleteTests : FunctionalTestBase
     [Fact]
     public async Task Should_Throw_InvalidOperationException_If_Movement_Not_Exists()
     {
-        Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Delete.Command(42));
+        var action = async () => await Fixture.SendCommandToMediatorAsync(new Delete.Command(42));
 
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementNotExists);
     }

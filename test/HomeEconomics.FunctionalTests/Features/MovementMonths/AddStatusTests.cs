@@ -18,12 +18,12 @@ public class AddStatusTests : FunctionalTestBase
         var movementMonth = await CreateMovementMonth();
 
         _command = new AddStatus.Command(
-            movementMonth.Year,
+            movementMonth!.Year,
             (Month)movementMonth.Month,
             1000,
             50);
 
-        var result = await Fixture.SendToMediatRAsync(_command);
+        var result = await Fixture.SendCommandToMediatorAsync(_command);
 
         result.Status.AccountAmount.Should().Be(1000);
         result.Status.CashAmount.Should().Be(50);
@@ -44,7 +44,7 @@ public class AddStatusTests : FunctionalTestBase
             1000,
             50);
 
-        Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
+        Func<Task> action = async () => await Fixture.SendCommandToMediatorAsync(_command);
 
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
     }

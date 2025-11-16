@@ -2,7 +2,7 @@
 using FluentValidation;
 using HomeEconomics.Helpers;
 using JetBrains.Annotations;
-using MediatR;
+using LiteBus.Commands.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -11,7 +11,7 @@ namespace HomeEconomics.Features.Movements;
 [UsedImplicitly]
 public class Create
 {
-    public record Command(string Name, decimal Amount, MovementType Type, Frequency Frequency) : IRequest<int>;
+    public record Command(string Name, decimal Amount, MovementType Type, Frequency Frequency) : ICommand<int>;
 
     public record Frequency
     {
@@ -52,9 +52,9 @@ public class Create
         }
     }
 
-    public class Handler(HomeEconomicsDbContext dbContext) : IRequestHandler<Command, int>
+    public class Handler(HomeEconomicsDbContext dbContext) : ICommandHandler<Command, int>
     {
-        public async Task<int> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<int> HandleAsync(Command request, CancellationToken cancellationToken)
         {
             var movement = await dbContext.GetMovementAsync(m => m.Name == request.Name,
                 cancellationToken: cancellationToken);

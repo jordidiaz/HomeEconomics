@@ -16,9 +16,9 @@ public class DeleteMonthMovementTests : FunctionalTestBase
 
         var movementMonth = await CreateMovementMonth();
 
-        _command = new DeleteMonthMovement.Command(movementMonth.Id, movementMonth.MonthMovements.First().Id);
+        _command = new DeleteMonthMovement.Command(movementMonth!.Id, movementMonth.MonthMovements.First().Id);
 
-        var result = await Fixture.SendToMediatRAsync(_command);
+        var result = await Fixture.SendCommandToMediatorAsync(_command);
 
         result.Status.PendingTotalExpenses.Should().Be(60m);
         result.Status.PendingTotalIncomes.Should().Be(70m);
@@ -30,7 +30,7 @@ public class DeleteMonthMovementTests : FunctionalTestBase
     {
         _command = new DeleteMonthMovement.Command(0, 0);
 
-        Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
+        Func<Task> action = async () => await Fixture.SendCommandToMediatorAsync(_command);
 
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
     }

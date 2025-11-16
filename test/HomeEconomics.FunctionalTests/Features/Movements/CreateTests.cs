@@ -12,7 +12,7 @@ public class CreateTests : FunctionalTestBase
     [Fact]
     public async Task Should_Create_A_New_Movement()
     {
-        var movementId = await Fixture.SendToMediatRAsync(new Create.Command(
+        var movementId = await Fixture.SendCommandToMediatorAsync(new Create.Command(
             "Gasolina",
             60m,
             MovementType.Expense,
@@ -44,7 +44,7 @@ public class CreateTests : FunctionalTestBase
         var movement = new Movement("Gasolina", 60m, MovementType.Expense);
         await Fixture.InsertDbContextAsync(movement);
 
-        Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Create.Command(
+        Func<Task> action = async () => await Fixture.SendCommandToMediatorAsync(new Create.Command(
             "Gasolina",
             60m,
             MovementType.Expense,

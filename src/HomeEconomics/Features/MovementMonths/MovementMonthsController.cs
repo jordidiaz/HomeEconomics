@@ -1,11 +1,12 @@
-﻿using MediatR;
+﻿using LiteBus.Commands.Abstractions;
+using LiteBus.Queries.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeEconomics.Features.MovementMonths;
 
 [ApiController]
 [Route("api/movement-months")]
-public class MovementMonthsController(IMediator mediator) : ControllerBase
+public class MovementMonthsController(ICommandMediator commandMediator, IQueryMediator queryMediator) : ControllerBase
 {
     [HttpPost]
     [ProducesDefaultResponseType]
@@ -14,7 +15,7 @@ public class MovementMonthsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> Create(Create.Command command)
     {
-        var id = await mediator.Send(command);
+        var id = await commandMediator.SendAsync(command);
 
         return Ok(id);
     }
@@ -25,7 +26,7 @@ public class MovementMonthsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> Detail(int year, int month)
     {
-        var movementMonth = await mediator.Send(new Detail.Query(year, month));
+        var movementMonth = await queryMediator.QueryAsync(new Detail.Query(year, month));
 
         if (movementMonth is null)
         {
@@ -41,7 +42,7 @@ public class MovementMonthsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> PayMonthMovement(int movementMonthId, int monthMovementId)
     {
-        var result = await mediator.Send(new PayMonthMovement.Command(movementMonthId, monthMovementId));
+        var result = await commandMediator.SendAsync(new PayMonthMovement.Command(movementMonthId, monthMovementId));
 
         return Ok(result);
     }
@@ -52,7 +53,7 @@ public class MovementMonthsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> UnPayMonthMovement(int movementMonthId, int monthMovementId)
     {
-        var result = await mediator.Send(new UnPayMonthMovement.Command(movementMonthId, monthMovementId));
+        var result = await commandMediator.SendAsync(new UnPayMonthMovement.Command(movementMonthId, monthMovementId));
 
         return Ok(result);
     }
@@ -63,7 +64,7 @@ public class MovementMonthsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> DeleteMonthMovement(int movementMonthId, int monthMovementId)
     {
-        var result = await mediator.Send(new DeleteMonthMovement.Command(movementMonthId, monthMovementId));
+        var result = await commandMediator.SendAsync(new DeleteMonthMovement.Command(movementMonthId, monthMovementId));
 
         return Ok(result);
     }
@@ -74,7 +75,7 @@ public class MovementMonthsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> UpdateMonthMovementAmount(UpdateMonthMovementAmount.Command command)
     {
-        var result = await mediator.Send(command);
+        var result = await commandMediator.SendAsync(command);
 
         return Ok(result);
     }
@@ -85,7 +86,7 @@ public class MovementMonthsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> AddMonthMovement(AddMonthMovement.Command command)
     {
-        var result = await mediator.Send(command);
+        var result = await commandMediator.SendAsync(command);
 
         return Ok(result);
     }
@@ -96,7 +97,7 @@ public class MovementMonthsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> AddStatus(AddStatus.Command command)
     {
-        var result = await mediator.Send(command);
+        var result = await commandMediator.SendAsync(command);
 
         return Ok(result);
     }
@@ -107,7 +108,7 @@ public class MovementMonthsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> MonthMovementToNextMovementMonth(int movementMonthId, int monthMovementId)
     {
-        var result = await mediator.Send(new MonthMovementToNextMovementMonth.Command(movementMonthId, monthMovementId));
+        var result = await commandMediator.SendAsync(new MonthMovementToNextMovementMonth.Command(movementMonthId, monthMovementId));
 
         return Ok(result);
     }

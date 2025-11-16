@@ -13,7 +13,7 @@ public class FunctionalTestBase : IAsyncLifetime
 
     protected static async Task CreateMovements()
     {
-        await Fixture.SendToMediatRAsync(new HomeEconomics.Features.Movements.Create.Command(
+        await Fixture.SendCommandToMediatorAsync(new HomeEconomics.Features.Movements.Create.Command(
             "Income",
             50m,
             MovementType.Expense,
@@ -22,7 +22,7 @@ public class FunctionalTestBase : IAsyncLifetime
                 Type = FrequencyType.None
             }));
 
-        await Fixture.SendToMediatRAsync(new HomeEconomics.Features.Movements.Create.Command(
+        await Fixture.SendCommandToMediatorAsync(new HomeEconomics.Features.Movements.Create.Command(
             "Gasolina",
             60m,
             MovementType.Expense,
@@ -31,7 +31,7 @@ public class FunctionalTestBase : IAsyncLifetime
                 Type = FrequencyType.Monthly
             }));
 
-        await Fixture.SendToMediatRAsync(new HomeEconomics.Features.Movements.Create.Command(
+        await Fixture.SendCommandToMediatorAsync(new HomeEconomics.Features.Movements.Create.Command(
             "Amazon",
             30m,
             MovementType.Expense,
@@ -41,7 +41,7 @@ public class FunctionalTestBase : IAsyncLifetime
                 Month = 2
             }));
 
-        await Fixture.SendToMediatRAsync(new HomeEconomics.Features.Movements.Create.Command(
+        await Fixture.SendCommandToMediatorAsync(new HomeEconomics.Features.Movements.Create.Command(
             "Seguro",
             70m,
             MovementType.Income,
@@ -51,7 +51,7 @@ public class FunctionalTestBase : IAsyncLifetime
                 Month = 1
             }));
 
-        await Fixture.SendToMediatRAsync(new HomeEconomics.Features.Movements.Create.Command(
+        await Fixture.SendCommandToMediatorAsync(new HomeEconomics.Features.Movements.Create.Command(
             "Custom",
             60m,
             MovementType.Expense,
@@ -76,11 +76,11 @@ public class FunctionalTestBase : IAsyncLifetime
             }));
     }
 
-    protected static async Task<MovementMonthResponse> CreateMovementMonth(Month month = Month.Jan)
+    protected static async Task<MovementMonthResponse?> CreateMovementMonth(Month month = Month.Jan)
     {
         var year = DateTime.Now.Year;
 
-        var movementMonth = await Fixture.SendToMediatRAsync(new Create.Command(
+        var movementMonth = await Fixture.SendCommandToMediatorAsync(new Create.Command(
             year,
             month));
 
@@ -88,7 +88,7 @@ public class FunctionalTestBase : IAsyncLifetime
     }
 
     protected static async Task AddStatus(int year, int month, decimal accountAmount, decimal cashAmount) =>
-        await Fixture.SendToMediatRAsync(new AddStatus.Command(
+        await Fixture.SendCommandToMediatorAsync(new AddStatus.Command(
             year,
             (Month)month,
             accountAmount,

@@ -17,9 +17,9 @@ public class CreateTests : FunctionalTestBase
     {
         await CreateMovements();
             
-        var result = await Fixture.SendToMediatRAsync(_command);
+        var result = await Fixture.SendCommandToMediatorAsync(_command);
 
-        result.Id.Should().Be(result.Id);
+        result!.Id.Should().Be(result.Id);
         result.Year.Should().Be(DateTime.Now.Year);
         result.Month.Should().Be(1);
         result.Status.PendingTotalExpenses.Should().Be(120m);
@@ -62,9 +62,9 @@ public class CreateTests : FunctionalTestBase
     {
         await CreateMovements();
 
-        await Fixture.SendToMediatRAsync(_command);
+        await Fixture.SendCommandToMediatorAsync(_command);
 
-        Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
+        Func<Task> action = async () => await Fixture.SendCommandToMediatorAsync(_command);
 
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthExists);
     }
@@ -72,7 +72,7 @@ public class CreateTests : FunctionalTestBase
     [Fact]
     public async Task Should_Throw_InvalidOperationException_If_No_Movements()
     {
-        Func<Task> action = async () => await Fixture.SendToMediatRAsync(_command);
+        Func<Task> action = async () => await Fixture.SendCommandToMediatorAsync(_command);
 
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementsNotExists);
     }

@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.IntegrationTests.Infrastructure;
-using MediatR;
 using System.Net;
+using LiteBus.Queries.Abstractions;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths;
@@ -31,9 +31,9 @@ public class DetailTests(Fixture fixture) : IntegrationTestBase(fixture)
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
-    public class Handler : IRequestHandler<Detail.Query, MovementMonthResponse?>
+    public class Handler : IQueryHandler<Detail.Query, MovementMonthResponse?>
     {
-        public Task<MovementMonthResponse?> Handle(Detail.Query request, CancellationToken cancellationToken) =>
+        public Task<MovementMonthResponse?> HandleAsync(Detail.Query request, CancellationToken cancellationToken) =>
             request.Year == 2020 
                 ? Task.FromResult<MovementMonthResponse?>(new MovementMonthResponse()) 
                 : Task.FromResult<MovementMonthResponse?>(null!);

@@ -1,6 +1,6 @@
 ﻿using HomeEconomics.Services;
 using JetBrains.Annotations;
-using MediatR;
+using LiteBus.Commands.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -9,12 +9,12 @@ namespace HomeEconomics.Features.MovementMonths;
 [UsedImplicitly]
 public class DeleteMonthMovement
 {
-    public record Command(int MovementMonthId, int MonthMovementId) : IRequest<MovementMonthResponse>;
+    public record Command(int MovementMonthId, int MonthMovementId) : ICommand<MovementMonthResponse>;
 
     public class Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
-        : IRequestHandler<Command, MovementMonthResponse>
+        : ICommandHandler<Command, MovementMonthResponse>
     {
-        public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<MovementMonthResponse> HandleAsync(Command request, CancellationToken cancellationToken)
         {
             var movementMonth = await dbContext
                 .GetMovementMonthAsync(mm => mm.Id == request.MovementMonthId, cancellationToken: cancellationToken);

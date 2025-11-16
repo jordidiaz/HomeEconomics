@@ -12,7 +12,7 @@ public class EditTest : FunctionalTestBase
     [Fact]
     public async Task Should_Edit_The_Movement()
     {
-        var movementId = await Fixture.SendToMediatRAsync(new Create.Command(
+        var movementId = await Fixture.SendCommandToMediatorAsync(new Create.Command(
             "Gasolina",
             60m,
             MovementType.Expense,
@@ -21,7 +21,7 @@ public class EditTest : FunctionalTestBase
                 Type = FrequencyType.Monthly
             }));
 
-        await Fixture.SendToMediatRAsync(new Edit.Command
+        await Fixture.SendCommandToMediatorAsync(new Edit.Command
         {
             Id = movementId,
             Name = "EPSV",
@@ -80,7 +80,7 @@ public class EditTest : FunctionalTestBase
     [Fact]
     public async Task Should_Throw_InvalidOperationException_If_Movement_Not_Exists()
     {
-        Func<Task> action = async () => await Fixture.SendToMediatRAsync(new Edit.Command
+        Func<Task> action = async () => await Fixture.SendCommandToMediatorAsync(new Edit.Command
         {
             Id = 42,
             Name = "Gasolina",

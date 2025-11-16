@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using JetBrains.Annotations;
-using MediatR;
+using LiteBus.Commands.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -9,16 +9,16 @@ namespace HomeEconomics.Features.Movements;
 [UsedImplicitly]
 public class Delete
 {
-    public record Command(int Id) : IRequest;
+    public record Command(int Id) : ICommand;
 
     public class Validator : AbstractValidator<Command>
     {
         public Validator() => RuleFor(command => command.Id).GreaterThan(0);
     }
 
-    public class Handler(HomeEconomicsDbContext dbContext) : IRequestHandler<Command>
+    public class Handler(HomeEconomicsDbContext dbContext) : ICommandHandler<Command>
     {
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task HandleAsync(Command request, CancellationToken cancellationToken)
         {
             var movement =
                 await dbContext.GetMovementAsync(m => m.Id == request.Id, cancellationToken: cancellationToken);
@@ -31,8 +31,6 @@ public class Delete
             dbContext.Movements.Remove(movement);
 
             await dbContext.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

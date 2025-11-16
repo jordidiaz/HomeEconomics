@@ -12,7 +12,7 @@ public class Startup(IConfiguration configuration, IWebHostEnvironment webHostEn
             .AddHomeEconomicsApi()
             .AddHomeEconomicsServices()
             .AddIf(WebHostEnvironment.IsDevelopment(), serviceCollection => serviceCollection.AddCors())
-            .AddHomeEconomicsMediatR()
+            .AddHomeEconomicsMediator()
             .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment())
             .AddHomeEconomicsSwagger()
             .AddHomeEconomicsHealthChecks(Configuration);

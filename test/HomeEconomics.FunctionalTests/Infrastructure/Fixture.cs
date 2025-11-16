@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
-using MediatR;
+using LiteBus.Commands.Abstractions;
+using LiteBus.Queries.Abstractions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -70,16 +71,40 @@ public static class Fixture
         await respawner.ResetAsync(npgsqlConnection);
     }
 
-    public static async Task<TResponse> SendToMediatRAsync<TResponse>(IRequest<TResponse> request)
+    public static async Task<TResponse> SendCommandToMediatorAsync<TResponse>(ICommand<TResponse> request)
     {
         using var scope = ScopeFactory.CreateScope();
-        var mediator = scope.ServiceProvider.GetService<IMediator>();
+        var mediator = scope.ServiceProvider.GetService<ICommandMediator>();
         if (mediator is null)
         {
             throw new ArgumentNullException("Mediator is null");
         }
 
-        return await mediator.Send(request);
+        return await mediator.SendAsync(request);
+    }
+    
+    public static async Task<TResponse> SendQueryToMediatorAsync<TResponse>(IQuery<TResponse> query)
+    {
+        using var scope = ScopeFactory.CreateScope();
+        var mediator = scope.ServiceProvider.GetService<IQueryMediator>();
+        if (mediator is null)
+        {
+            throw new ArgumentNullException("Mediator is null");
+        }
+
+        return await mediator.QueryAsync(query);
+    }
+    
+    public static async Task SendCommandToMediatorAsync(ICommand request)
+    {
+        using var scope = ScopeFactory.CreateScope();
+        var mediator = scope.ServiceProvider.GetService<ICommandMediator>();
+        if (mediator is null)
+        {
+            throw new ArgumentNullException("Mediator is null");
+        }
+
+        await mediator.SendAsync(request);
     }
 
     public static async Task<T> QueryDbContextAsync<T>(Func<HomeEconomicsDbContext, Task<T>> query) => await ExecuteDbContextAsync(query);

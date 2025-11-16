@@ -8,7 +8,7 @@ public class TestStartup
     public void ConfigureServices(IServiceCollection services)
     {
         ServiceCollectionExtensions.AddHomeEconomicsApi(services);
-        ServiceCollectionExtensions.AddHomeEconomicsMediatR(services);
+        ServiceCollectionExtensions.AddHomeEconomicsMediator(services);
     }
 
     public void Configure(IApplicationBuilder applicationBuilder) =>

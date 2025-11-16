@@ -1,7 +1,7 @@
 ﻿using HomeEconomics.Services;
-using MediatR;
 using Domain.MovementMonth;
 using JetBrains.Annotations;
+using LiteBus.Commands.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -10,22 +10,14 @@ namespace HomeEconomics.Features.MovementMonths;
 [UsedImplicitly]
 public class MonthMovementToNextMovementMonth
 {
-    public record Command(int MovementMonthId, int MonthMovementId) : IRequest<MovementMonthResponse>;
+    public record Command(int MovementMonthId, int MonthMovementId) : ICommand<MovementMonthResponse>;
 
-    public class Handler : IRequestHandler<Command, MovementMonthResponse>
+    public class Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
+        : ICommandHandler<Command, MovementMonthResponse>
     {
-        private readonly IMovementMonthResponseService _movementMonthResponseService;
-        private readonly HomeEconomicsDbContext _dbContext;
-
-        public Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
+        public async Task<MovementMonthResponse> HandleAsync(Command request, CancellationToken cancellationToken)
         {
-            _movementMonthResponseService = movementMonthResponseService;
-            _dbContext = dbContext;
-        }
-
-        public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var movementMonth = await _dbContext
+            var movementMonth = await dbContext
                 .GetMovementMonthAsync(mm => mm.Id == request.MovementMonthId,
                     cancellationToken: cancellationToken);
 
@@ -41,7 +33,7 @@ public class MonthMovementToNextMovementMonth
             }
 
             var (year, month) = GetNext(movementMonth);
-            var nextMovementMonth = await _dbContext
+            var nextMovementMonth = await dbContext
                 .GetMovementMonthAsync(mm => mm.Year == year && mm.Month == month, cancellationToken);
             if (nextMovementMonth is null)
             {
@@ -51,9 +43,9 @@ public class MonthMovementToNextMovementMonth
             movementMonth.DeleteMonthMovement(request.MonthMovementId);
             nextMovementMonth.AddMonthMovement(monthMovement.Name, monthMovement.Amount, monthMovement.Type);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
-            return await _movementMonthResponseService.Get(movementMonth, cancellationToken);
+            return await movementMonthResponseService.Get(movementMonth, cancellationToken);
         }
 
         private (int year, Month month) GetNext(MovementMonth movementMonth)

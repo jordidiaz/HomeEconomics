@@ -16,7 +16,7 @@ public class TestStartup(IConfiguration configuration, IWebHostEnvironment webHo
         services
             .AddHomeEconomicsApi()
             .AddHomeEconomicsServices()
-            .AddHomeEconomicsMediatR()
+            .AddHomeEconomicsMediator()
             .AddHomeEconomicsPersistence(Configuration, WebHostEnvironment.IsDevelopment());
 
     public void Configure(IApplicationBuilder applicationBuilder) =>

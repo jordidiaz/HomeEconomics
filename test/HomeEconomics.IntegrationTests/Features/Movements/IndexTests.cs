@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using FluentAssertions;
 using HomeEconomics.IntegrationTests.Infrastructure;
-using MediatR;
+using LiteBus.Queries.Abstractions;
 using Xunit;
 using Index = HomeEconomics.Features.Movements.Index;
 
@@ -20,8 +20,8 @@ public class IndexTests(Fixture fixture) : IntegrationTestBase(fixture)
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
-    public class Handler : IRequestHandler<Index.Query, Index.Result>
+    public class Handler : IQueryHandler<Index.Query, Index.Result>
     {
-        public Task<Index.Result> Handle(Index.Query request, CancellationToken cancellationToken) => Task.FromResult(new Index.Result());
+        public Task<Index.Result> HandleAsync(Index.Query request, CancellationToken cancellationToken) => Task.FromResult(new Index.Result());
     }
 }

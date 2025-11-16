@@ -1,16 +1,14 @@
-﻿using MediatR;
+﻿using LiteBus.Commands.Abstractions;
+using LiteBus.Queries.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeEconomics.Features.Movements;
 
 [ApiController]
 [Route("api/movements")]
-public class MovementsController : ControllerBase
+public class MovementsController(ICommandMediator commandMediator, IQueryMediator queryMediator)
+    : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public MovementsController(IMediator mediator) => _mediator = mediator;
-
     [HttpPost]
     [ProducesDefaultResponseType]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -18,7 +16,7 @@ public class MovementsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Create(Create.Command command)
     {
-        var id = await _mediator.Send(command);
+        var id = await commandMediator.SendAsync(command);
 
         return Ok(id);
     }
@@ -28,7 +26,7 @@ public class MovementsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Index.Result>> Index()
     {
-        var movements = await _mediator.Send(new Index.Query());
+        var movements = await queryMediator.QueryAsync(new Index.Query());
 
         return Ok(movements);
     }
@@ -39,7 +37,7 @@ public class MovementsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> Delete(int id)
     {
-        await _mediator.Send(new Delete.Command(id));
+        await commandMediator.SendAsync(new Delete.Command(id));
 
         return NoContent();
     }
@@ -50,7 +48,7 @@ public class MovementsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult> Edit(Edit.Command command)
     {
-        await _mediator.Send(command);
+        await commandMediator.SendAsync(command);
 
         return NoContent();
     }

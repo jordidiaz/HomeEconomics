@@ -19,16 +19,16 @@ public class MonthMovementToNextMovementMonthTests : FunctionalTestBase
         var movementMonthResponse = await CreateMovementMonth(Month.Feb);
         var nextMovementMonthResponse = await CreateMovementMonth(Month.Mar);
 
-        movementMonthResponse.MonthMovements.Length.Should().Be(2);
+        movementMonthResponse!.MonthMovements.Length.Should().Be(2);
         movementMonthResponse.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon").Should().NotBeNull();
-        nextMovementMonthResponse.MonthMovements.Length.Should().Be(1);
+        nextMovementMonthResponse!.MonthMovements.Length.Should().Be(1);
         nextMovementMonthResponse.MonthMovements.SingleOrDefault(mm => mm.Name == "Amazon").Should().BeNull();
 
         _command = new MonthMovementToNextMovementMonth.Command(
             movementMonthResponse.Id,
             movementMonthResponse.MonthMovements.Single(mm => mm.Name == "Amazon").Id);
 
-        movementMonthResponse = await Fixture.SendToMediatRAsync(_command);
+        movementMonthResponse = await Fixture.SendCommandToMediatorAsync(_command);
 
         var nextMovementMonth = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
         {
@@ -47,7 +47,7 @@ public class MonthMovementToNextMovementMonthTests : FunctionalTestBase
     [Fact]
     public async Task Should_Throw_InvalidOperationException_If_MovementMonth_Not_Exists()
     {
-        Func<Task> action = async () => await Fixture.SendToMediatRAsync(new MonthMovementToNextMovementMonth.Command(1, 1));
+        Func<Task> action = async () => await Fixture.SendCommandToMediatorAsync(new MonthMovementToNextMovementMonth.Command(1, 1));
 
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementMonthNotExists);
     }
@@ -59,7 +59,7 @@ public class MonthMovementToNextMovementMonthTests : FunctionalTestBase
 
         var movementMonthResponse = await CreateMovementMonth();
 
-        Func<Task> action = async () => await Fixture.SendToMediatRAsync(new MonthMovementToNextMovementMonth.Command(movementMonthResponse.Id, 99));
+        Func<Task> action = async () => await Fixture.SendCommandToMediatorAsync(new MonthMovementToNextMovementMonth.Command(movementMonthResponse!.Id, 99));
 
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
     }
@@ -71,8 +71,8 @@ public class MonthMovementToNextMovementMonthTests : FunctionalTestBase
 
         var movementMonthResponse = await CreateMovementMonth();
 
-        Func<Task> action = async () => await Fixture.SendToMediatRAsync(new MonthMovementToNextMovementMonth.Command(
-            movementMonthResponse.Id,
+        Func<Task> action = async () => await Fixture.SendCommandToMediatorAsync(new MonthMovementToNextMovementMonth.Command(
+            movementMonthResponse!.Id,
             movementMonthResponse.MonthMovements.First().Id));
 
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.NextMovementMonthNotExists);

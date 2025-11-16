@@ -1,8 +1,11 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
+using HomeEconomics;
 using HomeEconomics.Services;
-using MediatR;
+using LiteBus.Commands;
+using LiteBus.Extensions.Microsoft.DependencyInjection;
+using LiteBus.Queries;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 
@@ -29,14 +32,20 @@ public static class ServiceCollectionExtensions
             {
                 configuration.DisableDataAnnotationsValidation = true;
             })
-            .AddValidatorsFromAssemblyContaining<HomeEconomics.HomeEconomicsApp>();
+            .AddValidatorsFromAssemblyContaining<HomeEconomicsApp>();
             
         return services;
     }
 
-    public static IServiceCollection AddHomeEconomicsMediatR(this IServiceCollection services) =>
+    public static IServiceCollection AddHomeEconomicsMediator(this IServiceCollection services) =>
         services
-            .AddMediatR(typeof(HomeEconomics.HomeEconomicsApp));
+            .AddLiteBus(liteBus =>
+            {
+                var appAssembly = typeof(Program).Assembly;
+
+                liteBus.AddCommandModule(module => module.RegisterFromAssembly(appAssembly));
+                liteBus.AddQueryModule(module => module.RegisterFromAssembly(appAssembly));
+            });
 
     public static IServiceCollection AddHomeEconomicsServices(this IServiceCollection services) =>
         services

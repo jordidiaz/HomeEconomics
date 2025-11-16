@@ -2,9 +2,9 @@
 using FluentValidation;
 using HomeEconomics.Helpers;
 using HomeEconomics.Services;
-using MediatR;
 using Domain.Movements;
 using JetBrains.Annotations;
+using LiteBus.Commands.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -13,7 +13,7 @@ namespace HomeEconomics.Features.MovementMonths;
 [UsedImplicitly]
 public class AddStatus
 {
-    public record Command(int Year, Month Month, decimal AccountAmount, decimal CashAmount) : IRequest<MovementMonthResponse>;
+    public record Command(int Year, Month Month, decimal AccountAmount, decimal CashAmount) : ICommand<MovementMonthResponse>;
 
     public class Validator : AbstractValidator<Command>
     {
@@ -27,9 +27,9 @@ public class AddStatus
     }
 
     public class Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
-        : IRequestHandler<Command, MovementMonthResponse>
+        : ICommandHandler<Command, MovementMonthResponse>
     {
-        public async Task<MovementMonthResponse> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<MovementMonthResponse> HandleAsync(Command request, CancellationToken cancellationToken)
         {
             var movementMonth = await dbContext.GetMovementMonthAsync(mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
 

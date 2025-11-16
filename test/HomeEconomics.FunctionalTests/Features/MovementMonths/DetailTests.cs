@@ -15,10 +15,10 @@ public class DetailTests : FunctionalTestBase
 
         var movementMonth = await CreateMovementMonth();
 
-        await AddStatus(movementMonth.Year, movementMonth.Month, 1000, 50);
+        await AddStatus(movementMonth!.Year, movementMonth.Month, 1000, 50);
         await AddStatus(movementMonth.Year, movementMonth.Month, 900, 60);
 
-        var result = await Fixture.SendToMediatRAsync(new Detail.Query(movementMonth.Year, movementMonth.Month));
+        var result = await Fixture.SendQueryToMediatorAsync(new Detail.Query(movementMonth.Year, movementMonth.Month));
 
         result!.Status.PendingTotalExpenses.Should().Be(120m);
         result.Status.PendingTotalIncomes.Should().Be(70m);
@@ -36,10 +36,10 @@ public class DetailTests : FunctionalTestBase
 
         await CreateMovementMonth(Month.Feb);
 
-        await AddStatus(movementMonth.Year, movementMonth.Month, 1000, 50);
+        await AddStatus(movementMonth!.Year, movementMonth.Month, 1000, 50);
         await AddStatus(movementMonth.Year, movementMonth.Month, 900, 60);
 
-        var result = await Fixture.SendToMediatRAsync(new Detail.Query(movementMonth.Year, movementMonth.Month));
+        var result = await Fixture.SendQueryToMediatorAsync(new Detail.Query(movementMonth.Year, movementMonth.Month));
 
         result!.Status.PendingTotalExpenses.Should().Be(120m);
         result.Status.PendingTotalIncomes.Should().Be(70m);
@@ -51,7 +51,7 @@ public class DetailTests : FunctionalTestBase
     [Fact]
     public async Task Should_Return_Null_If_MovementMonth_Not_Exist()
     {
-        var movementMonthDetail = await Fixture.SendToMediatRAsync(new Detail.Query(2020, 8));
+        var movementMonthDetail = await Fixture.SendQueryToMediatorAsync(new Detail.Query(2020, 8));
 
         movementMonthDetail.Should().BeNull();
     }

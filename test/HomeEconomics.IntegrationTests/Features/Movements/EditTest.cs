@@ -2,8 +2,8 @@
 using FluentAssertions;
 using HomeEconomics.Features.Movements;
 using HomeEconomics.IntegrationTests.Infrastructure;
-using MediatR;
 using System.Net;
+using LiteBus.Commands.Abstractions;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.Movements;
@@ -34,8 +34,8 @@ public class EditTest(Fixture fixture) : IntegrationTestBase(fixture)
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 
-    public class Handler : IRequestHandler<Edit.Command, Unit>
+    public class Handler : ICommandHandler<Edit.Command>
     {
-        public Task<Unit> Handle(Edit.Command request, CancellationToken cancellationToken) => Task.FromResult(Unit.Value);
+        public Task HandleAsync(Edit.Command request, CancellationToken cancellationToken) => Task.FromResult(Task.CompletedTask);
     }
 }

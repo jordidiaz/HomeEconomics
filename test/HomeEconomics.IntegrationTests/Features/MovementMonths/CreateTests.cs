@@ -2,8 +2,8 @@
 using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.IntegrationTests.Infrastructure;
-using MediatR;
 using System.Net;
+using LiteBus.Commands.Abstractions;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths;
@@ -39,8 +39,8 @@ public class CreateTests(Fixture fixture) : IntegrationTestBase(fixture)
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-    public class Handler : IRequestHandler<Create.Command, MovementMonthResponse>
+    public class Handler : ICommandHandler<Create.Command, MovementMonthResponse?>
     {
-        public Task<MovementMonthResponse> Handle(Create.Command request, CancellationToken cancellationToken) => Task.FromResult(new MovementMonthResponse());
+        public Task<MovementMonthResponse?> HandleAsync(Create.Command request, CancellationToken cancellationToken) => Task.FromResult(new MovementMonthResponse())!;
     }
 }

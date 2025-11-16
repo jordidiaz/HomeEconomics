@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using HomeEconomics.Features.Movements;
 using HomeEconomics.IntegrationTests.Infrastructure;
-using MediatR;
 using System.Net;
+using LiteBus.Commands.Abstractions;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.Movements;
@@ -21,8 +21,8 @@ public class DeleteTests(Fixture fixture) : IntegrationTestBase(fixture)
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 
-    public class Handler : IRequestHandler<Delete.Command, Unit>
+    public class Handler : ICommandHandler<Delete.Command>
     {
-        public Task<Unit> Handle(Delete.Command request, CancellationToken cancellationToken) => Task.FromResult(Unit.Value);
+        public Task HandleAsync(Delete.Command request, CancellationToken cancellationToken) => Task.FromResult(Task.CompletedTask);
     }
 }
