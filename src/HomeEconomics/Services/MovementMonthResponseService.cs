@@ -6,15 +6,11 @@ using System.Linq.Expressions;
 
 namespace HomeEconomics.Services;
 
-public class MovementMonthResponseService : IMovementMonthResponseService
+public class MovementMonthResponseService(HomeEconomicsDbContext dbContext) : IMovementMonthResponseService
 {
-    private readonly HomeEconomicsDbContext _dbContext;
-
-    public MovementMonthResponseService(HomeEconomicsDbContext dbContext) => _dbContext = dbContext;
-
     public async Task<MovementMonthResponse?> Get(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
     {
-        var movementMonth = await _dbContext.GetMovementMonthAsync(predicate, cancellationToken);
+        var movementMonth = await dbContext.GetMovementMonthAsync(predicate, cancellationToken);
         if (movementMonth is null)
         {
             return null;
@@ -52,7 +48,7 @@ public class MovementMonthResponseService : IMovementMonthResponseService
             nextMonth = (Month)((int)month + 1);
         }
 
-        var nextMovementMonth = await _dbContext.GetMovementMonthAsync(mm => mm.Year == nextYear && mm.Month == nextMonth,
+        var nextMovementMonth = await dbContext.GetMovementMonthAsync(mm => mm.Year == nextYear && mm.Month == nextMonth,
             cancellationToken: cancellationToken);
 
         return nextMovementMonth;

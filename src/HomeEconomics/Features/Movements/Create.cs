@@ -13,14 +13,7 @@ public class Create
 {
     public record Command(string Name, decimal Amount, MovementType Type, Frequency Frequency) : ICommand<int>;
 
-    public record Frequency
-    {
-        public FrequencyType Type { get; init; }
-
-        public int Month { get; init; }
-
-        public bool[] Months { get; init; } = new List<bool>().ToArray();
-    }
+    public record Frequency(FrequencyType Type, int Month, bool[] Months);
 
     public class Validator : AbstractValidator<Command>
     {
@@ -54,7 +47,7 @@ public class Create
 
     public class Handler(HomeEconomicsDbContext dbContext) : ICommandHandler<Command, int>
     {
-        public async Task<int> HandleAsync(Command request, CancellationToken cancellationToken)
+        public async Task<int> HandleAsync(Command request, CancellationToken cancellationToken = default)
         {
             var movement = await dbContext.GetMovementAsync(m => m.Name == request.Name,
                 cancellationToken: cancellationToken);

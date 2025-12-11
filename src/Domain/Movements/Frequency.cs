@@ -35,7 +35,7 @@ public sealed class Frequency : Entity
             throw new ArgumentOutOfRangeException(nameof(months));
         }
 
-        if (months.All(m => m is false))
+        if (months.All(m => !m))
         {
             throw new InvalidOperationException(Properties.Messages.NoMonthSelected);
         }

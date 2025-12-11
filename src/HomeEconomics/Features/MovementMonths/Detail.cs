@@ -13,7 +13,7 @@ public class Detail
     public class Handler(IMovementMonthResponseService movementMonthResponseService)
         : IQueryHandler<Query, MovementMonthResponse?>
     {
-        public async Task<MovementMonthResponse?> HandleAsync(Query request, CancellationToken cancellationToken) =>
+        public async Task<MovementMonthResponse?> HandleAsync(Query request, CancellationToken cancellationToken = default) =>
             await movementMonthResponseService.Get(
                 mm => mm.Year == request.Year && mm.Month == (Month)request.Month,
                 cancellationToken: cancellationToken);

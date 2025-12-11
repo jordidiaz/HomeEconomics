@@ -10,10 +10,8 @@ namespace HomeEconomics.IntegrationTests.Features.Movements;
 
 public class CreateTests(Fixture fixture) : IntegrationTestBase(fixture)
 {
-    private Create.Command _command = new("EPSV", 50m, MovementType.Expense, new Create.Frequency
-    {
-        Type = FrequencyType.Monthly
-    });
+    private Create.Command _command = new("EPSV", 50m, MovementType.Expense,
+        new Create.Frequency(FrequencyType.Monthly, 0, []));
 
     private const string Uri = "api/movements";
 
@@ -30,10 +28,7 @@ public class CreateTests(Fixture fixture) : IntegrationTestBase(fixture)
     [Fact]
     public async Task Should_Return_400_BadRequest()
     {
-        _command = new Create.Command(string.Empty, 50m, MovementType.Expense, new Create.Frequency
-        {
-            Type = FrequencyType.Monthly
-        });
+        _command = new Create.Command(string.Empty, 50m, MovementType.Expense, new Create.Frequency(FrequencyType.Monthly, 0, []));
 
         var response = await HttpClient
             .PostAsync(Uri, _command);
@@ -43,6 +38,6 @@ public class CreateTests(Fixture fixture) : IntegrationTestBase(fixture)
 
     public class Handler : ICommandHandler<Create.Command, int>
     {
-        public Task<int> HandleAsync(Create.Command request, CancellationToken cancellationToken) => Task.FromResult(1);
+        public Task<int> HandleAsync(Create.Command request, CancellationToken cancellationToken = default) => Task.FromResult(1);
     }
 }

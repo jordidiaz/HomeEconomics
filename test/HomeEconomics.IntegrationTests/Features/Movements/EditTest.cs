@@ -10,17 +10,7 @@ namespace HomeEconomics.IntegrationTests.Features.Movements;
 
 public class EditTest(Fixture fixture) : IntegrationTestBase(fixture)
 {
-    private readonly Edit.Command _command = new()
-    {
-        Id = 42,
-        Name = "EPSV",
-        Amount = 50m,
-        Type = MovementType.Expense,
-        Frequency = new Edit.Frequency
-        {
-            Type = FrequencyType.Monthly
-        }
-    };
+    private readonly Edit.Command _command = new(42, "EPSV", 50m, MovementType.Expense, new Edit.Frequency(FrequencyType.Monthly, 0, []));
 
     private const string Uri = "api/movements/42";
 
@@ -36,6 +26,6 @@ public class EditTest(Fixture fixture) : IntegrationTestBase(fixture)
 
     public class Handler : ICommandHandler<Edit.Command>
     {
-        public Task HandleAsync(Edit.Command request, CancellationToken cancellationToken) => Task.FromResult(Task.CompletedTask);
+        public Task HandleAsync(Edit.Command request, CancellationToken cancellationToken = default) => Task.FromResult(Task.CompletedTask);
     }
 }

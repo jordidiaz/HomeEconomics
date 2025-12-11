@@ -16,37 +16,23 @@ public class EditTest : FunctionalTestBase
             "Gasolina",
             60m,
             MovementType.Expense,
-            new Create.Frequency
-            {
-                Type = FrequencyType.Monthly
-            }));
+            new Create.Frequency(FrequencyType.Monthly, 0, [])));
 
-        await Fixture.SendCommandToMediatorAsync(new Edit.Command
-        {
-            Id = movementId,
-            Name = "EPSV",
-            Amount = 50m,
-            Type = MovementType.Income,
-            Frequency = new Edit.Frequency
-            {
-                Type = FrequencyType.Custom,
-                Months =
-                [
-                    true,
-                    false,
-                    true,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false,
-                    false
-                ]
-            }
-        });
+        await Fixture.SendCommandToMediatorAsync(new Edit.Command(movementId, "EPSV", 50m, MovementType.Income,
+            new Edit.Frequency(FrequencyType.Custom, 0, [
+                true,
+                false,
+                true,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+            ])));
 
         var movement = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
         {
@@ -80,17 +66,7 @@ public class EditTest : FunctionalTestBase
     [Fact]
     public async Task Should_Throw_InvalidOperationException_If_Movement_Not_Exists()
     {
-        Func<Task> action = async () => await Fixture.SendCommandToMediatorAsync(new Edit.Command
-        {
-            Id = 42,
-            Name = "Gasolina",
-            Amount = 60m,
-            Type = MovementType.Expense,
-            Frequency = new Edit.Frequency
-            {
-                Type = FrequencyType.Monthly
-            }
-        });
+        var action = async () => await Fixture.SendCommandToMediatorAsync(new Edit.Command(42, "Gasolina", 60m, MovementType.Expense, new Edit.Frequency(FrequencyType.Monthly, 0, [])));
 
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementNotExists);
     }

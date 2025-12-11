@@ -29,7 +29,7 @@ public class AddStatus
     public class Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
         : ICommandHandler<Command, MovementMonthResponse>
     {
-        public async Task<MovementMonthResponse> HandleAsync(Command request, CancellationToken cancellationToken)
+        public async Task<MovementMonthResponse> HandleAsync(Command request, CancellationToken cancellationToken = default)
         {
             var movementMonth = await dbContext.GetMovementMonthAsync(mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
 

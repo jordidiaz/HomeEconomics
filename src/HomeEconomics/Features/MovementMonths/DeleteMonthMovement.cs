@@ -14,7 +14,7 @@ public class DeleteMonthMovement
     public class Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
         : ICommandHandler<Command, MovementMonthResponse>
     {
-        public async Task<MovementMonthResponse> HandleAsync(Command request, CancellationToken cancellationToken)
+        public async Task<MovementMonthResponse> HandleAsync(Command request, CancellationToken cancellationToken = default)
         {
             var movementMonth = await dbContext
                 .GetMovementMonthAsync(mm => mm.Id == request.MovementMonthId, cancellationToken: cancellationToken);
