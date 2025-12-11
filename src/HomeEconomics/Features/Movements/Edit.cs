@@ -26,12 +26,12 @@ public class Edit
     {
         public FrequencyType Type { get; init; }
 
-        // ReSharper disable once UnassignedGetOnlyAutoProperty
-        public int Month { get; }
+        public int Month { get; init; }
 
         public bool[] Months { get; init; } = new List<bool>().ToArray();
     }
 
+    [UsedImplicitly]
     public class Validator : Create.Validator;
 
     public class Handler(HomeEconomicsDbContext dbContext) : ICommandHandler<Command>
