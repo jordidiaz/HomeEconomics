@@ -1,7 +1,7 @@
 ﻿<Project>
   <PropertyGroup>
-    <NetTargetVersion>net9.0</NetTargetVersion>
-    <LangVersion>13.0</LangVersion>
+    <NetTargetVersion>net10.0</NetTargetVersion>
+    <LangVersion>14.0</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
