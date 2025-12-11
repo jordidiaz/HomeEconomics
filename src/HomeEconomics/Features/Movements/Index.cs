@@ -48,6 +48,7 @@ public class Index
         }
     }
 
+    [UsedImplicitly]
     public class Handler(HomeEconomicsDbContext dbContext) : IQueryHandler<Query, Result>
     {
         public Task<Result> HandleAsync(Query request, CancellationToken cancellationToken)

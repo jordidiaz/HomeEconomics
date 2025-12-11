@@ -12,6 +12,7 @@ public class MonthMovementToNextMovementMonth
 {
     public record Command(int MovementMonthId, int MonthMovementId) : ICommand<MovementMonthResponse>;
 
+    [UsedImplicitly]
     public class Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
         : ICommandHandler<Command, MovementMonthResponse>
     {

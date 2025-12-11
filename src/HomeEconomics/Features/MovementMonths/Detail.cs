@@ -10,6 +10,7 @@ public class Detail
 {
     public record Query(int Year, int Month) : IQuery<MovementMonthResponse?>;
 
+    [UsedImplicitly]
     public class Handler(IMovementMonthResponseService movementMonthResponseService)
         : IQueryHandler<Query, MovementMonthResponse?>
     {

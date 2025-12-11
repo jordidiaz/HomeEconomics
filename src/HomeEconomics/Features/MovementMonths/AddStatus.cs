@@ -26,6 +26,7 @@ public class AddStatus
         }
     }
 
+    [UsedImplicitly]
     public class Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
         : ICommandHandler<Command, MovementMonthResponse>
     {

@@ -26,6 +26,7 @@ public class Edit
     {
         public FrequencyType Type { get; init; }
 
+        [UsedImplicitly]
         public int Month { get; init; }
 
         public bool[] Months { get; init; } = new List<bool>().ToArray();
@@ -34,6 +35,7 @@ public class Edit
     [UsedImplicitly]
     public class Validator : Create.Validator;
 
+    [UsedImplicitly]
     public class Handler(HomeEconomicsDbContext dbContext) : ICommandHandler<Command>
     {
         public async Task HandleAsync(Command request, CancellationToken cancellationToken)

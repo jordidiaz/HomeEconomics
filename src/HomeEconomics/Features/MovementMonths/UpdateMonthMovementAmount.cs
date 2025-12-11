@@ -18,6 +18,7 @@ public class UpdateMonthMovementAmount
         public Validator() => RuleFor(command => command.Amount).GreaterThanOrEqualTo(Movement.MinAmount);
     }
 
+    [UsedImplicitly]
     public class Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
         : ICommandHandler<Command, MovementMonthResponse>
     {

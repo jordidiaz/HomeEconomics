@@ -11,11 +11,13 @@ public class Delete
 {
     public record Command(int Id) : ICommand;
 
+    [UsedImplicitly]
     public class Validator : AbstractValidator<Command>
     {
         public Validator() => RuleFor(command => command.Id).GreaterThan(0);
     }
 
+    [UsedImplicitly]
     public class Handler(HomeEconomicsDbContext dbContext) : ICommandHandler<Command>
     {
         public async Task HandleAsync(Command request, CancellationToken cancellationToken)

@@ -15,6 +15,7 @@ public class AddMonthMovement
 
     public record Command(int MovementMonthId, string Name, decimal Amount, MovementType Type) : ICommand<MovementMonthResponse>;
 
+    [UsedImplicitly]
     public class Validator : AbstractValidator<Command>
     {
         public Validator()
@@ -25,6 +26,7 @@ public class AddMonthMovement
         }
     }
 
+    [UsedImplicitly]
     public class Handler(IMovementMonthResponseService movementMonthResponseService, HomeEconomicsDbContext dbContext)
         : ICommandHandler<Command, MovementMonthResponse>
     {
