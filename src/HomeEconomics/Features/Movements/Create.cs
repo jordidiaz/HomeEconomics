@@ -22,6 +22,7 @@ public class Create
             RuleFor(command => command.Name).NotNull().NotEmpty().MaximumLength(Movement.MovementNameMaxLength);
             RuleFor(command => command.Amount).GreaterThanOrEqualTo(Movement.MinAmount);
             RuleFor(command => command.Type).Must(Enums.IsAValidEnumValue);
+            RuleFor(command => command.Frequency).NotNull();
             RuleFor(command => command.Frequency).SetValidator(new FrequencyValidator());
         }
     }
