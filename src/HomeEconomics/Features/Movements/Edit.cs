@@ -9,16 +9,34 @@ namespace HomeEconomics.Features.Movements;
 [UsedImplicitly]
 public class Edit
 {
-    public record Command(int Id, string Name, decimal Amount, MovementType Type, Frequency Frequency) : ICommand;
+    public record Command : ICommand
+    {
+        public int Id { get; init; }
 
-    public record Frequency(FrequencyType Type, int Month, bool[] Months);
+        public string Name { get; init; } = string.Empty;
 
-    [UsedImplicitly]
+        public decimal Amount { get; init; }
+
+        public MovementType Type { get; init; }
+
+        public Frequency Frequency { get; init; } = new();
+    }
+
+    public record Frequency
+    {
+        public FrequencyType Type { get; init; }
+
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
+        public int Month { get; }
+
+        public bool[] Months { get; init; } = new List<bool>().ToArray();
+    }
+
     public class Validator : Create.Validator;
 
     public class Handler(HomeEconomicsDbContext dbContext) : ICommandHandler<Command>
     {
-        public async Task HandleAsync(Command request, CancellationToken cancellationToken = default)
+        public async Task HandleAsync(Command request, CancellationToken cancellationToken)
         {
             var movement =
                 await dbContext.GetMovementAsync(m => m.Id == request.Id,

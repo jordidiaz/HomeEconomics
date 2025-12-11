@@ -89,6 +89,7 @@ csharp_style_conditional_delegate_call = true:error
 
 # Modifier preferences
 csharp_prefer_static_local_function = true:error
+csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
 
 # Code-block preferences
 csharp_prefer_braces = true:error
@@ -114,8 +115,8 @@ csharp_using_directive_placement = outside_namespace:error
 csharp_new_line_before_catch =true
 csharp_new_line_before_else =true
 csharp_new_line_before_finally =true
-csharp_new_line_before_members_in_anonymous_types = false
-csharp_new_line_before_members_in_object_initializers = false
+csharp_new_line_before_members_in_anonymous_types = false,
+csharp_new_line_before_members_in_object_initializers = false,
 csharp_new_line_before_open_brace = all
 csharp_new_line_between_query_expression_clauses = true
 
@@ -196,3 +197,86 @@ dotnet_naming_style.begins_with_i.required_prefix = I
 dotnet_naming_style.begins_with_i.required_suffix = 
 dotnet_naming_style.begins_with_i.word_separator = 
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
+
+# StyleCop.Analyzers
+
+# SA0001: XML comment analysis is disabled due to project configuration
+dotnet_diagnostic.SA0001.severity = none
+
+# SA1101: Prefix local calls with this
+dotnet_diagnostic.SA1101.severity = none
+
+# SA1309: Field names should not begin with underscore
+dotnet_diagnostic.SA1309.severity = none
+
+# SA1413: Use trailing comma in multi-line initializers
+dotnet_diagnostic.SA1413.severity = none
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none
+
+# SA1649: File name should match first type name
+dotnet_diagnostic.SA1649.severity = none
+
+# SonarAnalyzers.CSharp
+
+# S1121: Assignments should not be made from within sub-expressions
+dotnet_diagnostic.S1121.severity = none
+
+# NET.CodeAnalyzers
+
+# CA1000: Do not declare static members on generic types
+dotnet_diagnostic.CA1000.severity = none
+
+# CA1014: Mark assemblies with CLSCompliantAttribute
+dotnet_diagnostic.CA1014.severity = none
+
+# CA1030: Use events where appropriate
+dotnet_diagnostic.CA1030.severity = none
+
+# CA1031: Do not catch general exception types
+dotnet_diagnostic.CA1031.severity = none
+
+# CA1040: Avoid empty interfaces
+dotnet_diagnostic.CA1040.severity = none
+
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = none
+
+# CA1711: Identifiers should not have incorrect suffix
+dotnet_diagnostic.CA1711.severity = none
+
+# CA1716: Identifiers should not match keywords
+dotnet_diagnostic.CA1716.severity = none
+
+# CA1724: Type names should not match namespaces
+dotnet_diagnostic.CA1724.severity = none
+
+# CA2326: Avoid uninstantiated internal classes
+dotnet_diagnostic.CA1812.severity = none
+
+# CA1819: Properties should not return arrays
+dotnet_diagnostic.CA1819.severity = none
+
+# CA1848: Use the LoggerMessage delegates
+dotnet_diagnostic.CA1848.severity = none
+
+# CA2007: Consider calling ConfigureAwait on the awaited task
+dotnet_diagnostic.CA2007.severity = none
+
+# CA2225: Operator overloads have named alternates
+dotnet_diagnostic.CA2225.severity = none
+
+# CA2326: Do not use TypeNameHandling values other than None
+dotnet_diagnostic.CA2326.severity = none
+
+# CA2327: Do not use insecure JsonSerializerSettings
+dotnet_diagnostic.CA2327.severity = none
+
+# Visual Studio.Analyzers
+
+# IDE0046: Convert to conditional expression
+dotnet_diagnostic.IDE0046.severity = none

@@ -12,7 +12,6 @@ public class CreateTests
 {
     public class CommandValidatorTests
     {
-        private readonly Create.Frequency _emptyFrequency = new(FrequencyType.Monthly, 0, []);
         private readonly Create.Validator _sut = new();
 
         private const string Name = nameof(Name);
@@ -24,28 +23,28 @@ public class CreateTests
         [InlineData("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")]
         public void Should_Have_Error_If_Name_Invalid(string name)
         {
-            var result = _sut.TestValidate(new Create.Command(name, Amount, Type, _emptyFrequency));
+            var result = _sut.TestValidate(new Create.Command(name, Amount, Type, new Create.Frequency()));
             result.IsValid.Should().BeFalse();
         }
 
         [Fact]
         public void Should_Have_Error_If_Amount_Invalid()
         {
-            var result = _sut.TestValidate(new Create.Command(Name, -1, Type, _emptyFrequency));
+            var result = _sut.TestValidate(new Create.Command(Name, -1, Type, new Create.Frequency()));
             result.IsValid.Should().BeFalse();
         }
 
         [Fact]
         public void Should_Have_Error_If_Type_Invalid()
         {
-            var result = _sut.TestValidate(new Create.Command(Name, Amount, (MovementType)4, _emptyFrequency));
+            var result = _sut.TestValidate(new Create.Command(Name, Amount, (MovementType)4, new Create.Frequency()));
             result.IsValid.Should().BeFalse();
         }
         
         [Fact]
         public void Should_Not_Have_Error_If_All_Valid()
         {
-            var result = _sut.TestValidate(new Create.Command(Name, Amount, Type, _emptyFrequency));
+            var result = _sut.TestValidate(new Create.Command(Name, Amount, Type, new Create.Frequency()));
             result.IsValid.Should().BeTrue();
         }
     }
@@ -57,7 +56,10 @@ public class CreateTests
         [Fact]
         public void Should_Have_Error_If_Type_Invalid()
         {
-            var result = _sut.TestValidate(new Create.Frequency((FrequencyType)5, 0, []));
+            var result = _sut.TestValidate(new Create.Frequency
+            {
+                Type = (FrequencyType)5
+            });
             result.IsValid.Should().BeFalse();
         }
 
@@ -66,7 +68,11 @@ public class CreateTests
         [InlineData(13)]
         public void Should_Have_Error_If_Month_Invalid(int month)
         {
-            var frequency = new Create.Frequency(FrequencyType.Yearly, month, []);
+            var frequency = new Create.Frequency
+            {
+                Type = FrequencyType.Yearly,
+                Month = month
+            };
             var result = _sut.TestValidate(frequency);
             result.IsValid.Should().BeFalse();
         }
@@ -74,12 +80,19 @@ public class CreateTests
         [Fact]
         public void Should_Have_Error_If_Months_Invalid()
         {
-            var frequency1 = new Create.Frequency(FrequencyType.Custom, 0, [true, false]);
+            var frequency1 = new Create.Frequency
+            {
+                Type = FrequencyType.Custom,
+                Months = [true, false]
+            };
             var result = _sut.TestValidate(frequency1);
             result.IsValid.Should().BeFalse();
-
-            var frequency2 = new Create.Frequency(FrequencyType.Custom, 0,
-                [true, false, false, false, false, false, false, false, false, false, false, false]);
+        
+            var frequency2 = new Create.Frequency
+            {
+                Type = FrequencyType.Custom,
+                Months = [true, false, false, false, false, false, false, false, false, false, false, false]
+            }; 
             result = _sut.TestValidate(frequency2);
             result.IsValid.Should().BeFalse();
         }
@@ -87,8 +100,11 @@ public class CreateTests
         [Fact]
         public void Should_Not_Have_Error_If_All_Valid()
         {
-            var frequency = new Create.Frequency(FrequencyType.Custom, 0,
-                [true, true, false, false, false, false, false, false, false, false, false, false]);
+            var frequency = new Create.Frequency
+            {
+                Type = FrequencyType.Custom,
+                Months = [true, true, false, false, false, false, false, false, false, false, false, false]
+            }; 
             var result = _sut.TestValidate(frequency);
             result.IsValid.Should().BeTrue();
         }

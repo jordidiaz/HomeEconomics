@@ -22,6 +22,6 @@ public class IndexTests(Fixture fixture) : IntegrationTestBase(fixture)
 
     public class Handler : IQueryHandler<Index.Query, Index.Result>
     {
-        public Task<Index.Result> HandleAsync(Index.Query request, CancellationToken cancellationToken = default) => Task.FromResult(new Index.Result([]));
+        public Task<Index.Result> HandleAsync(Index.Query request, CancellationToken cancellationToken) => Task.FromResult(new Index.Result());
     }
 }

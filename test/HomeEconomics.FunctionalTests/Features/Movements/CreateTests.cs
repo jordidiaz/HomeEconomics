@@ -12,7 +12,14 @@ public class CreateTests : FunctionalTestBase
     [Fact]
     public async Task Should_Create_A_New_Movement()
     {
-        var movementId = await Fixture.SendCommandToMediatorAsync(new Create.Command("Gasolina", 60m, MovementType.Expense, new Create.Frequency(FrequencyType.Monthly, 0, [])));
+        var movementId = await Fixture.SendCommandToMediatorAsync(new Create.Command(
+            "Gasolina",
+            60m,
+            MovementType.Expense,
+            new Create.Frequency
+            {
+                Type = FrequencyType.Monthly
+            }));
 
         var movement = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
         {
@@ -41,7 +48,10 @@ public class CreateTests : FunctionalTestBase
             "Gasolina",
             60m,
             MovementType.Expense,
-            new Create.Frequency(FrequencyType.Monthly, 0, [])));
+            new Create.Frequency
+            {
+                Type = FrequencyType.Monthly
+            }));
 
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.ExpenseExists);
     }

@@ -81,6 +81,11 @@ public class MovementMonth : Entity, IAggregateRoot
     private MonthMovement GetMonthMovementOrThrow(int monthMovementId)
     {
         var monthMovement = GetMonthMovement(monthMovementId);
-        return monthMovement ?? throw new InvalidOperationException(Properties.Messages.MonthMovementNotExists);
+        if (monthMovement is null)
+        {
+            throw new InvalidOperationException(Properties.Messages.MonthMovementNotExists);
+        }
+
+        return monthMovement;
     }
 }

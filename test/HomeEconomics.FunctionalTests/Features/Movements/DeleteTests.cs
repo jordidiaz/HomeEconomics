@@ -12,7 +12,14 @@ public class DeleteTests : FunctionalTestBase
     [Fact]
     public async Task Should_Delete_A_Movement()
     {
-        var movementId = await Fixture.SendCommandToMediatorAsync(new Create.Command("Gasolina", 60m, MovementType.Expense, new Create.Frequency(FrequencyType.Monthly, 0, [])));
+        var movementId = await Fixture.SendCommandToMediatorAsync(new Create.Command(
+            "Gasolina",
+            60m,
+            MovementType.Expense,
+            new Create.Frequency
+            {
+                Type = FrequencyType.Monthly
+            }));
 
         var movement = await Fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
         {

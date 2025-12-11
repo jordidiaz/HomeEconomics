@@ -18,7 +18,7 @@ public class Delete
 
     public class Handler(HomeEconomicsDbContext dbContext) : ICommandHandler<Command>
     {
-        public async Task HandleAsync(Command request, CancellationToken cancellationToken = default)
+        public async Task HandleAsync(Command request, CancellationToken cancellationToken)
         {
             var movement =
                 await dbContext.GetMovementAsync(m => m.Id == request.Id, cancellationToken: cancellationToken);

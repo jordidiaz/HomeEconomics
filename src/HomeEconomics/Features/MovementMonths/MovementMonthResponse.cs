@@ -44,7 +44,7 @@ public record MovementMonthResponse
     public static MovementMonthResponse FromMovementMonth(MovementMonth movementMonth)
     {
         var statuses = movementMonth.GetStatuses().ToArray();
-        var status = statuses.Length != 0 ? statuses.OrderByDescending(status => status.Day).First() : null;
+        var status = statuses.Any() ? statuses.OrderByDescending(status => status.Day).First() : null;
         var accountAmount = status?.AccountAmount ?? 0;
         var cashAmount = status?.CashAmount ?? 0;
 
