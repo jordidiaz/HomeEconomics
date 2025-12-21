@@ -1,29 +1,28 @@
-﻿using Persistence;
-using Serilog;
+﻿using System.Diagnostics.CodeAnalysis;
+using Hellang.Middleware.ProblemDetails;
 
-namespace HomeEconomics;
+var builder = WebApplication.CreateBuilder(args);
 
-public static class Program
-{
-    public static async Task Main(string[] args)
-    {
-        var host = CreateHostBuilder(args).Build();
-        host.InitializeDbContext<HomeEconomicsDbContext>();
-        await host.RunAsync();
-    }
+builder.Services
+    .AddHomeEconomicsApi()
+    .AddHomeEconomicsServices()
+    .AddIf(builder.Environment.IsDevelopment(), sc => sc.AddCors())
+    .AddHomeEconomicsMediator()
+    .AddHomeEconomicsPersistence(builder.Configuration, builder.Environment.IsDevelopment())
+    .AddHomeEconomicsSwagger()
+    .AddHomeEconomicsHealthChecks(builder.Configuration);
 
-    private static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .UseSerilog(ConfigureSerilog())
-            .ConfigureWebHostDefaults(webHostBuilder =>
-            {
-                webHostBuilder.UseStartup<Startup>();
-            });
+var app = builder.Build();
 
-    private static Action<HostBuilderContext, LoggerConfiguration> ConfigureSerilog() =>
-        (webHostBuilderContext, loggerConfiguration) =>
-        {
-            loggerConfiguration
-                .ReadFrom.Configuration(webHostBuilderContext.Configuration);
-        };
-}
+app
+    .UseHomeEconomicsSpa()
+    .UseRouting()
+    .UseIf(app.Environment.IsDevelopment(), ab => ab.UseHomeEconomicsCors())
+    .UseHomeEconomicsSwagger()
+    .UseProblemDetails()
+    .UseHomeEconomicsEndpoints();
+
+await app.RunAsync();
+
+// Don't remove this class, it's needed for the integration tests project to reference the HomeEconomics assembly.
+public partial class Program { }

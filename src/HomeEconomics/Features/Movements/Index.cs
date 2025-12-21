@@ -19,15 +19,15 @@ public class Index
             // ReSharper disable once UnusedAutoPropertyAccessor.Global
             public int Id { get; init; }
 
-            public string Name { get; private init; } = string.Empty;
+            public string Name { get; init; } = string.Empty;
 
-            public decimal Amount { get; private init; }
+            public decimal Amount { get; init; }
 
-            public int Type { get; private init; }
+            public int Type { get; init; }
 
-            public int FrequencyType { get; private init; }
+            public int FrequencyType { get; init; }
 
-            public bool[] FrequencyMonths { get; private init; } = new bool[12];
+            public bool[] FrequencyMonths { get; init; } = new bool[12];
 
             // ReSharper disable once UnusedAutoPropertyAccessor.Global
             public int FrequencyMonth { get; init; }
@@ -51,7 +51,7 @@ public class Index
     [UsedImplicitly]
     public class Handler(HomeEconomicsDbContext dbContext) : IQueryHandler<Query, Result>
     {
-        public Task<Result> HandleAsync(Query request, CancellationToken cancellationToken)
+        public Task<Result> HandleAsync(Query request, CancellationToken cancellationToken = default)
         {
             var movements = dbContext.GetMovements()
                 .OrderBy(m => m.Name);

@@ -3,49 +3,73 @@ using FluentAssertions;
 using HomeEconomics.Features.MovementMonths;
 using HomeEconomics.IntegrationTests.Infrastructure;
 using System.Net;
-using LiteBus.Commands.Abstractions;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.MovementMonths;
 
-public class AddStatusTests(Fixture fixture) : IntegrationTestBase(fixture)
+public class AddStatusTests: IntegrationTestBase
 {
-    private const string Uri = "api/movement-months/1/add-status";
-
-    private AddStatus.Command _command = new(
-        DateTime.Now.Year,
-        Month.Jan,
-        900,
-        50);
-
-    [Fact]
-    public async Task Should_Return_200_Ok()
+    // ReSharper disable once ConvertToPrimaryConstructor
+    public AddStatusTests(Fixture fixture) : base(fixture)
     {
+        
+    }
+    
+    [Fact]
+    public async Task Should_Return_200_OkAnd_Add_Status()
+    {
+        await CreateMovementsAsync();
+
+        var movementMonth = await CreateMovementMonthAsync();
+
+        var command = new AddStatus.Command(
+            movementMonth!.Year,
+            (Month)movementMonth.Month,
+            1000,
+            50);
 
         var response = await HttpClient
-            .PostAsync(Uri, _command);
+            .PostAsync($"api/movement-months/{movementMonth.Id}/add-status", command);
 
         response.EnsureSuccessStatusCode();
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+        
+        var result = await response.Content.ReadFromJsonAsync<MovementMonthResponse>();
+        
+        result!.Status.AccountAmount.Should().Be(1000);
+        result.Status.CashAmount.Should().Be(50);
+        result.Status.PendingTotalExpenses.Should().Be(120.00m);
+        result.Status.PendingTotalIncomes.Should().Be(70.00m);
+    }
+
+    [Fact]
+    public async Task Should_Return_409_Conflict_If_MovementMonth_Not_Exists()
+    {
+        var command = new AddStatus.Command(
+            2025,
+            Month.Apr,
+            1000,
+            50);
+        
+        var response = await HttpClient
+            .PostAsync($"api/movement-months/1/add-status", command);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
     }
 
     [Fact]
     public async Task Should_Return_400_BadRequest()
     {
-        _command = new AddStatus.Command(
+        var command = new AddStatus.Command(
             DateTime.Now.Year - 1,
             0,
             900,
             50);
 
         var response = await HttpClient
-            .PostAsync(Uri, _command);
+            .PostAsync("api/movement-months/1/add-status", command);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
-
-    public class Handler : ICommandHandler<AddStatus.Command, MovementMonthResponse>
-    {
-        public Task<MovementMonthResponse> HandleAsync(AddStatus.Command request, CancellationToken cancellationToken) => Task.FromResult(new MovementMonthResponse());
-    }
+    
 }

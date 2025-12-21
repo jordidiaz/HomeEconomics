@@ -55,7 +55,7 @@ public class Create
     [UsedImplicitly]
     public class Handler(HomeEconomicsDbContext dbContext) : ICommandHandler<Command, int>
     {
-        public async Task<int> HandleAsync(Command request, CancellationToken cancellationToken)
+        public async Task<int> HandleAsync(Command request, CancellationToken cancellationToken = default)
         {
             var movement = await dbContext.GetMovementAsync(m => m.Name == request.Name,
                 cancellationToken: cancellationToken);

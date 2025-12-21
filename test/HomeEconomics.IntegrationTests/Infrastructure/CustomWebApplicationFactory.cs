@@ -1,20 +1,5 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
+﻿using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace HomeEconomics.IntegrationTests.Infrastructure;
 
-public class CustomWebApplicationFactory<TStartup>
-    : WebApplicationFactory<TStartup> where TStartup : class
-{
-    protected override IWebHostBuilder CreateWebHostBuilder() =>
-        WebHost.CreateDefaultBuilder()
-            .UseStartup<TStartup>();
-
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        builder
-            .UseSolutionRelativeContentRoot(Directory.GetCurrentDirectory());
-        base.ConfigureWebHost(builder);
-    }
-}
+public class CustomWebApplicationFactory : WebApplicationFactory<Program>;

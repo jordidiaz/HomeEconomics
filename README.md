@@ -12,14 +12,14 @@ A personal finance management application built with .NET 9 and React TypeScript
 
 ## Technology Stack
 
-- **Backend**: .NET 9 ASP.NET Core Web API
+- **Backend**: .NET 10 ASP.NET Core Web API
 - **Frontend**: React 16.13.1 with TypeScript
 - **Database**: PostgreSQL with Entity Framework Core
 - **Architecture**: Clean Architecture with CQRS powered by LiteBus
 
 ## Prerequisites
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [Node.js 14+](https://nodejs.org/)
 - [PostgreSQL](https://www.postgresql.org/) (or Docker for development)
 
@@ -45,14 +45,6 @@ docker-compose -f docker-compose.development.yaml up -d
 This provides:
 - PostgreSQL database on port 5432
 - Adminer database admin interface on port 8080
-
-#### Option B: Local PostgreSQL
-
-Install PostgreSQL locally and create a database, then set the connection string environment variable:
-
-```bash
-export HOMEECONOMICS_CONNECTION_STRING="Host=localhost;Database=homeeconomics;Username=your_user;Password=your_password"
-```
 
 ### 3. Backend Development
 
@@ -170,7 +162,6 @@ HomeEconomics/
 │   ├── Domain.UnitTests/         # Domain layer unit tests
 │   ├── HomeEconomics.UnitTests/  # Application unit tests
 │   ├── HomeEconomics.IntegrationTests/ # API integration tests
-│   └── HomeEconomics.FunctionalTests/  # End-to-end functional tests
 ├── Directory.Build.props         # Global MSBuild properties
 ├── HomeEconomics.sln            # Solution file
 ├── docker-compose.yaml          # Production Docker setup

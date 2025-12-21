@@ -7,7 +7,7 @@ using LiteBus.Commands;
 using LiteBus.Extensions.Microsoft.DependencyInjection;
 using LiteBus.Queries;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
@@ -37,7 +37,8 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddHomeEconomicsMediator(this IServiceCollection services) =>
+    public static IServiceCollection AddHomeEconomicsMediator(
+        this IServiceCollection services) =>
         services
             .AddLiteBus(liteBus =>
             {

@@ -3,39 +3,107 @@ using FluentAssertions;
 using HomeEconomics.Features.Movements;
 using HomeEconomics.IntegrationTests.Infrastructure;
 using System.Net;
-using LiteBus.Commands.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace HomeEconomics.IntegrationTests.Features.Movements;
 
-public class EditTest(Fixture fixture) : IntegrationTestBase(fixture)
+public class EditTest : IntegrationTestBase
 {
-    private readonly Edit.Command _command = new()
-    {
-        Id = 42,
-        Name = "EPSV",
-        Amount = 50m,
-        Type = MovementType.Expense,
-        Frequency = new Edit.Frequency
-        {
-            Type = FrequencyType.Monthly
-        }
-    };
-
-    private const string Uri = "api/movements/42";
+    private readonly Fixture _fixture;
+    
+    // ReSharper disable once ConvertToPrimaryConstructor
+    public EditTest(Fixture fixture) : base(fixture) => _fixture = fixture;
 
     [Fact]
-    public async Task Should_Return_204_NoContent()
+    public async Task Should_Return_204_NoContent_Edit_The_Movement()
     {
+        var movementId = await _fixture.SendCommandToMediatorAsync(new Create.Command(
+            "Gasolina",
+            60m,
+            MovementType.Expense,
+            new Create.Frequency
+            {
+                Type = FrequencyType.Monthly
+            }));
+
+        var command = new Edit.Command
+        {
+            Id = movementId,
+            Name = "EPSV",
+            Amount = 50m,
+            Type = MovementType.Income,
+            Frequency = new Edit.Frequency
+            {
+                Type = FrequencyType.Custom,
+                Months =
+                [
+                    true,
+                    false,
+                    true,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            }
+        };
+        
         var response = await HttpClient
-            .PutAsync(Uri, _command);
+            .PutAsync($"api/movements/{movementId}", command);
 
         response.EnsureSuccessStatusCode();
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
-    }
 
-    public class Handler : ICommandHandler<Edit.Command>
+        var movement = await _fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
+        {
+            return await homeEconomicsDbContext
+                .Movements
+                .Include(m => m.Frequency)
+                .SingleOrDefaultAsync(m => m.Id == movementId);
+        });
+
+        movement!.Id.Should().Be(movementId);
+        movement.Name.Should().Be("EPSV");
+        movement.Amount.Should().Be(50m);
+        movement.Type.Should().Be(MovementType.Income);
+        movement.Frequency.Type.Should().Be(FrequencyType.Custom);
+        movement.Frequency.Months.SequenceEqual([
+            true,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ]).Should().BeTrue();
+    }
+    
+    [Fact]
+    public async Task Should_Throw_InvalidOperationException_If_Movement_Not_Exists()
     {
-        public Task HandleAsync(Edit.Command request, CancellationToken cancellationToken) => Task.FromResult(Task.CompletedTask);
+        var action = async () => await _fixture.SendCommandToMediatorAsync(new Edit.Command
+        {
+            Id = 42,
+            Name = "Gasolina",
+            Amount = 60m,
+            Type = MovementType.Expense,
+            Frequency = new Edit.Frequency
+            {
+                Type = FrequencyType.Monthly
+            }
+        });
+
+        await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementNotExists);
     }
 }

@@ -15,7 +15,6 @@ COPY ["src/HomeEconomics/HomeEconomics.csproj", "src/HomeEconomics/"]
 COPY ["src/Domain/Domain.csproj", "src/Domain/"]
 COPY ["src/Persistence/Persistence.csproj", "src/Persistence/"]
 COPY ["test/Domain.UnitTests/Domain.UnitTests.csproj", "test/Domain.UnitTests/"]
-COPY ["test/HomeEconomics.FunctionalTests/HomeEconomics.FunctionalTests.csproj", "test/HomeEconomics.FunctionalTests/"]
 COPY ["test/HomeEconomics.IntegrationTests/HomeEconomics.IntegrationTests.csproj", "test/HomeEconomics.IntegrationTests/"]
 COPY ["test/HomeEconomics.UnitTests/HomeEconomics.UnitTests.csproj", "test/HomeEconomics.UnitTests/"]
 RUN dotnet restore
