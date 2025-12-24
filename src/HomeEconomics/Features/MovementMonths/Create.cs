@@ -28,7 +28,7 @@ public class Create
     public class Handler(HomeEconomicsDbContext dbContext, IMovementMonthResponseService movementMonthResponseService)
         : ICommandHandler<Command, MovementMonthResponse?>
     {
-        public async Task<MovementMonthResponse?> HandleAsync(Command request, CancellationToken cancellationToken)
+        public async Task<MovementMonthResponse?> HandleAsync(Command request, CancellationToken cancellationToken = default)
         {
             var movementMonth = await dbContext.GetMovementMonthAsync(
                 mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);

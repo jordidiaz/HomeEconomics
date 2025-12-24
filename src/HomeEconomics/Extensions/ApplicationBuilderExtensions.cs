@@ -8,39 +8,42 @@ public static class ApplicationBuilderExtensions
     private const string SelfName = "self";
     private const string Npgsql = "npgsql";
 
-    internal static IApplicationBuilder UseHomeEconomicsSwagger(this IApplicationBuilder appBuilder) =>
-        appBuilder
-            .UseSwagger()
-            .UseSwaggerUI(swaggerUiOptions =>
+    extension(IApplicationBuilder appBuilder)
+    {
+        internal IApplicationBuilder UseHomeEconomicsSwagger() =>
+            appBuilder
+                .UseSwagger()
+                .UseSwaggerUI(swaggerUiOptions =>
+                {
+                    swaggerUiOptions.SwaggerEndpoint("/swagger/hm/swagger.json", "HomeEconomics API");
+                });
+
+        internal IApplicationBuilder UseHomeEconomicsSpa() =>
+            appBuilder
+                .UseFileServer();
+
+        internal IApplicationBuilder UseHomeEconomicsCors() =>
+            appBuilder.UseCors(corsPolicyBuilder =>
+                corsPolicyBuilder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+            );
+
+        internal IApplicationBuilder UseHomeEconomicsEndpoints() =>
+            appBuilder.UseEndpoints(endpointRouteBuilder =>
             {
-                swaggerUiOptions.SwaggerEndpoint("/swagger/hm/swagger.json", "HomeEconomics API");
+                endpointRouteBuilder.MapControllers();
+                endpointRouteBuilder.MapHealthChecks("/self", new HealthCheckOptions
+                {
+                    Predicate = registration => registration.Name == SelfName,
+                });
+                endpointRouteBuilder.MapHealthChecks("/npgsql", new HealthCheckOptions
+                {
+                    Predicate = registration => registration.Name == Npgsql,
+                });
             });
 
-    internal static IApplicationBuilder UseHomeEconomicsSpa(this IApplicationBuilder appBuilder) =>
-        appBuilder
-            .UseFileServer();
-
-    internal static IApplicationBuilder UseHomeEconomicsCors(this IApplicationBuilder appBuilder) =>
-        appBuilder.UseCors(corsPolicyBuilder =>
-            corsPolicyBuilder
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-        );
-
-    internal static IApplicationBuilder UseHomeEconomicsEndpoints(this IApplicationBuilder appBuilder) =>
-        appBuilder.UseEndpoints(endpointRouteBuilder =>
-        {
-            endpointRouteBuilder.MapControllers();
-            endpointRouteBuilder.MapHealthChecks("/self", new HealthCheckOptions
-            {
-                Predicate = registration => registration.Name == SelfName,
-            });
-            endpointRouteBuilder.MapHealthChecks("/npgsql", new HealthCheckOptions
-            {
-                Predicate = registration => registration.Name == Npgsql,
-            });
-        });
-
-    internal static IApplicationBuilder UseIf(this IApplicationBuilder appBuilder, bool condition, Func<IApplicationBuilder, IApplicationBuilder> action) => condition ? action(appBuilder) : appBuilder;
+        internal IApplicationBuilder UseIf(bool condition, Func<IApplicationBuilder, IApplicationBuilder> action) => condition ? action(appBuilder) : appBuilder;
+    }
 }

@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 using LiteBus.Queries.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -14,6 +15,7 @@ public class Index
     {
         public Movement[] Movements { get; init; } = [];
 
+        [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
         public record Movement
         {
             // ReSharper disable once UnusedAutoPropertyAccessor.Global

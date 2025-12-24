@@ -16,61 +16,63 @@ public static class ServiceCollectionExtensions
 {
     private const string SelfName = "self";
 
-    public static IServiceCollection AddHomeEconomicsApi(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        services
-            .AddProblemDetails(problemDetailsOptions =>
-            {
-                problemDetailsOptions.Map<InvalidOperationException>(_ =>
-                    new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
-            })
-            .AddMvcCore()
-            .AddApiExplorer();
+        public IServiceCollection AddHomeEconomicsApi()
+        {
+            services
+                .AddProblemDetails(problemDetailsOptions =>
+                {
+                    problemDetailsOptions.Map<InvalidOperationException>(_ =>
+                        new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
+                })
+                .AddMvcCore()
+                .AddApiExplorer();
 
-        services
-            .AddFluentValidationAutoValidation(configuration =>
-            {
-                configuration.DisableDataAnnotationsValidation = true;
-            })
-            .AddValidatorsFromAssemblyContaining<HomeEconomicsApp>();
+            services
+                .AddFluentValidationAutoValidation(configuration =>
+                {
+                    configuration.DisableDataAnnotationsValidation = true;
+                })
+                .AddValidatorsFromAssemblyContaining<HomeEconomicsApp>();
             
-        return services;
+            return services;
+        }
+
+        public IServiceCollection AddHomeEconomicsMediator() =>
+            services
+                .AddLiteBus(liteBus =>
+                {
+                    var appAssembly = typeof(Program).Assembly;
+
+                    liteBus.AddCommandModule(module => module.RegisterFromAssembly(appAssembly));
+                    liteBus.AddQueryModule(module => module.RegisterFromAssembly(appAssembly));
+                });
+
+        public IServiceCollection AddHomeEconomicsServices() =>
+            services
+                .AddTransient<IMovementMonthResponseService, MovementMonthResponseService>();
+
+        internal IServiceCollection AddHomeEconomicsSwagger() =>
+            services
+                .AddSwaggerGen(swaggerGenOptions =>
+                {
+                    swaggerGenOptions.SwaggerDoc("hm", new OpenApiInfo { Title = "HomeEconomics API" });
+                    swaggerGenOptions.CustomSchemaIds(type => type.FullName);
+                });
+
+        internal IServiceCollection AddHomeEconomicsHealthChecks(IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("HomeEconomics");
+
+            services
+                .AddHealthChecks()
+                .AddCheck(name: SelfName, timeout: TimeSpan.FromSeconds(30), check: () => HealthCheckResult.Healthy())
+                .AddNpgSql(connectionString!);
+
+            return services;
+        }
+
+        internal IServiceCollection AddIf(bool condition, Func<IServiceCollection, IServiceCollection> action) => condition ? action(services) : services;
     }
-
-    public static IServiceCollection AddHomeEconomicsMediator(
-        this IServiceCollection services) =>
-        services
-            .AddLiteBus(liteBus =>
-            {
-                var appAssembly = typeof(Program).Assembly;
-
-                liteBus.AddCommandModule(module => module.RegisterFromAssembly(appAssembly));
-                liteBus.AddQueryModule(module => module.RegisterFromAssembly(appAssembly));
-            });
-
-    public static IServiceCollection AddHomeEconomicsServices(this IServiceCollection services) =>
-        services
-            .AddTransient<IMovementMonthResponseService, MovementMonthResponseService>();
-
-    internal static IServiceCollection AddHomeEconomicsSwagger(this IServiceCollection services) =>
-        services
-            .AddSwaggerGen(swaggerGenOptions =>
-            {
-                swaggerGenOptions.SwaggerDoc("hm", new OpenApiInfo { Title = "HomeEconomics API" });
-                swaggerGenOptions.CustomSchemaIds(type => type.FullName);
-            });
-
-    internal static IServiceCollection AddHomeEconomicsHealthChecks(this IServiceCollection services, IConfiguration configuration)
-    {
-        var connectionString = configuration.GetConnectionString("HomeEconomics");
-
-        services
-            .AddHealthChecks()
-            .AddCheck(name: SelfName, timeout: TimeSpan.FromSeconds(30), check: () => HealthCheckResult.Healthy())
-            .AddNpgSql(connectionString!);
-
-        return services;
-    }
-
-    internal static IServiceCollection AddIf(this IServiceCollection services, bool condition, Func<IServiceCollection, IServiceCollection> action) => condition ? action(services) : services;
 }

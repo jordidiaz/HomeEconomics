@@ -8,19 +8,18 @@ namespace Microsoft.EntityFrameworkCore;
 
 public static class HomeEconomicsDbContextExtensions
 {
-    public static async Task<MovementMonth?> GetMovementMonthAsync(
-        this HomeEconomicsDbContext dbContext, 
-        Expression<Func<MovementMonth, bool>> predicate,
-        CancellationToken cancellationToken) =>
-        await GetAsync(dbContext, predicate, cancellationToken, "_monthMovements", "_statuses");
+    extension(HomeEconomicsDbContext dbContext)
+    {
+        public async Task<MovementMonth?> GetMovementMonthAsync(Expression<Func<MovementMonth, bool>> predicate,
+            CancellationToken cancellationToken) =>
+            await GetAsync(dbContext, predicate, cancellationToken, "_monthMovements", "_statuses");
 
-    public static async Task<Movement?> GetMovementAsync(
-        this HomeEconomicsDbContext dbContext, 
-        Expression<Func<Movement, bool>> predicate,
-        CancellationToken cancellationToken) =>
-        await GetAsync(dbContext, predicate, cancellationToken, "Frequency");
+        public async Task<Movement?> GetMovementAsync(Expression<Func<Movement, bool>> predicate,
+            CancellationToken cancellationToken) =>
+            await GetAsync(dbContext, predicate, cancellationToken, "Frequency");
 
-    public static IEnumerable<Movement> GetMovements(this HomeEconomicsDbContext dbContext) => GetCollection<Movement>(dbContext, "Frequency");
+        public IEnumerable<Movement> GetMovements() => GetCollection<Movement>(dbContext, "Frequency");
+    }
 
     private static async Task<T?> GetAsync<T>(
         DbContext dbContext, 
