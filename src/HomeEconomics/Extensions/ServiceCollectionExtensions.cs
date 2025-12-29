@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using FluentValidation.AspNetCore;
 using Hellang.Middleware.ProblemDetails;
 using HomeEconomics;
+using HomeEconomics.Filters;
 using HomeEconomics.Services;
 using LiteBus.Commands;
 using LiteBus.Extensions.Microsoft.DependencyInjection;
@@ -23,17 +23,15 @@ public static class ServiceCollectionExtensions
             services
                 .AddProblemDetails(problemDetailsOptions =>
                 {
-                    problemDetailsOptions.Map<InvalidOperationException>(_ =>
-                        new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
+                    problemDetailsOptions.Map<InvalidOperationException>(_ => new StatusCodeProblemDetails(StatusCodes.Status409Conflict));
                 })
-                .AddMvcCore()
+                .AddMvcCore(options =>
+                {
+                    options.Filters.Add<ValidateModelAttribute>();
+                })
                 .AddApiExplorer();
 
             services
-                .AddFluentValidationAutoValidation(configuration =>
-                {
-                    configuration.DisableDataAnnotationsValidation = true;
-                })
                 .AddValidatorsFromAssemblyContaining<HomeEconomicsApp>();
             
             return services;

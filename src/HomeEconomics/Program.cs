@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Hellang.Middleware.ProblemDetails;
+﻿using Hellang.Middleware.ProblemDetails;
 
 var builder = WebApplication.CreateBuilder(args);
 

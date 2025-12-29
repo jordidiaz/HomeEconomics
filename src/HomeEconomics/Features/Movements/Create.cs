@@ -26,7 +26,7 @@ public class Create
     {
         public Validator()
         {
-            RuleFor(command => command.Name).NotNull().NotEmpty().MaximumLength(Movement.MovementNameMaxLength);
+            RuleFor(command => command.Name).NotEmpty().MaximumLength(Movement.MovementNameMaxLength);
             RuleFor(command => command.Amount).GreaterThanOrEqualTo(Movement.MinAmount);
             RuleFor(command => command.Type).Must(Enums.IsAValidEnumValue);
             RuleFor(command => command.Frequency).SetValidator(new FrequencyValidator());
