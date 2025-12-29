@@ -6,7 +6,7 @@ using Persistence;
 namespace HomeEconomics.IntegrationTests.Infrastructure;
 
 [UsedImplicitly]
-public sealed class Fixture : IDisposable
+public sealed class Fixture : IDisposable, IAsyncDisposable
 {
     private CustomWebApplicationFactory Factory { get; }
     private IServiceProvider ServiceProvider => Factory.Services;
@@ -17,14 +17,12 @@ public sealed class Fixture : IDisposable
     {
         Factory = new CustomWebApplicationFactory();
         HttpClient = Factory.CreateClient();
-        ConnectionString = ServiceProvider.GetRequiredService<IConfiguration>().GetConnectionString("HomeEconomics")!;
+        ConnectionString = PostgreSqlContainerManager.Instance.GetConnectionString();
         
         DeleteDatabase();
         MigrateDatabase();
     }
     
-    public async Task<T> QueryDbContextAsync<T>(Func<HomeEconomicsDbContext, Task<T>> query) => await ExecuteDbContextAsync(query);
-
     public void Dispose()
     {
         HttpClient.Dispose();
@@ -56,6 +54,8 @@ public sealed class Fixture : IDisposable
             return dbContext.SaveChangesAsync();
         });
     
+    public async Task<T> QueryDbContextAsync<T>(Func<HomeEconomicsDbContext, Task<T>> query) => await ExecuteDbContextAsync(query);
+    
     private void DeleteDatabase()
     {
         using var scope = ServiceProvider.CreateScope();
@@ -76,4 +76,6 @@ public sealed class Fixture : IDisposable
         var dbContext = scope.ServiceProvider.GetService<HomeEconomicsDbContext>();
         return await action(dbContext!);
     }
+
+    public async ValueTask DisposeAsync() => await PostgreSqlContainerManager.Instance.DisposeAsync();
 }

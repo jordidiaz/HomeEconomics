@@ -59,14 +59,17 @@ public static class ServiceCollectionExtensions
                     swaggerGenOptions.CustomSchemaIds(type => type.FullName);
                 });
 
-        internal IServiceCollection AddHomeEconomicsHealthChecks(IConfiguration configuration)
+        public IServiceCollection AddHomeEconomicsHealthChecks(string connectionString)
         {
-            var connectionString = configuration.GetConnectionString("HomeEconomics");
-
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                return services;
+            }
+            
             services
                 .AddHealthChecks()
                 .AddCheck(name: SelfName, timeout: TimeSpan.FromSeconds(30), check: () => HealthCheckResult.Healthy())
-                .AddNpgSql(connectionString!);
+                .AddNpgSql(connectionString);
 
             return services;
         }

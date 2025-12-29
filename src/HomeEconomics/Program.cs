@@ -2,14 +2,16 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("HomeEconomics");
+
 builder.Services
     .AddHomeEconomicsApi()
     .AddHomeEconomicsServices()
     .AddIf(builder.Environment.IsDevelopment(), sc => sc.AddCors())
     .AddHomeEconomicsMediator()
-    .AddHomeEconomicsPersistence(builder.Configuration, builder.Environment.IsDevelopment())
+    .AddHomeEconomicsPersistence(connectionString!, builder.Environment.IsDevelopment())
     .AddHomeEconomicsSwagger()
-    .AddHomeEconomicsHealthChecks(builder.Configuration);
+    .AddHomeEconomicsHealthChecks(connectionString!);
 
 var app = builder.Build();
 

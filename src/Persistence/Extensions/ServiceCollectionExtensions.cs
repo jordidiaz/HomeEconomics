@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Persistence;
 
 // ReSharper disable once CheckNamespace
@@ -9,17 +8,20 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddHomeEconomicsPersistence(
         this IServiceCollection services,
-        IConfiguration configuration,
+        string connectionString,
         bool isDevelopment)
     {
-        var connectionString = configuration.GetConnectionString("HomeEconomics");
-
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            return services;
+        }
+        
         return services
             .AddDbContext<HomeEconomicsDbContext>(dbContextOptionsBuilder =>
             {
                 dbContextOptionsBuilder
                     .UseNpgsql(
-                        connectionString!,
+                        connectionString,
                         postgresDbContextOptionsBuilder => postgresDbContextOptionsBuilder.SetPostgresVersion(new Version(9, 6)))
                     .EnableSensitiveDataLogging(isDevelopment);
             });
