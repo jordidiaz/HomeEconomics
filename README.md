@@ -228,6 +228,7 @@ heroku pg:backups:download --app <heroku-app-name> -o heroku.dump
 ```bash
 docker compose up -d postgres
 docker compose exec -T postgres pg_restore \
+  --no-owner \
   --username=homeeconomics \
   --dbname=homeeconomics \
   --clean \
