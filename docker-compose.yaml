@@ -7,5 +7,21 @@ services:
     ports:
       - "6001:6001"
     environment:
-      - ConnectionStrings__HomeEconomics=${HOMEECONOMICS_CONNECTION_STRING}
+      - ConnectionStrings__HomeEconomics=Host=postgres;Port=5432;Database=homeeconomics;Username=homeeconomics;Password=homeeconomics
+    depends_on:
+      - postgres
     restart: unless-stopped
+  postgres:
+    image: postgres:18.1
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=homeeconomics
+      - POSTGRES_USER=homeeconomics
+      - POSTGRES_PASSWORD=homeeconomics
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    restart: always
+
+volumes:
+  postgres_data:

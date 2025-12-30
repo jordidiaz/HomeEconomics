@@ -212,6 +212,54 @@ This will:
 - Start PostgreSQL database
 - Serve the application on port 6001
 
+## Database Migration (Heroku ↔ Local Docker)
+
+### Export from Heroku and import into the local Docker container
+
+1. Create and download a Heroku backup:
+
+```bash
+heroku pg:backups:capture --app <heroku-app-name>
+heroku pg:backups:download --app <heroku-app-name> -o heroku.dump
+```
+
+2. Restore into the local PostgreSQL container:
+
+```bash
+docker compose up -d postgres
+docker compose exec -T postgres pg_restore \
+  --no-owner \
+  --username=homeeconomics \
+  --dbname=homeeconomics \
+  --clean \
+  --if-exists \
+  < heroku.dump
+```
+
+### Export from the local Docker container and import into another container
+
+1. Export a backup from the local container:
+
+```bash
+docker compose exec -T postgres pg_dump \
+  --username=homeeconomics \
+  --format=custom \
+  --file=/tmp/homeeconomics.dump \
+  homeeconomics
+docker cp "$(docker compose ps -q postgres)":/tmp/homeeconomics.dump ./homeeconomics.dump
+```
+
+2. Import into another PostgreSQL container:
+
+```bash
+docker compose exec -T <other-postgres-service> pg_restore \
+  --username=homeeconomics \
+  --dbname=homeeconomics \
+  --clean \
+  --if-exists \
+  < homeeconomics.dump
+```
+
 ## Contributing
 
 1. Create a feature branch
