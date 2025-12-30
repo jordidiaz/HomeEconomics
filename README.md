@@ -194,10 +194,6 @@ dotnet test
 cd src/HomeEconomics/spa && npm test
 ```
 
-## Environment Variables
-
-- `HOMEECONOMICS_CONNECTION_STRING`: PostgreSQL connection string
-
 ## Production Deployment
 
 Build and run with Docker:
