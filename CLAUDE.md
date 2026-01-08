@@ -78,7 +78,6 @@ npm run stylelint   # Stylelint for SCSS
 
 ## Database Configuration
 
-- Environment variable: `HOMEECONOMICS_CONNECTION_STRING` (PostgreSQL connection string)
 - Development database available via `docker-compose.development.yaml`
 - Migrations use code-first approach with Entity Framework Core
 
