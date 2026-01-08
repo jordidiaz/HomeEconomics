@@ -1,6 +1,6 @@
 # HomeEconomics
 
-A personal finance management application built with .NET 9 and React TypeScript to help track income, expenses, and monthly budgets with recurring movement patterns.
+A personal finance management application built with .NET 10 and React TypeScript to help track income, expenses, and monthly budgets with recurring movement patterns.
 
 ## Features
 
@@ -270,10 +270,10 @@ The application follows Clean Architecture principles:
 
 - **Domain Layer**: Core business logic and entities
 - **Persistence Layer**: Data access with Entity Framework Core
-- **Application Layer**: API controllers and CQRS handlers using MediatR
+- **Application Layer**: API controllers and CQRS handlers using LiteBus
 - **Presentation Layer**: React TypeScript frontend
 
 Key patterns used:
-- CQRS with MediatR for command/query separation
+- CQRS with LiteBus for command/query separation
 - Repository pattern through Entity Framework DbContext
 - Domain-Driven Design with rich domain models

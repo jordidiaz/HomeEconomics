@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-HomeEconomics is a personal finance management application built with .NET 8 backend API and React TypeScript frontend. It helps users track income and expenses with recurring movement patterns and monthly budgeting features.
+HomeEconomics is a personal finance management application built with .NET 9 backend API and React TypeScript frontend. It helps users track income and expenses with recurring movement patterns and monthly budgeting features.
 
 ## Technology Stack
 
-**Backend**: .NET 8 ASP.NET Core Web API, PostgreSQL with Entity Framework Core, MediatR for CQRS pattern
+**Backend**: .NET 9 ASP.NET Core Web API, PostgreSQL with Entity Framework Core, LiteBus for CQRS pattern
 **Frontend**: React 16.13.1 with TypeScript, SCSS, Create React App
 **Database**: PostgreSQL with code-first migrations
 **Architecture**: Clean Architecture with Domain-Driven Design principles
@@ -61,13 +61,13 @@ npm run stylelint   # Stylelint for SCSS
 - `src/Domain/` - Domain entities and business logic (Movement, MovementMonth)
 - `src/Persistence/` - Data access layer with EF Core configurations
 - `src/HomeEconomics/` - Web API application layer
-- `src/HomeEconomics/Features/` - CQRS feature organization using MediatR
+- `src/HomeEconomics/Features/` - CQRS feature organization using LiteBus
 - `src/HomeEconomics/spa/` - React TypeScript frontend
 - `test/` - Comprehensive test suite (Unit, Integration, Functional)
 
 ### Key Patterns
 - **Clean Architecture** with clear layer separation
-- **CQRS with MediatR** for command/query separation
+- **CQRS with LiteBus** for command/query separation
 - **Feature-based organization** rather than technical layering
 - **Domain-Driven Design** with rich domain models
 
