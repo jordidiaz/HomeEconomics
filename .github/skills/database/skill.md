@@ -17,6 +17,7 @@ Guide database and migration decisions for the HomeEconomics backend, focusing o
 ### 2) Decide where mapping rules belong
 - **EF configuration** is for persistence concerns (table/column names, relationships, indexes, conversions).
 - **Domain model** holds business meaning; avoid persistence-driven properties if they do not represent domain concepts.
+- EF configuration reflects the database schema, but does not define domain meaning.
 
 ### 3) Decide when to add or update a migration
 - Add a migration **only** when the schema must change in production or shared environments.
@@ -35,7 +36,12 @@ Guide database and migration decisions for the HomeEconomics backend, focusing o
 - **Domain invariants** protect data in motion (business rules before persistence).
 - Use both where the rule is critical; do not rely on only one layer for critical integrity.
 
+### 7) Avoid opportunistic schema changes
+- Do not modify schema “while you’re there” unless it directly supports the current feature.
+- Unrelated schema cleanups should be isolated, reviewed, and deployed independently.
+
 ## Guardrails
 - Keep migrations minimal and reversible when possible.
 - Avoid introducing persistence-specific details into domain entities.
 - Prefer explicit, intentional schema evolution over ad-hoc changes.
+- Avoid column or table deletion/renames without a deprecation period and data migration plan.
