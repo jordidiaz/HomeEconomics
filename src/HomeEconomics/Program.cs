@@ -2,6 +2,8 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.UseSerilog();
+
 var connectionString = builder.Configuration.GetConnectionString("HomeEconomics");
 
 builder.Services
