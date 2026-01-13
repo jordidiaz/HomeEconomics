@@ -1,7 +1,7 @@
-# dotnet-api
-
-## Purpose
-Guide backend changes in the .NET API using CQRS and Clean Architecture, focusing on *decision-making* over rote steps.
+---
+name: dotnet-api
+description: Guide backend changes in the .NET API using CQRS and Clean Architecture, focusing on focusing on architectural and layering decisions over rote steps over rote steps
+---
 
 ## When to use this skill
 - You are adding or modifying API behavior in `src/HomeEconomics/Features/`.
@@ -42,3 +42,21 @@ Guide backend changes in the .NET API using CQRS and Clean Architecture, focusin
 - Keep CQRS separation: no writes in queries, no reads with side effects in commands.
 - Prefer explicit domain methods over mutating properties directly in feature handlers.
 - Avoid leaking persistence concerns into domain or feature decisions.
+
+## Out of scope
+- Database schema or migration decisions (handled by the database skill).
+- Infrastructure or deployment concerns.
+- Frontend or API consumer decisions.
+- Cross-service integration patterns.
+
+## Available context
+- Feature handlers under src/HomeEconomics/Features/.
+- Domain entities and value objects under src/Domain/.
+- EF Core mappings under src/Persistence/.
+
+## Example scenarios
+- Adding a new command that creates a Movement with new domain rules.
+- Refactoring logic currently inside a handler into a domain entity.
+- Deciding whether a new endpoint should be a query or command.
+
+

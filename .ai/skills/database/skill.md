@@ -1,7 +1,7 @@
-# database
-
-## Purpose
-Guide database and migration decisions for the HomeEconomics backend, focusing on *when* and *why* to change schema, mappings, or persistence behavior.
+---
+name: database
+description: Guide database and migration decisions for the HomeEconomics backend, focusing on *when* and *why* to change schema, mappings, or persistence behavior
+---
 
 ## When to use this skill
 - You need to change database schema or migrations.
@@ -45,3 +45,18 @@ Guide database and migration decisions for the HomeEconomics backend, focusing o
 - Avoid introducing persistence-specific details into domain entities.
 - Prefer explicit, intentional schema evolution over ad-hoc changes.
 - Avoid column or table deletion/renames without a deprecation period and data migration plan.
+
+## Out of scope
+- Writing raw SQL queries unless strictly required.
+- Making domain-level business decisions unrelated to persistence.
+- Performance tuning outside of database-level concerns.
+- Infrastructure decisions (backups, replicas, hosting).
+
+## Available tools
+- PostgreSQL MCP server (read-only): inspect schema, indexes, constraints, and query plans.
+- EF Core migrations and model snapshots in the repository.
+
+## Example scenarios
+- Adding a new nullable column required by a feature rollout.
+- Deciding whether a slow endpoint needs an index or a domain refactor.
+- Reviewing a migration that drops or renames a column.
