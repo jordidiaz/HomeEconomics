@@ -1,0 +1,39 @@
+<Project>
+  <PropertyGroup>
+    <SolutionGuid>{9CD6A584-4AA0-416F-B5FE-9D8D46A83195}</SolutionGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SolutionConfiguration Include="Debug|Any CPU" />
+    <SolutionConfiguration Include="Release|Any CPU" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="src\HomeEconomics\HomeEconomics.csproj" />
+    <ProjectReference Include="src\Domain\Domain.csproj" />
+    <ProjectReference Include="src\Persistence\Persistence.csproj" />
+    <ProjectReference Include="test\Domain.UnitTests\Domain.UnitTests.csproj" />
+    <ProjectReference Include="test\HomeEconomics.IntegrationTests\HomeEconomics.IntegrationTests.csproj" />
+    <ProjectReference Include="test\HomeEconomics.UnitTests\HomeEconomics.UnitTests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SolutionItem Include="docker-compose.yaml" />
+    <SolutionItem Include="src\HomeEconomics\Dockerfile" />
+    <SolutionItem Include="Directory.Build.props" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SolutionFolder Include="src" />
+    <SolutionFolder Include="test" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SolutionFolderItem Include="src\HomeEconomics\HomeEconomics.csproj" Parent="src" />
+    <SolutionFolderItem Include="src\Domain\Domain.csproj" Parent="src" />
+    <SolutionFolderItem Include="src\Persistence\Persistence.csproj" Parent="src" />
+    <SolutionFolderItem Include="test\Domain.UnitTests\Domain.UnitTests.csproj" Parent="test" />
+    <SolutionFolderItem Include="test\HomeEconomics.IntegrationTests\HomeEconomics.IntegrationTests.csproj" Parent="test" />
+    <SolutionFolderItem Include="test\HomeEconomics.UnitTests\HomeEconomics.UnitTests.csproj" Parent="test" />
+  </ItemGroup>
+</Project>
