@@ -81,3 +81,10 @@ Run tests: `dotnet test` (all) or `dotnet test test/<project-name>`
 - **Tests are mandatory** for any behavior change
 - Use `[UsedImplicitly]` attribute on handlers for ReSharper
 - Follow existing feature structure: one file per command/query with nested types
+
+This repository defines AI skills under `.ai/skills`.
+
+When performing changes:
+- Identify the relevant skill
+- Follow its decision rules
+- Do not invent patterns outside those skills
