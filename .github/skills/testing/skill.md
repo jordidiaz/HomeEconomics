@@ -1,7 +1,7 @@
-# testing
-
-## Purpose
-Provide decision-making guidance for selecting the right test layer, scope, and quality checks for this repository.
+---
+name: testing
+description: Provide decision-making guidance for selecting the right test layer, scope, and quality checks for this repository
+---
 
 ## When to use this skill
 - You are adding or changing behavior in the domain, API features, or frontend.
