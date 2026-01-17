@@ -1,7 +1,7 @@
-# runtime
-
-## Purpose
-Provide decision-making guidance for configuring and reasoning about the app's runtime environment in development and deployment contexts.
+---
+name: runtime
+description: Provide decision-making guidance for configuring and reasoning about the app's runtime environment in development and deployment contexts
+---
 
 ## When to use this skill
 - You need to decide how a change impacts runtime configuration or deployment behavior.
