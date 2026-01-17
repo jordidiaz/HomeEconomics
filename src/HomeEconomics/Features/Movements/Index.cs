@@ -56,7 +56,8 @@ public class Index
         public Task<Result> HandleAsync(Query request, CancellationToken cancellationToken = default)
         {
             var movements = dbContext.GetMovements()
-                .OrderBy(m => m.Name);
+                .OrderBy(m => m.Name)
+                .AsEnumerable();
 
             return Task.FromResult(new Result
             {

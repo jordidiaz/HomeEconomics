@@ -22,7 +22,7 @@ public static class HomeEconomicsDbContextExtensions
             CancellationToken cancellationToken) =>
             await GetAsync(dbContext, predicate, cancellationToken, "Frequency");
 
-        public IEnumerable<Movement> GetMovements() => GetCollection<Movement>(dbContext, "Frequency");
+        public IQueryable<Movement> GetMovements() => GetCollection<Movement>(dbContext, "Frequency").AsNoTracking();
     }
 
     private static async Task<T?> GetAsync<T>(
@@ -43,7 +43,7 @@ public static class HomeEconomicsDbContextExtensions
         return await context.SingleOrDefaultAsync(predicate, cancellationToken);
     }
         
-    private static IEnumerable<T> GetCollection<T>(
+    private static IQueryable<T> GetCollection<T>(
         DbContext dbContext, 
         params string[] includes) where T : class
     {
