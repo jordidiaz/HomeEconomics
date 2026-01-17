@@ -14,6 +14,10 @@ public static class HomeEconomicsDbContextExtensions
             CancellationToken cancellationToken) =>
             await GetAsync(dbContext, predicate, cancellationToken, "_monthMovements", "_statuses");
 
+        public async Task<bool> ExistsMovementMonthAsync(Expression<Func<MovementMonth, bool>> predicate,
+            CancellationToken cancellationToken) =>
+            await dbContext.MovementMonths.AnyAsync(predicate, cancellationToken);
+
         public async Task<Movement?> GetMovementAsync(Expression<Func<Movement, bool>> predicate,
             CancellationToken cancellationToken) =>
             await GetAsync(dbContext, predicate, cancellationToken, "Frequency");

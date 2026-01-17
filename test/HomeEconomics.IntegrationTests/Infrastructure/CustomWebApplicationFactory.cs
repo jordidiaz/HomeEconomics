@@ -13,7 +13,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             var connectionString = PostgreSqlContainerManager.Instance.GetConnectionString();
 
             services.AddHomeEconomicsPersistence(connectionString, isDevelopment: true);
-            services.AddHomeEconomicsHealthChecks(connectionString);
         });
         
         base.ConfigureWebHost(builder);

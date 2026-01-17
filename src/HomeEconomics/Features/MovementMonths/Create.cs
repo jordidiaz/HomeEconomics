@@ -30,10 +30,10 @@ public class Create
     {
         public async Task<MovementMonthResponse?> HandleAsync(Command request, CancellationToken cancellationToken = default)
         {
-            var movementMonth = await dbContext.GetMovementMonthAsync(
+            var movementMonthExists = await dbContext.ExistsMovementMonthAsync(
                 mm => mm.Year == request.Year && mm.Month == request.Month, cancellationToken: cancellationToken);
 
-            if (movementMonth != null)
+            if (movementMonthExists)
             {
                 throw new InvalidOperationException(Properties.Messages.MovementMonthExists);
             }
@@ -49,7 +49,7 @@ public class Create
                 throw new InvalidOperationException(Properties.Messages.MovementsNotExists);
             }
 
-            movementMonth = new MovementMonth(request.Year, request.Month);
+            var movementMonth = new MovementMonth(request.Year, request.Month);
             movementMonth.AddStatus(0, 0, 0);
 
             foreach (var movement in movements)

@@ -46,7 +46,7 @@ public class AddStatusTests: IntegrationTestBase
     public async Task Should_Return_409_Conflict_If_MovementMonth_Not_Exists()
     {
         var command = new AddStatus.Command(
-            2025,
+            DateTime.Now.Year,
             Month.Apr,
             1000,
             50);

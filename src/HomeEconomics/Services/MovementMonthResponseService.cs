@@ -21,15 +21,15 @@ public class MovementMonthResponseService(HomeEconomicsDbContext dbContext) : IM
 
     public async Task<MovementMonthResponse> Get(MovementMonth movementMonth, CancellationToken cancellationToken)
     {
-        var nextMovementMonth = await GetNextMovementMonthAsync(movementMonth, cancellationToken);
+        var nextMovementMonthExists = await GetNextMovementMonthExistsAsync(movementMonth, cancellationToken);
 
         var movementMonthResponse = MovementMonthResponse.FromMovementMonth(movementMonth);
-        movementMonthResponse.NextMovementMonthExists = nextMovementMonth != null;
+        movementMonthResponse.NextMovementMonthExists = nextMovementMonthExists;
 
         return movementMonthResponse;
     }
 
-    private async Task<MovementMonth?> GetNextMovementMonthAsync(MovementMonth movementMonth, CancellationToken cancellationToken)
+    private async Task<bool> GetNextMovementMonthExistsAsync(MovementMonth movementMonth, CancellationToken cancellationToken)
     {
         var year = movementMonth.Year;
         var month = movementMonth.Month;
@@ -48,9 +48,7 @@ public class MovementMonthResponseService(HomeEconomicsDbContext dbContext) : IM
             nextMonth = (Month)((int)month + 1);
         }
 
-        var nextMovementMonth = await dbContext.GetMovementMonthAsync(mm => mm.Year == nextYear && mm.Month == nextMonth,
+        return await dbContext.ExistsMovementMonthAsync(mm => mm.Year == nextYear && mm.Month == nextMonth,
             cancellationToken: cancellationToken);
-
-        return nextMovementMonth;
     }
 }

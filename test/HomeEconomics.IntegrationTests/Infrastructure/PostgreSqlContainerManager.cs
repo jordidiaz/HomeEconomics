@@ -18,7 +18,7 @@ public class PostgreSqlContainerManager : IAsyncDisposable
     public async Task InitializeAsync()
     {
         _container = new PostgreSqlBuilder()
-            .WithImage("postgres:9.6.24-bullseye")
+            .WithImage("postgres:18.1")
             .WithName(DatabaseName)
             .WithAutoRemove(true)
             .WithCleanUp(true)
