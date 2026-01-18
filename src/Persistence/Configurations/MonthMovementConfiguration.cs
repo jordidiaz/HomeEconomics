@@ -13,6 +13,8 @@ internal class MonthMovementConfiguration : IEntityTypeConfiguration<MonthMoveme
 
         builder.HasKey(monthMovement => monthMovement.Id);
 
+        builder.HasIndex(monthMovement => new { monthMovement.MovementMonthId, monthMovement.Type, monthMovement.Paid });
+
         builder.Property(monthMovement => monthMovement.Name)
             .HasMaxLength(Movement.MovementNameMaxLength)
             .IsRequired();

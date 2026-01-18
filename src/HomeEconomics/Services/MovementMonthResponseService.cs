@@ -1,4 +1,5 @@
 ﻿using Domain.MovementMonth;
+using Domain.Movements;
 using HomeEconomics.Features.MovementMonths;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -10,30 +11,80 @@ public class MovementMonthResponseService(HomeEconomicsDbContext dbContext) : IM
 {
     public async Task<MovementMonthResponse?> Get(Expression<Func<MovementMonth, bool>> predicate, CancellationToken cancellationToken)
     {
-        var movementMonth = await dbContext.GetMovementMonthAsync(predicate, cancellationToken);
-        if (movementMonth is null)
+        var movementMonthResponse = await GetMovementMonthResponseAsync(predicate, cancellationToken);
+        if (movementMonthResponse is null)
         {
             return null;
         }
 
-        return await Get(movementMonth, cancellationToken);
-    }
-
-    public async Task<MovementMonthResponse> Get(MovementMonth movementMonth, CancellationToken cancellationToken)
-    {
-        var nextMovementMonthExists = await GetNextMovementMonthExistsAsync(movementMonth, cancellationToken);
-
-        var movementMonthResponse = MovementMonthResponse.FromMovementMonth(movementMonth);
-        movementMonthResponse.NextMovementMonthExists = nextMovementMonthExists;
+        movementMonthResponse.NextMovementMonthExists = await GetNextMovementMonthExistsAsync(
+            movementMonthResponse.Year,
+            (Month)movementMonthResponse.Month,
+            cancellationToken);
 
         return movementMonthResponse;
     }
 
-    private async Task<bool> GetNextMovementMonthExistsAsync(MovementMonth movementMonth, CancellationToken cancellationToken)
+    public async Task<MovementMonthResponse> Get(MovementMonth movementMonth, CancellationToken cancellationToken)
     {
-        var year = movementMonth.Year;
-        var month = movementMonth.Month;
+        var movementMonthResponse = await GetMovementMonthResponseAsync(mm => mm.Id == movementMonth.Id, cancellationToken)
+            ?? throw new InvalidOperationException("Movement month response could not be built.");
 
+        movementMonthResponse.NextMovementMonthExists = await GetNextMovementMonthExistsAsync(
+            movementMonth.Year,
+            movementMonth.Month,
+            cancellationToken);
+
+        return movementMonthResponse;
+    }
+
+    private async Task<MovementMonthResponse?> GetMovementMonthResponseAsync(
+        Expression<Func<MovementMonth, bool>> predicate,
+        CancellationToken cancellationToken) =>
+        await dbContext.MovementMonths
+            .AsNoTracking()
+            .Where(predicate)
+            .Select(movementMonth => new MovementMonthResponse
+            {
+                Id = movementMonth.Id,
+                Year = movementMonth.Year,
+                Month = (int)movementMonth.Month,
+                Status = new MovementMonthResponse.StatusResult
+                {
+                    AccountAmount = EF.Property<IEnumerable<Status>>(movementMonth, "_statuses")
+                        .OrderByDescending(status => status.Day)
+                        .Select(status => (decimal?)status.AccountAmount)
+                        .FirstOrDefault() ?? 0m,
+                    CashAmount = EF.Property<IEnumerable<Status>>(movementMonth, "_statuses")
+                        .OrderByDescending(status => status.Day)
+                        .Select(status => (decimal?)status.CashAmount)
+                        .FirstOrDefault() ?? 0m,
+                    PendingTotalExpenses = EF.Property<IEnumerable<MonthMovement>>(movementMonth, "_monthMovements")
+                        .Where(monthMovement => monthMovement.Type == MovementType.Expense && !monthMovement.Paid)
+                        .Select(monthMovement => (decimal?)monthMovement.Amount)
+                        .Sum() ?? 0m,
+                    PendingTotalIncomes = EF.Property<IEnumerable<MonthMovement>>(movementMonth, "_monthMovements")
+                        .Where(monthMovement => monthMovement.Type == MovementType.Income && !monthMovement.Paid)
+                        .Select(monthMovement => (decimal?)monthMovement.Amount)
+                        .Sum() ?? 0m,
+                },
+                MonthMovements = EF.Property<IEnumerable<MonthMovement>>(movementMonth, "_monthMovements")
+                    .OrderBy(monthMovement => monthMovement.Name)
+                    .Select(monthMovement => new MovementMonthResponse.MonthMovementResult
+                    {
+                        Id = monthMovement.Id,
+                        Name = monthMovement.Name,
+                        Amount = monthMovement.Amount,
+                        Type = (int)monthMovement.Type,
+                        Paid = monthMovement.Paid
+                    })
+                    .ToArray()
+            })
+            .AsSplitQuery()
+            .SingleOrDefaultAsync(cancellationToken);
+
+    private async Task<bool> GetNextMovementMonthExistsAsync(int year, Month month, CancellationToken cancellationToken)
+    {
         int nextYear;
         Month nextMonth;
 
