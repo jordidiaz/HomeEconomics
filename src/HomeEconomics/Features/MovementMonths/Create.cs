@@ -40,8 +40,9 @@ public class Create
 
             var movements = dbContext
                 .GetMovements()
+                .Where(m => m.Frequency.Type != FrequencyType.None)
                 .AsEnumerable()
-                .Where(m => UseMovement(m, request.Month))
+                .Where(m => MovementIsEligible(m, request.Month))
                 .ToArray();
 
             if (!movements.Any())
@@ -65,14 +66,7 @@ public class Create
                 cancellationToken: cancellationToken);
         }
 
-        private static bool UseMovement(Movement movement, Month month)
-        {
-            if (movement.GetFrequencyType() == FrequencyType.None)
-            {
-                return false;
-            }
-
-            return movement.GetFrequencyType() == FrequencyType.Monthly || movement.HasMonthInFrequency(month);
-        }
+        private static bool MovementIsEligible(Movement movement, Month month) =>
+            movement.GetFrequencyType() == FrequencyType.Monthly || movement.HasMonthInFrequency(month);
     }
 }
