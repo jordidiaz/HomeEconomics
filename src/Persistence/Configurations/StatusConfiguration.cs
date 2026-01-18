@@ -12,6 +12,9 @@ internal class StatusConfiguration : IEntityTypeConfiguration<Status>
 
         builder.HasKey(status => status.Id);
 
+        builder.HasIndex(status => new { status.MovementMonthId, status.Day })
+            .IsDescending(false, true);
+
         builder.Property(status => status.AccountAmount)
             .HasColumnType("decimal(18,2)");
 
