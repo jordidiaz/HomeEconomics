@@ -357,6 +357,10 @@ Deploy/*.tfvars
 src/HomeEconomics/spa/build
 .vscode
 
+# Next.js
+.next/
+out/
+
 # Jetbrains Rider
 .idea
 
