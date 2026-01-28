@@ -95,7 +95,37 @@ Silent failures are forbidden.
 
 ---
 
-## 8. Documentation
+## 8. Language & Internationalization
+
+### Source Code Language
+- All source code MUST be written in English:
+  - File names
+  - Variables
+  - Functions
+  - Types
+  - Comments
+
+### User-Facing Language
+- All user-facing text MUST be written in Spanish.
+
+User-facing text includes (non-exhaustive):
+- Visible HTML text content
+- Button labels
+- Form labels
+- Placeholders
+- Helper texts
+- Error messages
+- Empty and loading state messages
+- `aria-label`, `title`, and `alt` attributes when exposed to the user
+
+### Explicit Exclusions
+- Internal log messages
+- Exception messages not rendered in the UI
+- API error payloads (unless explicitly mapped to UI)
+
+Mixing languages in user-facing text is forbidden.
+
+## 9. Documentation
 
 When introducing a new feature:
 - Update README.md if setup or usage changes
@@ -103,7 +133,7 @@ When introducing a new feature:
 
 ---
 
-## 9. When in Doubt
+## 10. When in Doubt
 
 If any requirement is ambiguous:
 - Do NOT guess
@@ -112,7 +142,7 @@ If any requirement is ambiguous:
 
 ---
 
-## 10. Definition of Done
+## 11. Definition of Done
 
 A task is complete only if:
 - The spec is fully implemented
