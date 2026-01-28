@@ -10,7 +10,7 @@ export default function HomePage() {
   return (
     <Box sx={{ px: 4, py: 6 }}>
       <Typography component="h1" variant="h1" sx={{ mb: 4 }}>
-        Movements
+        Movimientos
       </Typography>
       {loading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
@@ -19,11 +19,11 @@ export default function HomePage() {
       ) : null}
       {!loading && error ? (
         <Alert severity="error">
-          Failed to load movements. Please try again.
+          No se pudieron cargar los movimientos. Por favor, inténtalo de nuevo.
         </Alert>
       ) : null}
       {!loading && !error && movements.length === 0 ? (
-        <Alert severity="info">No movements available.</Alert>
+        <Alert severity="info">No hay movimientos disponibles.</Alert>
       ) : null}
       {!loading && !error && movements.length > 0 ? (
         <MovementsList movements={movements} />

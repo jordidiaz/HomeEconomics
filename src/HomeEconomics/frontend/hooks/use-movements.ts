@@ -20,22 +20,22 @@ type UseMovementsResult = {
 };
 
 const monthLabels = [
-  "Jan",
+  "Ene",
   "Feb",
   "Mar",
-  "Apr",
+  "Abr",
   "May",
   "Jun",
   "Jul",
-  "Aug",
+  "Ago",
   "Sep",
   "Oct",
   "Nov",
-  "Dec",
+  "Dic",
 ];
 
 const formatAmount = (amount: number): string =>
-  new Intl.NumberFormat("en-US", {
+  new Intl.NumberFormat("es-ES", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(amount);
@@ -43,32 +43,32 @@ const formatAmount = (amount: number): string =>
 const formatTypeLabel = (type: MovementType): string => {
   switch (type) {
     case MovementType.Income:
-      return "Income";
+      return "Ingreso";
     case MovementType.Expense:
-      return "Expense";
+      return "Gasto";
     default:
-      return "Unknown";
+      return "Desconocido";
   }
 };
 
 const formatFrequencyLabel = (movement: Movement): string => {
   switch (movement.frequencyType) {
     case FrequencyType.None:
-      return "One-off";
+      return "Único";
     case FrequencyType.Monthly:
-      return "Monthly";
+      return "Mensual";
     case FrequencyType.Yearly: {
       const monthIndex = movement.frequencyMonth - 1;
-      return monthLabels[monthIndex] ?? "Yearly";
+      return monthLabels[monthIndex] ?? "Anual";
     }
     case FrequencyType.Custom: {
       const months = movement.frequencyMonths
         .map((isSelected, index) => (isSelected ? monthLabels[index] : null))
         .filter((month): month is string => Boolean(month));
-      return months.length > 0 ? months.join(", ") : "Custom";
+      return months.length > 0 ? months.join(", ") : "Personalizado";
     }
     default:
-      return "Unknown";
+      return "Desconocido";
   }
 };
 
