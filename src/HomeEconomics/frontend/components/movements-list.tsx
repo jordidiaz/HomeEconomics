@@ -25,6 +25,7 @@ type MovementsListProps = {
   movements: MovementListItem[];
   deleting: boolean;
   onDeleteRequest: (id: number, name: string) => void;
+  onEditRequest: (id: number) => void;
 };
 
 const getTypeColor = (type: MovementType) =>
@@ -34,6 +35,7 @@ export function MovementsList({
   movements,
   deleting,
   onDeleteRequest,
+  onEditRequest,
 }: MovementsListProps) {
   return (
     <List sx={{ bgcolor: "background.paper" }}>
@@ -83,15 +85,25 @@ export function MovementsList({
                   color={getTypeColor(movement.type)}
                   size="small"
                 />
-                <Button
-                  variant="outlined"
-                  color="error"
-                  size="small"
-                  disabled={deleting}
-                  onClick={() => onDeleteRequest(movement.id, movement.name)}
-                >
-                  Eliminar
-                </Button>
+                <Stack direction="row" spacing={1}>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    disabled={deleting}
+                    onClick={() => onEditRequest(movement.id)}
+                  >
+                    Editar
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    disabled={deleting}
+                    onClick={() => onDeleteRequest(movement.id, movement.name)}
+                  >
+                    Eliminar
+                  </Button>
+                </Stack>
               </Stack>
             </Stack>
           </Stack>

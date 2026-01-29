@@ -5,13 +5,13 @@ import { useState } from "react";
 import { ConfirmDeleteMovementDialog } from "../components/confirm-delete-movement-dialog";
 import { MovementForm } from "../components/movement-form";
 import { MovementsList } from "../components/movements-list";
-import { useCreateMovement } from "../hooks/use-create-movement";
 import { useDeleteMovement } from "../hooks/use-delete-movement";
+import { useMovementForm } from "../hooks/use-movement-form";
 import { useMovements } from "../hooks/use-movements";
 
 export default function HomePage() {
-  const { movements, loading, error, reload } = useMovements();
-  const createMovement = useCreateMovement({ onCreated: reload });
+  const { movements, movementMap, loading, error, reload } = useMovements();
+  const movementForm = useMovementForm({ onSaved: reload });
   const deleteMovement = useDeleteMovement({ onDeleted: reload });
   const [movementToDelete, setMovementToDelete] = useState<{
     id: number;
@@ -38,28 +38,37 @@ export default function HomePage() {
     }
   };
 
+  const handleEditRequest = (id: number) => {
+    const movement = movementMap[id];
+    if (!movement) {
+      return;
+    }
+    movementForm.startEdit(movement);
+  };
+
   return (
     <Box sx={{ px: 4, py: 6 }}>
       <Typography component="h1" variant="h1" sx={{ mb: 4 }}>
         Movimientos
       </Typography>
       <MovementForm
-        name={createMovement.name}
-        amount={createMovement.amount}
-        type={createMovement.type}
-        frequencyType={createMovement.frequencyType}
-        frequencyMonth={createMovement.frequencyMonth}
-        customMonths={createMovement.customMonths}
-        submitting={createMovement.submitting}
-        errorMessage={createMovement.errorMessage}
-        validationMessage={createMovement.validationMessage}
-        onNameChange={createMovement.setName}
-        onAmountChange={createMovement.setAmount}
-        onTypeChange={createMovement.setType}
-        onFrequencyTypeChange={createMovement.setFrequencyType}
-        onFrequencyMonthChange={createMovement.setFrequencyMonth}
-        onCustomMonthsChange={createMovement.setCustomMonths}
-        onSubmit={createMovement.submit}
+        name={movementForm.name}
+        amount={movementForm.amount}
+        type={movementForm.type}
+        frequencyType={movementForm.frequencyType}
+        frequencyMonth={movementForm.frequencyMonth}
+        customMonths={movementForm.customMonths}
+        isEditing={movementForm.isEditing}
+        submitting={movementForm.submitting}
+        errorMessage={movementForm.errorMessage}
+        validationMessage={movementForm.validationMessage}
+        onNameChange={movementForm.setName}
+        onAmountChange={movementForm.setAmount}
+        onTypeChange={movementForm.setType}
+        onFrequencyTypeChange={movementForm.setFrequencyType}
+        onFrequencyMonthChange={movementForm.setFrequencyMonth}
+        onCustomMonthsChange={movementForm.setCustomMonths}
+        onSubmit={movementForm.submit}
       />
       {loading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
@@ -79,6 +88,7 @@ export default function HomePage() {
           movements={movements}
           deleting={deleteMovement.deleting}
           onDeleteRequest={handleDeleteRequest}
+          onEditRequest={handleEditRequest}
         />
       ) : null}
       <ConfirmDeleteMovementDialog

@@ -15,6 +15,7 @@ type MovementListItem = {
 
 type UseMovementsResult = {
   movements: MovementListItem[];
+  movementMap: Record<number, Movement>;
   loading: boolean;
   error: Error | null;
   reload: () => Promise<void>;
@@ -84,6 +85,7 @@ const toMovementListItem = (movement: Movement): MovementListItem => ({
 
 export function useMovements(): UseMovementsResult {
   const [movements, setMovements] = useState<MovementListItem[]>([]);
+  const [movementMap, setMovementMap] = useState<Record<number, Movement>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const isMounted = useRef(true);
@@ -95,6 +97,12 @@ export function useMovements(): UseMovementsResult {
       const data = await MovementsService.getAll();
       if (isMounted.current) {
         setMovements(data.map(toMovementListItem));
+        setMovementMap(
+          data.reduce<Record<number, Movement>>((accumulator, movement) => {
+            accumulator[movement.id] = movement;
+            return accumulator;
+          }, {}),
+        );
       }
     } catch (caughtError) {
       if (isMounted.current) {
@@ -117,5 +125,5 @@ export function useMovements(): UseMovementsResult {
     };
   }, [loadMovements]);
 
-  return { movements, loading, error, reload: loadMovements };
+  return { movements, movementMap, loading, error, reload: loadMovements };
 }

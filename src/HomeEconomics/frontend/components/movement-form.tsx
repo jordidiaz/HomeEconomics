@@ -26,6 +26,7 @@ type MovementFormProps = {
   frequencyType: FrequencyType;
   frequencyMonth: number;
   customMonths: number[];
+  isEditing: boolean;
   submitting: boolean;
   errorMessage: string | null;
   validationMessage: string | null;
@@ -78,6 +79,7 @@ export function MovementForm({
   frequencyType,
   frequencyMonth,
   customMonths,
+  isEditing,
   submitting,
   errorMessage,
   validationMessage,
@@ -109,7 +111,7 @@ export function MovementForm({
     >
       <Stack spacing={3}>
         <Typography component="h2" variant="h4">
-          Crear movimiento
+          {isEditing ? "Editar movimiento" : "Crear movimiento"}
         </Typography>
         {validationMessage ? (
           <Alert severity="warning">{validationMessage}</Alert>
@@ -213,7 +215,13 @@ export function MovementForm({
             disabled={submitting}
             startIcon={submitting ? <CircularProgress size={18} /> : null}
           >
-            {submitting ? "Creando" : "Crear movimiento"}
+            {submitting
+              ? isEditing
+                ? "Guardando"
+                : "Creando"
+              : isEditing
+                ? "Guardar cambios"
+                : "Crear movimiento"}
           </Button>
         </Box>
       </Stack>

@@ -17,6 +17,8 @@ export type CreateMovementRequest = {
   };
 };
 
+export type UpdateMovementRequest = CreateMovementRequest & { id: number };
+
 export class MovementsService {
   static async getAll(): Promise<Movement[]> {
     const response = await fetch("/api/movements");
@@ -53,6 +55,21 @@ export class MovementsService {
 
     if (!response.ok) {
       throw new Error(`Failed to delete movement (${response.status})`);
+    }
+  }
+
+  static async update(id: number, request: UpdateMovementRequest): Promise<void> {
+    request.id = id;
+    const response = await fetch(`/api/movements/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update movement (${response.status})`);
     }
   }
 }
