@@ -70,7 +70,7 @@ export function useCreateMovement(
     if (!trimmedName) {
       return false;
     }
-    if (!Number.isFinite(parsedAmount) || parsedAmount === 0) {
+    if (!Number.isFinite(parsedAmount) || parsedAmount < 0) {
       return false;
     }
     if (type === MovementType.Undefined) {
@@ -82,7 +82,7 @@ export function useCreateMovement(
     if (frequencyType === FrequencyType.Yearly && !isValidMonth(frequencyMonth)) {
       return false;
     }
-    if (frequencyType === FrequencyType.Custom && customMonths.length === 0) {
+    if (frequencyType === FrequencyType.Custom && customMonths.length < 2) {
       return false;
     }
     return true;
