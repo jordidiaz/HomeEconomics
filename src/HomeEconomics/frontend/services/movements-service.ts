@@ -45,4 +45,14 @@ export class MovementsService {
     const data: number = await response.json();
     return data;
   }
+
+  static async delete(id: number): Promise<void> {
+    const response = await fetch(`/api/movements/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to delete movement (${response.status})`);
+    }
+  }
 }

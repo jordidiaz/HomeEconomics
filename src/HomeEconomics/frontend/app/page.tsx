@@ -4,11 +4,13 @@ import { Alert, Box, CircularProgress, Typography } from "@mui/material";
 import { MovementForm } from "../components/movement-form";
 import { MovementsList } from "../components/movements-list";
 import { useCreateMovement } from "../hooks/use-create-movement";
+import { useDeleteMovement } from "../hooks/use-delete-movement";
 import { useMovements } from "../hooks/use-movements";
 
 export default function HomePage() {
   const { movements, loading, error, reload } = useMovements();
   const createMovement = useCreateMovement({ onCreated: reload });
+  const deleteMovement = useDeleteMovement({ onDeleted: reload });
 
   return (
     <Box sx={{ px: 4, py: 6 }}>
@@ -46,8 +48,18 @@ export default function HomePage() {
       {!loading && !error && movements.length === 0 ? (
         <Alert severity="info">No hay movimientos disponibles.</Alert>
       ) : null}
+      {deleteMovement.errorMessage ? (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {deleteMovement.errorMessage}
+        </Alert>
+      ) : null}
       {!loading && !error && movements.length > 0 ? (
-        <MovementsList movements={movements} />
+        <MovementsList
+          movements={movements}
+          deleting={deleteMovement.deleting}
+          deletingId={deleteMovement.deletingId}
+          onDelete={deleteMovement.deleteMovement}
+        />
       ) : null}
     </Box>
   );
