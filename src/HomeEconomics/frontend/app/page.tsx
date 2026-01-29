@@ -1,6 +1,8 @@
 "use client";
 
 import { Alert, Box, CircularProgress, Typography } from "@mui/material";
+import { useState } from "react";
+import { ConfirmDeleteMovementDialog } from "../components/confirm-delete-movement-dialog";
 import { MovementForm } from "../components/movement-form";
 import { MovementsList } from "../components/movements-list";
 import { useCreateMovement } from "../hooks/use-create-movement";
@@ -11,6 +13,29 @@ export default function HomePage() {
   const { movements, loading, error, reload } = useMovements();
   const createMovement = useCreateMovement({ onCreated: reload });
   const deleteMovement = useDeleteMovement({ onDeleted: reload });
+  const [movementToDeleteId, setMovementToDeleteId] = useState<number | null>(
+    null,
+  );
+
+  const handleDeleteRequest = (id: number) => {
+    deleteMovement.clearError();
+    setMovementToDeleteId(id);
+  };
+
+  const handleDeleteCancel = () => {
+    deleteMovement.clearError();
+    setMovementToDeleteId(null);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (movementToDeleteId === null) {
+      return;
+    }
+    const wasDeleted = await deleteMovement.deleteMovement(movementToDeleteId);
+    if (wasDeleted) {
+      setMovementToDeleteId(null);
+    }
+  };
 
   return (
     <Box sx={{ px: 4, py: 6 }}>
@@ -48,19 +73,20 @@ export default function HomePage() {
       {!loading && !error && movements.length === 0 ? (
         <Alert severity="info">No hay movimientos disponibles.</Alert>
       ) : null}
-      {deleteMovement.errorMessage ? (
-        <Alert severity="error" sx={{ mt: 2 }}>
-          {deleteMovement.errorMessage}
-        </Alert>
-      ) : null}
       {!loading && !error && movements.length > 0 ? (
         <MovementsList
           movements={movements}
           deleting={deleteMovement.deleting}
-          deletingId={deleteMovement.deletingId}
-          onDelete={deleteMovement.deleteMovement}
+          onDeleteRequest={handleDeleteRequest}
         />
       ) : null}
+      <ConfirmDeleteMovementDialog
+        open={movementToDeleteId !== null}
+        deleting={deleteMovement.deleting}
+        errorMessage={deleteMovement.errorMessage}
+        onCancel={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+      />
     </Box>
   );
 }
