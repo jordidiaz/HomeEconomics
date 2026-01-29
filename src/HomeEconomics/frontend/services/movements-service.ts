@@ -17,7 +17,7 @@ export type CreateMovementRequest = {
   };
 };
 
-export type UpdateMovementRequest = CreateMovementRequest;
+export type UpdateMovementRequest = CreateMovementRequest & { id: number };
 
 export class MovementsService {
   static async getAll(): Promise<Movement[]> {
@@ -59,6 +59,7 @@ export class MovementsService {
   }
 
   static async update(id: number, request: UpdateMovementRequest): Promise<void> {
+    request.id = id;
     const response = await fetch(`/api/movements/${id}`, {
       method: "PUT",
       headers: {
