@@ -9,7 +9,8 @@ type UseDeleteMovementResult = {
   deletingId: number | null;
   deleting: boolean;
   errorMessage: string | null;
-  deleteMovement: (id: number) => Promise<void>;
+  deleteMovement: (id: number) => Promise<boolean>;
+  clearError: () => void;
 };
 
 export function useDeleteMovement(
@@ -18,6 +19,10 @@ export function useDeleteMovement(
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const clearError = useCallback(() => {
+    setErrorMessage(null);
+  }, []);
 
   const deleteMovement = useCallback(
     async (id: number) => {
@@ -29,10 +34,12 @@ export function useDeleteMovement(
         if (options.onDeleted) {
           await options.onDeleted();
         }
+        return true;
       } catch (error) {
         setErrorMessage(
           "No se pudo eliminar el movimiento. Por favor, inténtalo de nuevo.",
         );
+        return false;
       } finally {
         setDeleting(false);
         setDeletingId(null);
@@ -41,5 +48,5 @@ export function useDeleteMovement(
     [options],
   );
 
-  return { deletingId, deleting, errorMessage, deleteMovement };
+  return { deletingId, deleting, errorMessage, deleteMovement, clearError };
 }

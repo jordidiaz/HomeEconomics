@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Chip,
-  CircularProgress,
   List,
   ListItem,
   ListItemText,
@@ -24,9 +23,8 @@ type MovementListItem = {
 
 type MovementsListProps = {
   movements: MovementListItem[];
-  deletingId: number | null;
   deleting: boolean;
-  onDelete: (id: number) => Promise<void>;
+  onDeleteRequest: (id: number, name: string) => void;
 };
 
 const getTypeColor = (type: MovementType) =>
@@ -34,9 +32,8 @@ const getTypeColor = (type: MovementType) =>
 
 export function MovementsList({
   movements,
-  deletingId,
   deleting,
-  onDelete,
+  onDeleteRequest,
 }: MovementsListProps) {
   return (
     <List sx={{ bgcolor: "background.paper" }}>
@@ -91,14 +88,9 @@ export function MovementsList({
                   color="error"
                   size="small"
                   disabled={deleting}
-                  onClick={() => onDelete(movement.id)}
-                  startIcon={
-                    deletingId === movement.id ? (
-                      <CircularProgress size={16} />
-                    ) : null
-                  }
+                  onClick={() => onDeleteRequest(movement.id, movement.name)}
                 >
-                  {deletingId === movement.id ? "Eliminando" : "Eliminar"}
+                  Eliminar
                 </Button>
               </Stack>
             </Stack>
