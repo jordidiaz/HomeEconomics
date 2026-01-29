@@ -1,14 +1,18 @@
 import { useCallback, useMemo, useState } from "react";
 import { FrequencyType } from "../types/frequency-type";
+import type { Movement } from "../types/movement";
 import { MovementType } from "../types/movement-type";
-import { MovementsService } from "../services/movements-service";
-import type { CreateMovementRequest } from "../services/movements-service";
+import {
+  MovementsService,
+  type CreateMovementRequest,
+  type UpdateMovementRequest,
+} from "../services/movements-service";
 
-type UseCreateMovementOptions = {
-  onCreated?: () => Promise<void> | void;
+type UseMovementFormOptions = {
+  onSaved?: () => Promise<void> | void;
 };
 
-type UseCreateMovementResult = {
+type UseMovementFormResult = {
   name: string;
   amount: string;
   type: MovementType;
@@ -18,6 +22,7 @@ type UseCreateMovementResult = {
   submitting: boolean;
   errorMessage: string | null;
   validationMessage: string | null;
+  isEditing: boolean;
   setName: (value: string) => void;
   setAmount: (value: string) => void;
   setType: (value: MovementType) => void;
@@ -25,6 +30,7 @@ type UseCreateMovementResult = {
   setFrequencyMonth: (value: number) => void;
   setCustomMonths: (value: number[]) => void;
   submit: () => Promise<void>;
+  startEdit: (movement: Movement) => void;
 };
 
 const monthValues = [
@@ -38,9 +44,42 @@ const isValidMonth = (month: number): boolean => month >= 1 && month <= 12;
 const buildFrequencyMonths = (customMonths: number[]): boolean[] =>
   monthValues.map((month) => customMonths.includes(month));
 
-export function useCreateMovement(
-  options: UseCreateMovementOptions = {},
-): UseCreateMovementResult {
+const toCustomMonths = (months: boolean[]): number[] =>
+  months
+    .map((isSelected, index) => (isSelected ? index + 1 : null))
+    .filter((month): month is number => Boolean(month));
+
+const buildRequest = (
+  name: string,
+  amount: string,
+  type: MovementType,
+  frequencyType: FrequencyType,
+  frequencyMonth: number,
+  customMonths: number[],
+): CreateMovementRequest => {
+  const parsedAmount = Number(amount);
+  const trimmedName = name.trim();
+  const frequencyMonths =
+    frequencyType === FrequencyType.Custom
+      ? buildFrequencyMonths(customMonths)
+      : emptyMonths;
+
+  return {
+    name: trimmedName,
+    amount: parsedAmount,
+    type,
+    frequency: {
+      type: frequencyType,
+      month: frequencyType === FrequencyType.Yearly ? frequencyMonth : 0,
+      months: frequencyMonths,
+    },
+  };
+};
+
+export function useMovementForm(
+  options: UseMovementFormOptions = {},
+): UseMovementFormResult {
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState<MovementType>(MovementType.Undefined);
@@ -54,6 +93,7 @@ export function useCreateMovement(
   const [validationMessage, setValidationMessage] = useState<string | null>(null);
 
   const resetForm = useCallback(() => {
+    setEditingId(null);
     setName("");
     setAmount("");
     setType(MovementType.Undefined);
@@ -97,33 +137,32 @@ export function useCreateMovement(
       return;
     }
 
-    const parsedAmount = Number(amount);
-    const trimmedName = name.trim();
-    const frequencyMonths =
-      frequencyType === FrequencyType.Custom
-        ? buildFrequencyMonths(customMonths)
-        : emptyMonths;
-    const request: CreateMovementRequest = {
-      name: trimmedName,
-      amount: parsedAmount,
+    const request = buildRequest(
+      name,
+      amount,
       type,
-      frequency: {
-        type: frequencyType,
-        month: frequencyType === FrequencyType.Yearly ? frequencyMonth : 0,
-        months: frequencyMonths,
-      },
-    };
+      frequencyType,
+      frequencyMonth,
+      customMonths,
+    );
 
     setSubmitting(true);
     try {
-      await MovementsService.create(request);
+      if (editingId === null) {
+        await MovementsService.create(request);
+      } else {
+        const updateRequest: UpdateMovementRequest = request;
+        await MovementsService.update(editingId, updateRequest);
+      }
       resetForm();
-      if (options.onCreated) {
-        await options.onCreated();
+      if (options.onSaved) {
+        await options.onSaved();
       }
     } catch (error) {
       setErrorMessage(
-        "No se pudo crear el movimiento. Por favor, inténtalo de nuevo.",
+        editingId === null
+          ? "No se pudo crear el movimiento. Por favor, inténtalo de nuevo."
+          : "No se pudo actualizar el movimiento. Por favor, inténtalo de nuevo.",
       );
     } finally {
       setSubmitting(false);
@@ -131,6 +170,7 @@ export function useCreateMovement(
   }, [
     amount,
     customMonths,
+    editingId,
     frequencyMonth,
     frequencyType,
     isValid,
@@ -151,6 +191,18 @@ export function useCreateMovement(
     setCustomMonths(uniqueMonths);
   }, []);
 
+  const startEdit = useCallback((movement: Movement) => {
+    setEditingId(movement.id);
+    setName(movement.name);
+    setAmount(movement.amount.toString());
+    setType(movement.type);
+    setFrequencyType(movement.frequencyType);
+    setFrequencyMonth(movement.frequencyMonth);
+    setCustomMonths(toCustomMonths(movement.frequencyMonths));
+    setErrorMessage(null);
+    setValidationMessage(null);
+  }, []);
+
   return {
     name,
     amount,
@@ -161,6 +213,7 @@ export function useCreateMovement(
     submitting,
     errorMessage,
     validationMessage,
+    isEditing: editingId !== null,
     setName,
     setAmount,
     setType,
@@ -168,5 +221,6 @@ export function useCreateMovement(
     setFrequencyMonth,
     setCustomMonths: handleCustomMonthsChange,
     submit,
+    startEdit,
   };
 }
