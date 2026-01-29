@@ -2,7 +2,9 @@
 
 import {
   Box,
+  Button,
   Chip,
+  CircularProgress,
   List,
   ListItem,
   ListItemText,
@@ -22,12 +24,20 @@ type MovementListItem = {
 
 type MovementsListProps = {
   movements: MovementListItem[];
+  deletingId: number | null;
+  deleting: boolean;
+  onDelete: (id: number) => Promise<void>;
 };
 
 const getTypeColor = (type: MovementType) =>
   type === MovementType.Income ? "success" : "error";
 
-export function MovementsList({ movements }: MovementsListProps) {
+export function MovementsList({
+  movements,
+  deletingId,
+  deleting,
+  onDelete,
+}: MovementsListProps) {
   return (
     <List sx={{ bgcolor: "background.paper" }}>
       {movements.map((movement) => (
@@ -55,7 +65,11 @@ export function MovementsList({ movements }: MovementsListProps) {
                   </Typography>
                 }
               />
-              <Box sx={{ ml: "auto", textAlign: "right" }}>
+              <Stack
+                spacing={1}
+                alignItems="flex-end"
+                sx={{ ml: "auto", textAlign: "right" }}
+              >
                 <Typography
                   variant="h6"
                   sx={{
@@ -72,7 +86,21 @@ export function MovementsList({ movements }: MovementsListProps) {
                   color={getTypeColor(movement.type)}
                   size="small"
                 />
-              </Box>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  size="small"
+                  disabled={deleting}
+                  onClick={() => onDelete(movement.id)}
+                  startIcon={
+                    deletingId === movement.id ? (
+                      <CircularProgress size={16} />
+                    ) : null
+                  }
+                >
+                  {deletingId === movement.id ? "Eliminando" : "Eliminar"}
+                </Button>
+              </Stack>
             </Stack>
           </Stack>
         </ListItem>
