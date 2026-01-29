@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MovementsService } from "../services/movements-service";
 import { FrequencyType } from "../types/frequency-type";
 import { MovementType } from "../types/movement-type";
@@ -17,6 +17,7 @@ type UseMovementsResult = {
   movements: MovementListItem[];
   loading: boolean;
   error: Error | null;
+  reload: () => Promise<void>;
 };
 
 const monthLabels = [
@@ -85,33 +86,34 @@ export function useMovements(): UseMovementsResult {
   const [movements, setMovements] = useState<MovementListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const isMounted = useRef(true);
+
+  const loadMovements = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await MovementsService.getAll();
+      if (isMounted.current) {
+        setMovements(data.map(toMovementListItem));
+      }
+    } catch (caughtError) {
+      if (isMounted.current) {
+        setError(caughtError as Error);
+      }
+    } finally {
+      if (isMounted.current) {
+        setLoading(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const loadMovements = async () => {
-      try {
-        const data = await MovementsService.getAll();
-        if (isMounted) {
-          setMovements(data.map(toMovementListItem));
-        }
-      } catch (caughtError) {
-        if (isMounted) {
-          setError(caughtError as Error);
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    };
-
     loadMovements();
 
     return () => {
-      isMounted = false;
+      isMounted.current = false;
     };
-  }, []);
+  }, [loadMovements]);
 
-  return { movements, loading, error };
+  return { movements, loading, error, reload: loadMovements };
 }
