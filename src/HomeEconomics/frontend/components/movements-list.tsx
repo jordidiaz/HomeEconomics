@@ -24,7 +24,7 @@ type MovementListItem = {
 type MovementsListProps = {
   movements: MovementListItem[];
   deleting: boolean;
-  onDeleteRequest: (id: number) => void;
+  onDeleteRequest: (id: number, name: string) => void;
 };
 
 const getTypeColor = (type: MovementType) =>
@@ -88,7 +88,7 @@ export function MovementsList({
                   color="error"
                   size="small"
                   disabled={deleting}
-                  onClick={() => onDeleteRequest(movement.id)}
+                  onClick={() => onDeleteRequest(movement.id, movement.name)}
                 >
                   Eliminar
                 </Button>

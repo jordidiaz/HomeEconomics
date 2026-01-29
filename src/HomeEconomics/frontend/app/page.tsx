@@ -13,27 +13,28 @@ export default function HomePage() {
   const { movements, loading, error, reload } = useMovements();
   const createMovement = useCreateMovement({ onCreated: reload });
   const deleteMovement = useDeleteMovement({ onDeleted: reload });
-  const [movementToDeleteId, setMovementToDeleteId] = useState<number | null>(
-    null,
-  );
+  const [movementToDelete, setMovementToDelete] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
 
-  const handleDeleteRequest = (id: number) => {
+  const handleDeleteRequest = (id: number, name: string) => {
     deleteMovement.clearError();
-    setMovementToDeleteId(id);
+    setMovementToDelete({ id, name });
   };
 
   const handleDeleteCancel = () => {
     deleteMovement.clearError();
-    setMovementToDeleteId(null);
+    setMovementToDelete(null);
   };
 
   const handleDeleteConfirm = async () => {
-    if (movementToDeleteId === null) {
+    if (!movementToDelete) {
       return;
     }
-    const wasDeleted = await deleteMovement.deleteMovement(movementToDeleteId);
+    const wasDeleted = await deleteMovement.deleteMovement(movementToDelete.id);
     if (wasDeleted) {
-      setMovementToDeleteId(null);
+      setMovementToDelete(null);
     }
   };
 
@@ -81,9 +82,10 @@ export default function HomePage() {
         />
       ) : null}
       <ConfirmDeleteMovementDialog
-        open={movementToDeleteId !== null}
+        open={movementToDelete !== null}
         deleting={deleteMovement.deleting}
         errorMessage={deleteMovement.errorMessage}
+        movementName={movementToDelete?.name ?? ""}
         onCancel={handleDeleteCancel}
         onConfirm={handleDeleteConfirm}
       />

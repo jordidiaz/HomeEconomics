@@ -14,6 +14,7 @@ type ConfirmDeleteMovementDialogProps = {
   open: boolean;
   deleting: boolean;
   errorMessage: string | null;
+  movementName: string;
   onCancel: () => void;
   onConfirm: () => void;
 };
@@ -22,6 +23,7 @@ export function ConfirmDeleteMovementDialog({
   open,
   deleting,
   errorMessage,
+  movementName,
   onCancel,
   onConfirm,
 }: ConfirmDeleteMovementDialogProps) {
@@ -35,8 +37,8 @@ export function ConfirmDeleteMovementDialog({
       <DialogTitle id="delete-dialog-title">Confirmar borrado</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Esta acción es irreversible. El movimiento se eliminará
-          permanentemente.
+          ¿Quieres eliminar el movimiento &quot;{movementName}&quot;? Esta acción
+          es irreversible y se eliminará permanentemente.
         </DialogContentText>
         {errorMessage ? (
           <Alert severity="error" sx={{ mt: 2 }}>
