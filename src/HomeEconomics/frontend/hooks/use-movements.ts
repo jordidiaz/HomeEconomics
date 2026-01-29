@@ -107,7 +107,9 @@ export function useMovements(): UseMovementsResult {
     }
   }, []);
 
+
   useEffect(() => {
+    isMounted.current = true; // Reset on mount
     loadMovements();
 
     return () => {
