@@ -31,6 +31,7 @@ type UseMovementFormResult = {
   setCustomMonths: (value: number[]) => void;
   submit: () => Promise<void>;
   startEdit: (movement: Movement) => void;
+  cancel: () => void;
 };
 
 const monthValues = [
@@ -222,5 +223,6 @@ export function useMovementForm(
     setCustomMonths: handleCustomMonthsChange,
     submit,
     startEdit,
+    cancel: resetForm,
   };
 }

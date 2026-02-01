@@ -37,6 +37,7 @@ type MovementFormProps = {
   onFrequencyMonthChange: (value: number) => void;
   onCustomMonthsChange: (value: number[]) => void;
   onSubmit: () => void;
+  onCancel: () => void;
 };
 
 const monthOptions = [
@@ -90,6 +91,7 @@ export function MovementForm({
   onFrequencyMonthChange,
   onCustomMonthsChange,
   onSubmit,
+  onCancel,
 }: MovementFormProps) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -208,7 +210,10 @@ export function MovementForm({
             </Select>
           </FormControl>
         ) : null}
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+          <Button variant="outlined" onClick={onCancel}>
+            Cancelar
+          </Button>
           <Button
             type="submit"
             variant="contained"

@@ -69,6 +69,7 @@ export default function HomePage() {
         onFrequencyMonthChange={movementForm.setFrequencyMonth}
         onCustomMonthsChange={movementForm.setCustomMonths}
         onSubmit={movementForm.submit}
+        onCancel={movementForm.cancel}
       />
       {loading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
