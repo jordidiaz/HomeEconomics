@@ -23,11 +23,15 @@ type MonthMovementMonthSelectorProps = {
   selectedMonth: "current" | "next";
   nextMonthAvailable: boolean;
   disabled: boolean;
-  creating: boolean;
-  createErrorMessage: string | null;
+  creatingNextMonth: boolean;
+  createNextMonthErrorMessage: string | null;
+  creatingCurrentMonth: boolean;
+  createCurrentMonthErrorMessage: string | null;
+  showCreateMonth: boolean;
   showCreateNextMonth: boolean;
   onSelect: (value: "current" | "next") => void;
   onCreateNextMonth: () => void;
+  onCreateMonth: () => void;
 };
 
 const monthLabels = [
@@ -56,11 +60,15 @@ export function MonthMovementMonthSelector({
   selectedMonth,
   nextMonthAvailable,
   disabled,
-  creating,
-  createErrorMessage,
+  creatingNextMonth,
+  createNextMonthErrorMessage,
+  creatingCurrentMonth,
+  createCurrentMonthErrorMessage,
+  showCreateMonth,
   showCreateNextMonth,
   onSelect,
   onCreateNextMonth,
+  onCreateMonth,
 }: MonthMovementMonthSelectorProps) {
   const handleChange = (
     _event: MouseEvent<HTMLElement>,
@@ -96,17 +104,32 @@ export function MonthMovementMonthSelector({
             </Stack>
           </ToggleButton>
         </ToggleButtonGroup>
+        {showCreateMonth ? (
+          <Button
+            variant="outlined"
+            disabled={disabled || creatingCurrentMonth}
+            onClick={onCreateMonth}
+            startIcon={creatingCurrentMonth ? <CircularProgress size={18} /> : null}
+          >
+            {creatingCurrentMonth ? "Creando mes actual" : "Crear mes actual"}
+          </Button>
+        ) : null}
         {showCreateNextMonth ? (
           <Button
             variant="outlined"
-            disabled={disabled || creating}
+            disabled={disabled || creatingNextMonth}
             onClick={onCreateNextMonth}
-            startIcon={creating ? <CircularProgress size={18} /> : null}
+            startIcon={creatingNextMonth ? <CircularProgress size={18} /> : null}
           >
-            {creating ? "Creando mes siguiente" : "Crear mes siguiente"}
+            {creatingNextMonth ? "Creando mes siguiente" : "Crear mes siguiente"}
           </Button>
         ) : null}
-        {createErrorMessage ? <Alert severity="error">{createErrorMessage}</Alert> : null}
+        {createCurrentMonthErrorMessage ? (
+          <Alert severity="error">{createCurrentMonthErrorMessage}</Alert>
+        ) : null}
+        {createNextMonthErrorMessage ? (
+          <Alert severity="error">{createNextMonthErrorMessage}</Alert>
+        ) : null}
       </Stack>
     </Box>
   );

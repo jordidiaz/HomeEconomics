@@ -67,14 +67,20 @@ export default function HomePage() {
             selectedMonth={currentMonthMovements.selectedMonth}
             nextMonthAvailable={currentMonthMovements.nextMonthAvailable}
             disabled={currentMonthMovements.loading}
-            creating={currentMonthMovements.creatingNextMonth}
-            createErrorMessage={currentMonthMovements.createNextMonthErrorMessage}
+            creatingNextMonth={currentMonthMovements.creatingNextMonth}
+            createNextMonthErrorMessage={currentMonthMovements.createNextMonthErrorMessage}
+            creatingCurrentMonth={currentMonthMovements.creatingCurrentMonth}
+            createCurrentMonthErrorMessage={
+              currentMonthMovements.createCurrentMonthErrorMessage
+            }
+            showCreateMonth={!currentMonthMovements.currentMonthAvailable}
             showCreateNextMonth={
               currentMonthMovements.movementMonthLoaded &&
               !currentMonthMovements.nextMonthAvailable
             }
             onSelect={currentMonthMovements.selectMonth}
             onCreateNextMonth={currentMonthMovements.createNextMonth}
+            onCreateMonth={currentMonthMovements.createCurrentMonth}
           />
           {currentMonthMovements.loading ? (
             <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>

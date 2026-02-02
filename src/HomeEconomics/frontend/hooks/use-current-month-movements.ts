@@ -31,9 +31,13 @@ type UseCurrentMonthMovementsResult = {
   currentMonth: { year: number; month: number };
   nextMonth: { year: number; month: number };
   nextMonthAvailable: boolean;
+  currentMonthAvailable: boolean;
   creatingNextMonth: boolean;
   createNextMonthErrorMessage: string | null;
   createNextMonth: () => Promise<void>;
+  creatingCurrentMonth: boolean;
+  createCurrentMonthErrorMessage: string | null;
+  createCurrentMonth: () => Promise<void>;
   movementMonthLoaded: boolean;
   actionStates: Record<number, MonthMovementActionState>;
   payMonthMovement: (monthMovementId: number) => Promise<void>;
@@ -173,16 +177,20 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     totalMonthMovements: allMonthMovements.length,
     showPaid,
     setShowPaid,
-    loading: selector.loading || selector.creating,
+    loading: selector.loading || selector.creatingNextMonth || selector.creatingCurrentMonth,
     error: selector.error,
     selectedMonth: selector.selectedMonth,
     selectMonth: selector.selectMonth,
     currentMonth: selector.currentMonth,
     nextMonth: selector.nextMonth,
     nextMonthAvailable: selector.nextMonthAvailable,
-    creatingNextMonth: selector.creating,
-    createNextMonthErrorMessage: selector.createErrorMessage,
+    currentMonthAvailable: selector.currentMonthAvailable,
+    creatingNextMonth: selector.creatingNextMonth,
+    createNextMonthErrorMessage: selector.createNextMonthErrorMessage,
     createNextMonth: selector.createNextMonth,
+    creatingCurrentMonth: selector.creatingCurrentMonth,
+    createCurrentMonthErrorMessage: selector.createCurrentMonthErrorMessage,
+    createCurrentMonth: selector.createCurrentMonth,
     movementMonthLoaded: selector.movementMonth !== null,
     actionStates,
     payMonthMovement,

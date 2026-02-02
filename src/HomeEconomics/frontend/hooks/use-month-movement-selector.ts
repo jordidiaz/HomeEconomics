@@ -17,10 +17,14 @@ type UseMonthMovementSelectorResult = {
   movementMonth: MovementMonth | null;
   loading: boolean;
   error: Error | null;
-  creating: boolean;
-  createErrorMessage: string | null;
+  creatingNextMonth: boolean;
+  createNextMonthErrorMessage: string | null;
+  creatingCurrentMonth: boolean;
+  createCurrentMonthErrorMessage: string | null;
   nextMonthAvailable: boolean;
+  currentMonthAvailable: boolean;
   createNextMonth: () => Promise<void>;
+  createCurrentMonth: () => Promise<void>;
   reloadSelectedMonth: () => Promise<void>;
 };
 
@@ -41,9 +45,14 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
   const [movementMonth, setMovementMonth] = useState<MovementMonth | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [creating, setCreating] = useState(false);
-  const [createErrorMessage, setCreateErrorMessage] = useState<string | null>(null);
+  const [creatingNextMonth, setCreatingNextMonth] = useState(false);
+  const [createNextMonthErrorMessage, setCreateNextMonthErrorMessage] =
+    useState<string | null>(null);
+  const [creatingCurrentMonth, setCreatingCurrentMonth] = useState(false);
+  const [createCurrentMonthErrorMessage, setCreateCurrentMonthErrorMessage] =
+    useState<string | null>(null);
   const [nextMonthAvailable, setNextMonthAvailable] = useState(false);
+  const [currentMonthAvailable, setCurrentMonthAvailable] = useState(true);
   const isMounted = useRef(true);
   const skipNextLoad = useRef(false);
 
@@ -60,9 +69,18 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
           setMovementMonth(data);
           if (updateAvailability) {
             setNextMonthAvailable(data.nextMovementMonthExists);
+            setCurrentMonthAvailable(true);
           }
         }
       } catch (caughtError) {
+        const status = (caughtError as { status?: number }).status;
+        if (isMounted.current && updateAvailability && status === 404) {
+          setMovementMonth(null);
+          setCurrentMonthAvailable(false);
+          setNextMonthAvailable(false);
+          setError(null);
+          return;
+        }
         if (isMounted.current) {
           setError(caughtError as Error);
         }
@@ -79,13 +97,23 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
     if (selectedMonth === "next" && !nextMonthAvailable) {
       return;
     }
+    if (selectedMonth === "current" && !currentMonthAvailable) {
+      return;
+    }
     const target = selectedMonth === "current" ? currentMonth : nextMonth;
     await loadMovementMonth(target, selectedMonth === "current");
-  }, [currentMonth, loadMovementMonth, nextMonth, nextMonthAvailable, selectedMonth]);
+  }, [
+    currentMonth,
+    currentMonthAvailable,
+    loadMovementMonth,
+    nextMonth,
+    nextMonthAvailable,
+    selectedMonth,
+  ]);
 
   const createNextMonth = useCallback(async () => {
-    setCreating(true);
-    setCreateErrorMessage(null);
+    setCreatingNextMonth(true);
+    setCreateNextMonthErrorMessage(null);
     try {
       const data = await MovementMonthsService.create(nextMonth.year, nextMonth.month);
       if (isMounted.current) {
@@ -97,16 +125,41 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
       }
     } catch (caughtError) {
       if (isMounted.current) {
-        setCreateErrorMessage(
+        setCreateNextMonthErrorMessage(
           "No se pudo crear el mes siguiente. Por favor, inténtalo de nuevo.",
         );
       }
     } finally {
       if (isMounted.current) {
-        setCreating(false);
+        setCreatingNextMonth(false);
       }
     }
   }, [nextMonth.month, nextMonth.year]);
+
+  const createCurrentMonth = useCallback(async () => {
+    setCreatingCurrentMonth(true);
+    setCreateCurrentMonthErrorMessage(null);
+    try {
+      const data = await MovementMonthsService.create(currentMonth.year, currentMonth.month);
+      if (isMounted.current) {
+        setCurrentMonthAvailable(true);
+        setNextMonthAvailable(data.nextMovementMonthExists);
+        setMovementMonth(data);
+        setError(null);
+        setSelectedMonth("current");
+      }
+    } catch (caughtError) {
+      if (isMounted.current) {
+        setCreateCurrentMonthErrorMessage(
+          "No se pudo crear el mes actual. Por favor, inténtalo de nuevo.",
+        );
+      }
+    } finally {
+      if (isMounted.current) {
+        setCreatingCurrentMonth(false);
+      }
+    }
+  }, [currentMonth.month, currentMonth.year]);
 
   useEffect(() => {
     isMounted.current = true;
@@ -119,13 +172,23 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
     if (selectedMonth === "next" && !nextMonthAvailable) {
       return;
     }
+    if (selectedMonth === "current" && !currentMonthAvailable) {
+      return;
+    }
     if (selectedMonth === "next" && skipNextLoad.current) {
       skipNextLoad.current = false;
       return;
     }
     const target = selectedMonth === "current" ? currentMonth : nextMonth;
     loadMovementMonth(target, selectedMonth === "current");
-  }, [currentMonth, loadMovementMonth, nextMonth, nextMonthAvailable, selectedMonth]);
+  }, [
+    currentMonth,
+    currentMonthAvailable,
+    loadMovementMonth,
+    nextMonth,
+    nextMonthAvailable,
+    selectedMonth,
+  ]);
 
   return {
     currentMonth,
@@ -135,10 +198,14 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
     movementMonth,
     loading,
     error,
-    creating,
-    createErrorMessage,
+    creatingNextMonth,
+    createNextMonthErrorMessage,
+    creatingCurrentMonth,
+    createCurrentMonthErrorMessage,
     nextMonthAvailable,
+    currentMonthAvailable,
     createNextMonth,
+    createCurrentMonth,
     reloadSelectedMonth,
   };
 }
