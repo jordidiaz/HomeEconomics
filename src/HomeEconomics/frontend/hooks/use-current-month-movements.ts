@@ -32,12 +32,14 @@ type UseCurrentMonthMovementsResult = {
   nextMonth: { year: number; month: number };
   nextMonthAvailable: boolean;
   currentMonthAvailable: boolean;
+  currentMovementMonthId: number | null;
   creatingNextMonth: boolean;
   createNextMonthErrorMessage: string | null;
   createNextMonth: () => Promise<void>;
   creatingCurrentMonth: boolean;
   createCurrentMonthErrorMessage: string | null;
   createCurrentMonth: () => Promise<void>;
+  reloadCurrentMonthMovements: () => Promise<void>;
   movementMonthLoaded: boolean;
   actionStates: Record<number, MonthMovementActionState>;
   payMonthMovement: (monthMovementId: number) => Promise<void>;
@@ -93,6 +95,13 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
   const reloadMonthMovements = useCallback(async () => {
     await selector.reloadSelectedMonth();
   }, [selector.reloadSelectedMonth]);
+
+  const reloadCurrentMonthMovements = useCallback(async () => {
+    if (selector.selectedMonth !== "current") {
+      return;
+    }
+    await selector.reloadSelectedMonth();
+  }, [selector.reloadSelectedMonth, selector.selectedMonth]);
 
   const updateActionState = useCallback(
     (monthMovementId: number, changes: Partial<MonthMovementActionState>) => {
@@ -185,12 +194,14 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     nextMonth: selector.nextMonth,
     nextMonthAvailable: selector.nextMonthAvailable,
     currentMonthAvailable: selector.currentMonthAvailable,
+    currentMovementMonthId: selector.currentMovementMonthId,
     creatingNextMonth: selector.creatingNextMonth,
     createNextMonthErrorMessage: selector.createNextMonthErrorMessage,
     createNextMonth: selector.createNextMonth,
     creatingCurrentMonth: selector.creatingCurrentMonth,
     createCurrentMonthErrorMessage: selector.createCurrentMonthErrorMessage,
     createCurrentMonth: selector.createCurrentMonth,
+    reloadCurrentMonthMovements,
     movementMonthLoaded: selector.movementMonth !== null,
     actionStates,
     payMonthMovement,

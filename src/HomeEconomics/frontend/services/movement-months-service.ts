@@ -1,4 +1,5 @@
 import type { MovementMonth } from "../types/movement-month";
+import type { MovementType } from "../types/movement-type";
 
 export class MovementMonthsService {
   private static createError(message: string, status: number): Error & { status: number } {
@@ -31,6 +32,30 @@ export class MovementMonthsService {
     if (!response.ok) {
       throw MovementMonthsService.createError(
         `Failed to fetch movement month (${response.status})`,
+        response.status,
+      );
+    }
+
+    const data: MovementMonth = await response.json();
+    return data;
+  }
+
+  static async addMonthMovement(
+    movementMonthId: number,
+    movement: { movementMonthId: number, name: string; amount: number; type: MovementType },
+  ): Promise<MovementMonth> {
+    movement.movementMonthId = movementMonthId;
+    const response = await fetch(`/api/movement-months/${movementMonthId}/month-movements`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(movement),
+    });
+
+    if (!response.ok) {
+      throw MovementMonthsService.createError(
+        `Failed to add month movement (${response.status})`,
         response.status,
       );
     }

@@ -16,6 +16,7 @@ import { MovementForm } from "../components/movement-form";
 import { MovementsList } from "../components/movements-list";
 import { useCurrentMonthMovements } from "../hooks/use-current-month-movements";
 import { useDeleteMovement } from "../hooks/use-delete-movement";
+import { useAddMovementToCurrentMonth } from "../hooks/use-add-movement-to-current-month";
 import { useMovementForm } from "../hooks/use-movement-form";
 import { useMovements } from "../hooks/use-movements";
 
@@ -24,6 +25,10 @@ export default function HomePage() {
   const { movements, movementMap, loading, error, reload } = useMovements();
   const movementForm = useMovementForm({ onSaved: reload });
   const deleteMovement = useDeleteMovement({ onDeleted: reload });
+  const addMovementToCurrentMonth = useAddMovementToCurrentMonth({
+    movementMonthId: currentMonthMovements.currentMovementMonthId,
+    onAdded: currentMonthMovements.reloadCurrentMonthMovements,
+  });
   const [movementToDelete, setMovementToDelete] = useState<{
     id: number;
     name: string;
@@ -55,6 +60,14 @@ export default function HomePage() {
       return;
     }
     movementForm.startEdit(movement);
+  };
+
+  const handleAddToCurrentMonth = (id: number) => {
+    const movement = movementMap[id];
+    if (!movement) {
+      return;
+    }
+    void addMovementToCurrentMonth.addToCurrentMonth(movement);
   };
 
   return (
@@ -175,6 +188,12 @@ export default function HomePage() {
             <MovementsList
               movements={movements}
               deleting={deleteMovement.deleting}
+              addDisabled={
+                !currentMonthMovements.currentMonthAvailable ||
+                currentMonthMovements.currentMovementMonthId === null
+              }
+              addActionStates={addMovementToCurrentMonth.actionStates}
+              onAddToCurrentMonth={handleAddToCurrentMonth}
               onDeleteRequest={handleDeleteRequest}
               onEditRequest={handleEditRequest}
             />

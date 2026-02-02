@@ -12,6 +12,7 @@ type SelectedMonth = "current" | "next";
 type UseMonthMovementSelectorResult = {
   currentMonth: MonthReference;
   nextMonth: MonthReference;
+  currentMovementMonthId: number | null;
   selectedMonth: SelectedMonth;
   selectMonth: (value: SelectedMonth) => void;
   movementMonth: MovementMonth | null;
@@ -53,6 +54,7 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
     useState<string | null>(null);
   const [nextMonthAvailable, setNextMonthAvailable] = useState(false);
   const [currentMonthAvailable, setCurrentMonthAvailable] = useState(true);
+  const [currentMovementMonthId, setCurrentMovementMonthId] = useState<number | null>(null);
   const isMounted = useRef(true);
   const skipNextLoad = useRef(false);
 
@@ -70,6 +72,7 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
           if (updateAvailability) {
             setNextMonthAvailable(data.nextMovementMonthExists);
             setCurrentMonthAvailable(true);
+            setCurrentMovementMonthId(data.id);
           }
         }
       } catch (caughtError) {
@@ -78,6 +81,7 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
           setMovementMonth(null);
           setCurrentMonthAvailable(false);
           setNextMonthAvailable(false);
+          setCurrentMovementMonthId(null);
           setError(null);
           return;
         }
@@ -144,6 +148,7 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
       if (isMounted.current) {
         setCurrentMonthAvailable(true);
         setNextMonthAvailable(data.nextMovementMonthExists);
+        setCurrentMovementMonthId(data.id);
         setMovementMonth(data);
         setError(null);
         setSelectedMonth("current");
@@ -193,6 +198,7 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
   return {
     currentMonth,
     nextMonth,
+    currentMovementMonthId,
     selectedMonth,
     selectMonth: setSelectedMonth,
     movementMonth,
