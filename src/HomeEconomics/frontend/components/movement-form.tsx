@@ -112,9 +112,6 @@ export function MovementForm({
       }}
     >
       <Stack spacing={3}>
-        <Typography component="h2" variant="h4">
-          {isEditing ? "Editar movimiento" : "Crear movimiento"}
-        </Typography>
         {validationMessage ? (
           <Alert severity="warning">{validationMessage}</Alert>
         ) : null}

@@ -3,13 +3,16 @@
 import { Alert, Box, CircularProgress, Typography } from "@mui/material";
 import { useState } from "react";
 import { ConfirmDeleteMovementDialog } from "../components/confirm-delete-movement-dialog";
+import { CurrentMonthMovementsList } from "../components/current-month-movements-list";
 import { MovementForm } from "../components/movement-form";
 import { MovementsList } from "../components/movements-list";
+import { useCurrentMonthMovements } from "../hooks/use-current-month-movements";
 import { useDeleteMovement } from "../hooks/use-delete-movement";
 import { useMovementForm } from "../hooks/use-movement-form";
 import { useMovements } from "../hooks/use-movements";
 
 export default function HomePage() {
+  const currentMonthMovements = useCurrentMonthMovements();
   const { movements, movementMap, loading, error, reload } = useMovements();
   const movementForm = useMovementForm({ onSaved: reload });
   const deleteMovement = useDeleteMovement({ onDeleted: reload });
@@ -49,11 +52,33 @@ export default function HomePage() {
   return (
     <Box sx={{ px: 4, py: 6 }}>
       <Box sx={{ display: "flex", gap: 4 }}>
-        <Box sx={{ flex: 1 }} />
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography component="h1" variant="h1" sx={{ mb: 4 }}>
-            Movimientos
-          </Typography>
+          {currentMonthMovements.loading ? (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
+              <CircularProgress />
+            </Box>
+          ) : null}
+          {!currentMonthMovements.loading && currentMonthMovements.error ? (
+            <Alert severity="error">
+              No se pudieron cargar los movimientos del mes. Por favor, inténtalo de nuevo.
+            </Alert>
+          ) : null}
+          {!currentMonthMovements.loading &&
+          !currentMonthMovements.error &&
+          currentMonthMovements.monthMovements.length === 0 ? (
+            <Alert severity="info">
+              No hay movimientos registrados para el mes actual.
+            </Alert>
+          ) : null}
+          {!currentMonthMovements.loading &&
+          !currentMonthMovements.error &&
+          currentMonthMovements.monthMovements.length > 0 ? (
+            <CurrentMonthMovementsList
+              movements={currentMonthMovements.monthMovements}
+            />
+          ) : null}
+        </Box>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
           <MovementForm
             name={movementForm.name}
             amount={movementForm.amount}
