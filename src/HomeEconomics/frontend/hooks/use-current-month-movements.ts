@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MovementMonthsService } from "../services/movement-months-service";
 import { MovementType } from "../types/movement-type";
 import type { MonthMovement } from "../types/month-movement";
@@ -15,6 +15,9 @@ type MonthMovementListItem = {
 
 type UseCurrentMonthMovementsResult = {
   monthMovements: MonthMovementListItem[];
+  totalMonthMovements: number;
+  showPaid: boolean;
+  setShowPaid: (value: boolean) => void;
   loading: boolean;
   error: Error | null;
 };
@@ -55,10 +58,16 @@ const getCurrentYearMonth = (): { year: number; month: number } => {
 };
 
 export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
-  const [monthMovements, setMonthMovements] = useState<MonthMovementListItem[]>([]);
+  const [allMonthMovements, setAllMonthMovements] = useState<MonthMovementListItem[]>([]);
+  const [showPaid, setShowPaid] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const isMounted = useRef(true);
+
+  const monthMovements = useMemo(
+    () => allMonthMovements.filter((movement) => movement.paid === showPaid),
+    [allMonthMovements, showPaid],
+  );
 
   const loadMonthMovements = useCallback(async () => {
     setLoading(true);
@@ -67,7 +76,7 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
       const { year, month } = getCurrentYearMonth();
       const data = await MovementMonthsService.getByYearMonth(year, month);
       if (isMounted.current) {
-        setMonthMovements(data.monthMovements.map(toMonthMovementListItem));
+        setAllMonthMovements(data.monthMovements.map(toMonthMovementListItem));
       }
     } catch (caughtError) {
       if (isMounted.current) {
@@ -89,5 +98,12 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     };
   }, [loadMonthMovements]);
 
-  return { monthMovements, loading, error };
+  return {
+    monthMovements,
+    totalMonthMovements: allMonthMovements.length,
+    showPaid,
+    setShowPaid,
+    loading,
+    error,
+  };
 }

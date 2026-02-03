@@ -1,6 +1,13 @@
 "use client";
 
-import { Alert, Box, CircularProgress, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  CircularProgress,
+  FormControlLabel,
+  Switch,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { ConfirmDeleteMovementDialog } from "../components/confirm-delete-movement-dialog";
 import { CurrentMonthMovementsList } from "../components/current-month-movements-list";
@@ -65,9 +72,35 @@ export default function HomePage() {
           ) : null}
           {!currentMonthMovements.loading &&
           !currentMonthMovements.error &&
-          currentMonthMovements.monthMovements.length === 0 ? (
+          currentMonthMovements.totalMonthMovements > 0 ? (
+            <FormControlLabel
+              sx={{ mb: 2 }}
+              control={
+                <Switch
+                  checked={currentMonthMovements.showPaid}
+                  onChange={(event) =>
+                    currentMonthMovements.setShowPaid(event.target.checked)
+                  }
+                />
+              }
+              label="Mostrar pagados"
+            />
+          ) : null}
+          {!currentMonthMovements.loading &&
+          !currentMonthMovements.error &&
+          currentMonthMovements.totalMonthMovements === 0 ? (
             <Alert severity="info">
               No hay movimientos registrados para el mes actual.
+            </Alert>
+          ) : null}
+          {!currentMonthMovements.loading &&
+          !currentMonthMovements.error &&
+          currentMonthMovements.totalMonthMovements > 0 &&
+          currentMonthMovements.monthMovements.length === 0 ? (
+            <Alert severity="info">
+              {currentMonthMovements.showPaid
+                ? "No hay movimientos pagados para el mes actual."
+                : "No hay movimientos pendientes para el mes actual."}
             </Alert>
           ) : null}
           {!currentMonthMovements.loading &&
@@ -75,6 +108,7 @@ export default function HomePage() {
           currentMonthMovements.monthMovements.length > 0 ? (
             <CurrentMonthMovementsList
               movements={currentMonthMovements.monthMovements}
+              showPaid={currentMonthMovements.showPaid}
             />
           ) : null}
         </Box>

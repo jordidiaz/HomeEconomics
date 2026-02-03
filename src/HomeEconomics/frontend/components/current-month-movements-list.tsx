@@ -15,6 +15,7 @@ type MonthMovementListItem = {
 
 type CurrentMonthMovementsListProps = {
   movements: MonthMovementListItem[];
+  showPaid: boolean;
 };
 
 const getTypeColor = (type: MovementType) =>
@@ -24,6 +25,7 @@ const getPaidColor = (paid: boolean) => (paid ? "success" : "warning");
 
 export function CurrentMonthMovementsList({
   movements,
+  showPaid,
 }: CurrentMonthMovementsListProps) {
   return (
     <List sx={{ bgcolor: "background.paper" }}>
@@ -53,12 +55,14 @@ export function CurrentMonthMovementsList({
                       color={getTypeColor(movement.type)}
                       size="small"
                     />
-                    <Chip
-                      label={movement.paidLabel}
-                      color={getPaidColor(movement.paid)}
-                      size="small"
-                      variant="outlined"
-                    />
+                    {showPaid ? (
+                      <Chip
+                        label={movement.paidLabel}
+                        color={getPaidColor(movement.paid)}
+                        size="small"
+                        variant="outlined"
+                      />
+                    ) : null}
                   </Stack>
                 }
               />
