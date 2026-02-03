@@ -13,6 +13,11 @@ type MonthMovementListItem = {
   paidLabel: string;
 };
 
+type MonthMovementActionState = {
+  loading: boolean;
+  errorMessage: string | null;
+};
+
 type UseCurrentMonthMovementsResult = {
   monthMovements: MonthMovementListItem[];
   totalMonthMovements: number;
@@ -20,6 +25,9 @@ type UseCurrentMonthMovementsResult = {
   setShowPaid: (value: boolean) => void;
   loading: boolean;
   error: Error | null;
+  actionStates: Record<number, MonthMovementActionState>;
+  payMonthMovement: (monthMovementId: number) => Promise<void>;
+  unpayMonthMovement: (monthMovementId: number) => Promise<void>;
 };
 
 const formatAmount = (amount: number): string =>
@@ -59,9 +67,13 @@ const getCurrentYearMonth = (): { year: number; month: number } => {
 
 export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
   const [allMonthMovements, setAllMonthMovements] = useState<MonthMovementListItem[]>([]);
+  const [movementMonthId, setMovementMonthId] = useState<number | null>(null);
   const [showPaid, setShowPaid] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [actionStates, setActionStates] = useState<Record<number, MonthMovementActionState>>(
+    {},
+  );
   const isMounted = useRef(true);
 
   const monthMovements = useMemo(
@@ -69,14 +81,19 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     [allMonthMovements, showPaid],
   );
 
+  const fetchMonthMovements = useCallback(async () => {
+    const { year, month } = getCurrentYearMonth();
+    return MovementMonthsService.getByYearMonth(year, month);
+  }, []);
+
   const loadMonthMovements = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const { year, month } = getCurrentYearMonth();
-      const data = await MovementMonthsService.getByYearMonth(year, month);
+      const data = await fetchMonthMovements();
       if (isMounted.current) {
         setAllMonthMovements(data.monthMovements.map(toMonthMovementListItem));
+        setMovementMonthId(data.id);
       }
     } catch (caughtError) {
       if (isMounted.current) {
@@ -87,7 +104,77 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
         setLoading(false);
       }
     }
-  }, []);
+  }, [fetchMonthMovements]);
+
+  const reloadMonthMovements = useCallback(async () => {
+    const data = await fetchMonthMovements();
+    if (isMounted.current) {
+      setAllMonthMovements(data.monthMovements.map(toMonthMovementListItem));
+      setMovementMonthId(data.id);
+    }
+  }, [fetchMonthMovements]);
+
+  const updateActionState = useCallback(
+    (monthMovementId: number, changes: Partial<MonthMovementActionState>) => {
+      setActionStates((prev) => {
+        const currentState = prev[monthMovementId] ?? {
+          loading: false,
+          errorMessage: null,
+        };
+        return {
+          ...prev,
+          [monthMovementId]: {
+            ...currentState,
+            ...changes,
+          },
+        };
+      });
+    },
+    [],
+  );
+
+  const handleMonthMovementAction = useCallback(
+    async (monthMovementId: number, action: "pay" | "unpay") => {
+      if (!movementMonthId) {
+        return;
+      }
+      updateActionState(monthMovementId, { loading: true, errorMessage: null });
+      try {
+        if (action === "pay") {
+          await MovementMonthsService.payMonthMovement(movementMonthId, monthMovementId);
+        } else {
+          await MovementMonthsService.unpayMonthMovement(movementMonthId, monthMovementId);
+        }
+        await reloadMonthMovements();
+      } catch (caughtError) {
+        if (isMounted.current) {
+          updateActionState(monthMovementId, {
+            errorMessage:
+              "No se pudo actualizar el estado del movimiento. Por favor, inténtalo de nuevo.",
+          });
+        }
+      } finally {
+        if (isMounted.current) {
+          updateActionState(monthMovementId, { loading: false });
+        }
+      }
+    },
+    [movementMonthId, reloadMonthMovements, updateActionState],
+  );
+
+  const payMonthMovement = useCallback(
+    async (monthMovementId: number) => {
+      await handleMonthMovementAction(monthMovementId, "pay");
+    },
+    [handleMonthMovementAction],
+  );
+
+  const unpayMonthMovement = useCallback(
+    async (monthMovementId: number) => {
+      await handleMonthMovementAction(monthMovementId, "unpay");
+    },
+    [handleMonthMovementAction],
+  );
 
   useEffect(() => {
     isMounted.current = true;
@@ -105,5 +192,8 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     setShowPaid,
     loading,
     error,
+    actionStates,
+    payMonthMovement,
+    unpayMonthMovement,
   };
 }

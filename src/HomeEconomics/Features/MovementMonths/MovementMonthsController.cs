@@ -36,7 +36,7 @@ public class MovementMonthsController(ICommandMediator commandMediator, IQueryMe
         return Ok(movementMonth);
     }
 
-    [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/pay")]
+    [HttpPost("api/movement-months")]
     [ProducesDefaultResponseType]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]

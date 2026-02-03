@@ -109,6 +109,9 @@ export default function HomePage() {
             <CurrentMonthMovementsList
               movements={currentMonthMovements.monthMovements}
               showPaid={currentMonthMovements.showPaid}
+              actionStates={currentMonthMovements.actionStates}
+              onPay={currentMonthMovements.payMonthMovement}
+              onUnpay={currentMonthMovements.unpayMonthMovement}
             />
           ) : null}
         </Box>
