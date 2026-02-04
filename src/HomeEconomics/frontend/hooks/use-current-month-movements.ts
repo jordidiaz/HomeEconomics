@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MovementMonthsService } from "../services/movement-months-service";
+import { useMonthMovementSelector } from "./use-month-movement-selector";
 import { MovementType } from "../types/movement-type";
 import type { MonthMovement } from "../types/month-movement";
 
@@ -25,6 +26,15 @@ type UseCurrentMonthMovementsResult = {
   setShowPaid: (value: boolean) => void;
   loading: boolean;
   error: Error | null;
+  selectedMonth: "current" | "next";
+  selectMonth: (value: "current" | "next") => void;
+  currentMonth: { year: number; month: number };
+  nextMonth: { year: number; month: number };
+  nextMonthAvailable: boolean;
+  creatingNextMonth: boolean;
+  createNextMonthErrorMessage: string | null;
+  createNextMonth: () => Promise<void>;
+  movementMonthLoaded: boolean;
   actionStates: Record<number, MonthMovementActionState>;
   payMonthMovement: (monthMovementId: number) => Promise<void>;
   unpayMonthMovement: (monthMovementId: number) => Promise<void>;
@@ -60,17 +70,10 @@ const toMonthMovementListItem = (monthMovement: MonthMovement): MonthMovementLis
   paidLabel: formatPaidLabel(monthMovement.paid),
 });
 
-const getCurrentYearMonth = (): { year: number; month: number } => {
-  const now = new Date();
-  return { year: now.getFullYear(), month: now.getMonth() + 1 };
-};
-
 export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
+  const selector = useMonthMovementSelector();
   const [allMonthMovements, setAllMonthMovements] = useState<MonthMovementListItem[]>([]);
-  const [movementMonthId, setMovementMonthId] = useState<number | null>(null);
   const [showPaid, setShowPaid] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
   const [actionStates, setActionStates] = useState<Record<number, MonthMovementActionState>>(
     {},
   );
@@ -81,38 +84,11 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     [allMonthMovements, showPaid],
   );
 
-  const fetchMonthMovements = useCallback(async () => {
-    const { year, month } = getCurrentYearMonth();
-    return MovementMonthsService.getByYearMonth(year, month);
-  }, []);
-
-  const loadMonthMovements = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchMonthMovements();
-      if (isMounted.current) {
-        setAllMonthMovements(data.monthMovements.map(toMonthMovementListItem));
-        setMovementMonthId(data.id);
-      }
-    } catch (caughtError) {
-      if (isMounted.current) {
-        setError(caughtError as Error);
-      }
-    } finally {
-      if (isMounted.current) {
-        setLoading(false);
-      }
-    }
-  }, [fetchMonthMovements]);
+  const movementMonthId = selector.movementMonth?.id ?? null;
 
   const reloadMonthMovements = useCallback(async () => {
-    const data = await fetchMonthMovements();
-    if (isMounted.current) {
-      setAllMonthMovements(data.monthMovements.map(toMonthMovementListItem));
-      setMovementMonthId(data.id);
-    }
-  }, [fetchMonthMovements]);
+    await selector.reloadSelectedMonth();
+  }, [selector.reloadSelectedMonth]);
 
   const updateActionState = useCallback(
     (monthMovementId: number, changes: Partial<MonthMovementActionState>) => {
@@ -178,20 +154,36 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
 
   useEffect(() => {
     isMounted.current = true;
-    loadMonthMovements();
-
     return () => {
       isMounted.current = false;
     };
-  }, [loadMonthMovements]);
+  }, []);
+
+  useEffect(() => {
+    if (selector.movementMonth) {
+      setAllMonthMovements(selector.movementMonth.monthMovements.map(toMonthMovementListItem));
+    } else {
+      setAllMonthMovements([]);
+    }
+    setActionStates({});
+  }, [selector.movementMonth]);
 
   return {
     monthMovements,
     totalMonthMovements: allMonthMovements.length,
     showPaid,
     setShowPaid,
-    loading,
-    error,
+    loading: selector.loading || selector.creating,
+    error: selector.error,
+    selectedMonth: selector.selectedMonth,
+    selectMonth: selector.selectMonth,
+    currentMonth: selector.currentMonth,
+    nextMonth: selector.nextMonth,
+    nextMonthAvailable: selector.nextMonthAvailable,
+    creatingNextMonth: selector.creating,
+    createNextMonthErrorMessage: selector.createErrorMessage,
+    createNextMonth: selector.createNextMonth,
+    movementMonthLoaded: selector.movementMonth !== null,
     actionStates,
     payMonthMovement,
     unpayMonthMovement,

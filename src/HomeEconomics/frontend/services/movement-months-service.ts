@@ -1,6 +1,23 @@
 import type { MovementMonth } from "../types/movement-month";
 
 export class MovementMonthsService {
+  static async create(year: number, month: number): Promise<MovementMonth> {
+    const response = await fetch("/api/movement-months", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ year, month }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to create movement month (${response.status})`);
+    }
+
+    const data: MovementMonth = await response.json();
+    return data;
+  }
+
   static async getByYearMonth(year: number, month: number): Promise<MovementMonth> {
     const response = await fetch(`/api/movement-months/${year}/${month}`);
 

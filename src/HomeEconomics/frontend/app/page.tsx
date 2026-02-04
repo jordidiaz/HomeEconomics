@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import { ConfirmDeleteMovementDialog } from "../components/confirm-delete-movement-dialog";
 import { CurrentMonthMovementsList } from "../components/current-month-movements-list";
+import { MonthMovementMonthSelector } from "../components/month-movement-month-selector";
 import { MovementForm } from "../components/movement-form";
 import { MovementsList } from "../components/movements-list";
 import { useCurrentMonthMovements } from "../hooks/use-current-month-movements";
@@ -60,6 +61,21 @@ export default function HomePage() {
     <Box sx={{ px: 4, py: 6 }}>
       <Box sx={{ display: "flex", gap: 4 }}>
         <Box sx={{ flex: 1, minWidth: 0 }}>
+          <MonthMovementMonthSelector
+            currentMonth={currentMonthMovements.currentMonth}
+            nextMonth={currentMonthMovements.nextMonth}
+            selectedMonth={currentMonthMovements.selectedMonth}
+            nextMonthAvailable={currentMonthMovements.nextMonthAvailable}
+            disabled={currentMonthMovements.loading}
+            creating={currentMonthMovements.creatingNextMonth}
+            createErrorMessage={currentMonthMovements.createNextMonthErrorMessage}
+            showCreateNextMonth={
+              currentMonthMovements.movementMonthLoaded &&
+              !currentMonthMovements.nextMonthAvailable
+            }
+            onSelect={currentMonthMovements.selectMonth}
+            onCreateNextMonth={currentMonthMovements.createNextMonth}
+          />
           {currentMonthMovements.loading ? (
             <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
               <CircularProgress />
