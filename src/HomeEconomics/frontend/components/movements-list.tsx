@@ -2,14 +2,17 @@
 
 import {
   Box,
-  Button,
   Chip,
+  IconButton,
   List,
   ListItem,
   ListItemText,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { MovementType } from "../types/movement-type";
 
 type MovementListItem = {
@@ -86,23 +89,30 @@ export function MovementsList({
                   size="small"
                 />
                 <Stack direction="row" spacing={1}>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    disabled={deleting}
-                    onClick={() => onEditRequest(movement.id)}
-                  >
-                    Editar
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    size="small"
-                    disabled={deleting}
-                    onClick={() => onDeleteRequest(movement.id, movement.name)}
-                  >
-                    Eliminar
-                  </Button>
+                  <Tooltip title="Editar">
+                    <span>
+                      <IconButton
+                        size="small"
+                        aria-label="Editar"
+                        disabled={deleting}
+                        onClick={() => onEditRequest(movement.id)}
+                      >
+                        <EditOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+                  <Tooltip title="Eliminar">
+                    <span>
+                      <IconButton
+                        size="small"
+                        aria-label="Eliminar"
+                        disabled={deleting}
+                        onClick={() => onDeleteRequest(movement.id, movement.name)}
+                      >
+                        <DeleteOutlineIcon fontSize="small" />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
                 </Stack>
               </Stack>
             </Stack>

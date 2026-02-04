@@ -1,6 +1,17 @@
 "use client";
 
-import { Button, Chip, List, ListItem, ListItemText, Stack, Typography } from "@mui/material";
+import {
+  Chip,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
+import MoneyOffOutlinedIcon from "@mui/icons-material/MoneyOffOutlined";
 import { MovementType } from "../types/movement-type";
 
 type MonthMovementListItem = {
@@ -96,18 +107,34 @@ export function CurrentMonthMovementsList({
                     {movement.amount}
                   </Typography>
                   <Stack spacing={0.5} sx={{ alignItems: "flex-end" }}>
-                    <Button
-                      variant="text"
-                      size="small"
-                      disabled={actionState.loading}
-                      onClick={() =>
-                        movement.paid
-                          ? void onUnpay(movement.id)
-                          : void onPay(movement.id)
+                    <Tooltip
+                      title={
+                        movement.paid ? "Marcar como no pagado" : "Marcar como pagado"
                       }
                     >
-                      {movement.paid ? "Marcar como no pagado" : "Marcar como pagado"}
-                    </Button>
+                      <span>
+                        <IconButton
+                          size="small"
+                          aria-label={
+                            movement.paid
+                              ? "Marcar como no pagado"
+                              : "Marcar como pagado"
+                          }
+                          disabled={actionState.loading}
+                          onClick={() =>
+                            movement.paid
+                              ? void onUnpay(movement.id)
+                              : void onPay(movement.id)
+                          }
+                        >
+                          {movement.paid ? (
+                            <MoneyOffOutlinedIcon fontSize="small" />
+                          ) : (
+                            <AttachMoneyOutlinedIcon fontSize="small" />
+                          )}
+                        </IconButton>
+                      </span>
+                    </Tooltip>
                     {actionState.errorMessage ? (
                       <Typography variant="body2" color="error">
                         {actionState.errorMessage}
