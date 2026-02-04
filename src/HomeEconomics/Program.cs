@@ -1,4 +1,7 @@
-﻿using Hellang.Middleware.ProblemDetails;
+using Hellang.Middleware.ProblemDetails;
+using HomeEconomics.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,15 @@ builder.Services
     .AddHomeEconomicsHealthChecks(connectionString!);
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    await DevelopmentDatabaseBootstrapper.EnsureDatabaseExistsAsync(connectionString!);
+
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<HomeEconomicsDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
 
 app
     .UseHomeEconomicsSpa()
