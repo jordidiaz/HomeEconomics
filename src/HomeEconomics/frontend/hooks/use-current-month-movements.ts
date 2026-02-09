@@ -8,6 +8,7 @@ type MonthMovementListItem = {
   id: number;
   name: string;
   amount: string;
+  amountValue: number;
   type: MovementType;
   typeLabel: string;
   paid: boolean;
@@ -17,6 +18,12 @@ type MonthMovementListItem = {
 type MonthMovementActionState = {
   loading: boolean;
   errorMessage: string | null;
+};
+
+type MonthMovementAmountUpdateState = {
+  loading: boolean;
+  errorMessage: string | null;
+  monthMovementId: number | null;
 };
 
 type UseCurrentMonthMovementsResult = {
@@ -44,6 +51,12 @@ type UseCurrentMonthMovementsResult = {
   actionStates: Record<number, MonthMovementActionState>;
   payMonthMovement: (monthMovementId: number) => Promise<void>;
   unpayMonthMovement: (monthMovementId: number) => Promise<void>;
+  amountUpdateState: MonthMovementAmountUpdateState;
+  setAmountUpdateTarget: (monthMovementId: number | null) => void;
+  updateMonthMovementAmount: (
+    monthMovementId: number,
+    amountInput: string,
+  ) => Promise<boolean>;
 };
 
 const formatAmount = (amount: number): string =>
@@ -70,6 +83,7 @@ const toMonthMovementListItem = (monthMovement: MonthMovement): MonthMovementLis
   id: monthMovement.id,
   name: monthMovement.name,
   amount: formatAmount(monthMovement.amount),
+  amountValue: monthMovement.amount,
   type: monthMovement.type,
   typeLabel: formatTypeLabel(monthMovement.type),
   paid: monthMovement.paid,
@@ -83,6 +97,11 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
   const [actionStates, setActionStates] = useState<Record<number, MonthMovementActionState>>(
     {},
   );
+  const [amountUpdateState, setAmountUpdateState] = useState<MonthMovementAmountUpdateState>({
+    loading: false,
+    errorMessage: null,
+    monthMovementId: null,
+  });
   const isMounted = useRef(true);
 
   const monthMovements = useMemo(
@@ -151,6 +170,65 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     [movementMonthId, reloadMonthMovements, updateActionState],
   );
 
+  const setAmountUpdateTarget = useCallback((monthMovementId: number | null) => {
+    setAmountUpdateState({
+      loading: false,
+      errorMessage: null,
+      monthMovementId,
+    });
+  }, []);
+
+  const updateMonthMovementAmount = useCallback(
+    async (monthMovementId: number, amountInput: string) => {
+      if (!movementMonthId) {
+        return false;
+      }
+      const amount = Number(amountInput);
+      setAmountUpdateState({
+        loading: true,
+        errorMessage: null,
+        monthMovementId,
+      });
+
+      if (Number.isNaN(amount)) {
+        setAmountUpdateState({
+          loading: false,
+          errorMessage: "Introduce un importe válido.",
+          monthMovementId,
+        });
+        return false;
+      }
+
+      try {
+        await MovementMonthsService.updateMonthMovementAmount(
+          movementMonthId,
+          monthMovementId,
+          amount,
+        );
+        await reloadMonthMovements();
+        return true;
+      } catch (caughtError) {
+        if (isMounted.current) {
+          setAmountUpdateState({
+            loading: false,
+            errorMessage:
+              "No se pudo actualizar el importe del movimiento. Por favor, inténtalo de nuevo.",
+            monthMovementId,
+          });
+        }
+        return false;
+      } finally {
+        if (isMounted.current) {
+          setAmountUpdateState((prev) => ({
+            ...prev,
+            loading: false,
+          }));
+        }
+      }
+    },
+    [movementMonthId, reloadMonthMovements],
+  );
+
   const payMonthMovement = useCallback(
     async (monthMovementId: number) => {
       await handleMonthMovementAction(monthMovementId, "pay");
@@ -179,6 +257,7 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
       setAllMonthMovements([]);
     }
     setActionStates({});
+    setAmountUpdateState({ loading: false, errorMessage: null, monthMovementId: null });
   }, [selector.movementMonth]);
 
   return {
@@ -206,5 +285,8 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     actionStates,
     payMonthMovement,
     unpayMonthMovement,
+    amountUpdateState,
+    setAmountUpdateTarget,
+    updateMonthMovementAmount,
   };
 }

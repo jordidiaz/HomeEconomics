@@ -101,4 +101,32 @@ export class MovementMonthsService {
       );
     }
   }
+
+  static async updateMonthMovementAmount(
+    movementMonthId: number,
+    monthMovementId: number,
+    amount: number,
+  ): Promise<void> {
+    const response = await fetch(
+      `/api/movement-months/${movementMonthId}/month-movements/${monthMovementId}/update-amount`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          movementMonthId,
+          monthMovementId,
+          amount,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      throw MovementMonthsService.createError(
+        `Failed to update month movement amount (${response.status})`,
+        response.status,
+      );
+    }
+  }
 }

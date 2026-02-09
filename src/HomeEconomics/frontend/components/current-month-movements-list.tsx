@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import MoneyOffOutlinedIcon from "@mui/icons-material/MoneyOffOutlined";
 import { MovementType } from "../types/movement-type";
 
@@ -18,6 +19,7 @@ type MonthMovementListItem = {
   id: number;
   name: string;
   amount: string;
+  amountValue: number;
   type: MovementType;
   typeLabel: string;
   paid: boolean;
@@ -29,12 +31,25 @@ type MonthMovementActionState = {
   errorMessage: string | null;
 };
 
+type MonthMovementAmountUpdateState = {
+  loading: boolean;
+  monthMovementId: number | null;
+};
+
+type MonthMovementEditTarget = {
+  id: number;
+  name: string;
+  amountValue: number;
+};
+
 type CurrentMonthMovementsListProps = {
   movements: MonthMovementListItem[];
   showPaid: boolean;
   actionStates: Record<number, MonthMovementActionState>;
+  amountUpdateState: MonthMovementAmountUpdateState;
   onPay: (monthMovementId: number) => Promise<void>;
   onUnpay: (monthMovementId: number) => Promise<void>;
+  onEditAmount: (movement: MonthMovementEditTarget) => void;
 };
 
 const getTypeColor = (type: MovementType) =>
@@ -46,8 +61,10 @@ export function CurrentMonthMovementsList({
   movements,
   showPaid,
   actionStates,
+  amountUpdateState,
   onPay,
   onUnpay,
+  onEditAmount,
 }: CurrentMonthMovementsListProps) {
   return (
     <List sx={{ bgcolor: "background.paper" }}>
@@ -56,6 +73,9 @@ export function CurrentMonthMovementsList({
           loading: false,
           errorMessage: null,
         };
+        const isAmountUpdateLoading =
+          amountUpdateState.loading && amountUpdateState.monthMovementId === movement.id;
+        const disableActions = actionState.loading || isAmountUpdateLoading;
 
         return (
           <ListItem
@@ -107,34 +127,54 @@ export function CurrentMonthMovementsList({
                     {movement.amount}
                   </Typography>
                   <Stack spacing={0.5} sx={{ alignItems: "flex-end" }}>
-                    <Tooltip
-                      title={
-                        movement.paid ? "Marcar como no pagado" : "Marcar como pagado"
-                      }
-                    >
-                      <span>
-                        <IconButton
-                          size="small"
-                          aria-label={
-                            movement.paid
-                              ? "Marcar como no pagado"
-                              : "Marcar como pagado"
-                          }
-                          disabled={actionState.loading}
-                          onClick={() =>
-                            movement.paid
-                              ? void onUnpay(movement.id)
-                              : void onPay(movement.id)
-                          }
-                        >
-                          {movement.paid ? (
-                            <MoneyOffOutlinedIcon fontSize="small" />
-                          ) : (
-                            <AttachMoneyOutlinedIcon fontSize="small" />
-                          )}
-                        </IconButton>
-                      </span>
-                    </Tooltip>
+                    <Stack direction="row" spacing={0.5}>
+                      <Tooltip title="Editar importe">
+                        <span>
+                          <IconButton
+                            size="small"
+                            aria-label="Editar importe"
+                            disabled={disableActions}
+                            onClick={() =>
+                              onEditAmount({
+                                id: movement.id,
+                                name: movement.name,
+                                amountValue: movement.amountValue,
+                              })
+                            }
+                          >
+                            <EditOutlinedIcon fontSize="small" />
+                          </IconButton>
+                        </span>
+                      </Tooltip>
+                      <Tooltip
+                        title={
+                          movement.paid ? "Marcar como no pagado" : "Marcar como pagado"
+                        }
+                      >
+                        <span>
+                          <IconButton
+                            size="small"
+                            aria-label={
+                              movement.paid
+                                ? "Marcar como no pagado"
+                                : "Marcar como pagado"
+                            }
+                            disabled={disableActions}
+                            onClick={() =>
+                              movement.paid
+                                ? void onUnpay(movement.id)
+                                : void onPay(movement.id)
+                            }
+                          >
+                            {movement.paid ? (
+                              <MoneyOffOutlinedIcon fontSize="small" />
+                            ) : (
+                              <AttachMoneyOutlinedIcon fontSize="small" />
+                            )}
+                          </IconButton>
+                        </span>
+                      </Tooltip>
+                    </Stack>
                     {actionState.errorMessage ? (
                       <Typography variant="body2" color="error">
                         {actionState.errorMessage}

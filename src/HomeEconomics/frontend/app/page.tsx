@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import { ConfirmDeleteMovementDialog } from "../components/confirm-delete-movement-dialog";
 import { CurrentMonthMovementsList } from "../components/current-month-movements-list";
+import { EditMonthMovementAmountDialog } from "../components/edit-month-movement-amount-dialog";
 import { MonthMovementMonthSelector } from "../components/month-movement-month-selector";
 import { MovementForm } from "../components/movement-form";
 import { MovementsList } from "../components/movements-list";
@@ -33,6 +34,12 @@ export default function HomePage() {
     id: number;
     name: string;
   } | null>(null);
+  const [movementToEditAmount, setMovementToEditAmount] = useState<{
+    id: number;
+    name: string;
+    amountValue: number;
+  } | null>(null);
+  const [editAmountValue, setEditAmountValue] = useState("");
 
   const handleDeleteRequest = (id: number, name: string) => {
     deleteMovement.clearError();
@@ -68,6 +75,35 @@ export default function HomePage() {
       return;
     }
     void addMovementToCurrentMonth.addToCurrentMonth(movement);
+  };
+
+  const handleEditAmountRequest = (movement: {
+    id: number;
+    name: string;
+    amountValue: number;
+  }) => {
+    currentMonthMovements.setAmountUpdateTarget(movement.id);
+    setMovementToEditAmount(movement);
+    setEditAmountValue(movement.amountValue.toFixed(2));
+  };
+
+  const handleEditAmountCancel = () => {
+    currentMonthMovements.setAmountUpdateTarget(null);
+    setMovementToEditAmount(null);
+    setEditAmountValue("");
+  };
+
+  const handleEditAmountAccept = async () => {
+    if (!movementToEditAmount) {
+      return;
+    }
+    const wasUpdated = await currentMonthMovements.updateMonthMovementAmount(
+      movementToEditAmount.id,
+      editAmountValue,
+    );
+    if (wasUpdated) {
+      handleEditAmountCancel();
+    }
   };
 
   return (
@@ -145,8 +181,10 @@ export default function HomePage() {
               movements={currentMonthMovements.monthMovements}
               showPaid={currentMonthMovements.showPaid}
               actionStates={currentMonthMovements.actionStates}
+              amountUpdateState={currentMonthMovements.amountUpdateState}
               onPay={currentMonthMovements.payMonthMovement}
               onUnpay={currentMonthMovements.unpayMonthMovement}
+              onEditAmount={handleEditAmountRequest}
             />
           ) : null}
         </Box>
@@ -207,6 +245,15 @@ export default function HomePage() {
         movementName={movementToDelete?.name ?? ""}
         onCancel={handleDeleteCancel}
         onConfirm={handleDeleteConfirm}
+      />
+      <EditMonthMovementAmountDialog
+        open={movementToEditAmount !== null}
+        amount={editAmountValue}
+        submitting={currentMonthMovements.amountUpdateState.loading}
+        errorMessage={currentMonthMovements.amountUpdateState.errorMessage}
+        onAmountChange={setEditAmountValue}
+        onCancel={handleEditAmountCancel}
+        onAccept={handleEditAmountAccept}
       />
     </Box>
   );
