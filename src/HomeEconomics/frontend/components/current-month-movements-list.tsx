@@ -13,6 +13,7 @@ import {
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import RedoOutlinedIcon from "@mui/icons-material/RedoOutlined";
 import MoneyOffOutlinedIcon from "@mui/icons-material/MoneyOffOutlined";
 import { MovementType } from "../types/movement-type";
 
@@ -42,6 +43,11 @@ type MonthMovementDeleteState = {
   monthMovementId: number | null;
 };
 
+type MonthMovementMoveState = {
+  loading: boolean;
+  monthMovementId: number | null;
+};
+
 type MonthMovementEditTarget = {
   id: number;
   name: string;
@@ -54,10 +60,13 @@ type CurrentMonthMovementsListProps = {
   actionStates: Record<number, MonthMovementActionState>;
   amountUpdateState: MonthMovementAmountUpdateState;
   deleteState: MonthMovementDeleteState;
+  moveState: MonthMovementMoveState;
+  nextMovementMonthExists: boolean;
   onPay: (monthMovementId: number) => Promise<void>;
   onUnpay: (monthMovementId: number) => Promise<void>;
   onEditAmount: (movement: MonthMovementEditTarget) => void;
   onDelete: (movementId: number) => void;
+  onMoveToNextMonth: (movementId: number) => void;
 };
 
 const getTypeColor = (type: MovementType) =>
@@ -71,10 +80,13 @@ export function CurrentMonthMovementsList({
   actionStates,
   amountUpdateState,
   deleteState,
+  moveState,
+  nextMovementMonthExists,
   onPay,
   onUnpay,
   onEditAmount,
   onDelete,
+  onMoveToNextMonth,
 }: CurrentMonthMovementsListProps) {
   return (
     <List sx={{ bgcolor: "background.paper" }}>
@@ -87,7 +99,9 @@ export function CurrentMonthMovementsList({
           amountUpdateState.loading && amountUpdateState.monthMovementId === movement.id;
         const isDeleteLoading =
           deleteState.loading && deleteState.monthMovementId === movement.id;
-        const disableActions = actionState.loading || isAmountUpdateLoading || isDeleteLoading;
+        const isMoveLoading = moveState.loading && moveState.monthMovementId === movement.id;
+        const disableActions =
+          actionState.loading || isAmountUpdateLoading || isDeleteLoading || isMoveLoading;
 
         return (
           <ListItem
@@ -140,6 +154,20 @@ export function CurrentMonthMovementsList({
                   </Typography>
                   <Stack spacing={0.5} sx={{ alignItems: "flex-end" }}>
                     <Stack direction="row" spacing={0.5}>
+                      {nextMovementMonthExists ? (
+                        <Tooltip title="Mover al mes siguiente">
+                          <span>
+                            <IconButton
+                              size="small"
+                              aria-label="Mover al mes siguiente"
+                              disabled={disableActions}
+                              onClick={() => onMoveToNextMonth(movement.id)}
+                            >
+                              <RedoOutlinedIcon fontSize="small" />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                      ) : null}
                       <Tooltip title="Editar importe">
                         <span>
                           <IconButton

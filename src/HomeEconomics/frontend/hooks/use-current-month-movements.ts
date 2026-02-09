@@ -32,6 +32,12 @@ type MonthMovementDeleteState = {
   monthMovementId: number | null;
 };
 
+type MonthMovementMoveState = {
+  loading: boolean;
+  errorMessage: string | null;
+  monthMovementId: number | null;
+};
+
 type UseCurrentMonthMovementsResult = {
   monthMovements: MonthMovementListItem[];
   totalMonthMovements: number;
@@ -44,6 +50,7 @@ type UseCurrentMonthMovementsResult = {
   currentMonth: { year: number; month: number };
   nextMonth: { year: number; month: number };
   nextMonthAvailable: boolean;
+  nextMovementMonthExists: boolean;
   currentMonthAvailable: boolean;
   currentMovementMonthId: number | null;
   creatingNextMonth: boolean;
@@ -66,6 +73,9 @@ type UseCurrentMonthMovementsResult = {
   deleteState: MonthMovementDeleteState;
   setDeleteTarget: (monthMovementId: number | null) => void;
   deleteMonthMovement: (monthMovementId: number) => Promise<boolean>;
+  moveState: MonthMovementMoveState;
+  setMoveTarget: (monthMovementId: number | null) => void;
+  moveMonthMovementToNextMonth: (monthMovementId: number) => Promise<boolean>;
 };
 
 const formatAmount = (amount: number): string =>
@@ -112,6 +122,11 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     monthMovementId: null,
   });
   const [deleteState, setDeleteState] = useState<MonthMovementDeleteState>({
+    loading: false,
+    errorMessage: null,
+    monthMovementId: null,
+  });
+  const [moveState, setMoveState] = useState<MonthMovementMoveState>({
     loading: false,
     errorMessage: null,
     monthMovementId: null,
@@ -288,6 +303,54 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     [movementMonthId, reloadMonthMovements],
   );
 
+  const setMoveTarget = useCallback((monthMovementId: number | null) => {
+    setMoveState({
+      loading: false,
+      errorMessage: null,
+      monthMovementId,
+    });
+  }, []);
+
+  const moveMonthMovementToNextMonth = useCallback(
+    async (monthMovementId: number) => {
+      if (!movementMonthId) {
+        return false;
+      }
+      setMoveState({
+        loading: true,
+        errorMessage: null,
+        monthMovementId,
+      });
+
+      try {
+        await MovementMonthsService.moveMonthMovementToNextMonth(
+          movementMonthId,
+          monthMovementId,
+        );
+        await reloadMonthMovements();
+        return true;
+      } catch (caughtError) {
+        if (isMounted.current) {
+          setMoveState({
+            loading: false,
+            errorMessage:
+              "No se pudo mover el movimiento al mes siguiente. Por favor, inténtalo de nuevo.",
+            monthMovementId,
+          });
+        }
+        return false;
+      } finally {
+        if (isMounted.current) {
+          setMoveState((prev) => ({
+            ...prev,
+            loading: false,
+          }));
+        }
+      }
+    },
+    [movementMonthId, reloadMonthMovements],
+  );
+
   const payMonthMovement = useCallback(
     async (monthMovementId: number) => {
       await handleMonthMovementAction(monthMovementId, "pay");
@@ -318,6 +381,7 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     setActionStates({});
     setAmountUpdateState({ loading: false, errorMessage: null, monthMovementId: null });
     setDeleteState({ loading: false, errorMessage: null, monthMovementId: null });
+    setMoveState({ loading: false, errorMessage: null, monthMovementId: null });
   }, [selector.movementMonth]);
 
   return {
@@ -332,6 +396,7 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     currentMonth: selector.currentMonth,
     nextMonth: selector.nextMonth,
     nextMonthAvailable: selector.nextMonthAvailable,
+    nextMovementMonthExists: selector.movementMonth?.nextMovementMonthExists ?? false,
     currentMonthAvailable: selector.currentMonthAvailable,
     currentMovementMonthId: selector.currentMovementMonthId,
     creatingNextMonth: selector.creatingNextMonth,
@@ -351,5 +416,8 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     deleteState,
     setDeleteTarget,
     deleteMonthMovement,
+    moveState,
+    setMoveTarget,
+    moveMonthMovementToNextMonth,
   };
 }

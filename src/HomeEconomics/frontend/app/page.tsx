@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import { ConfirmDeleteMonthMovementDialog } from "../components/confirm-delete-month-movement-dialog";
 import { ConfirmDeleteMovementDialog } from "../components/confirm-delete-movement-dialog";
+import { ConfirmMoveMonthMovementDialog } from "../components/confirm-move-month-movement-dialog";
 import { CurrentMonthMovementsList } from "../components/current-month-movements-list";
 import { EditMonthMovementAmountDialog } from "../components/edit-month-movement-amount-dialog";
 import { MonthMovementMonthSelector } from "../components/month-movement-month-selector";
@@ -36,6 +37,10 @@ export default function HomePage() {
     name: string;
   } | null>(null);
   const [monthMovementToDelete, setMonthMovementToDelete] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
+  const [monthMovementToMove, setMonthMovementToMove] = useState<{
     id: number;
     name: string;
   } | null>(null);
@@ -91,6 +96,34 @@ export default function HomePage() {
     );
     if (wasDeleted) {
       handleMonthMovementDeleteCancel();
+    }
+  };
+
+  const handleMonthMovementMoveRequest = (movementId: number) => {
+    const movement = currentMonthMovements.monthMovements.find(
+      (monthMovement) => monthMovement.id === movementId,
+    );
+    if (!movement) {
+      return;
+    }
+    currentMonthMovements.setMoveTarget(movementId);
+    setMonthMovementToMove({ id: movementId, name: movement.name });
+  };
+
+  const handleMonthMovementMoveCancel = () => {
+    currentMonthMovements.setMoveTarget(null);
+    setMonthMovementToMove(null);
+  };
+
+  const handleMonthMovementMoveConfirm = async () => {
+    if (!monthMovementToMove) {
+      return;
+    }
+    const wasMoved = await currentMonthMovements.moveMonthMovementToNextMonth(
+      monthMovementToMove.id,
+    );
+    if (wasMoved) {
+      handleMonthMovementMoveCancel();
     }
   };
 
@@ -216,10 +249,13 @@ export default function HomePage() {
               actionStates={currentMonthMovements.actionStates}
               amountUpdateState={currentMonthMovements.amountUpdateState}
               deleteState={currentMonthMovements.deleteState}
+              moveState={currentMonthMovements.moveState}
+              nextMovementMonthExists={currentMonthMovements.nextMovementMonthExists}
               onPay={currentMonthMovements.payMonthMovement}
               onUnpay={currentMonthMovements.unpayMonthMovement}
               onEditAmount={handleEditAmountRequest}
               onDelete={handleMonthMovementDeleteRequest}
+              onMoveToNextMonth={handleMonthMovementMoveRequest}
             />
           ) : null}
         </Box>
@@ -297,6 +333,14 @@ export default function HomePage() {
         movementName={monthMovementToDelete?.name ?? ""}
         onCancel={handleMonthMovementDeleteCancel}
         onConfirm={handleMonthMovementDeleteConfirm}
+      />
+      <ConfirmMoveMonthMovementDialog
+        open={monthMovementToMove !== null}
+        moving={currentMonthMovements.moveState.loading}
+        errorMessage={currentMonthMovements.moveState.errorMessage}
+        movementName={monthMovementToMove?.name ?? ""}
+        onCancel={handleMonthMovementMoveCancel}
+        onConfirm={handleMonthMovementMoveConfirm}
       />
     </Box>
   );

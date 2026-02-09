@@ -148,4 +148,23 @@ export class MovementMonthsService {
       );
     }
   }
+
+  static async moveMonthMovementToNextMonth(
+    movementMonthId: number,
+    monthMovementId: number,
+  ): Promise<void> {
+    const response = await fetch(
+      `/api/movement-months/${movementMonthId}/month-movements/${monthMovementId}/to-next-movement-month`,
+      {
+        method: "POST",
+      },
+    );
+
+    if (!response.ok) {
+      throw MovementMonthsService.createError(
+        `Failed to move month movement to next month (${response.status})`,
+        response.status,
+      );
+    }
+  }
 }
