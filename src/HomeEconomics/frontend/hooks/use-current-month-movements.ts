@@ -26,6 +26,12 @@ type MonthMovementAmountUpdateState = {
   monthMovementId: number | null;
 };
 
+type MonthMovementDeleteState = {
+  loading: boolean;
+  errorMessage: string | null;
+  monthMovementId: number | null;
+};
+
 type UseCurrentMonthMovementsResult = {
   monthMovements: MonthMovementListItem[];
   totalMonthMovements: number;
@@ -57,6 +63,9 @@ type UseCurrentMonthMovementsResult = {
     monthMovementId: number,
     amountInput: string,
   ) => Promise<boolean>;
+  deleteState: MonthMovementDeleteState;
+  setDeleteTarget: (monthMovementId: number | null) => void;
+  deleteMonthMovement: (monthMovementId: number) => Promise<boolean>;
 };
 
 const formatAmount = (amount: number): string =>
@@ -98,6 +107,11 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     {},
   );
   const [amountUpdateState, setAmountUpdateState] = useState<MonthMovementAmountUpdateState>({
+    loading: false,
+    errorMessage: null,
+    monthMovementId: null,
+  });
+  const [deleteState, setDeleteState] = useState<MonthMovementDeleteState>({
     loading: false,
     errorMessage: null,
     monthMovementId: null,
@@ -229,6 +243,51 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     [movementMonthId, reloadMonthMovements],
   );
 
+  const setDeleteTarget = useCallback((monthMovementId: number | null) => {
+    setDeleteState({
+      loading: false,
+      errorMessage: null,
+      monthMovementId,
+    });
+  }, []);
+
+  const deleteMonthMovement = useCallback(
+    async (monthMovementId: number) => {
+      if (!movementMonthId) {
+        return false;
+      }
+      setDeleteState({
+        loading: true,
+        errorMessage: null,
+        monthMovementId,
+      });
+
+      try {
+        await MovementMonthsService.deleteMonthMovement(movementMonthId, monthMovementId);
+        await reloadMonthMovements();
+        return true;
+      } catch (caughtError) {
+        if (isMounted.current) {
+          setDeleteState({
+            loading: false,
+            errorMessage:
+              "No se pudo eliminar el movimiento. Por favor, inténtalo de nuevo.",
+            monthMovementId,
+          });
+        }
+        return false;
+      } finally {
+        if (isMounted.current) {
+          setDeleteState((prev) => ({
+            ...prev,
+            loading: false,
+          }));
+        }
+      }
+    },
+    [movementMonthId, reloadMonthMovements],
+  );
+
   const payMonthMovement = useCallback(
     async (monthMovementId: number) => {
       await handleMonthMovementAction(monthMovementId, "pay");
@@ -258,6 +317,7 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     }
     setActionStates({});
     setAmountUpdateState({ loading: false, errorMessage: null, monthMovementId: null });
+    setDeleteState({ loading: false, errorMessage: null, monthMovementId: null });
   }, [selector.movementMonth]);
 
   return {
@@ -288,5 +348,8 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     amountUpdateState,
     setAmountUpdateTarget,
     updateMonthMovementAmount,
+    deleteState,
+    setDeleteTarget,
+    deleteMonthMovement,
   };
 }

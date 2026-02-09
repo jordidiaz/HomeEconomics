@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import MoneyOffOutlinedIcon from "@mui/icons-material/MoneyOffOutlined";
 import { MovementType } from "../types/movement-type";
@@ -36,6 +37,11 @@ type MonthMovementAmountUpdateState = {
   monthMovementId: number | null;
 };
 
+type MonthMovementDeleteState = {
+  loading: boolean;
+  monthMovementId: number | null;
+};
+
 type MonthMovementEditTarget = {
   id: number;
   name: string;
@@ -47,9 +53,11 @@ type CurrentMonthMovementsListProps = {
   showPaid: boolean;
   actionStates: Record<number, MonthMovementActionState>;
   amountUpdateState: MonthMovementAmountUpdateState;
+  deleteState: MonthMovementDeleteState;
   onPay: (monthMovementId: number) => Promise<void>;
   onUnpay: (monthMovementId: number) => Promise<void>;
   onEditAmount: (movement: MonthMovementEditTarget) => void;
+  onDelete: (movementId: number) => void;
 };
 
 const getTypeColor = (type: MovementType) =>
@@ -62,9 +70,11 @@ export function CurrentMonthMovementsList({
   showPaid,
   actionStates,
   amountUpdateState,
+  deleteState,
   onPay,
   onUnpay,
   onEditAmount,
+  onDelete,
 }: CurrentMonthMovementsListProps) {
   return (
     <List sx={{ bgcolor: "background.paper" }}>
@@ -75,7 +85,9 @@ export function CurrentMonthMovementsList({
         };
         const isAmountUpdateLoading =
           amountUpdateState.loading && amountUpdateState.monthMovementId === movement.id;
-        const disableActions = actionState.loading || isAmountUpdateLoading;
+        const isDeleteLoading =
+          deleteState.loading && deleteState.monthMovementId === movement.id;
+        const disableActions = actionState.loading || isAmountUpdateLoading || isDeleteLoading;
 
         return (
           <ListItem
@@ -146,6 +158,20 @@ export function CurrentMonthMovementsList({
                           </IconButton>
                         </span>
                       </Tooltip>
+                      {!movement.paid ? (
+                        <Tooltip title="Eliminar">
+                          <span>
+                            <IconButton
+                              size="small"
+                              aria-label="Eliminar"
+                              disabled={disableActions}
+                              onClick={() => onDelete(movement.id)}
+                            >
+                              <DeleteOutlinedIcon fontSize="small" />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                      ) : null}
                       <Tooltip
                         title={
                           movement.paid ? "Marcar como no pagado" : "Marcar como pagado"

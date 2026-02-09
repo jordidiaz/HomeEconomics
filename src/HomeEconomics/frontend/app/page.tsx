@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { ConfirmDeleteMonthMovementDialog } from "../components/confirm-delete-month-movement-dialog";
 import { ConfirmDeleteMovementDialog } from "../components/confirm-delete-movement-dialog";
 import { CurrentMonthMovementsList } from "../components/current-month-movements-list";
 import { EditMonthMovementAmountDialog } from "../components/edit-month-movement-amount-dialog";
@@ -31,6 +32,10 @@ export default function HomePage() {
     onAdded: currentMonthMovements.reloadCurrentMonthMovements,
   });
   const [movementToDelete, setMovementToDelete] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
+  const [monthMovementToDelete, setMonthMovementToDelete] = useState<{
     id: number;
     name: string;
   } | null>(null);
@@ -58,6 +63,34 @@ export default function HomePage() {
     const wasDeleted = await deleteMovement.deleteMovement(movementToDelete.id);
     if (wasDeleted) {
       setMovementToDelete(null);
+    }
+  };
+
+  const handleMonthMovementDeleteRequest = (movementId: number) => {
+    const movement = currentMonthMovements.monthMovements.find(
+      (monthMovement) => monthMovement.id === movementId,
+    );
+    if (!movement) {
+      return;
+    }
+    currentMonthMovements.setDeleteTarget(movementId);
+    setMonthMovementToDelete({ id: movementId, name: movement.name });
+  };
+
+  const handleMonthMovementDeleteCancel = () => {
+    currentMonthMovements.setDeleteTarget(null);
+    setMonthMovementToDelete(null);
+  };
+
+  const handleMonthMovementDeleteConfirm = async () => {
+    if (!monthMovementToDelete) {
+      return;
+    }
+    const wasDeleted = await currentMonthMovements.deleteMonthMovement(
+      monthMovementToDelete.id,
+    );
+    if (wasDeleted) {
+      handleMonthMovementDeleteCancel();
     }
   };
 
@@ -182,9 +215,11 @@ export default function HomePage() {
               showPaid={currentMonthMovements.showPaid}
               actionStates={currentMonthMovements.actionStates}
               amountUpdateState={currentMonthMovements.amountUpdateState}
+              deleteState={currentMonthMovements.deleteState}
               onPay={currentMonthMovements.payMonthMovement}
               onUnpay={currentMonthMovements.unpayMonthMovement}
               onEditAmount={handleEditAmountRequest}
+              onDelete={handleMonthMovementDeleteRequest}
             />
           ) : null}
         </Box>
@@ -254,6 +289,14 @@ export default function HomePage() {
         onAmountChange={setEditAmountValue}
         onCancel={handleEditAmountCancel}
         onAccept={handleEditAmountAccept}
+      />
+      <ConfirmDeleteMonthMovementDialog
+        open={monthMovementToDelete !== null}
+        deleting={currentMonthMovements.deleteState.loading}
+        errorMessage={currentMonthMovements.deleteState.errorMessage}
+        movementName={monthMovementToDelete?.name ?? ""}
+        onCancel={handleMonthMovementDeleteCancel}
+        onConfirm={handleMonthMovementDeleteConfirm}
       />
     </Box>
   );
