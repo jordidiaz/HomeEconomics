@@ -33,7 +33,7 @@ Use the `status` object from the movement month response and render:
 
 - `accountAmount` in a text input
 - `cashAmount` in a text input
-- The calculation `pendingTotalExpenses + pendingTotalIncomes` in a label just below
+- The calculation `(accountAmount + cashAmount) - (pendingTotalExpenses - pendingTotalIncomes)` in a label just below
 
 ---
 
@@ -41,7 +41,7 @@ Use the `status` object from the movement month response and render:
 
 - `accountAmount`: **"Dinero en cuenta"**
 - `cashAmount`: **"Dinero en cash"**
-- `pendingTotalExpenses + pendingTotalIncomes`: **"Balance"**
+- `(accountAmount + cashAmount) - (pendingTotalExpenses - pendingTotalIncomes)`: **"Balance"**
 
 All user-facing text must be in Spanish.
 

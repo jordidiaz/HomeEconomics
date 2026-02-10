@@ -21,7 +21,10 @@ const formatAmount = (amount: number): string =>
   }).format(amount);
 
 export function MovementMonthStatusForm({ status, loading }: MovementMonthStatusFormProps) {
-  const balance = status.pendingTotalExpenses + status.pendingTotalIncomes;
+  const balance =
+    status.accountAmount +
+    status.cashAmount -
+    (status.pendingTotalExpenses - status.pendingTotalIncomes);
 
   return (
     <Box
