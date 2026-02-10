@@ -25,6 +25,7 @@ import { useDeleteMovement } from "../hooks/use-delete-movement";
 import { useAddMovementToCurrentMonth } from "../hooks/use-add-movement-to-current-month";
 import { useMovementForm } from "../hooks/use-movement-form";
 import { useMovements } from "../hooks/use-movements";
+import { useMovementMonthStatusForm } from "../hooks/use-movement-month-status-form";
 
 export default function HomePage() {
   const currentMonthMovements = useCurrentMonthMovements();
@@ -38,6 +39,10 @@ export default function HomePage() {
   const addMonthMovementForm = useAddMonthMovementForm({
     movementMonthId: currentMonthMovements.currentMovementMonthId,
     onAdded: currentMonthMovements.reloadCurrentMonthMovements,
+  });
+  const movementMonthStatusForm = useMovementMonthStatusForm({
+    movementMonth: currentMonthMovements.movementMonth,
+    status: currentMonthMovements.status,
   });
   const [movementToDelete, setMovementToDelete] = useState<{
     id: number;
@@ -185,8 +190,16 @@ export default function HomePage() {
         <Box sx={{ flex: 1, minWidth: 0 }}>
           {currentMonthMovements.status ? (
             <MovementMonthStatusForm
-              status={currentMonthMovements.status}
-              loading={currentMonthMovements.loading}
+              accountAmount={movementMonthStatusForm.accountAmount}
+              cashAmount={movementMonthStatusForm.cashAmount}
+              balance={movementMonthStatusForm.balance}
+              loading={
+                movementMonthStatusForm.submitting || currentMonthMovements.loading
+              }
+              errorMessage={movementMonthStatusForm.errorMessage}
+              onAccountAmountChange={movementMonthStatusForm.setAccountAmount}
+              onCashAmountChange={movementMonthStatusForm.setCashAmount}
+              onBlur={movementMonthStatusForm.submitOnBlur}
             />
           ) : null}
           <MonthMovementMonthSelector

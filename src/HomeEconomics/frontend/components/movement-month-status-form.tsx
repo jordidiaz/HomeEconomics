@@ -1,17 +1,16 @@
 "use client";
 
-import { Box, Stack, TextField, Typography } from "@mui/material";
-
-type MovementMonthStatus = {
-  pendingTotalExpenses: number;
-  pendingTotalIncomes: number;
-  accountAmount: number;
-  cashAmount: number;
-};
+import { Alert, Box, Stack, TextField, Typography } from "@mui/material";
 
 type MovementMonthStatusFormProps = {
-  status: MovementMonthStatus;
+  accountAmount: string;
+  cashAmount: string;
+  balance: number;
   loading: boolean;
+  errorMessage: string | null;
+  onAccountAmountChange: (value: string) => void;
+  onCashAmountChange: (value: string) => void;
+  onBlur: () => void;
 };
 
 const formatAmount = (amount: number): string =>
@@ -20,12 +19,16 @@ const formatAmount = (amount: number): string =>
     maximumFractionDigits: 2,
   }).format(amount);
 
-export function MovementMonthStatusForm({ status, loading }: MovementMonthStatusFormProps) {
-  const balance =
-    status.accountAmount +
-    status.cashAmount -
-    (status.pendingTotalExpenses - status.pendingTotalIncomes);
-
+export function MovementMonthStatusForm({
+  accountAmount,
+  cashAmount,
+  balance,
+  loading,
+  errorMessage,
+  onAccountAmountChange,
+  onCashAmountChange,
+  onBlur,
+}: MovementMonthStatusFormProps) {
   return (
     <Box
       sx={{
@@ -40,21 +43,28 @@ export function MovementMonthStatusForm({ status, loading }: MovementMonthStatus
       <Stack spacing={2}>
         <TextField
           label="Dinero en cuenta"
-          value={formatAmount(status.accountAmount)}
-          InputProps={{ readOnly: true }}
+          value={accountAmount}
+          onChange={(event) => onAccountAmountChange(event.target.value)}
+          onBlur={onBlur}
           disabled={loading}
           fullWidth
+          type="number"
+          inputProps={{ step: "0.01" }}
         />
         <TextField
           label="Dinero en cash"
-          value={formatAmount(status.cashAmount)}
-          InputProps={{ readOnly: true }}
+          value={cashAmount}
+          onChange={(event) => onCashAmountChange(event.target.value)}
+          onBlur={onBlur}
           disabled={loading}
           fullWidth
+          type="number"
+          inputProps={{ step: "0.01" }}
         />
         <Typography variant="body2" color="text.secondary">
           Balance: {formatAmount(balance)}
         </Typography>
+        {errorMessage ? <Alert severity="error">{errorMessage}</Alert> : null}
       </Stack>
     </Box>
   );

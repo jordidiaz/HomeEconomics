@@ -47,6 +47,7 @@ type UseCurrentMonthMovementsResult = {
   loading: boolean;
   error: Error | null;
   status: MovementMonth["status"] | null;
+  movementMonth: { id: number; year: number; month: number } | null;
   selectedMonth: "current" | "next";
   selectMonth: (value: "current" | "next") => void;
   currentMonth: { year: number; month: number };
@@ -394,6 +395,13 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     loading: selector.loading || selector.creatingNextMonth || selector.creatingCurrentMonth,
     error: selector.error,
     status: selector.movementMonth?.status ?? null,
+    movementMonth: selector.movementMonth
+      ? {
+          id: selector.movementMonth.id,
+          year: selector.movementMonth.year,
+          month: selector.movementMonth.month,
+        }
+      : null,
     selectedMonth: selector.selectedMonth,
     selectMonth: selector.selectMonth,
     currentMonth: selector.currentMonth,

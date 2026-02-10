@@ -167,4 +167,29 @@ export class MovementMonthsService {
       );
     }
   }
+
+  static async addStatus(
+    movementMonthId: number,
+    status: {
+      year: number;
+      month: number;
+      accountAmount: number;
+      cashAmount: number;
+    },
+  ): Promise<void> {
+    const response = await fetch(`/api/movement-months/${movementMonthId}/add-status`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(status),
+    });
+
+    if (!response.ok) {
+      throw MovementMonthsService.createError(
+        `Failed to add movement month status (${response.status})`,
+        response.status,
+      );
+    }
+  }
 }
