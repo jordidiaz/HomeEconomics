@@ -3,6 +3,7 @@ import { MovementMonthsService } from "../services/movement-months-service";
 import { useMonthMovementSelector } from "./use-month-movement-selector";
 import { MovementType } from "../types/movement-type";
 import type { MonthMovement } from "../types/month-movement";
+import type { MovementMonth } from "../types/movement-month";
 
 type MonthMovementListItem = {
   id: number;
@@ -45,6 +46,7 @@ type UseCurrentMonthMovementsResult = {
   setShowPaid: (value: boolean) => void;
   loading: boolean;
   error: Error | null;
+  status: MovementMonth["status"] | null;
   selectedMonth: "current" | "next";
   selectMonth: (value: "current" | "next") => void;
   currentMonth: { year: number; month: number };
@@ -391,6 +393,7 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     setShowPaid,
     loading: selector.loading || selector.creatingNextMonth || selector.creatingCurrentMonth,
     error: selector.error,
+    status: selector.movementMonth?.status ?? null,
     selectedMonth: selector.selectedMonth,
     selectMonth: selector.selectMonth,
     currentMonth: selector.currentMonth,

@@ -15,6 +15,7 @@ import { ConfirmMoveMonthMovementDialog } from "../components/confirm-move-month
 import { CurrentMonthMovementsList } from "../components/current-month-movements-list";
 import { EditMonthMovementAmountDialog } from "../components/edit-month-movement-amount-dialog";
 import { AddMonthMovementForm } from "../components/add-month-movement-form";
+import { MovementMonthStatusForm } from "../components/movement-month-status-form";
 import { MonthMovementMonthSelector } from "../components/month-movement-month-selector";
 import { MovementForm } from "../components/movement-form";
 import { MovementsList } from "../components/movements-list";
@@ -182,6 +183,12 @@ export default function HomePage() {
     <Box sx={{ px: 4, py: 6 }}>
       <Box sx={{ display: "flex", gap: 4 }}>
         <Box sx={{ flex: 1, minWidth: 0 }}>
+          {currentMonthMovements.status ? (
+            <MovementMonthStatusForm
+              status={currentMonthMovements.status}
+              loading={currentMonthMovements.loading}
+            />
+          ) : null}
           <MonthMovementMonthSelector
             currentMonth={currentMonthMovements.currentMonth}
             nextMonth={currentMonthMovements.nextMonth}
