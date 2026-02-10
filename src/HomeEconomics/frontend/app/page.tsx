@@ -215,22 +215,6 @@ export default function HomePage() {
           ) : null}
           {!currentMonthMovements.loading &&
           !currentMonthMovements.error &&
-          currentMonthMovements.totalMonthMovements > 0 ? (
-            <FormControlLabel
-              sx={{ mb: 2 }}
-              control={
-                <Switch
-                  checked={currentMonthMovements.showPaid}
-                  onChange={(event) =>
-                    currentMonthMovements.setShowPaid(event.target.checked)
-                  }
-                />
-              }
-              label="Mostrar pagados"
-            />
-          ) : null}
-          {!currentMonthMovements.loading &&
-          !currentMonthMovements.error &&
           currentMonthMovements.selectedMonth === "current" &&
           currentMonthMovements.currentMovementMonthId !== null ? (
             <AddMonthMovementForm
@@ -245,6 +229,22 @@ export default function HomePage() {
               onTypeChange={addMonthMovementForm.setType}
               onSubmit={addMonthMovementForm.submit}
               onCancel={addMonthMovementForm.cancel}
+            />
+          ) : null}
+          {!currentMonthMovements.loading &&
+          !currentMonthMovements.error &&
+          currentMonthMovements.totalMonthMovements > 0 ? (
+            <FormControlLabel
+              sx={{ mb: 2 }}
+              control={
+                <Switch
+                  checked={currentMonthMovements.showPaid}
+                  onChange={(event) =>
+                    currentMonthMovements.setShowPaid(event.target.checked)
+                  }
+                />
+              }
+              label="Mostrar pagados"
             />
           ) : null}
           {!currentMonthMovements.loading &&
