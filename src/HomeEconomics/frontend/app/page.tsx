@@ -14,9 +14,11 @@ import { ConfirmDeleteMovementDialog } from "../components/confirm-delete-moveme
 import { ConfirmMoveMonthMovementDialog } from "../components/confirm-move-month-movement-dialog";
 import { CurrentMonthMovementsList } from "../components/current-month-movements-list";
 import { EditMonthMovementAmountDialog } from "../components/edit-month-movement-amount-dialog";
+import { AddMonthMovementForm } from "../components/add-month-movement-form";
 import { MonthMovementMonthSelector } from "../components/month-movement-month-selector";
 import { MovementForm } from "../components/movement-form";
 import { MovementsList } from "../components/movements-list";
+import { useAddMonthMovementForm } from "../hooks/use-add-month-movement-form";
 import { useCurrentMonthMovements } from "../hooks/use-current-month-movements";
 import { useDeleteMovement } from "../hooks/use-delete-movement";
 import { useAddMovementToCurrentMonth } from "../hooks/use-add-movement-to-current-month";
@@ -29,6 +31,10 @@ export default function HomePage() {
   const movementForm = useMovementForm({ onSaved: reload });
   const deleteMovement = useDeleteMovement({ onDeleted: reload });
   const addMovementToCurrentMonth = useAddMovementToCurrentMonth({
+    movementMonthId: currentMonthMovements.currentMovementMonthId,
+    onAdded: currentMonthMovements.reloadCurrentMonthMovements,
+  });
+  const addMonthMovementForm = useAddMonthMovementForm({
     movementMonthId: currentMonthMovements.currentMovementMonthId,
     onAdded: currentMonthMovements.reloadCurrentMonthMovements,
   });
@@ -221,6 +227,24 @@ export default function HomePage() {
                 />
               }
               label="Mostrar pagados"
+            />
+          ) : null}
+          {!currentMonthMovements.loading &&
+          !currentMonthMovements.error &&
+          currentMonthMovements.selectedMonth === "current" &&
+          currentMonthMovements.currentMovementMonthId !== null ? (
+            <AddMonthMovementForm
+              name={addMonthMovementForm.name}
+              amount={addMonthMovementForm.amount}
+              type={addMonthMovementForm.type}
+              submitting={addMonthMovementForm.submitting}
+              errorMessage={addMonthMovementForm.errorMessage}
+              validationMessage={addMonthMovementForm.validationMessage}
+              onNameChange={addMonthMovementForm.setName}
+              onAmountChange={addMonthMovementForm.setAmount}
+              onTypeChange={addMonthMovementForm.setType}
+              onSubmit={addMonthMovementForm.submit}
+              onCancel={addMonthMovementForm.cancel}
             />
           ) : null}
           {!currentMonthMovements.loading &&
