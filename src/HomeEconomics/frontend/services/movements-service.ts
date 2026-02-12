@@ -20,15 +20,31 @@ export type CreateMovementRequest = {
 export type UpdateMovementRequest = CreateMovementRequest & { id: number };
 
 export class MovementsService {
-  static async getAll(): Promise<Movement[]> {
-    const response = await fetch("/api/movements");
+  private static inFlightGetAll: Promise<Movement[]> | null = null;
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch movements (${response.status})`);
+  static async getAll(): Promise<Movement[]> {
+    if (MovementsService.inFlightGetAll) {
+      return MovementsService.inFlightGetAll;
     }
 
-    const data: MovementsResponse = await response.json();
-    return data.movements;
+    const request = (async () => {
+      const response = await fetch("/api/movements");
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch movements (${response.status})`);
+      }
+
+      const data: MovementsResponse = await response.json();
+      return data.movements;
+    })();
+
+    MovementsService.inFlightGetAll = request;
+
+    try {
+      return await request;
+    } finally {
+      MovementsService.inFlightGetAll = null;
+    }
   }
 
   static async create(request: CreateMovementRequest): Promise<number> {

@@ -2,6 +2,8 @@ import type { MovementMonth } from "../types/movement-month";
 import type { MovementType } from "../types/movement-type";
 
 export class MovementMonthsService {
+  private static inFlightByYearMonth = new Map<string, Promise<MovementMonth>>();
+
   private static createError(message: string, status: number): Error & { status: number } {
     return Object.assign(new Error(message), { status });
   }
@@ -27,17 +29,33 @@ export class MovementMonthsService {
   }
 
   static async getByYearMonth(year: number, month: number): Promise<MovementMonth> {
-    const response = await fetch(`/api/movement-months/${year}/${month}`);
-
-    if (!response.ok) {
-      throw MovementMonthsService.createError(
-        `Failed to fetch movement month (${response.status})`,
-        response.status,
-      );
+    const key = `${year}-${month}`;
+    const inFlight = MovementMonthsService.inFlightByYearMonth.get(key);
+    if (inFlight) {
+      return inFlight;
     }
 
-    const data: MovementMonth = await response.json();
-    return data;
+    const request = (async () => {
+      const response = await fetch(`/api/movement-months/${year}/${month}`);
+
+      if (!response.ok) {
+        throw MovementMonthsService.createError(
+          `Failed to fetch movement month (${response.status})`,
+          response.status,
+        );
+      }
+
+      const data: MovementMonth = await response.json();
+      return data;
+    })();
+
+    MovementMonthsService.inFlightByYearMonth.set(key, request);
+
+    try {
+      return await request;
+    } finally {
+      MovementMonthsService.inFlightByYearMonth.delete(key);
+    }
   }
 
   static async addMonthMovement(
