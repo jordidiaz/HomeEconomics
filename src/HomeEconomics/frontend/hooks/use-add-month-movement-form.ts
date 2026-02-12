@@ -45,7 +45,7 @@ export function useAddMonthMovementForm(
     if (!trimmedName) {
       return false;
     }
-    if (!Number.isFinite(parsedAmount) || parsedAmount < 0) {
+    if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
       return false;
     }
     if (type === MovementType.Undefined) {

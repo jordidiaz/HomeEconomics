@@ -4,7 +4,7 @@ import { AppThemeProvider } from "../components/app-theme-provider";
 
 export const metadata: Metadata = {
   title: "HomeEconomics",
-  description: "HomeEconomics frontend bootstrap",
+  description: "HomeEconomics interfaz principal",
 };
 
 type RootLayoutProps = {
@@ -13,7 +13,7 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body>
         <AppThemeProvider>{children}</AppThemeProvider>
       </body>

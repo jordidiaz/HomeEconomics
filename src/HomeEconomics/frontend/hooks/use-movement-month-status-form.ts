@@ -78,6 +78,20 @@ export function useMovementMonthStatusForm(
       return;
     }
 
+    const parsedAccount = Number(accountAmount);
+    const parsedCash = Number(cashAmount);
+    if (
+      !Number.isFinite(parsedAccount) ||
+      !Number.isFinite(parsedCash) ||
+      parsedAccount < 0 ||
+      parsedCash < 0
+    ) {
+      setErrorMessage("Introduce valores numericos validos.");
+      return;
+    }
+
+    setErrorMessage(null);
+
     const currentValues = { accountAmount, cashAmount };
     const lastSubmitted = lastSubmittedRef.current;
     if (
@@ -88,14 +102,7 @@ export function useMovementMonthStatusForm(
       return;
     }
 
-    const parsedAccount = Number(accountAmount);
-    const parsedCash = Number(cashAmount);
-    if (!Number.isFinite(parsedAccount) || !Number.isFinite(parsedCash)) {
-      return;
-    }
-
     setSubmitting(true);
-    setErrorMessage(null);
     try {
       await MovementMonthsService.addStatus(options.movementMonth.id, {
         year: options.movementMonth.year,

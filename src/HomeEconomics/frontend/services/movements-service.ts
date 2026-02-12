@@ -59,13 +59,16 @@ export class MovementsService {
   }
 
   static async update(id: number, request: UpdateMovementRequest): Promise<void> {
-    request.id = id;
+    const payload: UpdateMovementRequest = {
+      ...request,
+      id,
+    };
     const response = await fetch(`/api/movements/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(request),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {

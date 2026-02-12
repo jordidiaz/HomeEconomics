@@ -111,7 +111,7 @@ export function useMovementForm(
     if (!trimmedName) {
       return false;
     }
-    if (!Number.isFinite(parsedAmount) || parsedAmount < 0) {
+    if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
       return false;
     }
     if (type === MovementType.Undefined) {
@@ -123,7 +123,7 @@ export function useMovementForm(
     if (frequencyType === FrequencyType.Yearly && !isValidMonth(frequencyMonth)) {
       return false;
     }
-    if (frequencyType === FrequencyType.Custom && customMonths.length < 2) {
+    if (frequencyType === FrequencyType.Custom && customMonths.length < 1) {
       return false;
     }
     return true;
@@ -152,7 +152,10 @@ export function useMovementForm(
       if (editingId === null) {
         await MovementsService.create(request);
       } else {
-        const updateRequest: UpdateMovementRequest = request;
+        const updateRequest: UpdateMovementRequest = {
+          ...request,
+          id: editingId,
+        };
         await MovementsService.update(editingId, updateRequest);
       }
       resetForm();

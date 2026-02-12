@@ -42,15 +42,18 @@ export class MovementMonthsService {
 
   static async addMonthMovement(
     movementMonthId: number,
-    movement: { movementMonthId: number, name: string; amount: number; type: MovementType },
+    movement: { name: string; amount: number; type: MovementType },
   ): Promise<MovementMonth> {
-    movement.movementMonthId = movementMonthId;
+    const payload = {
+      movementMonthId,
+      ...movement,
+    };
     const response = await fetch(`/api/movement-months/${movementMonthId}/month-movements`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(movement),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
@@ -107,6 +110,11 @@ export class MovementMonthsService {
     monthMovementId: number,
     amount: number,
   ): Promise<void> {
+    const payload = {
+      movementMonthId,
+      monthMovementId,
+      amount,
+    };
     const response = await fetch(
       `/api/movement-months/${movementMonthId}/month-movements/${monthMovementId}/update-amount`,
       {
@@ -114,11 +122,7 @@ export class MovementMonthsService {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          movementMonthId,
-          monthMovementId,
-          amount,
-        }),
+        body: JSON.stringify(payload),
       },
     );
 
