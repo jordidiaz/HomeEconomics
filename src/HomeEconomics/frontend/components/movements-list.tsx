@@ -53,7 +53,15 @@ export function MovementsList({
   onEditRequest,
 }: MovementsListProps) {
   return (
-    <List sx={{ bgcolor: "background.paper" }}>
+    <List
+      sx={{
+        p: 0,
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        bgcolor: "transparent",
+      }}
+    >
       {movements.map((movement) => {
         const actionState = addActionStates[movement.id] ?? {
           loading: false,
@@ -64,11 +72,18 @@ export function MovementsList({
           <ListItem
             key={movement.id}
             sx={{
+              p: { xs: 2, md: 2.5 },
               border: 1,
               borderColor: "divider",
-              borderRadius: 2,
-              mb: 2,
+              borderRadius: 3,
               alignItems: "flex-start",
+              bgcolor: "background.paper",
+              boxShadow: "0 12px 24px rgba(15, 23, 42, 0.08)",
+              transition: "transform 0.2s ease, box-shadow 0.2s ease",
+              "&:hover": {
+                boxShadow: "0 18px 32px rgba(15, 23, 42, 0.12)",
+                transform: "translateY(-1px)",
+              },
             }}
           >
             <Stack spacing={1} sx={{ width: "100%" }}>
@@ -93,6 +108,7 @@ export function MovementsList({
                   <Typography
                     variant="h6"
                     sx={{
+                      fontWeight: 700,
                       color:
                         movement.type === MovementType.Income
                           ? "success.main"

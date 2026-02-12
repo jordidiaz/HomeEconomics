@@ -33,11 +33,12 @@ export function MovementMonthStatusForm({
     <Box
       sx={{
         mb: 2,
-        p: 3,
+        p: { xs: 2.5, md: 3 },
         border: 1,
         borderColor: "divider",
-        borderRadius: 2,
+        borderRadius: 3,
         bgcolor: "background.paper",
+        boxShadow: "0 14px 24px rgba(15, 23, 42, 0.08)",
       }}
     >
       <Stack spacing={2}>
@@ -61,7 +62,7 @@ export function MovementMonthStatusForm({
           type="number"
           inputProps={{ step: "0.01" }}
         />
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>
           Balance: {formatAmount(balance)}
         </Typography>
         {errorMessage ? <Alert severity="error">{errorMessage}</Alert> : null}

@@ -88,6 +88,7 @@ export function MonthMovementMonthSelector({
           exclusive
           onChange={handleChange}
           disabled={disabled}
+          sx={{ width: "fit-content" }}
         >
           <ToggleButton value="current" disabled={disabled}>
             <Stack spacing={0.5} alignItems="center">

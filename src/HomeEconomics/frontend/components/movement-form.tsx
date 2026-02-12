@@ -104,11 +104,12 @@ export function MovementForm({
       onSubmit={handleSubmit}
       sx={{
         mb: 4,
-        p: 3,
+        p: { xs: 2.5, md: 3 },
         border: 1,
         borderColor: "divider",
-        borderRadius: 2,
+        borderRadius: 3,
         bgcolor: "background.paper",
+        boxShadow: "0 18px 30px rgba(15, 23, 42, 0.08)",
       }}
     >
       <Stack spacing={3}>

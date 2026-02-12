@@ -58,11 +58,12 @@ export function AddMonthMovementForm({
       onSubmit={handleSubmit}
       sx={{
         mb: 3,
-        p: 3,
+        p: { xs: 2.5, md: 3 },
         border: 1,
         borderColor: "divider",
-        borderRadius: 2,
+        borderRadius: 3,
         bgcolor: "background.paper",
+        boxShadow: "0 16px 28px rgba(15, 23, 42, 0.08)",
       }}
     >
       <Stack spacing={3}>

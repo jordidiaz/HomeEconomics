@@ -185,8 +185,21 @@ export default function HomePage() {
   };
 
   return (
-    <Box sx={{ px: 4, py: 6 }}>
-      <Box sx={{ display: "flex", gap: 4 }}>
+    <Box
+      sx={{
+        px: { xs: 2.5, md: 6 },
+        py: { xs: 4, md: 7 },
+        minHeight: "100vh",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", lg: "row" },
+          gap: { xs: 3, md: 4 },
+          alignItems: "flex-start",
+        }}
+      >
         <Box sx={{ flex: 1, minWidth: 0 }}>
           {currentMonthMovements.status ? (
             <MovementMonthStatusForm
