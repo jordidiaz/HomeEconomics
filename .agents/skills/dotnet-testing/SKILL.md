@@ -1,5 +1,5 @@
 ---
-name: testing
+name: dotnet-testing
 description: Provide decision-making guidance for selecting the right test layer, scope, and quality checks for this repository
 ---
 
