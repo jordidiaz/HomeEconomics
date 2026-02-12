@@ -82,7 +82,7 @@ Run tests: `dotnet test` (all) or `dotnet test test/<project-name>`
 - Use `[UsedImplicitly]` attribute on handlers for ReSharper
 - Follow existing feature structure: one file per command/query with nested types
 
-This repository defines AI skills under `.ai/skills`.
+This repository defines AI skills under `.agent/skills`.
 
 When performing changes:
 - Identify the relevant skill
