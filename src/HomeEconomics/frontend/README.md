@@ -31,3 +31,15 @@ npm run dev
 ```bash
 npm run build
 ```
+
+## Testing
+
+```bash
+npm test
+```
+
+## Coverage
+
+```bash
+npm run test:coverage
+```
