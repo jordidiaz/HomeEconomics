@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import {
   Chip,
   IconButton,
@@ -132,6 +133,7 @@ export function CurrentMonthMovementsList({
             <Stack spacing={1} sx={{ width: "100%" }}>
               <Stack direction="row" spacing={2} alignItems="center">
                 <ListItemText
+                  disableTypography
                   primary={
                     <Typography variant="h6" component="h2">
                       {movement.name}

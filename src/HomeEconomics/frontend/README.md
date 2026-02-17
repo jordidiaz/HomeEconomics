@@ -38,6 +38,10 @@ npm run build
 npm test
 ```
 
+Includes unit and component tests (React Testing Library).
+
+We use `@testing-library/jest-dom` for DOM matchers.
+
 ## Coverage
 
 ```bash
