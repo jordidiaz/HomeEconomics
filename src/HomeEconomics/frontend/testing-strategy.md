@@ -87,6 +87,18 @@ create test data via API in each test or in `beforeEach`.
 - Paid toggle shows correct list.
 - Dialog flows (edit amount, delete, move) call hook actions and close on success.
 
+### Integration coverage matrix
+
+| Area | Scenario | Status | Test file |
+| --- | --- | --- | --- |
+| Movements wiring | Create/edit/delete triggers movements reload | Implemented | `app/__tests__/page.test.tsx` |
+| Month wiring | Add-to-current-month triggers month reload | Implemented | `app/__tests__/page.test.tsx` |
+| Selector wiring | Switching current/next month is wired to selector state/actions | Implemented | `app/__tests__/page.test.tsx` |
+| Paid filter wiring | Paid toggle is wired to hook state update | Implemented | `app/__tests__/page.test.tsx` |
+| Dialog success flow | Edit amount action + close on success | Implemented | `app/__tests__/page.test.tsx` |
+| Dialog success flow | Delete month movement action + close on success | Implemented | `app/__tests__/page.test.tsx` |
+| Dialog success flow | Move to next month action + close on success | Implemented | `app/__tests__/page.test.tsx` |
+
 ## 6) E2E Tests (Playwright, local backend)
 
 Core journeys (create data via API in each test):

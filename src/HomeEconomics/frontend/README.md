@@ -38,7 +38,9 @@ npm run build
 npm test
 ```
 
-Includes unit and component tests (React Testing Library).
+Includes unit, component, and integration tests (Vitest + React Testing Library).
+
+Integration coverage includes `app/page.tsx` wiring for movement lifecycle reloads, add-to-current-month reload, month selector and paid toggle wiring, and month dialog success flows (edit amount, delete, move).
 
 We use `@testing-library/jest-dom` for DOM matchers.
 
