@@ -8,6 +8,7 @@ type MovementMonthStatusFormProps = {
   balance: number;
   loading: boolean;
   errorMessage: string | null;
+  successMessage?: string | null;
   onAccountAmountChange: (value: string) => void;
   onCashAmountChange: (value: string) => void;
   onBlur: () => void;
@@ -25,6 +26,7 @@ export function MovementMonthStatusForm({
   balance,
   loading,
   errorMessage,
+  successMessage,
   onAccountAmountChange,
   onCashAmountChange,
   onBlur,
@@ -44,6 +46,7 @@ export function MovementMonthStatusForm({
       <Stack spacing={2}>
         <TextField
           label="Dinero en cuenta"
+          data-testid="status-account-input"
           value={accountAmount}
           onChange={(event) => onAccountAmountChange(event.target.value)}
           onBlur={onBlur}
@@ -54,6 +57,7 @@ export function MovementMonthStatusForm({
         />
         <TextField
           label="Dinero en cash"
+          data-testid="status-cash-input"
           value={cashAmount}
           onChange={(event) => onCashAmountChange(event.target.value)}
           onBlur={onBlur}
@@ -62,9 +66,19 @@ export function MovementMonthStatusForm({
           type="number"
           inputProps={{ step: "0.01" }}
         />
-        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          data-testid="status-balance"
+          sx={{ fontWeight: 600 }}
+        >
           Balance: {formatAmount(balance)}
         </Typography>
+        {successMessage ? (
+          <Alert severity="success" data-testid="status-success">
+            {successMessage}
+          </Alert>
+        ) : null}
         {errorMessage ? <Alert severity="error">{errorMessage}</Alert> : null}
       </Stack>
     </Box>

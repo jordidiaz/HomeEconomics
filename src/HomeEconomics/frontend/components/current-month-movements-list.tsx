@@ -91,6 +91,7 @@ export function CurrentMonthMovementsList({
 }: CurrentMonthMovementsListProps) {
   return (
     <List
+      data-testid="current-month-movements-list"
       sx={{
         p: 0,
         display: "flex",
@@ -115,6 +116,7 @@ export function CurrentMonthMovementsList({
         return (
           <ListItem
             key={movement.id}
+            data-testid={`month-movement-${movement.name}`}
             sx={{
               p: { xs: 2, md: 2.5 },
               border: 1,
@@ -148,6 +150,7 @@ export function CurrentMonthMovementsList({
                       />
                       {showPaid ? (
                         <Chip
+                          data-testid={`month-movement-paid-${movement.name}`}
                           label={movement.paidLabel}
                           color={getPaidColor(movement.paid)}
                           size="small"
@@ -178,6 +181,7 @@ export function CurrentMonthMovementsList({
                             <IconButton
                               size="small"
                               aria-label="Mover al mes siguiente"
+                              data-testid={`month-movement-move-${movement.name}`}
                               disabled={disableActions}
                               onClick={() => onMoveToNextMonth(movement.id)}
                             >
@@ -188,12 +192,13 @@ export function CurrentMonthMovementsList({
                       ) : null}
                       <Tooltip title="Editar importe">
                         <span>
-                          <IconButton
-                            size="small"
-                            aria-label="Editar importe"
-                            disabled={disableActions}
-                            onClick={() =>
-                              onEditAmount({
+                            <IconButton
+                              size="small"
+                              aria-label="Editar importe"
+                              data-testid={`month-movement-edit-amount-${movement.name}`}
+                              disabled={disableActions}
+                              onClick={() =>
+                                onEditAmount({
                                 id: movement.id,
                                 name: movement.name,
                                 amountValue: movement.amountValue,
@@ -210,6 +215,7 @@ export function CurrentMonthMovementsList({
                             <IconButton
                               size="small"
                               aria-label="Eliminar"
+                              data-testid={`month-movement-delete-${movement.name}`}
                               disabled={disableActions}
                               onClick={() => onDelete(movement.id)}
                             >
@@ -224,11 +230,16 @@ export function CurrentMonthMovementsList({
                         }
                       >
                         <span>
-                          <IconButton
-                            size="small"
-                            aria-label={
-                              movement.paid
-                                ? "Marcar como no pagado"
+                            <IconButton
+                              size="small"
+                              data-testid={
+                                movement.paid
+                                  ? `month-movement-unpay-${movement.name}`
+                                  : `month-movement-pay-${movement.name}`
+                              }
+                              aria-label={
+                                movement.paid
+                                  ? "Marcar como no pagado"
                                 : "Marcar como pagado"
                             }
                             disabled={disableActions}

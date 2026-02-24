@@ -30,6 +30,7 @@ export function ConfirmDeleteMovementDialog({
 }: ConfirmDeleteMovementDialogProps) {
   return (
     <Dialog
+      data-testid="confirm-delete-movement-dialog"
       open={open}
       onClose={deleting ? undefined : onCancel}
       aria-labelledby="delete-dialog-title"
@@ -42,19 +43,20 @@ export function ConfirmDeleteMovementDialog({
           es irreversible y se eliminará permanentemente.
         </DialogContentText>
         {errorMessage ? (
-          <Alert severity="error" sx={{ mt: 2 }}>
+          <Alert severity="error" data-testid="delete-movement-error" sx={{ mt: 2 }}>
             {errorMessage}
           </Alert>
         ) : null}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onCancel} disabled={deleting}>
+        <Button onClick={onCancel} data-testid="delete-movement-cancel" disabled={deleting}>
           Cancelar
         </Button>
         <Button
           onClick={onConfirm}
           variant="contained"
           color="error"
+          data-testid="delete-movement-confirm"
           disabled={deleting}
         >
           Eliminar

@@ -55,6 +55,7 @@ export function MovementsList({
 }: MovementsListProps) {
   return (
     <List
+      data-testid="movements-list"
       sx={{
         p: 0,
         display: "flex",
@@ -72,6 +73,7 @@ export function MovementsList({
         return (
           <ListItem
             key={movement.id}
+            data-testid={`movement-item-${movement.name}`}
             sx={{
               p: { xs: 2, md: 2.5 },
               border: 1,
@@ -130,6 +132,7 @@ export function MovementsList({
                           <IconButton
                             size="small"
                             aria-label="Agregar al mes actual"
+                            data-testid={`movement-add-to-month-${movement.name}`}
                             disabled={addDisabled || actionState.loading}
                             onClick={() => onAddToCurrentMonth(movement.id)}
                           >
@@ -142,6 +145,7 @@ export function MovementsList({
                           <IconButton
                             size="small"
                             aria-label="Editar"
+                            data-testid={`movement-edit-${movement.name}`}
                             disabled={deleting}
                             onClick={() => onEditRequest(movement.id)}
                           >
@@ -154,6 +158,7 @@ export function MovementsList({
                           <IconButton
                             size="small"
                             aria-label="Eliminar"
+                            data-testid={`movement-delete-${movement.name}`}
                             disabled={deleting}
                             onClick={() => onDeleteRequest(movement.id, movement.name)}
                           >

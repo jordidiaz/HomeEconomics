@@ -91,14 +91,18 @@ export function MonthMovementMonthSelector({
           disabled={disabled}
           sx={{ width: "fit-content" }}
         >
-          <ToggleButton value="current" disabled={disabled}>
+          <ToggleButton value="current" data-testid="month-selector-current" disabled={disabled}>
             <Stack spacing={0.5} alignItems="center">
               <Typography variant="subtitle2">
                 {formatMonthYear(currentMonth.month, currentMonth.year)}
               </Typography>
             </Stack>
           </ToggleButton>
-          <ToggleButton value="next" disabled={disabled || !nextMonthAvailable}>
+          <ToggleButton
+            value="next"
+            data-testid="month-selector-next"
+            disabled={disabled || !nextMonthAvailable}
+          >
             <Stack spacing={0.5} alignItems="center">
               <Typography variant="subtitle2">
                 {formatMonthYear(nextMonth.month, nextMonth.year)}
@@ -109,6 +113,7 @@ export function MonthMovementMonthSelector({
         {showCreateMonth ? (
           <Button
             variant="outlined"
+            data-testid="create-current-month"
             disabled={disabled || creatingCurrentMonth}
             onClick={onCreateMonth}
             startIcon={creatingCurrentMonth ? <CircularProgress size={18} /> : null}
@@ -119,6 +124,7 @@ export function MonthMovementMonthSelector({
         {showCreateNextMonth ? (
           <Button
             variant="outlined"
+            data-testid="create-next-month"
             disabled={disabled || creatingNextMonth}
             onClick={onCreateNextMonth}
             startIcon={creatingNextMonth ? <CircularProgress size={18} /> : null}

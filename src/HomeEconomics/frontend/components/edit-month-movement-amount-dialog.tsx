@@ -39,6 +39,7 @@ export function EditMonthMovementAmountDialog({
 
   return (
     <Dialog
+      data-testid="edit-amount-dialog"
       open={open}
       onClose={submitting ? undefined : onCancel}
       aria-labelledby="edit-amount-dialog-title"
@@ -49,6 +50,7 @@ export function EditMonthMovementAmountDialog({
         <DialogContent>
           <TextField
             label="Cantidad"
+            data-testid="edit-amount-input"
             type="number"
             value={amount}
             onChange={(event) => onAmountChange(event.target.value)}
@@ -65,10 +67,15 @@ export function EditMonthMovementAmountDialog({
           ) : null}
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel} disabled={submitting}>
+          <Button onClick={onCancel} data-testid="edit-amount-cancel" disabled={submitting}>
             Cancelar
           </Button>
-          <Button type="submit" variant="contained" disabled={submitting}>
+          <Button
+            type="submit"
+            variant="contained"
+            data-testid="edit-amount-save"
+            disabled={submitting}
+          >
             Aceptar
           </Button>
         </DialogActions>

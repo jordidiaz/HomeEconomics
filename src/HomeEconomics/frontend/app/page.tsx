@@ -271,6 +271,7 @@ export default function HomePage() {
               sx={{ mb: 2 }}
               control={
                 <Switch
+                  data-testid="paid-toggle"
                   checked={currentMonthMovements.showPaid}
                   onChange={(event) =>
                     currentMonthMovements.setShowPaid(event.target.checked)

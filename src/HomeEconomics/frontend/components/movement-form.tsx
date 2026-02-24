@@ -120,6 +120,7 @@ export function MovementForm({
         {errorMessage ? <Alert severity="error">{errorMessage}</Alert> : null}
         <TextField
           label="Nombre"
+          data-testid="movement-form-name"
           value={name}
           onChange={(event) => onNameChange(event.target.value)}
           disabled={submitting}
@@ -128,6 +129,7 @@ export function MovementForm({
         />
         <TextField
           label="Cantidad"
+          data-testid="movement-form-amount"
           type="number"
           value={amount}
           onChange={(event) => onAmountChange(event.target.value)}
@@ -139,6 +141,7 @@ export function MovementForm({
         <FormControl fullWidth required disabled={submitting}>
           <InputLabel id="movement-type-label">Tipo</InputLabel>
           <Select
+            data-testid="movement-form-type"
             labelId="movement-type-label"
             value={type === MovementType.Undefined ? "" : type}
             label="Tipo"
@@ -154,6 +157,7 @@ export function MovementForm({
         <FormControl fullWidth required disabled={submitting}>
           <InputLabel id="movement-frequency-label">Frecuencia</InputLabel>
           <Select
+            data-testid="movement-form-frequency"
             labelId="movement-frequency-label"
             value={frequencyType === FrequencyType.Undefined ? "" : frequencyType}
             label="Frecuencia"
@@ -210,12 +214,13 @@ export function MovementForm({
           </FormControl>
         ) : null}
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-          <Button variant="outlined" onClick={onCancel}>
+          <Button variant="outlined" data-testid="movement-form-cancel" onClick={onCancel}>
             Cancelar
           </Button>
           <Button
             type="submit"
             variant="contained"
+            data-testid="movement-form-submit"
             disabled={submitting}
             startIcon={submitting ? <CircularProgress size={18} /> : null}
           >
