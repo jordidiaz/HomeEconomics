@@ -63,6 +63,12 @@ Before running E2E tests, ensure:
 
 ### Running E2E Tests
 
+Install Playwright browser binaries once:
+
+```bash
+npx playwright install chromium
+```
+
 The E2E test runner automatically:
 1. Starts the .NET backend with test database
 2. Migrates the test database
@@ -76,6 +82,9 @@ npm run e2e:ui       # Run with Playwright UI
 npm run e2e:headed   # Run with visible browser
 npm run e2e:debug    # Debug mode
 npm run e2e:report   # View last test report
+
+# Run a single spec file
+npx playwright test e2e/specs/movements-lifecycle.spec.ts
 ```
 
 ### Test Data Strategy

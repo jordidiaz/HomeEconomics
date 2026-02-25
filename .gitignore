@@ -379,3 +379,9 @@ out/
 appsettings.Production.json
 appsettings.Staging.json
 secrets.json
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+/tmp/homeeconomics-backend.pid
