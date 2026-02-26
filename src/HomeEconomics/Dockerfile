@@ -1,6 +1,6 @@
-FROM node:14.21.3-alpine as base-spa
-COPY src/HomeEconomics/spa spa
-WORKDIR /spa
+FROM node:20-alpine as base-spa
+COPY src/HomeEconomics/frontend frontend
+WORKDIR /frontend
 RUN npm install
 RUN npm run build
 
@@ -21,7 +21,7 @@ RUN dotnet restore
 COPY src src
 COPY test test
 RUN dotnet build "HomeEconomics.sln" -c Release
-COPY --from=base-spa /spa/build src/HomeEconomics/wwwroot
+COPY --from=base-spa /frontend/out src/HomeEconomics/wwwroot
 
 FROM build AS publish
 RUN dotnet publish "src/HomeEconomics/HomeEconomics.csproj" --no-restore --no-build -c Release -o /app/publish

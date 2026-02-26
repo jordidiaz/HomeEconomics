@@ -1,10 +1,13 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "export",
   reactStrictMode: true,
   async rewrites() {
-    const port = 5000; // development server port
-    // const port = 6001; // production server port
+    if (process.env.NODE_ENV !== "development") {
+      return [];
+    }
+    const port = 5000;
     return [
       {
         source: '/api/:path*',
