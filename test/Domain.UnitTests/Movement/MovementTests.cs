@@ -78,6 +78,18 @@ public class MovementTests
     }
 
     [Fact]
+    public void SetYearlyFrequency_Should_Keep_Only_The_Last_Selected_Month()
+    {
+        _sut.SetYearlyFrequency(3);
+
+        _sut.SetYearlyFrequency(7);
+
+        _sut.Frequency.Type.Should().Be(FrequencyType.Yearly);
+        _sut.Frequency.Months.Count(m => m).Should().Be(1);
+        _sut.Frequency.Months[6].Should().BeTrue();
+    }
+
+    [Fact]
     public void SetCustomFrequency_Throws_ArgumentOutOfRangeException_If_Months_Count_Not_12()
     {
         var months = new[] { true, false, true };

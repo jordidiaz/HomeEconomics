@@ -106,4 +106,56 @@ public class EditTest : IntegrationTestBase
 
         await action.Should().ThrowAsync<InvalidOperationException>().WithMessage(Properties.Messages.MovementNotExists);
     }
+
+    [Fact]
+    public async Task Should_Update_Yearly_Frequency_Month_And_Clear_Previous_Selection()
+    {
+        var movementId = await _fixture.SendCommandToMediatorAsync(new Create.Command(
+            "Seguro anual",
+            120m,
+            MovementType.Expense,
+            new Create.Frequency
+            {
+                Type = FrequencyType.Yearly,
+                Month = 3,
+            }));
+
+        var command = new Edit.Command
+        {
+            Id = movementId,
+            Name = "Seguro anual",
+            Amount = 120m,
+            Type = MovementType.Expense,
+            Frequency = new Edit.Frequency
+            {
+                Type = FrequencyType.Yearly,
+                Month = 7,
+            },
+        };
+
+        var response = await HttpClient.PutAsync($"api/movements/{movementId}", command);
+
+        response.EnsureSuccessStatusCode();
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        var movement = await _fixture.QueryDbContextAsync(async homeEconomicsDbContext =>
+            await homeEconomicsDbContext
+                .Movements
+                .Include(m => m.Frequency)
+                .SingleOrDefaultAsync(m => m.Id == movementId));
+
+        movement.Should().NotBeNull();
+        movement.Frequency.Type.Should().Be(FrequencyType.Yearly);
+        movement.Frequency.Months.Count(m => m).Should().Be(1);
+        movement.Frequency.Months[6].Should().BeTrue();
+
+        var indexResponse = await HttpClient.GetAsync("api/movements");
+        indexResponse.EnsureSuccessStatusCode();
+
+        var result = await indexResponse.Content.ReadFromJsonAsync<HomeEconomics.Features.Movements.Index.Result>();
+        result.Should().NotBeNull();
+        var editedMovement = result.Movements.Single(m => m.Id == movementId);
+        editedMovement.FrequencyType.Should().Be((int)FrequencyType.Yearly);
+        editedMovement.FrequencyMonth.Should().Be(7);
+    }
 }

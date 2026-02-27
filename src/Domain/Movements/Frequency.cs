@@ -15,8 +15,17 @@ public sealed class Frequency : Entity
     public MonthCollection Months { get; private set; }
     public int MovementId { get; private set; }
 
-    internal void SetNoneFrequency() => Type = FrequencyType.None;
-    internal void SetMonthlyFrequency() => Type = FrequencyType.Monthly;
+    internal void SetNoneFrequency()
+    {
+        Type = FrequencyType.None;
+        Months = MonthCollection.Init();
+    }
+
+    internal void SetMonthlyFrequency()
+    {
+        Type = FrequencyType.Monthly;
+        Months = MonthCollection.Init();
+    }
 
     internal void SetYearlyFrequency(int month)
     {
@@ -24,7 +33,9 @@ public sealed class Frequency : Entity
         {
             throw new ArgumentOutOfRangeException(nameof(month));
         }
+
         Type = FrequencyType.Yearly;
+        Months = MonthCollection.Init();
         Months.EnableMonth(month);
     }
 
