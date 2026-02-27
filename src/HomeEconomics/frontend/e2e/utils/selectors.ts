@@ -56,4 +56,8 @@ export const selectors = {
     balanceDisplay: '[data-testid="status-balance"]',
     successMessage: '[data-testid="status-success"]',
   },
+
+  addMonthMovementForm: {
+    container: '[data-testid="add-month-movement-form"]',
+  },
 };

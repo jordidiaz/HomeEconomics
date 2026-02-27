@@ -66,14 +66,22 @@ export function MovementMonthStatusForm({
           type="number"
           inputProps={{ step: "0.01" }}
         />
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          data-testid="status-balance"
-          sx={{ fontWeight: 600 }}
-        >
-          Balance: {formatAmount(balance)}
-        </Typography>
+        <Box data-testid="status-balance" sx={{ mt: 0.5 }}>
+          <Typography
+            variant="subtitle1"
+            color="text.secondary"
+            sx={{ fontWeight: 700, fontSize: { xs: "1.05rem", md: "1.15rem" } }}
+          >
+            Balance
+          </Typography>
+          <Typography
+            variant="h5"
+            color="text.primary"
+            sx={{ fontWeight: 700, fontSize: { xs: "1.55rem", md: "1.9rem" }, lineHeight: 1.15 }}
+          >
+            {formatAmount(balance)}
+          </Typography>
+        </Box>
         {successMessage ? (
           <Alert severity="success" data-testid="status-success">
             {successMessage}

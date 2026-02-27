@@ -56,6 +56,7 @@ export function AddMonthMovementForm({
   return (
     <Box
       component="form"
+      data-testid="add-month-movement-form"
       onSubmit={handleSubmit}
       sx={{
         mb: 3,

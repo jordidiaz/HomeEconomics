@@ -63,6 +63,7 @@ type UseCurrentMonthMovementsResult = {
   createCurrentMonthErrorMessage: string | null;
   createCurrentMonth: () => Promise<void>;
   reloadCurrentMonthMovements: () => Promise<void>;
+  reloadSelectedMonthMovements: () => Promise<void>;
   movementMonthLoaded: boolean;
   actionStates: Record<number, MonthMovementActionState>;
   payMonthMovement: (monthMovementId: number) => Promise<void>;
@@ -153,6 +154,10 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     }
     await selector.reloadSelectedMonth();
   }, [selector.reloadSelectedMonth, selector.selectedMonth]);
+
+  const reloadSelectedMonthMovements = useCallback(async () => {
+    await selector.reloadSelectedMonth();
+  }, [selector.reloadSelectedMonth]);
 
   const updateActionState = useCallback(
     (monthMovementId: number, changes: Partial<MonthMovementActionState>) => {
@@ -417,6 +422,7 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     createCurrentMonthErrorMessage: selector.createCurrentMonthErrorMessage,
     createCurrentMonth: selector.createCurrentMonth,
     reloadCurrentMonthMovements,
+    reloadSelectedMonthMovements,
     movementMonthLoaded: selector.movementMonth !== null,
     actionStates,
     payMonthMovement,

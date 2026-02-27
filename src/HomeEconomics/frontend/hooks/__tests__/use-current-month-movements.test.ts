@@ -9,7 +9,7 @@ const selectorMock = {
   movementMonth: null as MovementMonth | null,
   loading: false,
   error: null as Error | null,
-  selectedMonth: "current" as const,
+  selectedMonth: "current" as "current" | "next",
   selectMonth: vi.fn(),
   currentMonth: { year: 2024, month: 5 },
   nextMonth: { year: 2024, month: 6 },
@@ -140,5 +140,24 @@ describe("useCurrentMonthMovements", () => {
     expect(result.current.moveState.errorMessage).toBe(
       "No se pudo mover el movimiento al mes siguiente. Por favor, inténtalo de nuevo.",
     );
+  });
+
+  it("reloads selected month movements for current or next selection", async () => {
+    const { result, rerender } = renderHook(() => useCurrentMonthMovements());
+
+    await act(async () => {
+      await result.current.reloadSelectedMonthMovements();
+    });
+
+    expect(selectorMock.reloadSelectedMonth).toHaveBeenCalledTimes(1);
+
+    selectorMock.selectedMonth = "next";
+    rerender();
+
+    await act(async () => {
+      await result.current.reloadSelectedMonthMovements();
+    });
+
+    expect(selectorMock.reloadSelectedMonth).toHaveBeenCalledTimes(2);
   });
 });

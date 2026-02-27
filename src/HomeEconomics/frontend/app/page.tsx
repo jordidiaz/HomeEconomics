@@ -37,8 +37,8 @@ export default function HomePage() {
     onAdded: currentMonthMovements.reloadCurrentMonthMovements,
   });
   const addMonthMovementForm = useAddMonthMovementForm({
-    movementMonthId: currentMonthMovements.currentMovementMonthId,
-    onAdded: currentMonthMovements.reloadCurrentMonthMovements,
+    movementMonthId: currentMonthMovements.movementMonth?.id ?? null,
+    onAdded: currentMonthMovements.reloadSelectedMonthMovements,
   });
   const movementMonthStatusForm = useMovementMonthStatusForm({
     movementMonth: currentMonthMovements.movementMonth,
@@ -248,8 +248,7 @@ export default function HomePage() {
           ) : null}
           {!currentMonthMovements.loading &&
           !currentMonthMovements.error &&
-          currentMonthMovements.selectedMonth === "current" &&
-          currentMonthMovements.currentMovementMonthId !== null ? (
+          currentMonthMovements.movementMonth !== null ? (
             <AddMonthMovementForm
               name={addMonthMovementForm.name}
               amount={addMonthMovementForm.amount}

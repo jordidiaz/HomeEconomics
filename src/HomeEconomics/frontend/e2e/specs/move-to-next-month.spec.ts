@@ -47,6 +47,8 @@ test.describe("Move month movement to next month", () => {
   test("should move movement from current to next month", async ({ page }) => {
     await page.goto("/");
 
+    await expect(page.locator(selectors.addMonthMovementForm.container)).toBeVisible();
+
     const movementInCurrentMonth = page.locator(selectors.currentMonthList.item(movementName));
     await expect(movementInCurrentMonth).toBeVisible();
 
@@ -59,6 +61,7 @@ test.describe("Move month movement to next month", () => {
     await expect(movementInCurrentMonth).toHaveCount(0);
 
     await page.click(selectors.monthSelector.nextMonthButton);
+    await expect(page.locator(selectors.addMonthMovementForm.container)).toBeVisible();
     await expect(page.locator(selectors.currentMonthList.item(movementName))).toBeVisible();
   });
 });

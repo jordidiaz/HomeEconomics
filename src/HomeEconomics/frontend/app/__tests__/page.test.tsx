@@ -212,7 +212,7 @@ vi.mock("../../components/movement-month-status-form", () => ({
 }));
 
 vi.mock("../../components/add-month-movement-form", () => ({
-  AddMonthMovementForm: () => null,
+  AddMonthMovementForm: () => <div>add month movement form</div>,
 }));
 
 const movement: Movement = {
@@ -241,6 +241,7 @@ const createCurrentMonthMovementsMockValue = (
 ) => ({
   currentMovementMonthId: 77,
   reloadCurrentMonthMovements: vi.fn().mockResolvedValue(undefined),
+  reloadSelectedMonthMovements: vi.fn().mockResolvedValue(undefined),
   movementMonth: { id: 77, year: 2026, month: 2 },
   status: null,
   monthMovements: [monthMovement],
@@ -476,6 +477,42 @@ describe("HomePage integration wiring", () => {
 
     expect(selectMonth).toHaveBeenNthCalledWith(1, "next");
     expect(selectMonth).toHaveBeenNthCalledWith(2, "current");
+  });
+
+  it("shows add month movement form when current month is selected", () => {
+    useCurrentMonthMovementsMock.mockReturnValue(
+      createCurrentMonthMovementsMockValue({ selectedMonth: "current" }),
+    );
+
+    render(<HomePage />);
+
+    expect(screen.getByText("add month movement form")).toBeInTheDocument();
+  });
+
+  it("shows add month movement form when next month is selected", () => {
+    useCurrentMonthMovementsMock.mockReturnValue(
+      createCurrentMonthMovementsMockValue({ selectedMonth: "next" }),
+    );
+
+    render(<HomePage />);
+
+    expect(screen.getByText("add month movement form")).toBeInTheDocument();
+  });
+
+  it("wires add month movement form to selected month id", () => {
+    useCurrentMonthMovementsMock.mockReturnValue(
+      createCurrentMonthMovementsMockValue({
+        currentMovementMonthId: 77,
+        movementMonth: { id: 88, year: 2026, month: 3 },
+      }),
+    );
+
+    render(<HomePage />);
+
+    expect(useAddMonthMovementFormMock).toHaveBeenCalledWith({
+      movementMonthId: 88,
+      onAdded: expect.any(Function),
+    });
   });
 
   it("wires paid toggle through setShowPaid", () => {
