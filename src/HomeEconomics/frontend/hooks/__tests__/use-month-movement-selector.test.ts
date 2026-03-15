@@ -9,6 +9,7 @@ const createMovementMonth = (overrides: Partial<MovementMonth> = {}): MovementMo
   year: 2024,
   month: 5,
   nextMovementMonthExists: false,
+  previousMovementMonthExists: false,
   status: {
     pendingTotalExpenses: 0,
     pendingTotalIncomes: 0,
@@ -88,6 +89,102 @@ describe("useMonthMovementSelector", () => {
     expect(createMock).toHaveBeenCalledWith(2024, 6);
     expect(result.current.selectedMonth).toBe("next");
     expect(result.current.nextMonthAvailable).toBe(true);
+  });
+
+  it("computes previous month correctly", async () => {
+    getByYearMonthMock.mockResolvedValueOnce(createMovementMonth());
+
+    const { result } = renderHook(() => useMonthMovementSelector());
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(result.current.previousMonth).toEqual({ year: 2024, month: 4 });
+  });
+
+  it("sets previousMonthAvailable from API response", async () => {
+    const month = createMovementMonth({ previousMovementMonthExists: true });
+    getByYearMonthMock.mockResolvedValueOnce(month);
+
+    const { result } = renderHook(() => useMonthMovementSelector());
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(result.current.previousMonthAvailable).toBe(true);
+  });
+
+  it("loads previous month on select", async () => {
+    const current = createMovementMonth({ previousMovementMonthExists: true });
+    getByYearMonthMock.mockResolvedValueOnce(current);
+
+    const { result } = renderHook(() => useMonthMovementSelector());
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const previous = createMovementMonth({ year: 2024, month: 4, id: 5 });
+    getByYearMonthMock.mockResolvedValueOnce(previous);
+
+    await act(async () => {
+      result.current.selectMonth("previous");
+    });
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(getByYearMonthMock).toHaveBeenLastCalledWith(2024, 4);
+  });
+
+  it("previous month handles 404", async () => {
+    const current = createMovementMonth({ previousMovementMonthExists: true });
+    getByYearMonthMock.mockResolvedValueOnce(current);
+    const error = Object.assign(new Error("Not found"), { status: 404 });
+    getByYearMonthMock.mockRejectedValueOnce(error);
+
+    const { result } = renderHook(() => useMonthMovementSelector());
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    await act(async () => {
+      result.current.selectMonth("previous");
+      await Promise.resolve();
+    });
+
+    expect(result.current.movementMonth).toBeNull();
+    expect(result.current.error).toBeNull();
+  });
+
+  it("previous month disabled when unavailable", async () => {
+    const month = createMovementMonth({ previousMovementMonthExists: false });
+    getByYearMonthMock.mockResolvedValueOnce(month);
+
+    const { result } = renderHook(() => useMonthMovementSelector());
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(result.current.previousMonthAvailable).toBe(false);
+  });
+
+  it("January wraps to previous December", async () => {
+    vi.setSystemTime(new Date("2024-01-15T12:00:00Z"));
+    getByYearMonthMock.mockResolvedValueOnce(createMovementMonth({ year: 2024, month: 1 }));
+
+    const { result } = renderHook(() => useMonthMovementSelector());
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(result.current.previousMonth).toEqual({ year: 2023, month: 12 });
   });
 
   it("creates the current month when missing", async () => {

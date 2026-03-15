@@ -105,6 +105,15 @@ public abstract class IntegrationTestBase(Fixture fixture) : IAsyncLifetime
 
         return movementMonth;
     }
+
+    protected async Task<MovementMonthResponse?> CreateMovementMonthAsync(Month month, int year)
+    {
+        var movementMonth = await fixture.SendCommandToMediatorAsync(new Create.Command(
+            year,
+            month));
+
+        return movementMonth;
+    }
     
     protected async Task AddStatusAsync(int year, int month, decimal accountAmount, decimal cashAmount) =>
         await fixture.SendCommandToMediatorAsync(new AddStatus.Command(

@@ -12,8 +12,19 @@ test.describe("Move month movement to next month", () => {
   let movementName = "";
   let currentMonthId: number | null = null;
   let monthMovementId: number | null = null;
+  let helperMovementId: number | null = null;
 
   test.beforeEach(async () => {
+    // Create a monthly movement first so the backend Create handler finds
+    // eligible movements when initialising the next month.
+    const helperMovement = await apiClient.createMovement({
+      name: generateUniqueTestName("e2e-move"),
+      amount: 1,
+      type: "expense",
+      frequency: "monthly",
+    });
+    helperMovementId = helperMovement.id;
+
     const currentMonth = await getOrCreateCurrentMovementMonth();
     currentMonthId = currentMonth.id;
     await getOrCreateNextMovementMonth();
@@ -41,6 +52,10 @@ test.describe("Move month movement to next month", () => {
 
     if (movementId !== null) {
       await apiClient.deleteMovement(movementId).catch(() => undefined);
+    }
+
+    if (helperMovementId !== null) {
+      await apiClient.deleteMovement(helperMovementId).catch(() => undefined);
     }
   });
 

@@ -48,11 +48,13 @@ type UseCurrentMonthMovementsResult = {
   error: Error | null;
   status: MovementMonth["status"] | null;
   movementMonth: { id: number; year: number; month: number } | null;
-  selectedMonth: "current" | "next";
-  selectMonth: (value: "current" | "next") => void;
+  selectedMonth: "previous" | "current" | "next";
+  selectMonth: (value: "previous" | "current" | "next") => void;
   currentMonth: { year: number; month: number };
   nextMonth: { year: number; month: number };
+  previousMonth: { year: number; month: number };
   nextMonthAvailable: boolean;
+  previousMonthAvailable: boolean;
   nextMovementMonthExists: boolean;
   currentMonthAvailable: boolean;
   currentMovementMonthId: number | null;
@@ -411,7 +413,9 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     selectMonth: selector.selectMonth,
     currentMonth: selector.currentMonth,
     nextMonth: selector.nextMonth,
+    previousMonth: selector.previousMonth,
     nextMonthAvailable: selector.nextMonthAvailable,
+    previousMonthAvailable: selector.previousMonthAvailable,
     nextMovementMonthExists: selector.movementMonth?.nextMovementMonthExists ?? false,
     currentMonthAvailable: selector.currentMonthAvailable,
     currentMovementMonthId: selector.currentMovementMonthId,

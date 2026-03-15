@@ -10,6 +10,8 @@ public record MovementMonthResponse
 
     public bool NextMovementMonthExists { get; set; }
 
+    public bool PreviousMovementMonthExists { get; set; }
+
     public StatusResult Status { get; init; } = new();
 
     public MonthMovementResult[] MonthMovements { get; set; } = [];

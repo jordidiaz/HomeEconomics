@@ -5,6 +5,7 @@ export type MovementMonth = {
   year: number;
   month: number;
   nextMovementMonthExists: boolean;
+  previousMovementMonthExists: boolean;
   status: {
     pendingTotalExpenses: number;
     pendingTotalIncomes: number;

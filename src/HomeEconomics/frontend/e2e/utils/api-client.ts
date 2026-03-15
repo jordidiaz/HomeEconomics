@@ -110,7 +110,10 @@ export class TestApiClient {
 
     const response = await fetch(`${API_BASE}/movements`);
     if (!response.ok) {
-      throw new Error(`List movements failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(
+        `List movements failed: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
 
     const data = await parseJson<ApiMovementListResponse>(response);
@@ -139,9 +142,13 @@ export class TestApiClient {
         frequency: mapFrequency(data.frequency),
       }),
     });
+
     if (!response.ok) {
-      throw new Error(`Create movement failed: ${response.status}`);
-    }
+      const errorText = await response.text();
+      throw new Error(
+        `Create movement failed: ${response.status} ${response.statusText} - ${errorText}`
+      );
+  }
 
     const id = await parseJson<number>(response);
     this.movementCache.set(id, {
@@ -158,7 +165,10 @@ export class TestApiClient {
       method: "DELETE",
     });
     if (!response.ok && response.status !== 404) {
-      throw new Error(`Delete movement failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(
+        `Delete movement failed: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
     this.movementCache.delete(id);
   }
@@ -170,7 +180,10 @@ export class TestApiClient {
       body: JSON.stringify({ year, month }),
     });
     if (!response.ok) {
-      throw new Error(`Create month failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(
+        `Create month failed: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
 
     const payload = await parseJson<unknown>(response);
@@ -190,7 +203,10 @@ export class TestApiClient {
   async getMovementMonth(year: number, month: number): Promise<ApiMovementMonth | null> {
     const response = await fetch(`${API_BASE}/movement-months/${year}/${month}`);
     if (!response.ok && response.status !== 404) {
-      throw new Error(`Get month failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(
+        `Get month failed: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
     if (response.status === 404) {
       return null;
@@ -218,7 +234,10 @@ export class TestApiClient {
       }),
     });
     if (!response.ok) {
-      throw new Error(`Add month movement failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(
+        `Add month movement failed: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
 
     const payload = await parseJson<unknown>(response);
@@ -240,7 +259,10 @@ export class TestApiClient {
       method: "DELETE",
     });
     if (!response.ok && response.status !== 404) {
-      throw new Error(`Delete month movement failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(
+        `Delete month movement failed: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
   }
 
@@ -249,7 +271,10 @@ export class TestApiClient {
       method: "POST",
     });
     if (!response.ok) {
-      throw new Error(`Pay failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(
+        `Pay failed: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
   }
 
@@ -258,7 +283,10 @@ export class TestApiClient {
       method: "POST",
     });
     if (!response.ok) {
-      throw new Error(`Unpay failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(
+        `Unpay failed: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
   }
 
@@ -269,7 +297,10 @@ export class TestApiClient {
       body: JSON.stringify({ movementMonthId: monthId, monthMovementId: movementId, amount }),
     });
     if (!response.ok) {
-      throw new Error(`Update amount failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(
+        `Update amount failed: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
   }
 
@@ -278,7 +309,10 @@ export class TestApiClient {
       method: "POST",
     });
     if (!response.ok) {
-      throw new Error(`Move to next month failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(
+        `Move to next month failed: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
   }
 
@@ -302,7 +336,10 @@ export class TestApiClient {
     });
 
     if (!response.ok) {
-      throw new Error(`Add status failed: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(
+        `Add status failed: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
 
     await this.cacheMovementMonthFromResponse(response);

@@ -104,6 +104,7 @@ Returns the month detail with movements and status.
   "year": 2024,
   "month": 10,
   "nextMovementMonthExists": true,
+  "previousMovementMonthExists": false,
   "status": {
     "pendingTotalExpenses": 450,
     "pendingTotalIncomes": 1200,

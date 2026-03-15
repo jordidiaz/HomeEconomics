@@ -21,8 +21,10 @@ type MonthReference = {
 type MonthMovementMonthSelectorProps = {
   currentMonth: MonthReference;
   nextMonth: MonthReference;
-  selectedMonth: "current" | "next";
+  previousMonth: MonthReference;
+  selectedMonth: "previous" | "current" | "next";
   nextMonthAvailable: boolean;
+  previousMonthAvailable: boolean;
   disabled: boolean;
   creatingNextMonth: boolean;
   createNextMonthErrorMessage: string | null;
@@ -30,7 +32,7 @@ type MonthMovementMonthSelectorProps = {
   createCurrentMonthErrorMessage: string | null;
   showCreateMonth: boolean;
   showCreateNextMonth: boolean;
-  onSelect: (value: "current" | "next") => void;
+  onSelect: (value: "previous" | "current" | "next") => void;
   onCreateNextMonth: () => void;
   onCreateMonth: () => void;
 };
@@ -58,8 +60,10 @@ const formatMonthYear = (month: number, year: number): string => {
 export function MonthMovementMonthSelector({
   currentMonth,
   nextMonth,
+  previousMonth,
   selectedMonth,
   nextMonthAvailable,
+  previousMonthAvailable,
   disabled,
   creatingNextMonth,
   createNextMonthErrorMessage,
@@ -73,7 +77,7 @@ export function MonthMovementMonthSelector({
 }: MonthMovementMonthSelectorProps) {
   const handleChange = (
     _event: MouseEvent<HTMLElement>,
-    value: "current" | "next" | null,
+    value: "previous" | "current" | "next" | null,
   ) => {
     if (value) {
       onSelect(value);
@@ -91,6 +95,17 @@ export function MonthMovementMonthSelector({
           disabled={disabled}
           sx={{ width: "fit-content" }}
         >
+          <ToggleButton
+            value="previous"
+            data-testid="month-selector-previous"
+            disabled={disabled || !previousMonthAvailable}
+          >
+            <Stack spacing={0.5} alignItems="center">
+              <Typography variant="subtitle2">
+                {formatMonthYear(previousMonth.month, previousMonth.year)}
+              </Typography>
+            </Stack>
+          </ToggleButton>
           <ToggleButton value="current" data-testid="month-selector-current" disabled={disabled}>
             <Stack spacing={0.5} alignItems="center">
               <Typography variant="subtitle2">

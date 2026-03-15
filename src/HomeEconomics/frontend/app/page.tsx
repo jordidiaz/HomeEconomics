@@ -218,8 +218,10 @@ export default function HomePage() {
           <MonthMovementMonthSelector
             currentMonth={currentMonthMovements.currentMonth}
             nextMonth={currentMonthMovements.nextMonth}
+            previousMonth={currentMonthMovements.previousMonth}
             selectedMonth={currentMonthMovements.selectedMonth}
             nextMonthAvailable={currentMonthMovements.nextMonthAvailable}
+            previousMonthAvailable={currentMonthMovements.previousMonthAvailable}
             disabled={currentMonthMovements.loading}
             creatingNextMonth={currentMonthMovements.creatingNextMonth}
             createNextMonthErrorMessage={currentMonthMovements.createNextMonthErrorMessage}

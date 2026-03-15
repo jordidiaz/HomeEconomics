@@ -9,12 +9,14 @@ const selectorMock = {
   movementMonth: null as MovementMonth | null,
   loading: false,
   error: null as Error | null,
-  selectedMonth: "current" as "current" | "next",
+  selectedMonth: "current" as "previous" | "current" | "next",
   selectMonth: vi.fn(),
   currentMonth: { year: 2024, month: 5 },
   nextMonth: { year: 2024, month: 6 },
+  previousMonth: { year: 2024, month: 4 },
   nextMonthAvailable: true,
   currentMonthAvailable: true,
+  previousMonthAvailable: false,
   creatingNextMonth: false,
   createNextMonthErrorMessage: null as string | null,
   creatingCurrentMonth: false,
@@ -34,6 +36,7 @@ const createMovementMonth = (): MovementMonth => ({
   year: 2024,
   month: 5,
   nextMovementMonthExists: true,
+  previousMovementMonthExists: false,
   status: {
     pendingTotalExpenses: 0,
     pendingTotalIncomes: 0,
@@ -159,5 +162,16 @@ describe("useCurrentMonthMovements", () => {
     });
 
     expect(selectorMock.reloadSelectedMonth).toHaveBeenCalledTimes(2);
+  });
+
+  it("reloads selected month movements when selectedMonth is previous", async () => {
+    selectorMock.selectedMonth = "previous";
+    const { result } = renderHook(() => useCurrentMonthMovements());
+
+    await act(async () => {
+      await result.current.reloadSelectedMonthMovements();
+    });
+
+    expect(selectorMock.reloadSelectedMonth).toHaveBeenCalledTimes(1);
   });
 });

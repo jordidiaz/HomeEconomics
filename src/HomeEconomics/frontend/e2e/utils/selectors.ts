@@ -24,6 +24,7 @@ export const selectors = {
   },
 
   monthSelector: {
+    previousMonthButton: '[data-testid="month-selector-previous"]',
     currentMonthButton: '[data-testid="month-selector-current"]',
     nextMonthButton: '[data-testid="month-selector-next"]',
     createCurrentMonthButton: '[data-testid="create-current-month"]',

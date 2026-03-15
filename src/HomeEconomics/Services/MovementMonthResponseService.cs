@@ -22,6 +22,11 @@ public class MovementMonthResponseService(HomeEconomicsDbContext dbContext) : IM
             (Month)movementMonthResponse.Month,
             cancellationToken);
 
+        movementMonthResponse.PreviousMovementMonthExists = await GetPreviousMovementMonthExistsAsync(
+            movementMonthResponse.Year,
+            (Month)movementMonthResponse.Month,
+            cancellationToken);
+
         return movementMonthResponse;
     }
 
@@ -31,6 +36,11 @@ public class MovementMonthResponseService(HomeEconomicsDbContext dbContext) : IM
             ?? throw new InvalidOperationException("Movement month response could not be built.");
 
         movementMonthResponse.NextMovementMonthExists = await GetNextMovementMonthExistsAsync(
+            movementMonth.Year,
+            movementMonth.Month,
+            cancellationToken);
+
+        movementMonthResponse.PreviousMovementMonthExists = await GetPreviousMovementMonthExistsAsync(
             movementMonth.Year,
             movementMonth.Month,
             cancellationToken);
@@ -100,6 +110,26 @@ public class MovementMonthResponseService(HomeEconomicsDbContext dbContext) : IM
         }
 
         return await dbContext.ExistsMovementMonthAsync(mm => mm.Year == nextYear && mm.Month == nextMonth,
+            cancellationToken: cancellationToken);
+    }
+
+    private async Task<bool> GetPreviousMovementMonthExistsAsync(int year, Month month, CancellationToken cancellationToken)
+    {
+        int previousYear;
+        Month previousMonth;
+
+        if (month == Month.Jan)
+        {
+            previousYear = year - 1;
+            previousMonth = Month.Dec;
+        }
+        else
+        {
+            previousYear = year;
+            previousMonth = (Month)((int)month - 1);
+        }
+
+        return await dbContext.ExistsMovementMonthAsync(mm => mm.Year == previousYear && mm.Month == previousMonth,
             cancellationToken: cancellationToken);
     }
 }

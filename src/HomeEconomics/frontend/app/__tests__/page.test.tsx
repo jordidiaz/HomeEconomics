@@ -97,9 +97,12 @@ vi.mock("../../components/movements-list", () => ({
 
 vi.mock("../../components/month-movement-month-selector", () => ({
   MonthMovementMonthSelector: (props: {
-    onSelect: (value: "current" | "next") => void;
+    onSelect: (value: "previous" | "current" | "next") => void;
   }) => (
     <>
+      <button type="button" onClick={() => props.onSelect("previous")}>
+        select previous month
+      </button>
       <button type="button" onClick={() => props.onSelect("current")}>
         select current month
       </button>
@@ -249,8 +252,10 @@ const createCurrentMonthMovementsMockValue = (
   error: null,
   currentMonth: { year: 2026, month: 2 },
   nextMonth: { year: 2026, month: 3 },
+  previousMonth: { year: 2026, month: 1 },
   selectedMonth: "current",
   nextMonthAvailable: true,
+  previousMonthAvailable: false,
   creatingNextMonth: false,
   createNextMonthErrorMessage: null,
   creatingCurrentMonth: false,
@@ -477,6 +482,21 @@ describe("HomePage integration wiring", () => {
 
     expect(selectMonth).toHaveBeenNthCalledWith(1, "next");
     expect(selectMonth).toHaveBeenNthCalledWith(2, "current");
+  });
+
+  it("wires selector switching for previous month", () => {
+    const selectMonth = vi.fn();
+    useCurrentMonthMovementsMock.mockReturnValue(
+      createCurrentMonthMovementsMockValue({
+        selectMonth,
+      }),
+    );
+
+    render(<HomePage />);
+
+    fireEvent.click(screen.getByRole("button", { name: "select previous month" }));
+
+    expect(selectMonth).toHaveBeenCalledWith("previous");
   });
 
   it("shows add month movement form when current month is selected", () => {

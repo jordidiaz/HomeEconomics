@@ -7,11 +7,12 @@ type MonthReference = {
   month: number;
 };
 
-type SelectedMonth = "current" | "next";
+type SelectedMonth = "previous" | "current" | "next";
 
 type UseMonthMovementSelectorResult = {
   currentMonth: MonthReference;
   nextMonth: MonthReference;
+  previousMonth: MonthReference;
   currentMovementMonthId: number | null;
   selectedMonth: SelectedMonth;
   selectMonth: (value: SelectedMonth) => void;
@@ -24,6 +25,7 @@ type UseMonthMovementSelectorResult = {
   createCurrentMonthErrorMessage: string | null;
   nextMonthAvailable: boolean;
   currentMonthAvailable: boolean;
+  previousMonthAvailable: boolean;
   createNextMonth: () => Promise<void>;
   createCurrentMonth: () => Promise<void>;
   reloadSelectedMonth: () => Promise<void>;
@@ -41,6 +43,13 @@ const getNextYearMonth = (current: MonthReference): MonthReference => {
   return { year: current.year, month: current.month + 1 };
 };
 
+const getPreviousYearMonth = (current: MonthReference): MonthReference => {
+  if (current.month === 1) {
+    return { year: current.year - 1, month: 12 };
+  }
+  return { year: current.year, month: current.month - 1 };
+};
+
 export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
   const [selectedMonth, setSelectedMonth] = useState<SelectedMonth>("current");
   const [movementMonth, setMovementMonth] = useState<MovementMonth | null>(null);
@@ -54,12 +63,14 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
     useState<string | null>(null);
   const [nextMonthAvailable, setNextMonthAvailable] = useState(false);
   const [currentMonthAvailable, setCurrentMonthAvailable] = useState(true);
+  const [previousMonthAvailable, setPreviousMonthAvailable] = useState(false);
   const [currentMovementMonthId, setCurrentMovementMonthId] = useState<number | null>(null);
   const isMounted = useRef(true);
   const skipNextLoad = useRef(false);
 
   const currentMonth = useMemo(() => getCurrentYearMonth(), []);
   const nextMonth = useMemo(() => getNextYearMonth(currentMonth), [currentMonth]);
+  const previousMonth = useMemo(() => getPreviousYearMonth(currentMonth), [currentMonth]);
 
   const loadMovementMonth = useCallback(
     async (target: MonthReference, updateAvailability: boolean) => {
@@ -71,6 +82,7 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
           setMovementMonth(data);
           if (updateAvailability) {
             setNextMonthAvailable(data.nextMovementMonthExists);
+            setPreviousMonthAvailable(data.previousMovementMonthExists);
             setCurrentMonthAvailable(true);
             setCurrentMovementMonthId(data.id);
           }
@@ -81,6 +93,7 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
           setMovementMonth(null);
           setCurrentMonthAvailable(false);
           setNextMonthAvailable(false);
+          setPreviousMonthAvailable(false);
           setCurrentMovementMonthId(null);
           setError(null);
           return;
@@ -104,7 +117,17 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
     if (selectedMonth === "current" && !currentMonthAvailable) {
       return;
     }
-    const target = selectedMonth === "current" ? currentMonth : nextMonth;
+    if (selectedMonth === "previous" && !previousMonthAvailable) {
+      return;
+    }
+    let target: MonthReference;
+    if (selectedMonth === "current") {
+      target = currentMonth;
+    } else if (selectedMonth === "next") {
+      target = nextMonth;
+    } else {
+      target = previousMonth;
+    }
     await loadMovementMonth(target, selectedMonth === "current");
   }, [
     currentMonth,
@@ -112,6 +135,8 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
     loadMovementMonth,
     nextMonth,
     nextMonthAvailable,
+    previousMonth,
+    previousMonthAvailable,
     selectedMonth,
   ]);
 
@@ -180,11 +205,21 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
     if (selectedMonth === "current" && !currentMonthAvailable) {
       return;
     }
+    if (selectedMonth === "previous" && !previousMonthAvailable) {
+      return;
+    }
     if (selectedMonth === "next" && skipNextLoad.current) {
       skipNextLoad.current = false;
       return;
     }
-    const target = selectedMonth === "current" ? currentMonth : nextMonth;
+    let target: MonthReference;
+    if (selectedMonth === "current") {
+      target = currentMonth;
+    } else if (selectedMonth === "next") {
+      target = nextMonth;
+    } else {
+      target = previousMonth;
+    }
     loadMovementMonth(target, selectedMonth === "current");
   }, [
     currentMonth,
@@ -192,12 +227,15 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
     loadMovementMonth,
     nextMonth,
     nextMonthAvailable,
+    previousMonth,
+    previousMonthAvailable,
     selectedMonth,
   ]);
 
   return {
     currentMonth,
     nextMonth,
+    previousMonth,
     currentMovementMonthId,
     selectedMonth,
     selectMonth: setSelectedMonth,
@@ -210,6 +248,7 @@ export function useMonthMovementSelector(): UseMonthMovementSelectorResult {
     createCurrentMonthErrorMessage,
     nextMonthAvailable,
     currentMonthAvailable,
+    previousMonthAvailable,
     createNextMonth,
     createCurrentMonth,
     reloadSelectedMonth,
