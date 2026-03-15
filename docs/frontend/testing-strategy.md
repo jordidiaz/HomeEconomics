@@ -126,3 +126,6 @@ Core journeys (create data via API in each test):
 
 - Unit + component + integration: `npm test` (once scripts are added).
 - E2E: `npx playwright test`.
+
+## Agent skills
+- For test layer and scope decisions: `.agents/skills/dotnet-testing/SKILL.md`

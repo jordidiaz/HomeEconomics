@@ -3,7 +3,7 @@
 ## Overview
 HomeEconomics follows **Clean Architecture** with a clear separation of responsibilities between domain, persistence, and the web application. The API uses **CQRS** with LiteBus to separate commands (mutations) from queries (reads), and exposes endpoints through minimal controllers in `Features/*`.
 
-The SPA (React + TypeScript) lives under `src/HomeEconomics/spa` and consumes the ASP.NET Core API, which also serves static assets in production.
+The frontend (Next.js App Router) lives under `src/HomeEconomics/frontend` and consumes the ASP.NET Core API.
 
 ## Folder structure
 
@@ -11,12 +11,12 @@ The SPA (React + TypeScript) lives under `src/HomeEconomics/spa` and consumes th
 src/
 ├── Domain/                 # Domain model and business rules
 ├── Persistence/            # Data infrastructure (EF Core)
-└── HomeEconomics/          # Web API application + SPA
+└── HomeEconomics/          # Web API application + frontend
     ├── Features/           # CQRS by feature (command/query/handler/validator)
     ├── Extensions/         # Service registration and middleware
     ├── Filters/            # MVC filters (validation)
     ├── Services/           # Application services
-    └── spa/                # React + TypeScript
+    └── frontend/           # Next.js App Router frontend
 ```
 
 ## Layers and responsibilities
@@ -41,10 +41,11 @@ src/
 - **Swagger**: documents and tests the API (`/swagger`).
 - **Health checks**: `/self` and `/npgsql`.
 
-### Frontend (`src/HomeEconomics/spa`)
-- **React + TypeScript** organized by functional domains (`Movements`, `MovementMonth`).
-- **HTTP layer** centralized in `App/infrastructure/http.ts`.
-- **Services** (`services/*.service.ts`) encapsulate API calls.
+### Frontend (`src/HomeEconomics/frontend`)
+- **Next.js App Router** with TypeScript strict mode and MUI.
+- **Data flow**: `app/ → hooks/ → services/ → API` (one-way, enforced).
+- **Services** (`services/`) encapsulate all fetch calls; hooks own loading/error state; components are presentational.
+- See `docs/frontend/architecture.md` for full rules.
 
 ## Patterns and conventions
 
@@ -58,7 +59,7 @@ src/
 
 - **Swagger**: `swagger/hm/swagger.json` and UI at `/swagger`.
 - **CORS**: enabled only in development.
-- **SPA**: served via `UseFileServer()`.
+- **Frontend**: Next.js serves its own dev server; API proxied via `next.config.js` in development.
 - **API base URL**: `/api/` prefix.
 
 ## Common extension points
@@ -66,3 +67,7 @@ src/
 - **New endpoint**: create a file in `Features/<Feature>/` with command/query and add a method in the corresponding controller.
 - **New business case**: extend an entity in `Domain/` and update mapping/configuration if needed.
 - **New validation**: add a `Validator` in the feature; the filter detects it automatically.
+
+## Agent skills
+- For layering and CQRS decisions: `.agents/skills/dotnet-api/SKILL.md`
+- For schema, migration, and persistence decisions: `.agents/skills/database/SKILL.md`
