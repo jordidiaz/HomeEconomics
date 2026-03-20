@@ -76,3 +76,16 @@ Read these for decision-making guidance in specific domains:
 - Backend API (CQRS/Clean Architecture): `.agents/skills/dotnet-api/SKILL.md`
 - Testing strategy: `.agents/skills/dotnet-testing/SKILL.md`
 - Discover & install new skills: `.agents/skills/find-skills/SKILL.md`
+
+## Memory policy
+
+After completing any task, update the project memory with interesting knowledge discovered:
+- New patterns, conventions, or architectural decisions
+- Key file locations and their purposes
+- Important domain concepts or business rules
+
+Follow the two-step process:
+1. Write each memory to its own file in the memory directory (e.g., `project_foo.md`, `reference_patterns.md`) with frontmatter: `name`, `description`, `type` (`user`/`feedback`/`project`/`reference`). For `feedback` and `project` types, include a **Why:** and **How to apply:** line.
+2. Add a pointer to `MEMORY.md` as an index entry — never write memory content directly into `MEMORY.md`.
+
+Do not save: code patterns derivable from reading the code, git history, debugging recipes, or ephemeral task state.
