@@ -5,9 +5,13 @@ import {
   Box,
   CircularProgress,
   FormControlLabel,
+  IconButton,
+  InputAdornment,
   Switch,
+  TextField,
   Typography,
 } from "@mui/material";
+import { Close } from "@mui/icons-material";
 import { useState } from "react";
 import { ConfirmDeleteMonthMovementDialog } from "../components/confirm-delete-month-movement-dialog";
 import { ConfirmDeleteMovementDialog } from "../components/confirm-delete-movement-dialog";
@@ -284,6 +288,32 @@ export default function HomePage() {
           ) : null}
           {!currentMonthMovements.loading &&
           !currentMonthMovements.error &&
+          currentMonthMovements.totalMonthMovements > 0 ? (
+            <TextField
+              placeholder="Buscar por nombre o importe"
+              value={currentMonthMovements.searchTerm}
+              onChange={(e) => currentMonthMovements.setSearchTerm(e.target.value)}
+              fullWidth
+              sx={{ mb: 2 }}
+              data-testid="search-month-movements"
+              InputProps={{
+                endAdornment: currentMonthMovements.searchTerm ? (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => currentMonthMovements.setSearchTerm("")}
+                      edge="end"
+                      size="small"
+                      aria-label="Limpiar búsqueda"
+                    >
+                      <Close fontSize="small" />
+                    </IconButton>
+                  </InputAdornment>
+                ) : null,
+              }}
+            />
+          ) : null}
+          {!currentMonthMovements.loading &&
+          !currentMonthMovements.error &&
           currentMonthMovements.totalMonthMovements === 0 ? (
             <Alert severity="info">
               No hay movimientos registrados para el mes actual.
@@ -294,9 +324,11 @@ export default function HomePage() {
           currentMonthMovements.totalMonthMovements > 0 &&
           currentMonthMovements.monthMovements.length === 0 ? (
             <Alert severity="info">
-              {currentMonthMovements.showPaid
-                ? "No hay movimientos pagados para el mes actual."
-                : "No hay movimientos pendientes para el mes actual."}
+              {currentMonthMovements.searchTerm
+                ? "No se encontraron movimientos."
+                : currentMonthMovements.showPaid
+                  ? "No hay movimientos pagados para el mes actual."
+                  : "No hay movimientos pendientes para el mes actual."}
             </Alert>
           ) : null}
           {!currentMonthMovements.loading &&

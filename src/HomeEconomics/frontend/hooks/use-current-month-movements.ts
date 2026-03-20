@@ -44,6 +44,8 @@ type UseCurrentMonthMovementsResult = {
   totalMonthMovements: number;
   showPaid: boolean;
   setShowPaid: (value: boolean) => void;
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
   loading: boolean;
   error: Error | null;
   status: MovementMonth["status"] | null;
@@ -119,6 +121,7 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
   const selector = useMonthMovementSelector();
   const [allMonthMovements, setAllMonthMovements] = useState<MonthMovementListItem[]>([]);
   const [showPaid, setShowPaid] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [actionStates, setActionStates] = useState<Record<number, MonthMovementActionState>>(
     {},
   );
@@ -139,10 +142,15 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
   });
   const isMounted = useRef(true);
 
-  const monthMovements = useMemo(
-    () => allMonthMovements.filter((movement) => movement.paid === showPaid),
-    [allMonthMovements, showPaid],
-  );
+  const monthMovements = useMemo(() => {
+    const byPaid = allMonthMovements.filter((movement) => movement.paid === showPaid);
+    if (!searchTerm) return byPaid;
+    const lower = searchTerm.toLowerCase();
+    return byPaid.filter(
+      (movement) =>
+        movement.name.toLowerCase().includes(lower) || movement.amount.includes(searchTerm),
+    );
+  }, [allMonthMovements, showPaid, searchTerm]);
 
   const movementMonthId = selector.movementMonth?.id ?? null;
 
@@ -399,6 +407,8 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     totalMonthMovements: allMonthMovements.length,
     showPaid,
     setShowPaid,
+    searchTerm,
+    setSearchTerm,
     loading: selector.loading || selector.creatingNextMonth || selector.creatingCurrentMonth,
     error: selector.error,
     status: selector.movementMonth?.status ?? null,

@@ -265,6 +265,8 @@ const createCurrentMonthMovementsMockValue = (
   totalMonthMovements: 1,
   showPaid: false,
   setShowPaid: vi.fn(),
+  searchTerm: "",
+  setSearchTerm: vi.fn(),
   selectMonth: vi.fn(),
   createNextMonth: vi.fn(),
   createCurrentMonth: vi.fn(),
@@ -602,6 +604,58 @@ describe("HomePage integration wiring", () => {
         screen.queryByRole("button", { name: "confirm delete month movement" }),
       ).not.toBeInTheDocument();
     });
+  });
+
+  it("wires search input through setSearchTerm", () => {
+    const setSearchTerm = vi.fn();
+    useCurrentMonthMovementsMock.mockReturnValue(
+      createCurrentMonthMovementsMockValue({ setSearchTerm }),
+    );
+
+    render(<HomePage />);
+
+    fireEvent.change(screen.getByTestId("search-month-movements").querySelector("input")!, {
+      target: { value: "luz" },
+    });
+
+    expect(setSearchTerm).toHaveBeenCalledWith("luz");
+  });
+
+  it("wires search clear button through setSearchTerm", () => {
+    const setSearchTerm = vi.fn();
+    useCurrentMonthMovementsMock.mockReturnValue(
+      createCurrentMonthMovementsMockValue({ searchTerm: "luz", setSearchTerm }),
+    );
+
+    render(<HomePage />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Limpiar búsqueda" }));
+
+    expect(setSearchTerm).toHaveBeenCalledWith("");
+  });
+
+  it('shows "No se encontraron movimientos." when search yields no results', () => {
+    useCurrentMonthMovementsMock.mockReturnValue(
+      createCurrentMonthMovementsMockValue({
+        totalMonthMovements: 5,
+        monthMovements: [],
+        searchTerm: "xyz",
+      }),
+    );
+
+    render(<HomePage />);
+
+    expect(screen.getByText("No se encontraron movimientos.")).toBeInTheDocument();
+  });
+
+  it("hides search input when no movements exist", () => {
+    useCurrentMonthMovementsMock.mockReturnValue(
+      createCurrentMonthMovementsMockValue({ totalMonthMovements: 0, monthMovements: [] }),
+    );
+
+    render(<HomePage />);
+
+    expect(screen.queryByTestId("search-month-movements")).not.toBeInTheDocument();
   });
 
   it("calls move month movement and closes move dialog on success", async () => {

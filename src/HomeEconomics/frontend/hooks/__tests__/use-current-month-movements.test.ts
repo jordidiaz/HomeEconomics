@@ -164,6 +164,68 @@ describe("useCurrentMonthMovements", () => {
     expect(selectorMock.reloadSelectedMonth).toHaveBeenCalledTimes(2);
   });
 
+  it("returns all movements for current paid state when searchTerm is empty", async () => {
+    const { result } = renderHook(() => useCurrentMonthMovements());
+
+    await waitFor(() => expect(result.current.monthMovements.length).toBe(1));
+    expect(result.current.searchTerm).toBe("");
+  });
+
+  it("filters movements by name (case-insensitive)", async () => {
+    const { result } = renderHook(() => useCurrentMonthMovements());
+
+    await waitFor(() => expect(result.current.monthMovements.length).toBe(1));
+
+    act(() => {
+      result.current.setSearchTerm("SEG");
+    });
+
+    await waitFor(() => expect(result.current.monthMovements.length).toBe(1));
+    expect(result.current.monthMovements[0].name).toBe("Seguro");
+  });
+
+  it("filters movements by formatted amount", async () => {
+    const { result } = renderHook(() => useCurrentMonthMovements());
+
+    await waitFor(() => expect(result.current.monthMovements.length).toBe(1));
+
+    act(() => {
+      result.current.setSearchTerm("20,00");
+    });
+
+    await waitFor(() => expect(result.current.monthMovements.length).toBe(1));
+    expect(result.current.monthMovements[0].name).toBe("Seguro");
+  });
+
+  it("composes search with paid toggle", async () => {
+    const { result } = renderHook(() => useCurrentMonthMovements());
+
+    act(() => {
+      result.current.setShowPaid(true);
+      result.current.setSearchTerm("nom");
+    });
+
+    await waitFor(() => expect(result.current.monthMovements.length).toBe(1));
+    expect(result.current.monthMovements[0].name).toBe("Nomina");
+  });
+
+  it("shows all movements again when searchTerm is cleared", async () => {
+    const { result } = renderHook(() => useCurrentMonthMovements());
+
+    act(() => {
+      result.current.setSearchTerm("SEG");
+    });
+
+    await waitFor(() => expect(result.current.monthMovements.length).toBe(1));
+
+    act(() => {
+      result.current.setSearchTerm("");
+    });
+
+    await waitFor(() => expect(result.current.monthMovements.length).toBe(1));
+    expect(result.current.searchTerm).toBe("");
+  });
+
   it("reloads selected month movements when selectedMonth is previous", async () => {
     selectorMock.selectedMonth = "previous";
     const { result } = renderHook(() => useCurrentMonthMovements());
