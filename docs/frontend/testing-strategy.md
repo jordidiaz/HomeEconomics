@@ -128,4 +128,4 @@ Core journeys (create data via API in each test):
 - E2E: `npx playwright test`.
 
 ## Agent skills
-- For test layer and scope decisions: `.agents/skills/dotnet-testing/SKILL.md`
+- For test layer and scope decisions: `.claude/skills/testing/SKILL.md`

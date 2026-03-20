@@ -69,5 +69,5 @@ src/
 - **New validation**: add a `Validator` in the feature; the filter detects it automatically.
 
 ## Agent skills
-- For layering and CQRS decisions: `.agents/skills/dotnet-api/SKILL.md`
-- For schema, migration, and persistence decisions: `.agents/skills/database/SKILL.md`
+- For layering and CQRS decisions: `.claude/skills/dotnet-api/SKILL.md`
+- For schema, migration, and persistence decisions: `.claude/skills/database/SKILL.md`

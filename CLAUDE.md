@@ -62,6 +62,16 @@ npm run e2e        # Playwright E2E against local backend
 - **User-facing text in Spanish only.**
 - **Import ordering**: external packages → internal modules → relative paths; no circular dependencies.
 
+## Mandatory: testing workflow
+When developing a feature (from `specs/` or a detailed prompt), you MUST:
+1. Read `.claude/skills/testing/SKILL.md`.
+2. For each layer touched, identify the specific tests to write.
+3. Detail the test plan (class names, method names, key assertions) before writing test code.
+4. Write tests following the established patterns for each layer.
+5. Run all relevant suites and confirm all pass.
+
+Skipping tests requires explicit user opt-out.
+
 ## Detailed docs
 Read these when working in the relevant area:
 - Backend patterns: `docs/architecture.md`
@@ -72,10 +82,10 @@ Read these when working in the relevant area:
 
 ## Agent skills
 Read these for decision-making guidance in specific domains:
-- Database & migrations: `.agents/skills/database/SKILL.md`
-- Backend API (CQRS/Clean Architecture): `.agents/skills/dotnet-api/SKILL.md`
-- Testing strategy: `.agents/skills/dotnet-testing/SKILL.md`
-- Discover & install new skills: `.agents/skills/find-skills/SKILL.md`
+- Database & migrations: `.claude/skills/database/SKILL.md`
+- Backend API (CQRS/Clean Architecture): `.claude/skills/dotnet-api/SKILL.md`
+- Testing strategy (full-stack): `.claude/skills/testing/SKILL.md`
+- Discover & install new skills: `.claude/skills/find-skills/SKILL.md`
 
 ## Memory policy
 
