@@ -21,7 +21,7 @@ type MonthMovementActionState = {
   errorMessage: string | null;
 };
 
-type MonthMovementAmountUpdateState = {
+type MonthMovementEditState = {
   loading: boolean;
   errorMessage: string | null;
   monthMovementId: number | null;
@@ -72,11 +72,13 @@ type UseCurrentMonthMovementsResult = {
   actionStates: Record<number, MonthMovementActionState>;
   payMonthMovement: (monthMovementId: number) => Promise<void>;
   unpayMonthMovement: (monthMovementId: number) => Promise<void>;
-  amountUpdateState: MonthMovementAmountUpdateState;
-  setAmountUpdateTarget: (monthMovementId: number | null) => void;
-  updateMonthMovementAmount: (
+  editState: MonthMovementEditState;
+  setEditTarget: (monthMovementId: number | null) => void;
+  updateMonthMovement: (
     monthMovementId: number,
+    name: string,
     amountInput: string,
+    type: MovementType,
   ) => Promise<boolean>;
   deleteState: MonthMovementDeleteState;
   setDeleteTarget: (monthMovementId: number | null) => void;
@@ -125,7 +127,7 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
   const [actionStates, setActionStates] = useState<Record<number, MonthMovementActionState>>(
     {},
   );
-  const [amountUpdateState, setAmountUpdateState] = useState<MonthMovementAmountUpdateState>({
+  const [editState, setEditState] = useState<MonthMovementEditState>({
     loading: false,
     errorMessage: null,
     monthMovementId: null,
@@ -217,28 +219,28 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     [movementMonthId, reloadMonthMovements, updateActionState],
   );
 
-  const setAmountUpdateTarget = useCallback((monthMovementId: number | null) => {
-    setAmountUpdateState({
+  const setEditTarget = useCallback((monthMovementId: number | null) => {
+    setEditState({
       loading: false,
       errorMessage: null,
       monthMovementId,
     });
   }, []);
 
-  const updateMonthMovementAmount = useCallback(
-    async (monthMovementId: number, amountInput: string) => {
+  const updateMonthMovement = useCallback(
+    async (monthMovementId: number, name: string, amountInput: string, type: MovementType) => {
       if (!movementMonthId) {
         return false;
       }
       const amount = Number(amountInput);
-      setAmountUpdateState({
+      setEditState({
         loading: true,
         errorMessage: null,
         monthMovementId,
       });
 
       if (Number.isNaN(amount)) {
-        setAmountUpdateState({
+        setEditState({
           loading: false,
           errorMessage: "Introduce un importe válido.",
           monthMovementId,
@@ -247,26 +249,26 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
       }
 
       try {
-        await MovementMonthsService.updateMonthMovementAmount(
+        await MovementMonthsService.updateMonthMovement(
           movementMonthId,
           monthMovementId,
-          amount,
+          { name, amount, type },
         );
         await reloadMonthMovements();
         return true;
       } catch (caughtError) {
         if (isMounted.current) {
-          setAmountUpdateState({
+          setEditState({
             loading: false,
             errorMessage:
-              "No se pudo actualizar el importe del movimiento. Por favor, inténtalo de nuevo.",
+              "No se pudo actualizar el movimiento. Por favor, inténtalo de nuevo.",
             monthMovementId,
           });
         }
         return false;
       } finally {
         if (isMounted.current) {
-          setAmountUpdateState((prev) => ({
+          setEditState((prev) => ({
             ...prev,
             loading: false,
           }));
@@ -397,7 +399,7 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
       setAllMonthMovements([]);
     }
     setActionStates({});
-    setAmountUpdateState({ loading: false, errorMessage: null, monthMovementId: null });
+    setEditState({ loading: false, errorMessage: null, monthMovementId: null });
     setDeleteState({ loading: false, errorMessage: null, monthMovementId: null });
     setMoveState({ loading: false, errorMessage: null, monthMovementId: null });
   }, [selector.movementMonth]);
@@ -441,9 +443,9 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     actionStates,
     payMonthMovement,
     unpayMonthMovement,
-    amountUpdateState,
-    setAmountUpdateTarget,
-    updateMonthMovementAmount,
+    editState,
+    setEditTarget,
+    updateMonthMovement,
     deleteState,
     setDeleteTarget,
     deleteMonthMovement,

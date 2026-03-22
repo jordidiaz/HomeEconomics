@@ -34,7 +34,7 @@ type MonthMovementActionState = {
   errorMessage: string | null;
 };
 
-type MonthMovementAmountUpdateState = {
+type MonthMovementEditState = {
   loading: boolean;
   monthMovementId: number | null;
 };
@@ -53,19 +53,20 @@ type MonthMovementEditTarget = {
   id: number;
   name: string;
   amountValue: number;
+  type: MovementType;
 };
 
 type CurrentMonthMovementsListProps = {
   movements: MonthMovementListItem[];
   showPaid: boolean;
   actionStates: Record<number, MonthMovementActionState>;
-  amountUpdateState: MonthMovementAmountUpdateState;
+  editState: MonthMovementEditState;
   deleteState: MonthMovementDeleteState;
   moveState: MonthMovementMoveState;
   nextMovementMonthExists: boolean;
   onPay: (monthMovementId: number) => Promise<void>;
   onUnpay: (monthMovementId: number) => Promise<void>;
-  onEditAmount: (movement: MonthMovementEditTarget) => void;
+  onEdit: (movement: MonthMovementEditTarget) => void;
   onDelete: (movementId: number) => void;
   onMoveToNextMonth: (movementId: number) => void;
 };
@@ -79,13 +80,13 @@ export function CurrentMonthMovementsList({
   movements,
   showPaid,
   actionStates,
-  amountUpdateState,
+  editState,
   deleteState,
   moveState,
   nextMovementMonthExists,
   onPay,
   onUnpay,
-  onEditAmount,
+  onEdit,
   onDelete,
   onMoveToNextMonth,
 }: CurrentMonthMovementsListProps) {
@@ -106,7 +107,7 @@ export function CurrentMonthMovementsList({
           errorMessage: null,
         };
         const isAmountUpdateLoading =
-          amountUpdateState.loading && amountUpdateState.monthMovementId === movement.id;
+          editState.loading && editState.monthMovementId === movement.id;
         const isDeleteLoading =
           deleteState.loading && deleteState.monthMovementId === movement.id;
         const isMoveLoading = moveState.loading && moveState.monthMovementId === movement.id;
@@ -190,18 +191,19 @@ export function CurrentMonthMovementsList({
                           </span>
                         </Tooltip>
                       ) : null}
-                      <Tooltip title="Editar importe">
+                      <Tooltip title="Editar movimiento">
                         <span>
                             <IconButton
                               size="small"
-                              aria-label="Editar importe"
-                              data-testid={`month-movement-edit-amount-${movement.name}`}
+                              aria-label="Editar movimiento"
+                              data-testid={`month-movement-edit-${movement.name}`}
                               disabled={disableActions}
                               onClick={() =>
-                                onEditAmount({
+                                onEdit({
                                 id: movement.id,
                                 name: movement.name,
                                 amountValue: movement.amountValue,
+                                type: movement.type,
                               })
                             }
                           >

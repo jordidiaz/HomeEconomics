@@ -34,13 +34,13 @@ describe("CurrentMonthMovementsList", () => {
         movements={createMovements()}
         showPaid={true}
         actionStates={{}}
-        amountUpdateState={{ loading: false, monthMovementId: null }}
+        editState={{ loading: false, monthMovementId: null }}
         deleteState={{ loading: false, monthMovementId: null }}
         moveState={{ loading: false, monthMovementId: null }}
         nextMovementMonthExists={false}
         onPay={vi.fn()}
         onUnpay={vi.fn()}
-        onEditAmount={vi.fn()}
+        onEdit={vi.fn()}
         onDelete={vi.fn()}
         onMoveToNextMonth={vi.fn()}
       />,
@@ -55,13 +55,13 @@ describe("CurrentMonthMovementsList", () => {
         movements={createMovements()}
         showPaid={false}
         actionStates={{}}
-        amountUpdateState={{ loading: false, monthMovementId: null }}
+        editState={{ loading: false, monthMovementId: null }}
         deleteState={{ loading: false, monthMovementId: null }}
         moveState={{ loading: false, monthMovementId: null }}
         nextMovementMonthExists={false}
         onPay={vi.fn()}
         onUnpay={vi.fn()}
-        onEditAmount={vi.fn()}
+        onEdit={vi.fn()}
         onDelete={vi.fn()}
         onMoveToNextMonth={vi.fn()}
       />,
@@ -78,13 +78,13 @@ describe("CurrentMonthMovementsList", () => {
         actionStates={{
           1: { loading: true, errorMessage: null },
         }}
-        amountUpdateState={{ loading: false, monthMovementId: null }}
+        editState={{ loading: false, monthMovementId: null }}
         deleteState={{ loading: false, monthMovementId: null }}
         moveState={{ loading: false, monthMovementId: null }}
         nextMovementMonthExists={true}
         onPay={vi.fn()}
         onUnpay={vi.fn()}
-        onEditAmount={vi.fn()}
+        onEdit={vi.fn()}
         onDelete={vi.fn()}
         onMoveToNextMonth={vi.fn()}
       />,
@@ -93,7 +93,7 @@ describe("CurrentMonthMovementsList", () => {
     const item = screen.getByText("Seguro").closest("li");
     expect(item).not.toBeNull();
     if (item) {
-      const editButton = within(item).getByLabelText("Editar importe", {
+      const editButton = within(item).getByLabelText("Editar movimiento", {
         selector: "button",
       });
       expect(editButton).toBeDisabled();
@@ -108,13 +108,13 @@ describe("CurrentMonthMovementsList", () => {
         actionStates={{
           1: { loading: false, errorMessage: "No se pudo actualizar." },
         }}
-        amountUpdateState={{ loading: false, monthMovementId: null }}
+        editState={{ loading: false, monthMovementId: null }}
         deleteState={{ loading: false, monthMovementId: null }}
         moveState={{ loading: false, monthMovementId: null }}
         nextMovementMonthExists={true}
         onPay={vi.fn()}
         onUnpay={vi.fn()}
-        onEditAmount={vi.fn()}
+        onEdit={vi.fn()}
         onDelete={vi.fn()}
         onMoveToNextMonth={vi.fn()}
       />,

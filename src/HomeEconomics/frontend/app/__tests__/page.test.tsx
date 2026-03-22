@@ -116,7 +116,7 @@ vi.mock("../../components/month-movement-month-selector", () => ({
 vi.mock("../../components/current-month-movements-list", () => ({
   CurrentMonthMovementsList: (props: {
     showPaid: boolean;
-    onEditAmount: (movement: { id: number; name: string; amountValue: number }) => void;
+    onEdit: (movement: { id: number; name: string; amountValue: number; type: MovementType }) => void;
     onDelete: (movementId: number) => void;
     onMoveToNextMonth: (movementId: number) => void;
   }) => (
@@ -124,9 +124,11 @@ vi.mock("../../components/current-month-movements-list", () => ({
       <div>show paid: {props.showPaid ? "yes" : "no"}</div>
       <button
         type="button"
-        onClick={() => props.onEditAmount({ id: 10, name: "Luz", amountValue: 45 })}
+        onClick={() =>
+          props.onEdit({ id: 10, name: "Luz", amountValue: 45, type: MovementType.Expense })
+        }
       >
-        request edit month movement amount
+        request edit month movement
       </button>
       <button type="button" onClick={() => props.onDelete(10)}>
         request delete month movement
@@ -156,8 +158,8 @@ vi.mock("../../components/confirm-delete-movement-dialog", () => ({
     ) : null,
 }));
 
-vi.mock("../../components/edit-month-movement-amount-dialog", () => ({
-  EditMonthMovementAmountDialog: (props: {
+vi.mock("../../components/edit-month-movement-dialog", () => ({
+  EditMonthMovementDialog: (props: {
     open: boolean;
     onAccept: () => Promise<void>;
     onCancel: () => void;
@@ -165,10 +167,10 @@ vi.mock("../../components/edit-month-movement-amount-dialog", () => ({
     props.open ? (
       <div>
         <button type="button" onClick={() => void props.onAccept()}>
-          confirm edit month movement amount
+          confirm edit month movement
         </button>
         <button type="button" onClick={props.onCancel}>
-          cancel edit month movement amount
+          cancel edit month movement
         </button>
       </div>
     ) : null,
@@ -271,7 +273,7 @@ const createCurrentMonthMovementsMockValue = (
   createNextMonth: vi.fn(),
   createCurrentMonth: vi.fn(),
   actionStates: {},
-  amountUpdateState: { loading: false, errorMessage: null, monthMovementId: null },
+  editState: { loading: false, errorMessage: null, monthMovementId: null },
   deleteState: { loading: false, errorMessage: null, monthMovementId: null },
   moveState: { loading: false, errorMessage: null, monthMovementId: null },
   nextMovementMonthExists: true,
@@ -281,8 +283,8 @@ const createCurrentMonthMovementsMockValue = (
   deleteMonthMovement: vi.fn(async () => true),
   setMoveTarget: vi.fn(),
   moveMonthMovementToNextMonth: vi.fn(async () => true),
-  setAmountUpdateTarget: vi.fn(),
-  updateMonthMovementAmount: vi.fn(async () => true),
+  setEditTarget: vi.fn(),
+  updateMonthMovement: vi.fn(async () => true),
   ...overrides,
 });
 
@@ -552,31 +554,31 @@ describe("HomePage integration wiring", () => {
     expect(setShowPaid).toHaveBeenCalledWith(true);
   });
 
-  it("calls update amount and closes edit amount dialog on success", async () => {
-    const updateMonthMovementAmount = vi.fn(async () => true);
+  it("calls updateMonthMovement and closes edit dialog on success", async () => {
+    const updateMonthMovement = vi.fn(async () => true);
     useCurrentMonthMovementsMock.mockReturnValue(
       createCurrentMonthMovementsMockValue({
-        updateMonthMovementAmount,
+        updateMonthMovement,
       }),
     );
 
     render(<HomePage />);
 
     fireEvent.click(
-      screen.getByRole("button", { name: "request edit month movement amount" }),
+      screen.getByRole("button", { name: "request edit month movement" }),
     );
     expect(
-      screen.getByRole("button", { name: "confirm edit month movement amount" }),
+      screen.getByRole("button", { name: "confirm edit month movement" }),
     ).toBeInTheDocument();
 
     fireEvent.click(
-      screen.getByRole("button", { name: "confirm edit month movement amount" }),
+      screen.getByRole("button", { name: "confirm edit month movement" }),
     );
 
     await waitFor(() => {
-      expect(updateMonthMovementAmount).toHaveBeenCalledWith(10, "45.00");
+      expect(updateMonthMovement).toHaveBeenCalledWith(10, "Luz", "45.00", MovementType.Expense);
       expect(
-        screen.queryByRole("button", { name: "confirm edit month movement amount" }),
+        screen.queryByRole("button", { name: "confirm edit month movement" }),
       ).not.toBeInTheDocument();
     });
   });

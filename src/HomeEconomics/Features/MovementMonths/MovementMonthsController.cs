@@ -69,11 +69,12 @@ public class MovementMonthsController(ICommandMediator commandMediator, IQueryMe
         return Ok(result);
     }
 
-    [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/update-amount")]
+    [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/update")]
     [ProducesDefaultResponseType]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult> UpdateMonthMovementAmount(UpdateMonthMovementAmount.Command command)
+    public async Task<ActionResult> UpdateMonthMovement(UpdateMonthMovement.Command command)
     {
         var result = await commandMediator.SendAsync(command);
 

@@ -186,6 +186,58 @@ describe("MovementMonthsService", () => {
     );
   });
 
+  it("updateMonthMovement posts payload", async () => {
+    fetchMock.mockResolvedValueOnce(
+      createResponse({
+        ok: true,
+        status: 200,
+        json: async () => undefined,
+      }),
+    );
+
+    await MovementMonthsService.updateMonthMovement(10, 7, {
+      name: "Luz actualizada",
+      amount: 55,
+      type: MovementType.Expense,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/movement-months/10/month-movements/7/update",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          movementMonthId: 10,
+          monthMovementId: 7,
+          name: "Luz actualizada",
+          amount: 55,
+          type: MovementType.Expense,
+        }),
+      },
+    );
+  });
+
+  it("updateMonthMovement throws on non-2xx", async () => {
+    fetchMock.mockResolvedValueOnce(
+      createResponse({
+        ok: false,
+        status: 409,
+        json: async () => undefined,
+      }),
+    );
+
+    await expect(
+      MovementMonthsService.updateMonthMovement(10, 7, {
+        name: "Test",
+        amount: 10,
+        type: MovementType.Expense,
+      }),
+    ).rejects.toMatchObject({
+      status: 409,
+      message: "Failed to update month movement (409)",
+    });
+  });
+
   it("deleteMonthMovement sends DELETE", async () => {
     fetchMock.mockResolvedValueOnce(
       createResponse({

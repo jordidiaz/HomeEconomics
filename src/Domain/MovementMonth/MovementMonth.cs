@@ -48,6 +48,14 @@ public class MovementMonth : Entity, IAggregateRoot
         monthMovement.SetAmount(amount);
     }
 
+    public void UpdateMonthMovement(int monthMovementId, string name, decimal amount, MovementType type)
+    {
+        var monthMovement = GetMonthMovementOrThrow(monthMovementId);
+        monthMovement.SetName(name);
+        monthMovement.SetAmount(amount);
+        monthMovement.SetType(type);
+    }
+
     public void DeleteMonthMovement(int monthMovementId)
     {
         var monthMovement = GetMonthMovementOrThrow(monthMovementId);

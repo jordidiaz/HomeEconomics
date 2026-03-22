@@ -1,6 +1,7 @@
-﻿using FluentValidation;
-using HomeEconomics.Services;
 using Domain.Movements;
+using FluentValidation;
+using HomeEconomics.Helpers;
+using HomeEconomics.Services;
 using JetBrains.Annotations;
 using LiteBus.Commands.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -9,13 +10,19 @@ using Persistence;
 namespace HomeEconomics.Features.MovementMonths;
 
 [UsedImplicitly]
-public class UpdateMonthMovementAmount
+public class UpdateMonthMovement
 {
-    public record Command(int MovementMonthId, int MonthMovementId, decimal Amount) : ICommand<MovementMonthResponse>;
+    public record Command(int MovementMonthId, int MonthMovementId, string Name, decimal Amount, MovementType Type) : ICommand<MovementMonthResponse>;
 
+    [UsedImplicitly]
     public class Validator : AbstractValidator<Command>
     {
-        public Validator() => RuleFor(command => command.Amount).GreaterThanOrEqualTo(Movement.MinAmount);
+        public Validator()
+        {
+            RuleFor(command => command.Name).NotEmpty().MaximumLength(Movement.MovementNameMaxLength);
+            RuleFor(command => command.Amount).GreaterThanOrEqualTo(Movement.MinAmount);
+            RuleFor(command => command.Type).Must(Enums.IsAValidEnumValue);
+        }
     }
 
     [UsedImplicitly]
@@ -31,7 +38,7 @@ public class UpdateMonthMovementAmount
                 throw new InvalidOperationException(Properties.Messages.MovementMonthNotExists);
             }
 
-            movementMonth.UpdateMonthMovementAmount(request.MonthMovementId, request.Amount);
+            movementMonth.UpdateMonthMovement(request.MonthMovementId, request.Name, request.Amount, request.Type);
 
             await dbContext.SaveChangesAsync(cancellationToken);
 

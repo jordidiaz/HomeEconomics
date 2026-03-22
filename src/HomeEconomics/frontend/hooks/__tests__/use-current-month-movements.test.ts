@@ -53,6 +53,7 @@ describe("useCurrentMonthMovements", () => {
   const payMock = vi.spyOn(MovementMonthsService, "payMonthMovement");
   const unpayMock = vi.spyOn(MovementMonthsService, "unpayMonthMovement");
   const updateAmountMock = vi.spyOn(MovementMonthsService, "updateMonthMovementAmount");
+  const updateMock = vi.spyOn(MovementMonthsService, "updateMonthMovement");
   const deleteMock = vi.spyOn(MovementMonthsService, "deleteMonthMovement");
   const moveMock = vi.spyOn(MovementMonthsService, "moveMonthMovementToNextMonth");
 
@@ -63,6 +64,7 @@ describe("useCurrentMonthMovements", () => {
     payMock.mockReset();
     unpayMock.mockReset();
     updateAmountMock.mockReset();
+    updateMock.mockReset();
     deleteMock.mockReset();
     moveMock.mockReset();
   });
@@ -71,6 +73,7 @@ describe("useCurrentMonthMovements", () => {
     payMock.mockReset();
     unpayMock.mockReset();
     updateAmountMock.mockReset();
+    updateMock.mockReset();
     deleteMock.mockReset();
     moveMock.mockReset();
   });
@@ -108,11 +111,11 @@ describe("useCurrentMonthMovements", () => {
 
     let outcome = true;
     await act(async () => {
-      outcome = await result.current.updateMonthMovementAmount(1, "abc");
+      outcome = await result.current.updateMonthMovement(1, "Seguro", "abc", MovementType.Expense);
     });
 
     expect(outcome).toBe(false);
-    expect(result.current.amountUpdateState.errorMessage).toBe(
+    expect(result.current.editState.errorMessage).toBe(
       "Introduce un importe válido.",
     );
   });

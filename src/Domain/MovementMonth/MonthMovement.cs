@@ -25,4 +25,9 @@ public class MonthMovement : Entity
     internal void UnPay() => Paid = false;
 
     internal void SetAmount(decimal amount) => Amount = amount < Movement.MinAmount ? throw new ArgumentOutOfRangeException(nameof(amount)) : amount;
+
+    internal void SetName(string name) =>
+        Name = string.IsNullOrWhiteSpace(name) ? throw new ArgumentNullException(nameof(name)) : name;
+
+    internal void SetType(MovementType type) => Type = type;
 }

@@ -13,11 +13,12 @@ import {
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useState } from "react";
+import { MovementType } from "../types/movement-type";
 import { ConfirmDeleteMonthMovementDialog } from "../components/confirm-delete-month-movement-dialog";
 import { ConfirmDeleteMovementDialog } from "../components/confirm-delete-movement-dialog";
 import { ConfirmMoveMonthMovementDialog } from "../components/confirm-move-month-movement-dialog";
 import { CurrentMonthMovementsList } from "../components/current-month-movements-list";
-import { EditMonthMovementAmountDialog } from "../components/edit-month-movement-amount-dialog";
+import { EditMonthMovementDialog } from "../components/edit-month-movement-dialog";
 import { AddMonthMovementForm } from "../components/add-month-movement-form";
 import { MovementMonthStatusForm } from "../components/movement-month-status-form";
 import { MonthMovementMonthSelector } from "../components/month-movement-month-selector";
@@ -60,12 +61,15 @@ export default function HomePage() {
     id: number;
     name: string;
   } | null>(null);
-  const [movementToEditAmount, setMovementToEditAmount] = useState<{
+  const [movementToEdit, setMovementToEdit] = useState<{
     id: number;
     name: string;
     amountValue: number;
+    type: MovementType;
   } | null>(null);
+  const [editNameValue, setEditNameValue] = useState("");
   const [editAmountValue, setEditAmountValue] = useState("");
+  const [editTypeValue, setEditTypeValue] = useState<MovementType>(MovementType.Undefined);
 
   const handleDeleteRequest = (id: number, name: string) => {
     deleteMovement.clearError();
@@ -159,32 +163,39 @@ export default function HomePage() {
     void addMovementToCurrentMonth.addToCurrentMonth(movement);
   };
 
-  const handleEditAmountRequest = (movement: {
+  const handleMonthMovementEditRequest = (movement: {
     id: number;
     name: string;
     amountValue: number;
+    type: MovementType;
   }) => {
-    currentMonthMovements.setAmountUpdateTarget(movement.id);
-    setMovementToEditAmount(movement);
+    currentMonthMovements.setEditTarget(movement.id);
+    setMovementToEdit(movement);
+    setEditNameValue(movement.name);
     setEditAmountValue(movement.amountValue.toFixed(2));
+    setEditTypeValue(movement.type);
   };
 
-  const handleEditAmountCancel = () => {
-    currentMonthMovements.setAmountUpdateTarget(null);
-    setMovementToEditAmount(null);
+  const handleMonthMovementEditCancel = () => {
+    currentMonthMovements.setEditTarget(null);
+    setMovementToEdit(null);
+    setEditNameValue("");
     setEditAmountValue("");
+    setEditTypeValue(MovementType.Undefined);
   };
 
-  const handleEditAmountAccept = async () => {
-    if (!movementToEditAmount) {
+  const handleMonthMovementEditAccept = async () => {
+    if (!movementToEdit) {
       return;
     }
-    const wasUpdated = await currentMonthMovements.updateMonthMovementAmount(
-      movementToEditAmount.id,
+    const wasUpdated = await currentMonthMovements.updateMonthMovement(
+      movementToEdit.id,
+      editNameValue,
       editAmountValue,
+      editTypeValue,
     );
     if (wasUpdated) {
-      handleEditAmountCancel();
+      handleMonthMovementEditCancel();
     }
   };
 
@@ -338,13 +349,13 @@ export default function HomePage() {
               movements={currentMonthMovements.monthMovements}
               showPaid={currentMonthMovements.showPaid}
               actionStates={currentMonthMovements.actionStates}
-              amountUpdateState={currentMonthMovements.amountUpdateState}
+              editState={currentMonthMovements.editState}
               deleteState={currentMonthMovements.deleteState}
               moveState={currentMonthMovements.moveState}
               nextMovementMonthExists={currentMonthMovements.nextMovementMonthExists}
               onPay={currentMonthMovements.payMonthMovement}
               onUnpay={currentMonthMovements.unpayMonthMovement}
-              onEditAmount={handleEditAmountRequest}
+              onEdit={handleMonthMovementEditRequest}
               onDelete={handleMonthMovementDeleteRequest}
               onMoveToNextMonth={handleMonthMovementMoveRequest}
             />
@@ -408,14 +419,18 @@ export default function HomePage() {
         onCancel={handleDeleteCancel}
         onConfirm={handleDeleteConfirm}
       />
-      <EditMonthMovementAmountDialog
-        open={movementToEditAmount !== null}
+      <EditMonthMovementDialog
+        open={movementToEdit !== null}
+        name={editNameValue}
         amount={editAmountValue}
-        submitting={currentMonthMovements.amountUpdateState.loading}
-        errorMessage={currentMonthMovements.amountUpdateState.errorMessage}
+        type={editTypeValue}
+        submitting={currentMonthMovements.editState.loading}
+        errorMessage={currentMonthMovements.editState.errorMessage}
+        onNameChange={setEditNameValue}
         onAmountChange={setEditAmountValue}
-        onCancel={handleEditAmountCancel}
-        onAccept={handleEditAmountAccept}
+        onTypeChange={setEditTypeValue}
+        onCancel={handleMonthMovementEditCancel}
+        onAccept={handleMonthMovementEditAccept}
       />
       <ConfirmDeleteMonthMovementDialog
         open={monthMovementToDelete !== null}

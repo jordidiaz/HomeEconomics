@@ -152,6 +152,35 @@ export class MovementMonthsService {
     }
   }
 
+  static async updateMonthMovement(
+    movementMonthId: number,
+    monthMovementId: number,
+    movement: { name: string; amount: number; type: MovementType },
+  ): Promise<void> {
+    const payload = {
+      movementMonthId,
+      monthMovementId,
+      ...movement,
+    };
+    const response = await fetch(
+      `/api/movement-months/${movementMonthId}/month-movements/${monthMovementId}/update`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      },
+    );
+
+    if (!response.ok) {
+      throw MovementMonthsService.createError(
+        `Failed to update month movement (${response.status})`,
+        response.status,
+      );
+    }
+  }
+
   static async deleteMonthMovement(
     movementMonthId: number,
     monthMovementId: number,
