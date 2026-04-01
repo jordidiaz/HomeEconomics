@@ -58,7 +58,7 @@ End-to-end tests use Playwright and run against a local backend with the `homeec
 
 Before running E2E tests, ensure:
 - PostgreSQL is running
-- Port 5000 (backend) and 3000 (frontend) are available
+- Port 5050 (backend) and 3000 (frontend) are available
 - .NET 10 SDK is installed
 
 ### Running E2E Tests
@@ -111,7 +111,7 @@ See `e2e-implementation-plan.md` for complete implementation details.
 ### Troubleshooting
 
 **Backend fails to start:**
-- Check if port 5000 is already in use: `lsof -i :5000`
+- Check if port 5050 is already in use: `lsof -i :5050`
 - Verify PostgreSQL is running: `pg_isready`
 - Check test database exists: `psql -U homeeconomics -l | grep homeeconomics-test`
 

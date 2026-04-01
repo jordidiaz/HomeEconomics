@@ -31,12 +31,12 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Test"))
 }
 
 app
-    .UseHomeEconomicsSpa()
     .UseRouting()
     .UseIf(app.Environment.IsDevelopment(), ab => ab.UseHomeEconomicsCors())
     .UseHomeEconomicsSwagger()
     .UseProblemDetails()
-    .UseHomeEconomicsEndpoints();
+    .UseHomeEconomicsEndpoints()
+    .UseHomeEconomicsSpa();
 
 await app.RunAsync();
 

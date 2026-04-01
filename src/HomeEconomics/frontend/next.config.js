@@ -7,7 +7,7 @@ const nextConfig = {
     if (process.env.NODE_ENV !== "development") {
       return [];
     }
-    const port = 5000;
+    const port =5050;
     return [
       {
         source: '/api/:path*',

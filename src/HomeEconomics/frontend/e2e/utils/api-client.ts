@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "http://localhost:5050/api";
 
 type MovementTypeInput = "income" | "expense";
 type MovementFrequencyInput = "none" | "monthly" | "yearly" | "custom";

@@ -6,7 +6,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
 PROJECT_PATH="$REPO_ROOT/src/HomeEconomics"
 PID_FILE="/tmp/homeeconomics-backend.pid"
 LOG_FILE="/tmp/homeeconomics-backend.log"
-PORT=5000
+PORT=5050
 READY_ENDPOINT="http://localhost:${PORT}/self"
 MAX_WAIT_SECONDS=45
 

@@ -17,7 +17,7 @@ async function globalSetup(config: FullConfig) {
   let retries = 30;
   while (retries > 0) {
     try {
-      const response = await page.goto('http://localhost:5000/self');
+      const response = await page.goto('http://localhost:5050/self');
       if (response?.ok()) {
         console.log('✅ Backend is ready');
         break;

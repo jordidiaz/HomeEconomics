@@ -44,7 +44,6 @@ docker-compose -f docker-compose.development.yaml up -d
 
 This provides:
 - PostgreSQL database on port 5432
-- Adminer database admin interface on port 8080
 
 ### 3. Backend Development
 
@@ -66,7 +65,7 @@ Run the API:
 dotnet run --project src/HomeEconomics
 ```
 
-The API will be available at `https://localhost:5001` (or `http://localhost:5000`)
+The API will be available at `http://localhost:5050`
 
 #### Backend Development Commands
 

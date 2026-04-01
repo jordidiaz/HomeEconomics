@@ -11,7 +11,7 @@ type MovementListResponse = {
 };
 
 async function deleteMovementsByName(name: string): Promise<void> {
-  const response = await fetch("http://localhost:5000/api/movements");
+  const response = await fetch("http://localhost:5050/api/movements");
   if (!response.ok) {
     return;
   }

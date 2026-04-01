@@ -44,7 +44,7 @@ test.describe("Status form", () => {
     let resolvedStatus: StatusApiResponse["status"] | null = null;
     for (let attempt = 0; attempt < 20; attempt++) {
       const response = await fetch(
-        `http://localhost:5000/api/movement-months/${year}/${month}`,
+        `http://localhost:5050/api/movement-months/${year}/${month}`,
       );
 
       if (response.ok) {

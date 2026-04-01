@@ -3,7 +3,7 @@
 ## Base URL
 The API is served under the `/api` prefix.
 
-- **Backend**: `https://localhost:5001/api` (or `http://localhost:5000/api` for local development).
+- **Backend**: `http://localhost:5050/api` for local development.
 - **SPA**: the base is configured with the `REACT_APP_API_BASE_URL` variable and `/api/` is then appended in the client.
 
 ## Interactive documentation
