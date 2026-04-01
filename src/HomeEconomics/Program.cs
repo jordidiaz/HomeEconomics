@@ -22,7 +22,8 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Test"))
 {
-    await DevelopmentDatabaseBootstrapper.EnsureDatabaseExistsAsync(connectionString!);
+    var connString = app.Configuration.GetConnectionString("HomeEconomics");
+    await DevelopmentDatabaseBootstrapper.EnsureDatabaseExistsAsync(connString!);
 
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<HomeEconomicsDbContext>();

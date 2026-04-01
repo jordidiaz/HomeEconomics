@@ -11,7 +11,7 @@ public class PostgreSqlContainerManager : IAsyncDisposable
     private const string Username = PostgreSqlBuilder.DefaultUsername;
     private const string Password = PostgreSqlBuilder.DefaultPassword;
     
-    public const string DatabaseName = "HomeEconomics";
+    public const string DatabaseName = "homeeconomics-test";
 
     public static PostgreSqlContainerManager Instance => LazyInstance.Value;
 
