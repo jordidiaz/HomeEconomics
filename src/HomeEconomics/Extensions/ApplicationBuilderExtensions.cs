@@ -20,7 +20,7 @@ public static class ApplicationBuilderExtensions
 
         internal IApplicationBuilder UseHomeEconomicsSpa() =>
             appBuilder
-                .UseStaticFiles();
+                .UseFileServer();
 
         internal IApplicationBuilder UseHomeEconomicsCors() =>
             appBuilder.UseCors(corsPolicyBuilder =>
