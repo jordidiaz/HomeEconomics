@@ -1,6 +1,6 @@
 # HomeEconomics
 
-A personal finance management application built with .NET 10 and React TypeScript to help track income, expenses, and monthly budgets with recurring movement patterns.
+A personal finance management application built with .NET 10 and Next.js to help track income, expenses, and monthly budgets with recurring movement patterns.
 
 ## Features
 
@@ -8,13 +8,14 @@ A personal finance management application built with .NET 10 and React TypeScrip
 - **Recurring Patterns**: Support for monthly, yearly, and custom frequency patterns
 - **Monthly Budgeting**: Track actual vs planned movements per month
 - **Payment Tracking**: Mark movements as paid/unpaid
-- **Responsive UI**: Modern web interface built with React and SCSS
+- **Responsive UI**: Modern web interface built with Next.js and MUI
 
 ## Technology Stack
 
 - **Backend**: .NET 10 ASP.NET Core Web API
-- **Frontend**: React 16.13.1 with TypeScript
+- **Frontend**: Next.js 14 (App Router) with TypeScript and MUI
 - **Database**: PostgreSQL with Entity Framework Core
+- **Testing**: xUnit + FluentAssertions (backend), Vitest + RTL + Playwright (frontend)
 - **Architecture**: Clean Architecture with CQRS powered by LiteBus
 
 ## Prerequisites
@@ -92,7 +93,7 @@ dotnet ef database update --project src/Persistence --startup-project src/HomeEc
 Navigate to the frontend directory:
 
 ```bash
-cd src/HomeEconomics/spa
+cd src/HomeEconomics/frontend
 ```
 
 Install dependencies:
@@ -104,34 +105,31 @@ npm install
 Start the development server:
 
 ```bash
-npm start
+npm run dev
 ```
 
-The React app will be available at `http://localhost:3000`
+The Next.js app will be available at `http://localhost:3000`
 
 #### Frontend Development Commands
 
 ```bash
 # Start development server
-npm start
+npm run dev
 
 # Build for production
 npm run build
 
-# Run tests
+# Run tests (watch mode)
 npm test
 
 # Run tests in CI mode
-npm run citest
+npm run test:ci
 
-# Lint TypeScript files
-npm run lint
+# Run E2E tests (requires local backend running)
+npm run e2e
 
-# Lint SCSS files
-npm run stylelint
-
-# Fix linting issues automatically
-npm run lint:fix
+# Run E2E tests with Playwright UI
+npm run e2e:ui
 ```
 
 ## Project Structure
@@ -139,32 +137,41 @@ npm run lint:fix
 ```
 HomeEconomics/
 ├── src/
-│   ├── Domain/                     # Domain entities and business logic
-│   │   ├── Movements/             # Movement entities (income/expense)
-│   │   └── MovementMonth/         # Monthly movement tracking
-│   ├── Persistence/               # Data access layer
-│   │   ├── Configurations/        # EF Core entity configurations
-│   │   ├── Migrations/           # Database migrations
+│   ├── Domain/                          # Domain entities and business logic
+│   │   ├── Movements/                  # Movement entities (income/expense)
+│   │   └── MovementMonth/              # Monthly movement tracking
+│   ├── Persistence/                     # Data access layer
+│   │   ├── Configurations/             # EF Core entity configurations
+│   │   ├── Extensions/                 # Service registration helpers
+│   │   ├── Migrations/                 # Database migrations
 │   │   └── HomeEconomicsDbContext.cs
-│   └── HomeEconomics/            # Web API application
-│       ├── Features/             # Feature-based organization (CQRS)
-│       │   ├── Movements/        # Movement CRUD operations
-│       │   └── MovementMonths/   # Monthly movement operations
-│       └── spa/                  # React frontend
-│           ├── src/
-│           │   ├── App/          # Main application components
-│           │   ├── components/   # Reusable UI components
-│           │   ├── styles/       # SCSS styling system
-│           │   └── tests/        # Frontend tests
-│           └── package.json
+│   └── HomeEconomics/                   # Web API application
+│       ├── Features/                   # Feature-based organization (CQRS)
+│       │   ├── Movements/              # Movement CRUD operations
+│       │   └── MovementMonths/         # Monthly movement operations
+│       ├── Extensions/                 # Middleware and service extensions
+│       ├── Filters/                    # Action filters (model validation)
+│       ├── Services/                   # Application services
+│       └── frontend/                   # Next.js 14 App Router frontend
+│           ├── app/                    # Routes and layouts
+│           ├── components/             # Presentational UI components (MUI)
+│           ├── hooks/                  # State and side-effect hooks
+│           ├── services/               # API access layer (typed fetch)
+│           ├── types/                  # Shared TypeScript types
+│           └── e2e/                    # Playwright end-to-end tests
 ├── test/
-│   ├── Domain.UnitTests/         # Domain layer unit tests
-│   ├── HomeEconomics.UnitTests/  # Application unit tests
-│   ├── HomeEconomics.IntegrationTests/ # API integration tests
-├── Directory.Build.props         # Global MSBuild properties
-├── HomeEconomics.sln            # Solution file
-├── docker-compose.yaml          # Production Docker setup
-└── docker-compose.development.yaml # Development environment
+│   ├── Domain.UnitTests/               # Domain layer unit tests
+│   ├── HomeEconomics.UnitTests/        # Application unit tests (handlers)
+│   └── HomeEconomics.IntegrationTests/ # API integration tests
+├── docs/
+│   ├── architecture.md                 # Backend architecture and patterns
+│   ├── api.md                          # API reference
+│   └── frontend/                       # Frontend detailed docs
+├── specs/                              # Feature specifications
+├── Directory.Build.props               # Global MSBuild properties
+├── HomeEconomics.sln                   # Solution file
+├── docker-compose.yaml                 # Production Docker setup
+└── docker-compose.development.yaml     # Development environment (Postgres)
 ```
 
 ## Development Workflow
@@ -178,10 +185,10 @@ HomeEconomics/
 
 ### Frontend Development
 
-1. **Components**: Create reusable components in `src/HomeEconomics/spa/src/components/`
-2. **Styling**: Use SCSS files following the established pattern
-3. **API Integration**: Use Axios for HTTP requests to the backend API
-4. **Testing**: Write Jest tests for components
+1. **Components**: Create reusable components in `src/HomeEconomics/frontend/components/`
+2. **Styling**: Use MUI theme tokens and the `sx` prop
+3. **API Integration**: Use typed fetch-based services in `frontend/services/`
+4. **Testing**: Write Vitest tests for components and hooks
 
 ### Running Tests
 
@@ -189,13 +196,23 @@ HomeEconomics/
 # Backend tests
 dotnet test
 
-# Frontend tests
-cd src/HomeEconomics/spa && npm test
+# Frontend unit/component tests
+cd src/HomeEconomics/frontend && npm run test:ci
+
+# Frontend E2E tests (requires local backend running)
+cd src/HomeEconomics/frontend && npm run e2e
 ```
 
 ## Production Deployment
 
-Build and run with Docker:
+1. Copy the environment template and fill in your Supabase credentials:
+
+```bash
+cp .env.example .env
+# Edit .env with your real Supabase connection string
+```
+
+2. Build and run with Docker:
 
 ```bash
 docker-compose up -d
@@ -203,65 +220,18 @@ docker-compose up -d
 
 This will:
 - Build the .NET application
-- Build the React frontend for production
-- Start PostgreSQL database
+- Build the Next.js frontend for production
+- Connect to your Supabase PostgreSQL database
 - Serve the application on port 6001
-
-## Database Migration (Heroku ↔ Local Docker)
-
-### Export from Heroku and import into the local Docker container
-
-1. Create and download a Heroku backup:
-
-```bash
-heroku pg:backups:capture --app <heroku-app-name>
-heroku pg:backups:download --app <heroku-app-name> -o heroku.dump
-```
-
-2. Restore into the local PostgreSQL container:
-
-```bash
-docker compose up -d postgres
-docker compose exec -T postgres pg_restore \
-  --no-owner \
-  --username=homeeconomics \
-  --dbname=homeeconomics \
-  --clean \
-  --if-exists \
-  < heroku.dump
-```
-
-### Export from the local Docker container and import into another container
-
-1. Export a backup from the local container:
-
-```bash
-docker compose exec -T postgres pg_dump \
-  --username=homeeconomics \
-  --format=custom \
-  --file=/tmp/homeeconomics.dump \
-  homeeconomics
-docker cp "$(docker compose ps -q postgres)":/tmp/homeeconomics.dump ./homeeconomics.dump
-```
-
-2. Import into another PostgreSQL container:
-
-```bash
-docker compose exec -T <other-postgres-service> pg_restore \
-  --username=homeeconomics \
-  --dbname=homeeconomics \
-  --clean \
-  --if-exists \
-  < homeeconomics.dump
-```
 
 ## Contributing
 
 1. Create a feature branch
 2. Make your changes
-3. Run tests: `dotnet test` and `cd src/HomeEconomics/spa && npm test`
-4. Run linting: `cd src/HomeEconomics/spa && npm run lint && npm run stylelint`
-5. Submit a pull request
+3. Run backend tests: `dotnet test`
+4. Run frontend tests: `cd src/HomeEconomics/frontend && npm run test:ci`
+5. Run E2E tests: `cd src/HomeEconomics/frontend && npm run e2e`
+6. Submit a pull request
 
 ## Architecture
 
@@ -270,7 +240,7 @@ The application follows Clean Architecture principles:
 - **Domain Layer**: Core business logic and entities
 - **Persistence Layer**: Data access with Entity Framework Core
 - **Application Layer**: API controllers and CQRS handlers using LiteBus
-- **Presentation Layer**: React TypeScript frontend
+- **Presentation Layer**: Next.js TypeScript frontend
 
 Key patterns used:
 - CQRS with LiteBus for command/query separation
