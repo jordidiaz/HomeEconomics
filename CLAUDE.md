@@ -86,6 +86,7 @@ Read these for decision-making guidance in specific domains:
 - Backend API (CQRS/Clean Architecture): `.claude/skills/dotnet-api/SKILL.md`
 - Testing strategy (full-stack): `.claude/skills/testing/SKILL.md`
 - Discover & install new skills: `.claude/skills/find-skills/SKILL.md`
+- Backend dependency updates (NuGet): `.claude/skills/update-deps/SKILL.md`
 
 ## Memory policy
 
