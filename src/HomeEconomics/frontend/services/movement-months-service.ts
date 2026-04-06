@@ -123,6 +123,44 @@ export class MovementMonthsService {
     }
   }
 
+  static async starMonthMovement(
+    movementMonthId: number,
+    monthMovementId: number,
+  ): Promise<void> {
+    const response = await fetch(
+      `/api/movement-months/${movementMonthId}/month-movements/${monthMovementId}/star`,
+      {
+        method: "POST",
+      },
+    );
+
+    if (!response.ok) {
+      throw MovementMonthsService.createError(
+        `Failed to star month movement (${response.status})`,
+        response.status,
+      );
+    }
+  }
+
+  static async unstarMonthMovement(
+    movementMonthId: number,
+    monthMovementId: number,
+  ): Promise<void> {
+    const response = await fetch(
+      `/api/movement-months/${movementMonthId}/month-movements/${monthMovementId}/unstar`,
+      {
+        method: "POST",
+      },
+    );
+
+    if (!response.ok) {
+      throw MovementMonthsService.createError(
+        `Failed to unstar month movement (${response.status})`,
+        response.status,
+      );
+    }
+  }
+
   static async updateMonthMovementAmount(
     movementMonthId: number,
     monthMovementId: number,

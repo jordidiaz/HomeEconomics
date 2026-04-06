@@ -16,6 +16,8 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import RedoOutlinedIcon from "@mui/icons-material/RedoOutlined";
 import MoneyOffOutlinedIcon from "@mui/icons-material/MoneyOffOutlined";
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import { MovementType } from "../types/movement-type";
 
 type MonthMovementListItem = {
@@ -27,6 +29,7 @@ type MonthMovementListItem = {
   typeLabel: string;
   paid: boolean;
   paidLabel: string;
+  starred: boolean;
 };
 
 type MonthMovementActionState = {
@@ -66,6 +69,8 @@ type CurrentMonthMovementsListProps = {
   nextMovementMonthExists: boolean;
   onPay: (monthMovementId: number) => Promise<void>;
   onUnpay: (monthMovementId: number) => Promise<void>;
+  onStar: (monthMovementId: number) => Promise<void>;
+  onUnstar: (monthMovementId: number) => Promise<void>;
   onEdit: (movement: MonthMovementEditTarget) => void;
   onDelete: (movementId: number) => void;
   onMoveToNextMonth: (movementId: number) => void;
@@ -86,6 +91,8 @@ export function CurrentMonthMovementsList({
   nextMovementMonthExists,
   onPay,
   onUnpay,
+  onStar,
+  onUnstar,
   onEdit,
   onDelete,
   onMoveToNextMonth,
@@ -176,6 +183,31 @@ export function CurrentMonthMovementsList({
                   </Typography>
                   <Stack spacing={0.5} sx={{ alignItems: "flex-end" }}>
                     <Stack direction="row" spacing={0.5}>
+                      <Tooltip title={movement.starred ? "Quitar destacado" : "Destacar"}>
+                        <span>
+                          <IconButton
+                            size="small"
+                            data-testid={
+                              movement.starred
+                                ? `month-movement-unstar-${movement.name}`
+                                : `month-movement-star-${movement.name}`
+                            }
+                            aria-label={movement.starred ? "Quitar destacado" : "Destacar"}
+                            disabled={disableActions}
+                            onClick={() =>
+                              movement.starred
+                                ? void onUnstar(movement.id)
+                                : void onStar(movement.id)
+                            }
+                          >
+                            {movement.starred ? (
+                              <StarIcon fontSize="small" />
+                            ) : (
+                              <StarBorderOutlinedIcon fontSize="small" />
+                            )}
+                          </IconButton>
+                        </span>
+                      </Tooltip>
                       {nextMovementMonthExists ? (
                         <Tooltip title="Mover al mes siguiente">
                           <span>

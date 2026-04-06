@@ -27,6 +27,8 @@ public record MovementMonthResponse
         public int Type { get; init; }
 
         public bool Paid { get; init; }
+
+        public bool Starred { get; init; }
     }
 
     public class StatusResult

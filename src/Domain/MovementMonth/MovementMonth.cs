@@ -42,6 +42,18 @@ public class MovementMonth : Entity, IAggregateRoot
         monthMovement.UnPay();
     }
 
+    public void StarMonthMovement(int monthMovementId)
+    {
+        var monthMovement = GetMonthMovementOrThrow(monthMovementId);
+        monthMovement.Star();
+    }
+
+    public void UnStarMonthMovement(int monthMovementId)
+    {
+        var monthMovement = GetMonthMovementOrThrow(monthMovementId);
+        monthMovement.UnStar();
+    }
+
     public void UpdateMonthMovementAmount(int monthMovementId, decimal amount)
     {
         var monthMovement = GetMonthMovementOrThrow(monthMovementId);

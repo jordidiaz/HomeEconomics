@@ -19,10 +19,13 @@ public class MonthMovement : Entity
     public decimal Amount { get; private set; }
     public MovementType Type { get; private set; }
     public bool Paid { get; private set; }
+    public bool Starred { get; private set; }
     public int MovementMonthId { get; private set; }
 
     internal void Pay() => Paid = true;
     internal void UnPay() => Paid = false;
+    internal void Star() => Starred = true;
+    internal void UnStar() => Starred = false;
 
     internal void SetAmount(decimal amount) => Amount = amount < Movement.MinAmount ? throw new ArgumentOutOfRangeException(nameof(amount)) : amount;
 

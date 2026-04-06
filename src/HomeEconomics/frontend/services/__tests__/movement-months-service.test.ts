@@ -272,6 +272,51 @@ describe("MovementMonthsService", () => {
     );
   });
 
+  it("star and unstar post to the correct endpoints", async () => {
+    fetchMock.mockResolvedValueOnce(
+      createResponse({ ok: true, status: 200, json: async () => undefined }),
+    );
+    fetchMock.mockResolvedValueOnce(
+      createResponse({ ok: true, status: 200, json: async () => undefined }),
+    );
+
+    await MovementMonthsService.starMonthMovement(10, 7);
+    await MovementMonthsService.unstarMonthMovement(10, 7);
+
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      1,
+      "/api/movement-months/10/month-movements/7/star",
+      { method: "POST" },
+    );
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      2,
+      "/api/movement-months/10/month-movements/7/unstar",
+      { method: "POST" },
+    );
+  });
+
+  it("starMonthMovement throws on non-2xx", async () => {
+    fetchMock.mockResolvedValueOnce(
+      createResponse({ ok: false, status: 409, json: async () => undefined }),
+    );
+
+    await expect(MovementMonthsService.starMonthMovement(10, 7)).rejects.toMatchObject({
+      status: 409,
+      message: "Failed to star month movement (409)",
+    });
+  });
+
+  it("unstarMonthMovement throws on non-2xx", async () => {
+    fetchMock.mockResolvedValueOnce(
+      createResponse({ ok: false, status: 409, json: async () => undefined }),
+    );
+
+    await expect(MovementMonthsService.unstarMonthMovement(10, 7)).rejects.toMatchObject({
+      status: 409,
+      message: "Failed to unstar month movement (409)",
+    });
+  });
+
   it("addStatus posts payload", async () => {
     fetchMock.mockResolvedValueOnce(
       createResponse({

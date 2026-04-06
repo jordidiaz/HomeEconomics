@@ -70,6 +70,7 @@ public class MovementMonthTests
         _sut.GetMonthMovements().First().Amount.Should().Be(Amount1);
         _sut.GetMonthMovements().First().Type.Should().Be(MovementType1);
         _sut.GetMonthMovements().First().Paid.Should().BeFalse();
+        _sut.GetMonthMovements().First().Starred.Should().BeFalse();
 
     }
 
@@ -107,6 +108,44 @@ public class MovementMonthTests
     public void UnPayMonthMovement_Throws_InvalidOperationException_If_MonthMovement_Not_Exists()
     {
         var action = () => _sut.UnPayMonthMovement(3);
+
+        action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
+    }
+
+    [Fact]
+    public void StarMonthMovement_Sets_MonthMovement_Starred()
+    {
+        _sut.GetMonthMovements().First().Starred.Should().BeFalse();
+
+        _sut.StarMonthMovement(1);
+
+        _sut.GetMonthMovements().First().Starred.Should().BeTrue();
+    }
+
+    [Fact]
+    public void StarMonthMovement_Throws_InvalidOperationException_If_MonthMovement_Not_Exists()
+    {
+        var action = () => _sut.StarMonthMovement(3);
+
+        action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
+    }
+
+    [Fact]
+    public void UnStarMonthMovement_Sets_MonthMovement_UnStarred()
+    {
+        _sut.StarMonthMovement(1);
+
+        _sut.GetMonthMovements().First().Starred.Should().BeTrue();
+
+        _sut.UnStarMonthMovement(1);
+
+        _sut.GetMonthMovements().First().Starred.Should().BeFalse();
+    }
+
+    [Fact]
+    public void UnStarMonthMovement_Throws_InvalidOperationException_If_MonthMovement_Not_Exists()
+    {
+        var action = () => _sut.UnStarMonthMovement(3);
 
         action.Should().Throw<InvalidOperationException>().WithMessage(Properties.Messages.MonthMovementNotExists);
     }

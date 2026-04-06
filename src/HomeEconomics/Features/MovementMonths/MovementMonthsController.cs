@@ -58,6 +58,28 @@ public class MovementMonthsController(ICommandMediator commandMediator, IQueryMe
         return Ok(result);
     }
 
+    [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/star")]
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult> StarMonthMovement(int movementMonthId, int monthMovementId)
+    {
+        var result = await commandMediator.SendAsync(new StarMonthMovement.Command(movementMonthId, monthMovementId));
+
+        return Ok(result);
+    }
+
+    [HttpPost("{movementMonthId:int}/month-movements/{monthMovementId:int}/unstar")]
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult> UnStarMonthMovement(int movementMonthId, int monthMovementId)
+    {
+        var result = await commandMediator.SendAsync(new UnStarMonthMovement.Command(movementMonthId, monthMovementId));
+
+        return Ok(result);
+    }
+
     [HttpDelete("{movementMonthId:int}/month-movements/{monthMovementId:int}")]
     [ProducesDefaultResponseType]
     [ProducesResponseType(StatusCodes.Status200OK)]

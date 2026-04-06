@@ -24,8 +24,10 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Test"))
 {
     var connString = app.Configuration.GetConnectionString("HomeEconomics");
     await DevelopmentDatabaseBootstrapper.EnsureDatabaseExistsAsync(connString!);
+}
 
-    using var scope = app.Services.CreateScope();
+using (var scope = app.Services.CreateScope())
+{
     var dbContext = scope.ServiceProvider.GetRequiredService<HomeEconomicsDbContext>();
     await dbContext.Database.MigrateAsync();
 }

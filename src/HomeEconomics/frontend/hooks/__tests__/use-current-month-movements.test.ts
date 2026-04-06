@@ -44,8 +44,8 @@ const createMovementMonth = (): MovementMonth => ({
     cashAmount: 0,
   },
   monthMovements: [
-    { id: 1, name: "Seguro", amount: 20, type: MovementType.Expense, paid: false },
-    { id: 2, name: "Nomina", amount: 1200, type: MovementType.Income, paid: true },
+    { id: 1, name: "Seguro", amount: 20, type: MovementType.Expense, paid: false, starred: false },
+    { id: 2, name: "Nomina", amount: 1200, type: MovementType.Income, paid: true, starred: false },
   ],
 });
 
@@ -238,5 +238,67 @@ describe("useCurrentMonthMovements", () => {
     });
 
     expect(selectorMock.reloadSelectedMonth).toHaveBeenCalledTimes(1);
+  });
+
+  it("maps starred field from API to list item", async () => {
+    selectorMock.movementMonth = {
+      ...createMovementMonth(),
+      monthMovements: [
+        { id: 1, name: "Seguro", amount: 20, type: MovementType.Expense, paid: false, starred: true },
+      ],
+    };
+
+    const { result } = renderHook(() => useCurrentMonthMovements());
+
+    await waitFor(() => expect(result.current.monthMovements.length).toBe(1));
+    expect(result.current.monthMovements[0].starred).toBe(true);
+  });
+
+  it("executes star action and reloads", async () => {
+    const starMock = vi.spyOn(MovementMonthsService, "starMonthMovement").mockResolvedValueOnce();
+
+    const { result } = renderHook(() => useCurrentMonthMovements());
+
+    await act(async () => {
+      await result.current.starMonthMovement(1);
+    });
+
+    expect(starMock).toHaveBeenCalledWith(10, 1);
+    expect(selectorMock.reloadSelectedMonth).toHaveBeenCalled();
+    expect(result.current.actionStates[1].loading).toBe(false);
+
+    starMock.mockRestore();
+  });
+
+  it("executes unstar action and reloads", async () => {
+    const unstarMock = vi.spyOn(MovementMonthsService, "unstarMonthMovement").mockResolvedValueOnce();
+
+    const { result } = renderHook(() => useCurrentMonthMovements());
+
+    await act(async () => {
+      await result.current.unstarMonthMovement(1);
+    });
+
+    expect(unstarMock).toHaveBeenCalledWith(10, 1);
+    expect(selectorMock.reloadSelectedMonth).toHaveBeenCalled();
+    expect(result.current.actionStates[1].loading).toBe(false);
+
+    unstarMock.mockRestore();
+  });
+
+  it("reports star errors", async () => {
+    const starMock = vi.spyOn(MovementMonthsService, "starMonthMovement").mockRejectedValueOnce(new Error("fail"));
+
+    const { result } = renderHook(() => useCurrentMonthMovements());
+
+    await act(async () => {
+      await result.current.starMonthMovement(1);
+    });
+
+    expect(result.current.actionStates[1].errorMessage).toBe(
+      "No se pudo actualizar el estado del movimiento. Por favor, inténtalo de nuevo.",
+    );
+
+    starMock.mockRestore();
   });
 });

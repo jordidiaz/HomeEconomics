@@ -79,14 +79,16 @@ public class MovementMonthResponseService(HomeEconomicsDbContext dbContext) : IM
                         .Sum() ?? 0m,
                 },
                 MonthMovements = EF.Property<IEnumerable<MonthMovement>>(movementMonth, "_monthMovements")
-                    .OrderBy(monthMovement => monthMovement.Name)
+                    .OrderByDescending(monthMovement => monthMovement.Starred)
+                    .ThenBy(monthMovement => monthMovement.Name)
                     .Select(monthMovement => new MovementMonthResponse.MonthMovementResult
                     {
                         Id = monthMovement.Id,
                         Name = monthMovement.Name,
                         Amount = monthMovement.Amount,
                         Type = (int)monthMovement.Type,
-                        Paid = monthMovement.Paid
+                        Paid = monthMovement.Paid,
+                        Starred = monthMovement.Starred
                     })
                     .ToArray()
             })

@@ -6,4 +6,5 @@ export type MonthMovement = {
   amount: number;
   type: MovementType;
   paid: boolean;
+  starred: boolean;
 };

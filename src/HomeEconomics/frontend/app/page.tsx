@@ -355,6 +355,8 @@ export default function HomePage() {
               nextMovementMonthExists={currentMonthMovements.nextMovementMonthExists}
               onPay={currentMonthMovements.payMonthMovement}
               onUnpay={currentMonthMovements.unpayMonthMovement}
+              onStar={currentMonthMovements.starMonthMovement}
+              onUnstar={currentMonthMovements.unstarMonthMovement}
               onEdit={handleMonthMovementEditRequest}
               onDelete={handleMonthMovementDeleteRequest}
               onMoveToNextMonth={handleMonthMovementMoveRequest}

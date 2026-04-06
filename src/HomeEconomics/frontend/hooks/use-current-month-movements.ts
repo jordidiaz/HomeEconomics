@@ -14,6 +14,7 @@ type MonthMovementListItem = {
   typeLabel: string;
   paid: boolean;
   paidLabel: string;
+  starred: boolean;
 };
 
 type MonthMovementActionState = {
@@ -72,6 +73,8 @@ type UseCurrentMonthMovementsResult = {
   actionStates: Record<number, MonthMovementActionState>;
   payMonthMovement: (monthMovementId: number) => Promise<void>;
   unpayMonthMovement: (monthMovementId: number) => Promise<void>;
+  starMonthMovement: (monthMovementId: number) => Promise<void>;
+  unstarMonthMovement: (monthMovementId: number) => Promise<void>;
   editState: MonthMovementEditState;
   setEditTarget: (monthMovementId: number | null) => void;
   updateMonthMovement: (
@@ -117,6 +120,7 @@ const toMonthMovementListItem = (monthMovement: MonthMovement): MonthMovementLis
   typeLabel: formatTypeLabel(monthMovement.type),
   paid: monthMovement.paid,
   paidLabel: formatPaidLabel(monthMovement.paid),
+  starred: monthMovement.starred,
 });
 
 export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
@@ -191,7 +195,7 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
   );
 
   const handleMonthMovementAction = useCallback(
-    async (monthMovementId: number, action: "pay" | "unpay") => {
+    async (monthMovementId: number, action: "pay" | "unpay" | "star" | "unstar") => {
       if (!movementMonthId) {
         return;
       }
@@ -199,8 +203,12 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
       try {
         if (action === "pay") {
           await MovementMonthsService.payMonthMovement(movementMonthId, monthMovementId);
-        } else {
+        } else if (action === "unpay") {
           await MovementMonthsService.unpayMonthMovement(movementMonthId, monthMovementId);
+        } else if (action === "star") {
+          await MovementMonthsService.starMonthMovement(movementMonthId, monthMovementId);
+        } else {
+          await MovementMonthsService.unstarMonthMovement(movementMonthId, monthMovementId);
         }
         await reloadMonthMovements();
       } catch (caughtError) {
@@ -385,6 +393,20 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     [handleMonthMovementAction],
   );
 
+  const starMonthMovement = useCallback(
+    async (monthMovementId: number) => {
+      await handleMonthMovementAction(monthMovementId, "star");
+    },
+    [handleMonthMovementAction],
+  );
+
+  const unstarMonthMovement = useCallback(
+    async (monthMovementId: number) => {
+      await handleMonthMovementAction(monthMovementId, "unstar");
+    },
+    [handleMonthMovementAction],
+  );
+
   useEffect(() => {
     isMounted.current = true;
     return () => {
@@ -443,6 +465,8 @@ export function useCurrentMonthMovements(): UseCurrentMonthMovementsResult {
     actionStates,
     payMonthMovement,
     unpayMonthMovement,
+    starMonthMovement,
+    unstarMonthMovement,
     editState,
     setEditTarget,
     updateMonthMovement,
