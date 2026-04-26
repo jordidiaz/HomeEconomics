@@ -49,6 +49,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Make package public
+        run: |
+          gh api --method PATCH \
+            /user/packages/container/homeeconomics \
+            -f visibility=public
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   release:
     name: Create GitHub Release
     needs: build-and-push

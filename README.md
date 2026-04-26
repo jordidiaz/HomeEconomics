@@ -205,7 +205,7 @@ cd src/HomeEconomics/frontend && npm run e2e
 
 ## Production Deployment
 
-The Docker image is built automatically on every merge to `main` and published to GitHub Container Registry (GHCR) at `ghcr.io/jordidiaz/homeeconomics`. The image is private — a Personal Access Token (PAT) is required to pull it.
+The Docker image is built automatically on every merge to `main` and published publicly to GitHub Container Registry (GHCR) at `ghcr.io/jordidiaz/homeeconomics`. No authentication is required to pull it.
 
 ### First-time setup
 
@@ -216,15 +216,7 @@ cp .env.example .env
 # Edit .env with your real Supabase connection string
 ```
 
-2. Authenticate Docker to GHCR (one-time per host):
-
-```bash
-echo "$GHCR_TOKEN" | docker login ghcr.io -u jordidiaz --password-stdin
-```
-
-`GHCR_TOKEN` is a **classic Personal Access Token** with the `read:packages` scope — generate one at GitHub → Settings → Developer settings → Personal access tokens.
-
-3. Start the app:
+2. Start the app:
 
 ```bash
 docker compose up -d
