@@ -224,6 +224,39 @@ This will:
 - Connect to your Supabase PostgreSQL database
 - Serve the application on port 6001
 
+## Updating Dependencies
+
+This project uses Claude Code skills to update dependencies safely. Each skill discovers outdated packages, classifies them by semver risk, auto-applies safe updates, and verifies the build and tests.
+
+### Backend (NuGet)
+
+```bash
+# Using the skill (slash command)
+/update-backend-deps
+
+# Or ask the agent directly
+"update backend dependencies"
+```
+
+### Frontend (npm)
+
+```bash
+# Using the skill (slash command)
+/update-frontend-deps
+
+# Or ask the agent directly
+"update frontend dependencies"
+```
+
+### Both layers at once
+
+```bash
+# Ask the agent to handle everything
+"update dependencies"
+```
+
+MINOR and PATCH updates are applied automatically. MAJOR updates require explicit approval before proceeding.
+
 ## Contributing
 
 1. Create a feature branch

@@ -1,6 +1,6 @@
 ---
-name: update-deps
-description: Update, upgrade, or refresh .NET/NuGet backend dependencies — analyse outdated packages, classify by semver risk (MAJOR/MINOR/PATCH), auto-apply safe updates, ask before risky ones, and verify the build. Use this skill whenever the user mentions updating packages, upgrading NuGet dependencies, checking for outdated packages, or keeping backend libraries up to date, even if they don't use the word "dependency".
+name: update-backend-deps
+description: Update, upgrade, or refresh .NET/NuGet backend dependencies — analyse outdated packages, classify by semver risk (MAJOR/MINOR/PATCH), auto-apply safe updates, ask before risky ones, and verify the build. Use this skill when the user mentions updating NuGet packages, upgrading .NET/backend dependencies, checking for outdated backend packages, or keeping .NET libraries up to date. Do NOT use for npm, frontend, or Node.js dependency updates — see update-frontend-deps for those.
 ---
 
 ## When to use this skill
@@ -126,7 +126,7 @@ Remaining drift:
 - Do not introduce Central Package Management (`Directory.Packages.props`) as part of this workflow unless the user specifically requests it.
 
 ## Out of scope
-- Frontend (npm) dependency updates.
+- Frontend (npm) dependency updates — see `.claude/skills/update-frontend-deps/SKILL.md`.
 - .NET SDK or runtime version upgrades (e.g., changing `NetTargetVersion` in `Directory.Build.props`).
 - Introducing Central Package Management (`Directory.Packages.props`).
 - NuGet source or feed configuration changes.
