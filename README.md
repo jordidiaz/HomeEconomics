@@ -205,6 +205,10 @@ cd src/HomeEconomics/frontend && npm run e2e
 
 ## Production Deployment
 
+The Docker image is built automatically on every merge to `main` and published to GitHub Container Registry (GHCR) at `ghcr.io/jordidiaz/homeeconomics`. The image is private — a Personal Access Token (PAT) is required to pull it.
+
+### First-time setup
+
 1. Copy the environment template and fill in your Supabase credentials:
 
 ```bash
@@ -212,17 +216,38 @@ cp .env.example .env
 # Edit .env with your real Supabase connection string
 ```
 
-2. Build and run with Docker:
+2. Authenticate Docker to GHCR (one-time per host):
 
 ```bash
-docker-compose up -d
+echo "$GHCR_TOKEN" | docker login ghcr.io -u jordidiaz --password-stdin
 ```
 
-This will:
-- Build the .NET application
-- Build the Next.js frontend for production
-- Connect to your Supabase PostgreSQL database
-- Serve the application on port 6001
+`GHCR_TOKEN` is a **classic Personal Access Token** with the `read:packages` scope — generate one at GitHub → Settings → Developer settings → Personal access tokens.
+
+3. Start the app:
+
+```bash
+docker compose up -d
+```
+
+The application will be available on port 6001.
+
+### Updating the running app
+
+After every merge to `main`, CI publishes a new image tagged `:latest` and a short-SHA tag (e.g. `:sha-a1b2c3d`). To update a running instance:
+
+```bash
+# Pull the new image and restart in one step
+docker compose pull && docker compose up -d
+
+# Confirm the container is running the new image
+docker compose ps
+docker image ls ghcr.io/jordidiaz/homeeconomics
+```
+
+To pin to a specific build instead of `:latest`, edit `docker-compose.yaml` and replace `latest` with the desired `sha-<short>` tag (visible on the [Releases](../../releases) page).
+
+> **Local rebuild**: contributors who want to test local changes without publishing can still build manually with `docker compose build` — the `Dockerfile` at `src/HomeEconomics/Dockerfile` is unchanged.
 
 ## Updating Dependencies
 
@@ -259,12 +284,12 @@ MINOR and PATCH updates are applied automatically. MAJOR updates require explici
 
 ## Contributing
 
-1. Create a feature branch
+1. Create a feature branch from `main`
 2. Make your changes
 3. Run backend tests: `dotnet test`
 4. Run frontend tests: `cd src/HomeEconomics/frontend && npm run test:ci`
-5. Run E2E tests: `cd src/HomeEconomics/frontend && npm run e2e`
-6. Submit a pull request
+5. Submit a pull request — CI will run the full test suite automatically
+6. Once all checks pass, merge to `main`; the release workflow publishes a new Docker image
 
 ## Architecture
 

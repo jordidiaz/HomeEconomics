@@ -1,8 +1,8 @@
 services:
   homeeconomics:
-    build:
-      context: .
-      dockerfile: src/HomeEconomics/Dockerfile
+    image: ghcr.io/jordidiaz/homeeconomics:latest
+    pull_policy: always
+    container_name: homeeconomics
     ports:
       - "6001:6001"
     env_file:
