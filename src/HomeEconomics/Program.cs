@@ -42,5 +42,5 @@ app
 
 await app.RunAsync();
 
-// Don't remove this class, it's needed for the integration tests project to reference the HomeEconomics assembly.
+// Don't remove this class! It's needed for the integration tests project to reference the HomeEconomics assembly.
 public partial class Program { }
